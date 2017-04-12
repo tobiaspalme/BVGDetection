@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent">
+    <PreferenceCategory
+        android:title="Aufnahme"
+        android:key="pref_offline">
+        <CheckBoxPreference
+            android:key="pref_movingAverage"
+            android:title="Gleitender Mittelwertfilter"
+            android:defaultValue="true" >
+        </CheckBoxPreference>
+        <!--<com.example.carol.bvg.EditTextPreference-->
+            <!--android:defaultValue="3"-->
+            <!--android:key="pref_movivngAverageOrder"-->
+            <!--android:title="Ortnung"-->
+            <!--android:dependency="pref_movingAverage"-->
+            <!--android:inputType="number"-->
+            <!--/>-->
+        <com.example.carol.bvg.ListPreference
+            android:dependency="pref_movingAverage"
+            android:key="pref_movivngAverageOrder"
+            android:title="Ordnung"
+            android:entries="@array/pref_movingAverage_entries"
+            android:entryValues="@array/pref_movingAverage_values"
+            android:defaultValue="@string/pref_movingAverage_default" />
+        <CheckBoxPreference
+            android:key="pref_kalman"
+            android:title="Kalman Filter"
+            android:defaultValue="true" />
+        <com.example.carol.bvg.EditTextPreference
+            android:defaultValue="2"
+            android:key="pref_kalmanValue"
+            android:title="Kalman Wert"
+            android:dependency="pref_kalman"
+            android:inputType="number"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Ortnung"
+        android:key="pref_online">
+        <CheckBoxPreference
+            android:key="pref_euclideanDistance"
+            android:title="Euklidische Distanz"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_knnAlgorithm"
+            android:title="k-nächster-Nachbar Algorithmus"
+            android:dependency="pref_euclideanDistance"
+            android:defaultValue="true" />
+        <com.example.carol.bvg.EditTextPreference
+            android:defaultValue="3"
+            android:key="pref_knnNeighbours"
+            android:title="k Nachbarn"
+            android:dependency="pref_knnAlgorithm"
+            android:inputType="number"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

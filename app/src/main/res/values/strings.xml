@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BVG</string>
+    <string name="pref_movingAverage_default">3</string>
+    <string name="title_activity_record">RecordActivity</string>
+</resources>

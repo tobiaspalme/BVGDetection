@@ -1,0 +1,915 @@
+{
+	"Node": [{
+		"id": "MO1",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:02:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -52
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -72
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -62
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -78
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -88
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:03:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -54
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -57
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -72
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -84
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:04:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -70
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -67
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -81
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -86
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -85
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -76
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:05:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -75
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -79
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -90
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:06:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -54
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -71
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -73
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -73
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -90
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -85
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:07:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -56
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -54
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -72
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -75
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -84
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -81
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:08:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -57
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -56
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -66
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -77
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -76
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:09:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -56
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -75
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -81
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -72
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -89
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:10:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -57
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -70
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -52
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -72
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -87
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -77
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:11:58 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -70
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -65
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -84
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -75
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -86
+			}]
+		}]
+	}, {
+		"id": "MO2",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:14:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -85
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -69
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -64
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -90
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -92
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -78
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:15:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -81
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -55
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -87
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -51
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:16:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -85
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -84
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -52
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -82
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:17:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -79
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -73
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -55
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -49
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -84
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -89
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:18:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -82
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -77
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -55
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -49
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -80
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:19:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -55
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -83
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -83
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -90
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:20:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -80
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -54
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -50
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -82
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -85
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -82
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:21:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -75
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -53
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -86
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -80
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:22:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -77
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -51
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -48
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -83
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -79
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -93
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -91
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:23:05 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -83
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -92
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -50
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -87
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -83
+			}, {
+				"macAdress": "00:f2:8b:6c:68:ef",
+				"strength": -92
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -90
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -46
+			}]
+		}]
+	}, {
+		"id": "MO3",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:24:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -74
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -76
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -78
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -92
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -76
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:25:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -91
+			}, {
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -67
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -85
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -59
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -91
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:26:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -91
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -62
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -93
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -91
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -88
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:27:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -63
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -59
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -90
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -92
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -85
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:28:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -70
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -56
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -92
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:29:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -59
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -57
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -93
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -92
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:30:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -61
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -90
+			}, {
+				"macAdress": "00:f2:8b:8c:41:8f",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:6c:68:e0",
+				"strength": -91
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:31:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -70
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -91
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -61
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -93
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:32:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -68
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -63
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -89
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -94
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:33:54 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:f2:8b:8f:07:cf",
+				"strength": -63
+			}, {
+				"macAdress": "00:f2:8b:8f:07:c0",
+				"strength": -60
+			}, {
+				"macAdress": "00:f2:8b:8c:41:80",
+				"strength": -87
+			}, {
+				"macAdress": "00:f2:8b:8c:41:9f",
+				"strength": -88
+			}, {
+				"macAdress": "00:f2:8b:8c:41:90",
+				"strength": -93
+			}]
+		}]
+	}, {
+		"id": "MO4",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:37:53 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -89
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:38:53 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -92
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:39:53 GMT+01:00 2016",
+			"signalStrength": []
+		}, {
+			"timestamp": "Tue Dec 20 14:40:53 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -89
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:41:53 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -87
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:42:53 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -89
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:43:53 GMT+01:00 2016",
+			"signalStrength": []
+		}, {
+			"timestamp": "Tue Dec 20 14:44:53 GMT+01:00 2016",
+			"signalStrength": []
+		}, {
+			"timestamp": "Tue Dec 20 14:45:53 GMT+01:00 2016",
+			"signalStrength": []
+		}, {
+			"timestamp": "Tue Dec 20 14:46:53 GMT+01:00 2016",
+			"signalStrength": []
+		}]
+	}, {
+		"id": "MO5",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:48:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -71
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:49:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -74
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -59
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:50:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -68
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -63
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:51:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -71
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -60
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:52:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -68
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -59
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:53:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -71
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -61
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:54:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -68
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -57
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:55:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -73
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -57
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:56:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -69
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -58
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 14:57:47 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -69
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -59
+			}]
+		}]
+	}, {
+		"id": "MO6",
+		"zValue": 0,
+		"signalInformation": [{
+			"timestamp": "Tue Dec 20 14:59:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -64
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -55
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:00:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -63
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -53
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:01:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -69
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -62
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:02:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -66
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -62
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:03:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -62
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -55
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:04:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -63
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -57
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:05:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -63
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -59
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:06:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -63
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -59
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:07:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -62
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -56
+			}]
+		}, {
+			"timestamp": "Tue Dec 20 15:08:40 GMT+01:00 2016",
+			"signalStrength": [{
+				"macAdress": "00:81:c4:9d:b3:6f",
+				"strength": -71
+			}, {
+				"macAdress": "00:81:c4:9d:b3:60",
+				"strength": -58
+			}]
+		}]
+	}]
+}
