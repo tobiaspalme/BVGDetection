@@ -8,4 +8,10 @@
     tools:context="de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity"
     tools:showIn="@layout/coordinates_app_bar">
 
+    <FrameLayout
+        android:id="@+id/coordinates_contentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>

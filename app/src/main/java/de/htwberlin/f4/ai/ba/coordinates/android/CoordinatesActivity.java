@@ -1,9 +1,9 @@
 package de.htwberlin.f4.ai.ba.coordinates.android;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -77,19 +77,74 @@ public class CoordinatesActivity extends AppCompatActivity
         if (id == R.id.coordinates_nav_measurement) {
             Toast toast = Toast.makeText(getApplicationContext(), "Messen", Toast.LENGTH_SHORT);
             toast.show();
+            loadMeasureFragment();
         } else if (id == R.id.coordinates_nav_calibrate) {
             Toast toast = Toast.makeText(getApplicationContext(), "Kalibrieren", Toast.LENGTH_SHORT);
             toast.show();
+            loadCalibrateFragment();
         } else if (id == R.id.coordinates_nav_settings) {
             Toast toast = Toast.makeText(getApplicationContext(), "Einstellungen", Toast.LENGTH_SHORT);
             toast.show();
+            loadSettingsFragment();
         } else if (id == R.id.coordinates_nav_import) {
             Toast toast = Toast.makeText(getApplicationContext(), "Import / Export", Toast.LENGTH_SHORT);
             toast.show();
+            loadImportFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void loadMeasureFragment() {
+        removeAllFragments();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MeasureFragment measureFragment = new MeasureFragment();
+
+        fragmentTransaction.add(R.id.coordinates_contentFrame, measureFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void loadCalibrateFragment() {
+        removeAllFragments();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        CalibrateFragment calibrateFragment = new CalibrateFragment();
+
+        fragmentTransaction.add(R.id.coordinates_contentFrame, calibrateFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void loadSettingsFragment() {
+        removeAllFragments();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        SettingsFragment settingsFragment = new SettingsFragment();
+
+        fragmentTransaction.add(R.id.coordinates_contentFrame, settingsFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void loadImportFragment() {
+        removeAllFragments();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ImportFragment importFragment = new ImportFragment();
+
+        fragmentTransaction.add(R.id.coordinates_contentFrame, importFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void removeAllFragments() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (fragmentManager.getFragments() != null) {
+            for (Fragment fragment : fragmentManager.getFragments()) {
+                fragmentTransaction.remove(fragment);
+            }
+        }
+        fragmentTransaction.commit();
     }
 }
