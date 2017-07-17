@@ -17,17 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".Location" />
+        <activity android:name=".RecordActivity"></activity>
         <activity
-            android:name=".RecordActivity">
-
+            android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"
+            android:label="@string/title_activity_choose_app"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
