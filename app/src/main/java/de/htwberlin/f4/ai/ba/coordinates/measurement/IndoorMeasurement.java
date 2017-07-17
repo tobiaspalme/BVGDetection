@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates;
+package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 
 /**

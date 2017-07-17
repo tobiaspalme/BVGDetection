@@ -2,16 +2,15 @@ package de.htwberlin.f4.ai.ba.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.carol.bvg.MainActivity;
 import com.example.carol.bvg.R;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity;
 
 public class ChooseAppActivity extends AppCompatActivity {
 
@@ -47,6 +46,9 @@ public class ChooseAppActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Benjamin", Toast.LENGTH_SHORT);
                 toast.show();
+
+                Intent intent = new Intent(getApplicationContext(), CoordinatesActivity.class);
+                startActivity(intent);
             }
         });
 
