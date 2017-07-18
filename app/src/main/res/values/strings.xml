@@ -19,4 +19,7 @@
     <string name="step_setup_instructions">Bitte schreiten Sie eine bekannte Strecke ab. Anschließend geben Sie bitte die zurückgelegte Strecke in Metern an</string>
     <string name="step_count">Schrittanzahl:</string>
 
+    <!-- fragment_coordinates_measure -->
+    <string name="measure_start">Start</string>
+
 </resources>

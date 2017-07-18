@@ -5,31 +5,27 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
- * Note: sometimes it doesn't recognize the last step properly
+ * https://developer.android.com/guide/topics/sensors/sensors_position.html
  */
 
-public class StepCounterImpl implements StepCounter, SensorEventListener {
+public class CompassImpl implements Compass, SensorEventListener {
 
-    // we need the context so we can call getSystemService and get the sensor manager
     private Context context;
     private SensorManager sensorManager;
-    private int stepCount;
 
-
-    public StepCounterImpl(Context context) {
+    public CompassImpl(Context context) {
         this.context = context;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void start() {
-        stepCount = 0;
-        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+        Sensor magnetFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (magnetFieldSensor != null) {
+            sensorManager.registerListener(this, magnetFieldSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
@@ -41,14 +37,14 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
     }
 
     @Override
-    public int getStepCount() {
-        return stepCount;
+    public void getAzimuth() {
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            stepCount++;
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            Log.d("compass", "0: " + sensorEvent.values[0] + " 1: " + sensorEvent.values[1] + " 2: " + sensorEvent.values[2]);
         }
     }
 

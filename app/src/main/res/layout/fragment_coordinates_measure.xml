@@ -1,13 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.htwberlin.f4.ai.ba.coordinates.android.MeasureFragment">
+    android:orientation="vertical"
+    tools:context="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <Button
+        android:id="@+id/coordinates_measure_start"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/measure_start" />
+
+    <TextView
+        android:id="@+id/coordinates_measure_compass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="measurement" />
 
-</FrameLayout>
+</LinearLayout>

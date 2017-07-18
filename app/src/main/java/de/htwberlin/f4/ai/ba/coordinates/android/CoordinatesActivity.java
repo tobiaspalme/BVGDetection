@@ -20,6 +20,10 @@ import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateController;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateControllerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateView;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureController;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureControllerImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureView;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl;
 
 public class CoordinatesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -105,9 +109,12 @@ public class CoordinatesActivity extends AppCompatActivity
     public void loadMeasureFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MeasureFragment measureFragment = new MeasureFragment();
+        MeasureView view = new MeasureViewImpl();
+        MeasureController controller = new MeasureControllerImpl();
+        controller.setView(view);
+        view.setController(controller);
 
-        fragmentTransaction.replace(R.id.coordinates_contentFrame, measureFragment);
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         fragmentTransaction.commit();
     }
 

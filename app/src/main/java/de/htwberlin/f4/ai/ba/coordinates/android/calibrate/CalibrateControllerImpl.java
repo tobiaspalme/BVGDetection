@@ -23,18 +23,16 @@ public class CalibrateControllerImpl implements CalibrateController {
 
     @Override
     public void onStartStepSetupClick() {
-        // get context so we can pass it to stepcounter
-        Context context = view.getContext();
-        stepCounter = new StepCounterImpl(context);
+        stepCounter = new StepCounterImpl(view.getContext());
         stepCounter.start();
-
     }
 
     @Override
     public void onStopStepSetupClick() {
         if (stepCounter != null) {
-            view.updateStepCount(stepCounter.getStepCount());
             stepCounter.stop();
+            view.updateStepCount(stepCounter.getStepCount());
+
         }
 
     }
