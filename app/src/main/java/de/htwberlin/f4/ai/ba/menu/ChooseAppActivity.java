@@ -38,6 +38,9 @@ public class ChooseAppActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Johann", Toast.LENGTH_SHORT);
                 toast.show();
+
+                Intent intent = new Intent(getApplicationContext(), de.htwberlin.f4.ai.ma.prototype_temp.MainActivity.class);
+                startActivity(intent);
             }
         });
 

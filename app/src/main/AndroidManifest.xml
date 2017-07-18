@@ -20,6 +20,14 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".Location" />
         <activity android:name=".RecordActivity" />
+
+
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.Location"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity"/>
+
+
         <activity
             android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"
             android:theme="@style/AppTheme.NoActionBar">
