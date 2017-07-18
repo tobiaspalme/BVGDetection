@@ -8,7 +8,12 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 public class IndoorMeasurementFactory {
 
+    private static IndoorMeasurement indoorMeasurement;
+
     public static IndoorMeasurement getIndoorMeasurement() {
-        return new IndoorMeasurementImpl();
+        if (indoorMeasurement == null) {
+            indoorMeasurement = new IndoorMeasurementImpl();
+        }
+        return indoorMeasurement;
     }
 }
