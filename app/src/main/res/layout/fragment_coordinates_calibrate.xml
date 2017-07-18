@@ -1,13 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="de.htwberlin.f4.ai.ba.coordinates.android.MeasureFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
+        android:id="@+id/coordinates_calibrate_btn_stepsetup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="calibrate" />
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_start" />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/coordinates_calibrate_btn_stepstop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_stop" />
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_tv_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/step_setup_instructions" />
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_tv_stepcount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/step_count" />
+
+
+</LinearLayout>

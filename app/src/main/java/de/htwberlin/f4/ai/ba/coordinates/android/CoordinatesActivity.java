@@ -16,6 +16,11 @@ import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateController;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateControllerImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateView;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl;
+
 public class CoordinatesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -98,53 +103,45 @@ public class CoordinatesActivity extends AppCompatActivity
     }
 
     public void loadMeasureFragment() {
-        removeAllFragments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MeasureFragment measureFragment = new MeasureFragment();
 
-        fragmentTransaction.add(R.id.coordinates_contentFrame, measureFragment);
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, measureFragment);
         fragmentTransaction.commit();
     }
 
     public void loadCalibrateFragment() {
-        removeAllFragments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        CalibrateFragment calibrateFragment = new CalibrateFragment();
 
-        fragmentTransaction.add(R.id.coordinates_contentFrame, calibrateFragment);
+        CalibrateView view = new CalibrateViewImpl();
+        // TODO: save controller instance in activity?
+        CalibrateController controller = new CalibrateControllerImpl();
+        controller.setView(view);
+        view.setController(controller);
+
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         fragmentTransaction.commit();
     }
 
     public void loadSettingsFragment() {
-        removeAllFragments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         SettingsFragment settingsFragment = new SettingsFragment();
 
-        fragmentTransaction.add(R.id.coordinates_contentFrame, settingsFragment);
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, settingsFragment);
         fragmentTransaction.commit();
     }
 
     public void loadImportFragment() {
-        removeAllFragments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ImportFragment importFragment = new ImportFragment();
 
-        fragmentTransaction.add(R.id.coordinates_contentFrame, importFragment);
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, importFragment);
         fragmentTransaction.commit();
     }
 
-    private void removeAllFragments() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (fragmentManager.getFragments() != null) {
-            for (Fragment fragment : fragmentManager.getFragments()) {
-                fragmentTransaction.remove(fragment);
-            }
-        }
-        fragmentTransaction.commit();
-    }
+
 }
