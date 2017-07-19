@@ -48,6 +48,14 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (controller != null) {
+            controller.onPause();
+        }
+    }
+
+    @Override
     public void setController(CalibrateController controller) {
         this.controller = controller;
     }

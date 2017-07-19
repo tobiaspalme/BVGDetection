@@ -37,6 +37,13 @@ public class CalibrateControllerImpl implements CalibrateController {
     }
 
     @Override
+    public void onPause() {
+        if (stepCounter != null) {
+            stepCounter.stop();
+        }
+    }
+
+    @Override
     public void setView(CalibrateView view) {
         this.view = view;
     }

@@ -9,4 +9,5 @@ public interface CalibrateController {
     void setView(CalibrateView view);
     void onStartStepSetupClick();
     void onStopStepSetupClick();
+    void onPause();
 }
