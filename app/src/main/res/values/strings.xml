@@ -23,5 +23,6 @@
 
     <!-- fragment_coordinates_measure -->
     <string name="measure_start">Start</string>
+    <string name="measure_pressure">Luftdruck:</string>
 
 </resources>

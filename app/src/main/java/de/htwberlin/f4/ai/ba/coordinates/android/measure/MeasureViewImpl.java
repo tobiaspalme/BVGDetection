@@ -17,6 +17,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
 
     private MeasureController controller;
     private TextView compassView;
+    private TextView barometerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,6 +25,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         View root = inflater.inflate(R.layout.fragment_coordinates_measure, container, false);
 
         compassView = (TextView) root.findViewById(R.id.coordinates_measure_compass);
+        barometerView = (TextView) root.findViewById(R.id.coordinates_measure_pressure);
 
         Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -34,11 +36,28 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
+
+
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (controller != null) {
+            controller.onPause();
+        }
     }
 
     @Override
     public void setController(MeasureController controller) {
         this.controller = controller;
     }
+
+    @Override
+    public void updatePressure(Float pressure) {
+        barometerView.setText(getString(R.string.measure_pressure) + " " + String.valueOf(pressure));
+    }
+
+
 }

@@ -9,5 +9,7 @@ import android.content.Context;
 public interface MeasureView {
 
     void setController(MeasureController controller);
+    void updatePressure(Float pressure);
     Context getContext();
+
 }
