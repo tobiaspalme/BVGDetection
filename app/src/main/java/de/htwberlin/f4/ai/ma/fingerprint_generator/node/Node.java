@@ -4,7 +4,10 @@ import android.media.Image;
 
 import java.util.List;
 
+// TODO: Interface beschreiben
+
 public interface Node {
+
     String getId();
     void setId(String id);
 
@@ -14,9 +17,13 @@ public interface Node {
     String getCoordinates();
     void setCoordinates(String coordinates);
 
+    /*
     Image getPicture();
     void setPicture(Image picture);
+    */
+
+    String getPicturePath();
+    void setPicturePath(String picturePath);
 
 }
 
-// Kommentare

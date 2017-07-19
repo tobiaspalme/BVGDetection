@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma.persistence;
 
 import android.content.Context;
 import android.os.Environment;

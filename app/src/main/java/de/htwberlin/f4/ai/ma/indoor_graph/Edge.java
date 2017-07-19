@@ -8,11 +8,14 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 
 public interface Edge {
 
-    Node getFromNode();
-    void setFromNode(Node fromNode);
+    int getId();
+    void setID(int id);
 
-    Node getToNode();
-    void setToNode(Node toNode);
+    Node getNodeA();
+    void setNodeA(Node nodeA);
+
+    Node getNodeB();
+    void setNodeB(Node nodeB);
 
     boolean getAccessibly();
     void setAccessibly(boolean accessibly);

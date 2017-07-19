@@ -379,10 +379,10 @@ class FingerprintImplementation implements Fingerprint {
 
                     deviation = calculateDeviation(Values,average,counter);
 
-                    for (Double Value : Values) {
+                    for (int j = 0; j < Values.length; j++) {
 
-                        if (Value != null) {
-                            value = Value;
+                        if (Values[j] != null) {
+                            value = Values[j];
                         } else {
                             value = average;
                         }
@@ -404,9 +404,9 @@ class FingerprintImplementation implements Fingerprint {
 
         private double calculateDeviation(Double[] values, double average, double count) {
             int x = 0;
-            for (Double value : values) {
-                if (value != null) {
-                    x += Math.pow((value - average), 2);
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] != null) {
+                    x += Math.pow((values[i] - average), 2);
                 } else {
                     x += Math.pow((average - average), 2);
                 }

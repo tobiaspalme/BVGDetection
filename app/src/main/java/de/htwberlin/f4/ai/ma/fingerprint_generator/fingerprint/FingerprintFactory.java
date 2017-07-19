@@ -4,10 +4,17 @@ package de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint;
  * Created by Johann Winter
  */
 
-public class FingerprintFactory {
+public final class FingerprintFactory {
 
-    public static Fingerprint getFingerprint() {
-        return new FingerprintImplementation();
+    private static Fingerprint instance;
+
+    private FingerprintFactory() {}
+
+    public static Fingerprint getInstance() {
+        if (instance == null) {
+            instance = new FingerprintImplementation();
+        }
+        return instance;
     }
 }
 

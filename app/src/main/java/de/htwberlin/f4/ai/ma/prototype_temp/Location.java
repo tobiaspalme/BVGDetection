@@ -46,14 +46,20 @@ import java.util.Set;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.JsonReader;
 
 public class Location extends AppCompatActivity {
     private List<String> macAdresses = new ArrayList<>();
     private int count = 0;
     String[] permissions;
-    Fingerprint fingerprint = FingerprintFactory.getFingerprint();
+    Fingerprint fingerprint = FingerprintFactory.getInstance();
+    NodeFactory nodeFactory;
+    DatabaseHandler databaseHandler;
+
     ListView listView;
     String settings;
     Spinner dropdown;
@@ -356,7 +362,9 @@ public class Location extends AppCompatActivity {
         }
 
 
-        de.htwberlin.f4.ai.ma.prototype_temp.Node node = new de.htwberlin.f4.ai.ma.prototype_temp.Node(null, 0, signalInformationList);
+        Node node = nodeFactory.getInstance(null, 0, signalInformationList);
+
+       // de.htwberlin.f4.ai.ma.prototype_temp.Node node = new de.htwberlin.f4.ai.ma.prototype_temp.Node(null, 0, signalInformationList);
         actuallyNode.add(node);
 
 

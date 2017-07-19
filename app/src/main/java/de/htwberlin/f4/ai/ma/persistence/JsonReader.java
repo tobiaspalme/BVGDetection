@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma.persistence;
 
 import android.content.Context;
 import android.os.Environment;
@@ -14,10 +14,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
 
 public class JsonReader {
+
+    NodeFactory nodeFactory;
 
     /**
      * load and read a .txt file from Files Folder
@@ -91,7 +95,9 @@ public class JsonReader {
                         signalInformationList.add(signalInformation);
                     }
 
-                    de.htwberlin.f4.ai.ma.prototype_temp.Node node = new Node(id, z, signalInformationList);
+
+                    Node node = nodeFactory.getInstance(id, z, signalInformationList);
+                    //de.htwberlin.f4.ai.ma.prototype_temp.Node node = new Node(id, z, signalInformationList);
                     allNodes.add(node);
                 }
 

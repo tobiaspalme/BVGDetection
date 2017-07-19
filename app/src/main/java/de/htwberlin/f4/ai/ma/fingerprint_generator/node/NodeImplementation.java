@@ -1,22 +1,23 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma.fingerprint_generator.node;
 
 import android.media.Image;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
-
 /**
- * the node class implements the node from package
+ * Created by Johann Winter
  */
-public class Node implements de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node {
+
+class NodeImplementation implements Node {
+
     String id;
     //float xValue;
     //float yValue;
     float zValue;
     List<SignalInformation> signalInformationList;
     String coordinates;
-    Image picture;
+    //Image picture;
+    String picturePath;
 
     @Override
     public void setId(String id) {
@@ -44,6 +45,17 @@ public class Node implements de.htwberlin.f4.ai.ma.fingerprint_generator.node.No
     }
 
     @Override
+    public String getPicturePath() {
+        return this.picturePath;
+    }
+
+    @Override
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
+    }
+
+    /*
+    @Override
     public Image getPicture() {
         return this.picture;
     }
@@ -52,6 +64,7 @@ public class Node implements de.htwberlin.f4.ai.ma.fingerprint_generator.node.No
     public void setPicture(Image picture) {
         this.picture = picture;
     }
+    */
 
     @Override
     public List<SignalInformation> getSignalInformation() {
@@ -60,7 +73,7 @@ public class Node implements de.htwberlin.f4.ai.ma.fingerprint_generator.node.No
 
 
 
-    public Node(String id, float zValue, List<SignalInformation> signalInformationList) {
+    public NodeImplementation(String id, float zValue, List<SignalInformation> signalInformationList) {
         this.id = id;
         //this.xValue = xValue;
         //this.yValue = yValue;
@@ -68,7 +81,5 @@ public class Node implements de.htwberlin.f4.ai.ma.fingerprint_generator.node.No
         this.signalInformationList = signalInformationList;
     }
 
-    public Node(){}
+    public NodeImplementation(){}
 }
-
-

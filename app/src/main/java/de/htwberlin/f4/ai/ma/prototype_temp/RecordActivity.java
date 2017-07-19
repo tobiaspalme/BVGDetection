@@ -33,8 +33,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.JsonReader;
+import de.htwberlin.f4.ai.ma.persistence.JsonWriter;
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -49,10 +54,18 @@ public class RecordActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> items;
 
+    NodeFactory nodeFactory;
+    DatabaseHandler databaseHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        System.out.println("### RECORDACTIVITY");
+
+        databaseHandler = new DatabaseHandler(this);
+
 
         jsonWriter = new JsonWriter(this);
 
@@ -194,8 +207,12 @@ public class RecordActivity extends AppCompatActivity {
                     }
                 }
 
-                de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
+
+                Node node = nodeFactory.getInstance(id, 0, signalInformationList);
+                //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
                 jsonWriter.writeJSON(node);
+
+                databaseHandler.insertNode(node);
 
                 class UpdateAdapter implements Runnable {
                     de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node;

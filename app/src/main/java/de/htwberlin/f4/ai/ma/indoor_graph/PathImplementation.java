@@ -8,10 +8,12 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
  * Created by Johann Winter
  */
 
-public interface Path {
+class PathImplementation implements Path {
 
-    // Never ever change that object -> comment
+    List<Node> nodeList;
 
-    List<Node> getNodeList();
-
+    @Override
+    public List<Node> getNodeList() {
+        return this.nodeList;
+    }
 }

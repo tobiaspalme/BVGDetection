@@ -11,10 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.carol.bvg.Location;
+//import com.example.carol.bvg.Location;
 import com.example.carol.bvg.R;
-import com.example.carol.bvg.RecordActivity;
-import com.example.carol.bvg.SettingsActivity;
+//import com.example.carol.bvg.RecordActivity;
+//import com.example.carol.bvg.SettingsActivity;
+
+import de.htwberlin.f4.ai.ma.prototype_temp.*;
 
 public class MainActivity extends AppCompatActivity {
     String[] permissions;
