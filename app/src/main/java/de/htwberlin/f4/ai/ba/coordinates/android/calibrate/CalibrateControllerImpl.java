@@ -1,15 +1,8 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.provider.Settings;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.StepCounter;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.StepCounterImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterListener;
 
 /**
  * Created by benni on 18.07.2017.
@@ -24,6 +17,12 @@ public class CalibrateControllerImpl implements CalibrateController {
     @Override
     public void onStartStepSetupClick() {
         stepCounter = new StepCounterImpl(view.getContext());
+        stepCounter.setListener(new StepCounterListener() {
+            @Override
+            public void valueChanged(Integer newValue) {
+                view.updateStepCount(newValue);
+            }
+        });
         stepCounter.start();
     }
 
@@ -31,7 +30,7 @@ public class CalibrateControllerImpl implements CalibrateController {
     public void onStopStepSetupClick() {
         if (stepCounter != null) {
             stepCounter.stop();
-            view.updateStepCount(stepCounter.getStepCount());
+            view.updateStepCount(stepCounter.getValue());
 
         }
 

@@ -1,11 +1,12 @@
-package de.htwberlin.f4.ai.ba.coordinates.android.sensors;
+package de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.Toast;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 
 /**
  * Note: sometimes it doesn't recognize the last step properly
@@ -13,14 +14,12 @@ import android.widget.Toast;
 
 public class StepCounterImpl implements StepCounter, SensorEventListener {
 
-    // we need the context so we can call getSystemService and get the sensor manager
-    private Context context;
     private SensorManager sensorManager;
-    private int stepCount;
+    private Integer stepCount;
+    private SensorListener listener;
 
 
     public StepCounterImpl(Context context) {
-        this.context = context;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
@@ -41,14 +40,22 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
     }
 
     @Override
-    public int getStepCount() {
+    public Integer getValue() {
         return stepCount;
+    }
+
+    @Override
+    public void setListener(SensorListener listener) {
+        this.listener = listener;
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
             stepCount++;
+            if (listener != null) {
+                listener.valueChanged(stepCount);
+            }
         }
     }
 

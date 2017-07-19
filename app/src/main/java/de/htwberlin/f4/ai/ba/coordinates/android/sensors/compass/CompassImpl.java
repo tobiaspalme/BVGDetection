@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates.android.sensors;
+package de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass;
 
 import android.content.Context;
 import android.hardware.Sensor;

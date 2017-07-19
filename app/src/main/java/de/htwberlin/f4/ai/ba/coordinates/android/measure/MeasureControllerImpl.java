@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Compass;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.CompassImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.Compass;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.CompassImpl;
 
 /**
  * Created by benni on 18.07.2017.
