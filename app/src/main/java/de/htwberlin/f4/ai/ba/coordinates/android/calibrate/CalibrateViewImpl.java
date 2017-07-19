@@ -44,6 +44,33 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
             }
         });
 
+        Button btnSave = (Button) root.findViewById(R.id.coordinates_calibrate_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.onSaveClicked();
+                }
+            }
+        });
+
+        Button btnStepInc = (Button) root.findViewById(R.id.coordinates_calibrate_btn_stepinc);
+        btnStepInc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.onStepIncreaseClicked();
+                }
+            }
+        });
+
+        Button btnStepDec = (Button) root.findViewById(R.id.coordinates_calibrate_btn_stepdec);
+        btnStepDec.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.onStepDecreaseClicked();
+                }
+            }
+        });
+
         return root;
     }
 

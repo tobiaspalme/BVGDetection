@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
+import android.widget.Toast;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterListener;
@@ -34,6 +36,24 @@ public class CalibrateControllerImpl implements CalibrateController {
 
         }
 
+    }
+
+    @Override
+    public void onSaveClicked() {
+        Toast toast = Toast.makeText(view.getContext(), "save", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    public void onStepIncreaseClicked() {
+        Toast toast = Toast.makeText(view.getContext(), "step inc", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    public void onStepDecreaseClicked() {
+        Toast toast = Toast.makeText(view.getContext(), "step dec", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

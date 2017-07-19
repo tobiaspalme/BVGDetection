@@ -84,20 +84,12 @@ public class CoordinatesActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.coordinates_nav_measurement) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Messen", Toast.LENGTH_SHORT);
-            toast.show();
             loadMeasureFragment();
         } else if (id == R.id.coordinates_nav_calibrate) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Kalibrieren", Toast.LENGTH_SHORT);
-            toast.show();
             loadCalibrateFragment();
         } else if (id == R.id.coordinates_nav_settings) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Einstellungen", Toast.LENGTH_SHORT);
-            toast.show();
             loadSettingsFragment();
         } else if (id == R.id.coordinates_nav_import) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Import / Export", Toast.LENGTH_SHORT);
-            toast.show();
             loadImportFragment();
         }
 
@@ -106,7 +98,7 @@ public class CoordinatesActivity extends AppCompatActivity
         return true;
     }
 
-    public void loadMeasureFragment() {
+    private void loadMeasureFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MeasureView view = new MeasureViewImpl();
@@ -118,7 +110,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    public void loadCalibrateFragment() {
+    private void loadCalibrateFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -132,7 +124,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    public void loadSettingsFragment() {
+    private void loadSettingsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         SettingsFragment settingsFragment = new SettingsFragment();
@@ -141,7 +133,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    public void loadImportFragment() {
+    private void loadImportFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ImportFragment importFragment = new ImportFragment();

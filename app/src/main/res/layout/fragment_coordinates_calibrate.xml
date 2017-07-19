@@ -32,5 +32,39 @@
         android:layout_marginTop="20dp"
         android:text="@string/step_count" />
 
+    <Button
+        android:id="@+id/coordinates_calibrate_btn_stepinc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/coordinates_calibrate_btn_stepdec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_tv_distance_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/step_setup_distance_hint" />
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="0.0"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/coordinates_calibrate_btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_save" />
+
 
 </LinearLayout>

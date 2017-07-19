@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
+
 /**
  * https://developer.android.com/guide/topics/sensors/sensors_position.html
  */
@@ -15,6 +17,7 @@ public class CompassImpl implements Compass, SensorEventListener {
 
     private Context context;
     private SensorManager sensorManager;
+    private SensorListener listener;
 
     public CompassImpl(Context context) {
         this.context = context;
@@ -37,9 +40,16 @@ public class CompassImpl implements Compass, SensorEventListener {
     }
 
     @Override
-    public void getAzimuth() {
-
+    public Float getValue() {
+        return null;
     }
+
+    @Override
+    public void setListener(SensorListener listener) {
+        this.listener = listener;
+    }
+
+
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
