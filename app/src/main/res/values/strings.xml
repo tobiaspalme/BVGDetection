@@ -25,4 +25,10 @@
     <string name="measure_start">Start</string>
     <string name="measure_pressure">Luftdruck:</string>
 
+    <!-- activity_main -->
+    <string name="record_button">Node aufnehmen</string>
+    <string name="nodelist_button">Liste aller Nodes</string>
+    <string name="calculate_button">Node berechnen</string>
+    <string name="settings_button">Einstellungen</string>
+
 </resources>

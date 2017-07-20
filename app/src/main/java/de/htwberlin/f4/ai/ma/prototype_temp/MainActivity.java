@@ -11,12 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-//import com.example.carol.bvg.Location;
 import com.example.carol.bvg.R;
-//import com.example.carol.bvg.RecordActivity;
-//import com.example.carol.bvg.SettingsActivity;
-
-import de.htwberlin.f4.ai.ma.prototype_temp.*;
 
 public class MainActivity extends AppCompatActivity {
     String[] permissions;
@@ -24,7 +19,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.new_activity_main);
+
+        Button recordButton;
+        Button nodeListButton;
+        Button calculateButton;
+        Button settingsButton;
 
         permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -37,23 +37,34 @@ public class MainActivity extends AppCompatActivity {
             //TODO: Warnmeldung
         }
 
-        final Button buttonSetting = (Button) findViewById(R.id.b_Settings);
+        recordButton = (Button) findViewById(R.id.record_button);
+        nodeListButton = (Button) findViewById(R.id.nodelist_button);
+        calculateButton = (Button) findViewById(R.id.calculate_button);
+        settingsButton = (Button) findViewById(R.id.settings_button);
 
-        final Button buttonLocation = (Button) findViewById(R.id.b_location);
-
-        final Button buttonRecord = (Button) findViewById(R.id.b_record);
-
-        if (buttonSetting != null) {
-            buttonSetting.setOnClickListener(new View.OnClickListener() {
+        if (recordButton != null) {
+            recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
+
+                    //TODO: richtige Startmethode? Betrifft auch andere Buttons unten
                     startActivities(new Intent[]{intent});
                 }
             });
         }
 
-        if (buttonLocation != null) {
-            buttonLocation.setOnClickListener(new View.OnClickListener() {
+
+        if (nodeListButton != null) {
+            nodeListButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), NodeListActivity.class);
+                    startActivities(new Intent[]{intent});
+                }
+            });
+        }
+
+        if (calculateButton != null) {
+            calculateButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), Location.class);
                     startActivities(new Intent[]{intent});
@@ -61,14 +72,15 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if (buttonRecord != null) {
-            buttonRecord.setOnClickListener(new View.OnClickListener() {
+        if (settingsButton != null) {
+            settingsButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                     startActivities(new Intent[]{intent});
                 }
             });
         }
+
 
     }
 

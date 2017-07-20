@@ -47,13 +47,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createDB = "CREATE TABLE " + NODES_TABLE + " (" +
+        String createDbQuery = "CREATE TABLE " + NODES_TABLE + " (" +
                 NODE_ID + " TEXT PRIMARY KEY," +
                 NODE_SIGNALINFORMATIONLIST + " TEXT," +
                 NODE_COORDINATES + " TEXT," +
                 NODE_PICTURE_PATH + " TEXT)";
 
-        db.execSQL(createDB);
+        db.execSQL(createDbQuery);
     }
 
     @Override
@@ -79,7 +79,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     */
 
     public void insertNode(Node node) {
-
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -89,12 +88,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put("picture_path", node.getPicturePath());
 
         database.insert(NODES_TABLE, null, values);
+
+        Log.d("INSERTNODE:ID", node.getId());
+
         database.close();
     }
 
 
     public ArrayList<Node> getAllNodes() {
-
         ArrayList<Node> allNodes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NODES_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
@@ -116,5 +117,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return allNodes;
     }
 
+
+    public void deleteNode(Node node) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ node.getId() +"'";
+
+        Log.d("DELETENODE", node.getId());
+
+        database.execSQL(deleteQuery);
+    }
 
 }

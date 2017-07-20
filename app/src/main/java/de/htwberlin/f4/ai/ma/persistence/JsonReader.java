@@ -56,9 +56,9 @@ public class JsonReader {
      * @param context
      * @return list of Nodes
      */
-    public List<de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node> initializeNodeFromJson(Context context) {
+    public List<Node> initializeNodeFromJson(Context context) {
         String jsonString = loadJSONFromAsset(context);
-        List<de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node> allNodes = new ArrayList<>();
+        List<Node> allNodes = new ArrayList<>();
 
         if (jsonString != null) {
             try {
