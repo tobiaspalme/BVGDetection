@@ -11,6 +11,9 @@ public interface Node {
     String getId();
     void setId(String id);
 
+    String getDescription();
+    void setDescription(String description);
+
     List<SignalInformation> getSignalInformation();
     void setSignalInformationList(List<SignalInformation> signalInformationList);
 

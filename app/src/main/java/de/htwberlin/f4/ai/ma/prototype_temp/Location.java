@@ -362,7 +362,7 @@ public class Location extends AppCompatActivity {
         }
 
 
-        Node node = nodeFactory.getInstance(null, 0, signalInformationList);
+        Node node = nodeFactory.getInstance(null, 0, "", signalInformationList, "", "");
 
        // de.htwberlin.f4.ai.ma.prototype_temp.Node node = new de.htwberlin.f4.ai.ma.prototype_temp.Node(null, 0, signalInformationList);
         actuallyNode.add(node);

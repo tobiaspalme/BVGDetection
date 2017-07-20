@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String EDGES_TABLE = "edges";
 
     private static final String NODE_ID = "id";
+    private static final String NODE_DESCRIPTION = "description";
     private static final String NODE_SIGNALINFORMATIONLIST = "signalinformationlist";
     private static final String NODE_COORDINATES = "coordinates";
     private static final String NODE_PICTURE_PATH = "picture_path";
@@ -49,6 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createDbQuery = "CREATE TABLE " + NODES_TABLE + " (" +
                 NODE_ID + " TEXT PRIMARY KEY," +
+                NODE_DESCRIPTION + " TEXT," +
                 NODE_SIGNALINFORMATIONLIST + " TEXT," +
                 NODE_COORDINATES + " TEXT," +
                 NODE_PICTURE_PATH + " TEXT)";
@@ -83,6 +85,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put("id", node.getId());
+        values.put("description", node.getDescription());
         //values.put("signalinformationlist", node.getSignalInformation().toString()); TODO: serialize signalinformationlist?
         values.put("coordinates", node.getCoordinates());
         values.put("picture_path", node.getPicturePath());
@@ -105,12 +108,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 Node node = nodeFactory.getInstance();
                 node.setId(cursor.getString(0));
+                node.setDescription(cursor.getString(1));
 
                 Log.d("GETALLNODES:ID", cursor.getString(0));
 
                 //node.setSignalInformationList(); TODO: serialize signalinformationlist?
-                node.setCoordinates(cursor.getString(2));
-                node.setPicturePath(cursor.getString(3));
+                node.setCoordinates(cursor.getString(3));
+                node.setPicturePath(cursor.getString(4));
                 allNodes.add(node);
             } while (cursor.moveToNext());
         }

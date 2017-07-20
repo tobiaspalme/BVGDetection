@@ -1,35 +1,33 @@
 package de.htwberlin.f4.ai.ma.prototype_temp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-//import com.example.carol.bvg.JsonReader;
-//import com.example.carol.bvg.JsonWriter;
-//import com.example.carol.bvg.Node;
+import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Collections;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,9 +39,11 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.JsonReader;
 import de.htwberlin.f4.ai.ma.persistence.JsonWriter;
 
+
 public class RecordActivity extends AppCompatActivity {
 
     String id;
+    String description;
     String wlanName;
     int recordTime;
     int mProgressStatus = 0;
@@ -52,7 +52,15 @@ public class RecordActivity extends AppCompatActivity {
     JsonWriter jsonWriter;
     TextView progressText;
     ArrayAdapter<String> adapter;
-    ArrayList<String> items;
+
+    Button captureButton;
+    ImageView cameraImageview;
+    EditText idName;
+    EditText recordTimeText;
+    EditText wlanNameText;
+    EditText descriptionEdittext;
+
+    static final int CAM_REQUEST = 1;
 
     NodeFactory nodeFactory;
     DatabaseHandler databaseHandler;
@@ -60,18 +68,19 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record);
-
-        System.out.println("### RECORDACTIVITY");
+        setContentView(R.layout.new_activity_record);
 
         databaseHandler = new DatabaseHandler(this);
-
-
         jsonWriter = new JsonWriter(this);
+        captureButton  = (Button) findViewById(R.id.capture_button);
+        cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
+        descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
 
-        final EditText idName = (EditText) findViewById(R.id.edTx_id);
-        final EditText recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
-        final EditText wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
+
+        idName = (EditText) findViewById(R.id.edTx_id);
+        recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
+        wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
+
         Button recordButton = (Button) findViewById(R.id.b_record);
         progressText = (TextView) findViewById(R.id.tx_progress);
 
@@ -83,15 +92,37 @@ public class RecordActivity extends AppCompatActivity {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     id = idName.getText().toString();
+                    description = descriptionEdittext.getText().toString();
                     wlanName = wlanNameText.getText().toString();
                     recordTime = Integer.parseInt(recordTimeText.getText().toString());
-
                     measureNode();
-
                 }
             });
         }
 
+        if (captureButton != null) {
+            captureButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file = getFile();
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    startActivityForResult(cameraIntent, CAM_REQUEST);
+                }
+            });
+        }
+
+        cameraImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                intent.putExtra("pictureName", idName.getText());
+                startActivity(intent);
+            }
+        });
+
+        /*
         //create list of nodes with jsonReader
         final JsonReader jsonReader = new JsonReader();
         List<de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node> allNodes = jsonReader.initializeNodeFromJson(this);
@@ -156,8 +187,9 @@ public class RecordActivity extends AppCompatActivity {
 
                 return false;
             }
-        });
+        }); */
     }
+
 
     /**
      * make measurement with given record time
@@ -208,34 +240,10 @@ public class RecordActivity extends AppCompatActivity {
                 }
 
 
-                Node node = nodeFactory.getInstance(id, 0, signalInformationList);
+                Node node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", "");
                 //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
                 jsonWriter.writeJSON(node);
-
                 databaseHandler.insertNode(node);
-
-                class UpdateAdapter implements Runnable {
-                    de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node;
-
-                    UpdateAdapter(de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node) {
-                        this.node = node;
-                    }
-
-                    public void run() {
-                        adapter.add(node.getId().toString());
-                        adapter.notifyDataSetChanged();
-//                        for (int i = 0; i < adapter.getCount(); i++) {
-//                            if (!node.getId().equals(adapter.getItem(i))) {
-//                                adapter.add(node.getId().toString());
-//                                adapter.notifyDataSetChanged();
-//                                break;
-//                            }
-//                        }
-
-                    }
-                }
-
-                runOnUiThread(new UpdateAdapter(node));
 
                 mProgressStatus = 0;
 
@@ -244,4 +252,23 @@ public class RecordActivity extends AppCompatActivity {
     }
 
 
+
+    // TODO!
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String filePath = "sdcard/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        Glide.with(this).load(filePath).into(cameraImageview);
+    }
+
+
+    private File getFile() {
+        File folder = new File("sdcard/IndoorPositioning/Pictures");
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File imageFile = new File(folder, "Node_" + idName.getText() + ".jpg");
+        return imageFile;
+    }
 }

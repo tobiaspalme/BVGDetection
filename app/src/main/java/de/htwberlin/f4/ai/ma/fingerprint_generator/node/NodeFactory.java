@@ -12,7 +12,7 @@ public class NodeFactory {
         return new NodeImplementation();
     }
 
-    public static Node getInstance(String id, float zValue, List<SignalInformation> signalInformationList) {
-        return new NodeImplementation(id, zValue, signalInformationList);
+    public static Node getInstance(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath) {
+        return new NodeImplementation(id, zValue, description, signalInformationList, coordinates, picturePath);
     }
 }

@@ -75,6 +75,12 @@ public class JsonReader {
                     String id = jsonObjectNode.getString("id");
                     float z = jsonObjectNode.getLong("zValue");
 
+                    // ########## TEST
+                    String description = jsonObjectNode.getString("description");
+                    String coordinates = jsonObjectNode.getString("coordinates");
+                    String picturePath = jsonObjectNode.getString("picturePath");
+
+
                     JSONArray signalJsonArray = jsonObjectNode.getJSONArray("signalInformation");
                     for (int j = 0; j < signalJsonArray.length(); j++) {
                         JSONObject signalJsonObject = signalJsonArray.getJSONObject(j);
@@ -96,7 +102,7 @@ public class JsonReader {
                     }
 
 
-                    Node node = nodeFactory.getInstance(id, z, signalInformationList);
+                    Node node = nodeFactory.getInstance(id, z, description, signalInformationList, coordinates, picturePath);
                     //de.htwberlin.f4.ai.ma.prototype_temp.Node node = new Node(id, z, signalInformationList);
                     allNodes.add(node);
                 }

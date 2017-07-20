@@ -28,6 +28,13 @@ public class JsonWriter {
     public void writeJSON(de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node) {
         String jsonString = loadJSONFromAsset(context);
         String nodeId = node.getId().toString();
+
+        // ### TEST
+        /*String description = node.getDescription().toString();
+        String coordinates = node.getCoordinates().toString();
+        String picturePath = node.getPicturePath().toString();
+        */
+
         boolean idIsContained = false;
 
         if (jsonString != null) {
@@ -59,6 +66,13 @@ public class JsonWriter {
                 } else {
                     JSONObject jsonObjectNode = new JSONObject();
                     jsonNode.put(makeJsonNode(jsonObjectNode, node));
+
+                    /* ############ TEST
+                    jsonNode.put(description);
+                    jsonNode.put(coordinates);
+                    jsonNode.put(picturePath);
+                    */
+
                     save(jsonObj);
                 }
             } catch (final JSONException e) {
@@ -77,6 +91,12 @@ public class JsonWriter {
         try {
             jsonObjectNode.put("id", node.getId());
             jsonObjectNode.put("zValue", 0);
+
+            // ############## TEST
+            jsonObjectNode.put("description", node.getDescription());
+            jsonObjectNode.put("coordinates", node.getCoordinates());
+            jsonObjectNode.put("picturePath", node.getPicturePath());
+
 
             JSONArray signalJsonArray = new JSONArray();
             for (int i = 0; i < node.getSignalInformation().size(); i++) {

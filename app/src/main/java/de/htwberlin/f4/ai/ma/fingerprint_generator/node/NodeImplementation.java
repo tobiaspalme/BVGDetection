@@ -13,6 +13,7 @@ class NodeImplementation implements Node {
     String id;
     //float xValue;
     //float yValue;
+    String description;
     float zValue;
     List<SignalInformation> signalInformationList;
     String coordinates;
@@ -27,6 +28,16 @@ class NodeImplementation implements Node {
     @Override
     public String getId() {
         return this.id;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -73,11 +84,14 @@ class NodeImplementation implements Node {
 
 
 
-    public NodeImplementation(String id, float zValue, List<SignalInformation> signalInformationList) {
+    public NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath) {
         this.id = id;
         //this.xValue = xValue;
         //this.yValue = yValue;
         this.zValue = zValue;
+        this.description = description;
+        this.coordinates = coordinates;
+        this.picturePath = picturePath;
         this.signalInformationList = signalInformationList;
     }
 
