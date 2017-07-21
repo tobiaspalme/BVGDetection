@@ -1,6 +1,9 @@
 package de.htwberlin.f4.ai.ma.prototype_temp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
@@ -24,88 +27,55 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 
 public class NodeListActivity extends Activity {
 
-    ListView nodeList;
-    DatabaseHandler databaseHandler;
+    ListView nodeListView;
     ArrayList<String> items;
     ArrayAdapter<String> adapter;
+    List<Node> allNodes;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nodelist);
 
-        nodeList = (ListView) findViewById(R.id.nodeListListview);
-        databaseHandler = new DatabaseHandler(this);
+        nodeListView = (ListView) findViewById(R.id.nodeListListview);
 
-        List<Node> allNodes = databaseHandler.getAllNodes();
-
-        items = new ArrayList<>();
-        for (Node id : allNodes) {
-            items.add(id.getId().toString());
-        }
-        Collections.sort(items);
+        loadDbData();
 
         //fill list with adapter
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        nodeList.setAdapter(adapter);
+        nodeListView.setAdapter(adapter);
 
-        nodeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println();
+                Intent intent = new Intent(getApplicationContext(), NodeDetailActivity.class);
+                intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
+                startActivity(intent);
             }
         });
+    }
 
+    // TODO update List when item deleted
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        /*
-        //delete enty with long click
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(view.getContext())
-                        .setTitle("Eintrag löschen")
-                        .setMessage("möchten sie " + listView.getAdapter().getItem(position).toString() + " löschen?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    int index = 0;
-                                    String jsonString = jsonReader.loadJSONFromAsset(getApplicationContext());
-                                    JSONObject jsonObj = new JSONObject(jsonString);
-                                    JSONArray jsonNode = jsonObj.getJSONArray("Node");
-                                    for (int i = 0; i < jsonNode.length(); i++) {
-                                        JSONObject jsonObjectNode = jsonNode.getJSONObject(i);
-                                        if (jsonObjectNode.length() > 0) {
-                                            String idString = jsonObjectNode.getString("id");
-                                            if (idString.equals(listView.getAdapter().getItem(position).toString())) {
-                                                index = i;
-                                                jsonNode.remove(i);
-                                                JsonWriter jsonWriter = new JsonWriter(getApplicationContext());
-                                                jsonWriter.save(jsonObj);
-                                                adapter.remove(items.get(position));
-                                                adapter.notifyDataSetChanged();
-                                                break;
-                                            }
-                                        }
-                                    }
-                                } catch (final JSONException e) {
-                                    Log.e("JSON", "Json parsing error: " + e.getMessage());
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+        System.out.println("ONRESUME");
 
+        loadDbData();
+        adapter.notifyDataSetChanged();
+    }
 
-                return false;
-            }
-        });
-    }*/
+    private void loadDbData() {
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
+        allNodes = databaseHandler.getAllNodes();
 
+        System.out.println("ALLNODES COUNT: " + allNodes.size());
 
-
+        items = new ArrayList<>();
+        for (Node n : allNodes) {
+            items.add(n.getId().toString());
+        }
+        //Collections.sort(items);
     }
 }

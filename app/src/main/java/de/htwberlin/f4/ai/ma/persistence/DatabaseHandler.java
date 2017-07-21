@@ -61,24 +61,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
 
-    /*
-    public void insertNode(SQLiteDatabase db, Node node) {
-        String query = "INSERT INTO " + NODES_TABLE + " ("
-                + NODE_ID + ", "
-                + NODE_SIGNALINFORMATIONLIST + ", "
-                + NODE_COORDINATES + ", "
-                + NODE_PICTURE_PATH + ") VALUES " + "('"
-                + node.getId() + "','"
-                + node.getSignalInformation() + "','"
-                + node.getCoordinates() + "','"
-                + node.getPicture() + "')" ;
-
-        System.out.println("##### DB insert query: " + query);
-        try {
-            db.execSQL(query);
-        } catch (SQLiteException sqliteException) { Log.d("DB Error" , "Insert Error"); }
-    }
-    */
 
     public void insertNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -92,9 +74,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         database.insert(NODES_TABLE, null, values);
 
-        Log.d("INSERTNODE:ID", node.getId());
+        Log.d("INSERT_NODE:ID", node.getId());
 
         database.close();
+    }
+
+
+    public void updateNode(Node node, String oldNodeId) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("id", node.getId());
+        contentValues.put("description",node.getDescription());
+        // TODO contentValues.put("signalstrengthinformationlist", node.getSignalInformation());
+        contentValues.put("coordinates", node.getCoordinates());
+        contentValues.put("picture_path", node.getPicturePath());
+
+        Log.d("UPDATE_NODE:ID", node.getId());
+
+        database.update(NODES_TABLE, contentValues, NODE_ID + "='" + oldNodeId + "'", null);
     }
 
 
@@ -110,7 +108,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 node.setId(cursor.getString(0));
                 node.setDescription(cursor.getString(1));
 
-                Log.d("GETALLNODES:ID", cursor.getString(0));
+                Log.d("GET_ALL_NODES", cursor.getString(0));
 
                 //node.setSignalInformationList(); TODO: serialize signalinformationlist?
                 node.setCoordinates(cursor.getString(3));
@@ -122,11 +120,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
+    public Node getNode(String nodeName) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ nodeName +"'";
+        Node node = nodeFactory.getInstance();
+
+        Log.d("SELECT_NODE", nodeName);
+
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            node.setId(cursor.getString(0));
+            node.setDescription(cursor.getString(1));
+            //node.setSignalInformationList(); TODO: serialize signalinformationlist?
+            node.setCoordinates(cursor.getString(3));
+            node.setPicturePath(cursor.getString(4));
+        }
+        return node;
+    }
+
+
     public void deleteNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ node.getId() +"'";
 
-        Log.d("DELETENODE", node.getId());
+        Log.d("DELETE_NODE", node.getId());
 
         database.execSQL(deleteQuery);
     }

@@ -36,5 +36,12 @@
     <string name="description_text">Beschreibung:</string>
     <string name="measure_time_text">Messzeit:</string>
     <string name="wlan_name_text">WLAN Name:</string>
+    <string name="node_name_text">Node Name:</string>
+    <string name="minutes_text">Minuten</string>
 
+    <!-- acitvity_node_detail -->
+    <string name="coordinates_text">Coordinates:</string>
+    <string name="save_button_text">Speichern</string>
+    <string name="delete_button_text">Löschen</string>
+    
 </resources>

@@ -128,7 +128,7 @@ public class JsonWriter {
      */
     public void save(JSONObject jsonObject){
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Files");
+        File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
         dir.mkdirs();
         File file = new File(dir, "jsonFile.txt");
         //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonFile.txt");
@@ -171,7 +171,7 @@ public class JsonWriter {
         try {
             //TODO Exception abfangen
             File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/Files");
+            File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
             dir.mkdirs();
             File file = new File(dir, "jsonFile.txt");
             //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonFile.txt");

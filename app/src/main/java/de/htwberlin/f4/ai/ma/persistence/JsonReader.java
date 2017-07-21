@@ -32,7 +32,7 @@ public class JsonReader {
         String json = null;
         //TODO Exception abfangen
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Files");
+        File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
         dir.mkdirs();
         File file = new File(dir, "jsonFile.txt");
         //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonFile.txt");
