@@ -32,7 +32,7 @@ public class CalibrateControllerImpl implements CalibrateController {
     public void onStopStepSetupClick() {
         if (stepCounter != null) {
             stepCounter.stop();
-            view.updateStepCount(stepCounter.getValue());
+            //view.updateStepCount(stepCounter.getValue());
 
         }
 

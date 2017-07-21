@@ -20,6 +20,12 @@
         android:text="measurement" />
 
     <TextView
+        android:id="@+id/coordinates_measure_compass2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="measurement" />
+
+    <TextView
         android:id="@+id/coordinates_measure_pressure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

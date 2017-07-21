@@ -11,37 +11,48 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 
 /**
  * https://developer.android.com/guide/topics/sensors/sensors_position.html
+ *
+ * Compass using SensorFusion with TYPE_ROTATION_VECTOR
+ *
+ * Sensors used: Accelerometer, Magnetometer, AND (when present) Gyroscope
+ *
+ * Note: Values might be off, compass calibration might be required (waving 8 form or turn
+ * phone around each of its 3 axis)
  */
 
 public class CompassImpl implements Compass, SensorEventListener {
 
-    private Context context;
     private SensorManager sensorManager;
     private SensorListener listener;
+    private Sensor rotationSensor;
+
+    private float[] orientation = new float[3];
+    private float[] rotationMatrix = new float[9];
+    private Integer azimuth;
 
     public CompassImpl(Context context) {
-        this.context = context;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void start() {
-        Sensor magnetFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        if (magnetFieldSensor != null) {
-            sensorManager.registerListener(this, magnetFieldSensor, SensorManager.SENSOR_DELAY_UI);
+        azimuth = 0;
+        rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (rotationSensor != null) {
+            sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
     @Override
     public void stop() {
         if (sensorManager != null) {
-            sensorManager.unregisterListener(this);
+            sensorManager.unregisterListener(this, rotationSensor);
         }
     }
 
     @Override
-    public Float getValue() {
-        return null;
+    public Integer getValue() {
+        return azimuth;
     }
 
     @Override
@@ -53,8 +64,14 @@ public class CompassImpl implements Compass, SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            //Log.d("compass", "0: " + sensorEvent.values[0] + " 1: " + sensorEvent.values[1] + " 2: " + sensorEvent.values[2]);
+
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR ){
+            SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values );
+            azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
+
+            if (listener != null) {
+                listener.valueChanged(azimuth);
+            }
         }
     }
 
