@@ -15,8 +15,11 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 public class StepCounterImpl implements StepCounter, SensorEventListener {
 
     private SensorManager sensorManager;
-    private Integer stepCount;
     private SensorListener listener;
+    private Sensor stepCounterSensor;
+
+    private Integer stepCount;
+
 
 
     public StepCounterImpl(Context context) {
@@ -26,7 +29,7 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
     @Override
     public void start() {
         stepCount = 0;
-        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         if (stepCounterSensor != null) {
             sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
         }
@@ -35,7 +38,7 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
     @Override
     public void stop() {
         if (sensorManager != null) {
-            sensorManager.unregisterListener(this);
+            sensorManager.unregisterListener(this, stepCounterSensor);
         }
     }
 
