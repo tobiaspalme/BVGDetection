@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
@@ -19,6 +20,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private TextView compassView;
     private TextView compassView2;
     private TextView barometerView;
+    private ImageView compassImageView;
 
 
     @Override
@@ -29,6 +31,8 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         compassView = (TextView) root.findViewById(R.id.coordinates_measure_compass);
         compassView2 = (TextView) root.findViewById(R.id.coordinates_measure_compass2);
         barometerView = (TextView) root.findViewById(R.id.coordinates_measure_pressure);
+
+        compassImageView = (ImageView) root.findViewById(R.id.coordinates_measure_compass_iv);
 
         Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +69,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     @Override
     public void updateAzimuth(Integer azimuth) {
         compassView.setText(String.valueOf(azimuth));
+        compassImageView.setRotation(-azimuth);
     }
 
     @Override

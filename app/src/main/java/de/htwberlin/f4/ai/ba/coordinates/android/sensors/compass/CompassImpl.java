@@ -67,6 +67,7 @@ public class CompassImpl implements Compass, SensorEventListener {
 
         if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR ){
             SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values );
+            // original values are within [-180,180]
             azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
             if (listener != null) {
