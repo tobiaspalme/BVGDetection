@@ -25,6 +25,15 @@
     <string name="measure_start">Start</string>
     <string name="measure_pressure">Luftdruck:</string>
 
+    <!-- fragment_coordinates_record -->
+    <string name="x_caption">X:</string>
+    <string name="y_caption">Y:</string>
+    <string name="z_caption">Z:</string>
+    <string name="record_start">Start</string>
+    <string name="record_stop">Stop</string>
+    <string name="compass_simple">Compass Simple</string>
+    <string name="compass_fusion">Compass Fusion</string>
+
     <!-- new_activity_main -->
     <string name="record_button">Node aufnehmen</string>
     <string name="nodelist_button">Liste aller Nodes</string>

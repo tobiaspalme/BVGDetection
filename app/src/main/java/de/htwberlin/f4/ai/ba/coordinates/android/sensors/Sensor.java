@@ -9,5 +9,6 @@ public interface Sensor<T> {
     void start();
     void stop();
     T getValue();
+    boolean isSensorAvailable();
     void setListener(SensorListener listener);
 }

@@ -18,6 +18,10 @@
             android:id="@+id/coordinates_nav_import"
             android:icon="@drawable/ic_menu_manage"
             android:title="Import / Export" />
+        <item
+            android:id="@+id/coordinates_nav_record"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Aufnehmen" />
     </group>
 
 

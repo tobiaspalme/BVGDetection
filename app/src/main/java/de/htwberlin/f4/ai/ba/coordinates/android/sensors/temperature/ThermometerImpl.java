@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter;
+package de.htwberlin.f4.ai.ba.coordinates.android.sensors.temperature;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,47 +9,46 @@ import android.hardware.SensorManager;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 
 /**
- * Note: sometimes it doesn't recognize the last step properly
+ * Note: no temperature sensor in nexus 5x
  */
 
-public class StepCounterImpl implements StepCounter, SensorEventListener {
+public class ThermometerImpl implements Thermometer, SensorEventListener {
 
     private SensorManager sensorManager;
+    private Sensor temperatureSensor;
     private SensorListener listener;
-    private Sensor stepCounterSensor;
 
-    private Integer stepCount;
-
+    private float value;
 
 
-    public StepCounterImpl(Context context) {
+    public ThermometerImpl(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void start() {
-        stepCount = 0;
-        stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+        value = 0.0f;
+        temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        if (temperatureSensor != null) {
+            sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
     @Override
     public void stop() {
         if (sensorManager != null) {
-            sensorManager.unregisterListener(this, stepCounterSensor);
+            sensorManager.unregisterListener(this, temperatureSensor);
         }
     }
 
     @Override
-    public Integer getValue() {
-        return stepCount;
+    public Float getValue() {
+        return value;
     }
 
     @Override
     public boolean isSensorAvailable() {
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) == null) {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) == null) {
             return false;
         }
 
@@ -61,12 +60,17 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
         this.listener = listener;
     }
 
+    /**
+     * values[0]: Ambient air temperature in °C
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            stepCount++;
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            value = sensorEvent.values[0];
+
             if (listener != null) {
-                listener.valueChanged(stepCount);
+                listener.valueChanged(value);
             }
         }
     }

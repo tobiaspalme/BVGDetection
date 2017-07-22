@@ -63,6 +63,16 @@ public class CompassSimple implements Compass, SensorEventListener {
     }
 
     @Override
+    public boolean isSensorAvailable() {
+        if ((sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) ||
+                (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }

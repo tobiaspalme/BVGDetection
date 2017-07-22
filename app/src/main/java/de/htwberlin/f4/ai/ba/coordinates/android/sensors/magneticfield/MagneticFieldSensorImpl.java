@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter;
+package de.htwberlin.f4.ai.ba.coordinates.android.sensors.magneticfield;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,47 +9,45 @@ import android.hardware.SensorManager;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 
 /**
- * Note: sometimes it doesn't recognize the last step properly
+ * Created by benni on 22.07.2017.
  */
 
-public class StepCounterImpl implements StepCounter, SensorEventListener {
+public class MagneticFieldSensorImpl implements MagneticFieldSensor, SensorEventListener {
 
     private SensorManager sensorManager;
+    private Sensor magneticFieldSensor;
     private SensorListener listener;
-    private Sensor stepCounterSensor;
 
-    private Integer stepCount;
+    private float[] values;
 
-
-
-    public StepCounterImpl(Context context) {
+    public MagneticFieldSensorImpl(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void start() {
-        stepCount = 0;
-        stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+        values = new float[3];
+        magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (magneticFieldSensor != null) {
+            sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
     @Override
     public void stop() {
         if (sensorManager != null) {
-            sensorManager.unregisterListener(this, stepCounterSensor);
+            sensorManager.unregisterListener(this, magneticFieldSensor);
         }
     }
 
     @Override
-    public Integer getValue() {
-        return stepCount;
+    public float[] getValue() {
+        return values;
     }
 
     @Override
     public boolean isSensorAvailable() {
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) == null) {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null) {
             return false;
         }
 
@@ -63,10 +61,11 @@ public class StepCounterImpl implements StepCounter, SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            stepCount++;
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
+
             if (listener != null) {
-                listener.valueChanged(stepCount);
+                listener.valueChanged(values);
             }
         }
     }

@@ -56,6 +56,15 @@ public class CompassImpl implements Compass, SensorEventListener {
     }
 
     @Override
+    public boolean isSensorAvailable() {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
