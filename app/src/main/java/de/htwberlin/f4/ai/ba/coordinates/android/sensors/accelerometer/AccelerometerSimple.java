@@ -5,15 +5,17 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 /**
  * Created by benni on 22.07.2017.
  */
 
-public class AccelerometerSimple implements Accelerometer, SensorEventListener {
+public class AccelerometerSimple implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
+
+    private static final SensorType sensorType = SensorType.ACCELEROMETER_SIMPLE;
 
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
@@ -43,7 +45,7 @@ public class AccelerometerSimple implements Accelerometer, SensorEventListener {
     }
 
     @Override
-    public float[] getValue() {
+    public float[] getValues() {
         return values;
     }
 
@@ -59,6 +61,11 @@ public class AccelerometerSimple implements Accelerometer, SensorEventListener {
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public SensorType getSensorType() {
+        return sensorType;
     }
 
     /**

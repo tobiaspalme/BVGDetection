@@ -16,8 +16,8 @@ public interface RecordView {
     void updateGyroscope(float[] values);
     void updateGyroscopeUncalibrated(float[] values);
     void updateMagneticField(float[] values);
-    void updateCompassFusion(Integer value);
-    void updateCompassSimple(Integer value);
+    void updateCompassFusion(int value);
+    void updateCompassSimple(int value);
     void updatePressure(float value);
     Context getContext();
 }

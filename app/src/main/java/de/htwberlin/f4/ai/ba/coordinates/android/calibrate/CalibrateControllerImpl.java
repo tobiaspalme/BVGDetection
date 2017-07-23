@@ -2,9 +2,13 @@ package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
 import android.widget.Toast;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounterListener;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
 
 /**
  * Created by benni on 18.07.2017.
@@ -13,29 +17,29 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter
 public class CalibrateControllerImpl implements CalibrateController {
 
     private CalibrateView view;
-    private StepCounter stepCounter;
-
+    private IndoorMeasurement indoorMeasurement;
 
     @Override
     public void onStartStepSetupClick() {
-        stepCounter = new StepCounterImpl(view.getContext());
-        stepCounter.setListener(new StepCounterListener() {
+
+        SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
+        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
+        indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
-            public void valueChanged(Integer newValue) {
-                view.updateStepCount(newValue);
+            public void valueChanged(float[] values, SensorType sensorType) {
+                if (sensorType == SensorType.STEPCOUNTER) {
+                    view.updateStepCount((int) values[0]);
+                }
             }
         });
-        stepCounter.start();
+        indoorMeasurement.start(SensorType.STEPCOUNTER);
     }
 
     @Override
     public void onStopStepSetupClick() {
-        if (stepCounter != null) {
-            stepCounter.stop();
-            //view.updateStepCount(stepCounter.getValue());
-
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
         }
-
     }
 
     @Override
@@ -58,8 +62,8 @@ public class CalibrateControllerImpl implements CalibrateController {
 
     @Override
     public void onPause() {
-        if (stepCounter != null) {
-            stepCounter.stop();
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
         }
     }
 

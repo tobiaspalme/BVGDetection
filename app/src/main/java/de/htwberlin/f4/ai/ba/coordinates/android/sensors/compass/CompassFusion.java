@@ -5,22 +5,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
+
 
 /**
- * https://developer.android.com/guide/topics/sensors/sensors_position.html
- *
- * Compass using SensorFusion with TYPE_ROTATION_VECTOR
- *
- * Sensors used: Accelerometer, Magnetometer, AND (when present) Gyroscope
- *
- * Note: Values might be off, compass calibration might be required (waving 8 form or turn
- * phone around each of its 3 axis)
+ * Created by benni on 23.07.2017.
  */
 
-public class CompassImpl implements Compass, SensorEventListener {
+public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor{
+
+    private static final SensorType sensorType = SensorType.COMPASS_FUSION;
 
     private SensorManager sensorManager;
     private SensorListener listener;
@@ -30,14 +26,14 @@ public class CompassImpl implements Compass, SensorEventListener {
     private float[] rotationMatrix = new float[9];
     private Integer azimuth;
 
-    public CompassImpl(Context context) {
+    public CompassFusion(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void start() {
         azimuth = 0;
-        rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        rotationSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
         if (rotationSensor != null) {
             sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
         }
@@ -51,13 +47,14 @@ public class CompassImpl implements Compass, SensorEventListener {
     }
 
     @Override
-    public Integer getValue() {
-        return azimuth;
+    public float[] getValues() {
+        return new float[]{azimuth};
     }
+
 
     @Override
     public boolean isSensorAvailable() {
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
+        if (sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR) == null) {
             return false;
         }
 
@@ -69,24 +66,27 @@ public class CompassImpl implements Compass, SensorEventListener {
         this.listener = listener;
     }
 
-
+    @Override
+    public SensorType getSensorType() {
+        return sensorType;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
-        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR ){
+        if(sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_ROTATION_VECTOR ){
             SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values );
             // original values are within [-180,180]
             azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
             if (listener != null) {
-                listener.valueChanged(azimuth);
+                listener.valueChanged(new float[]{azimuth});
             }
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(android.hardware.Sensor sensor, int i) {
 
     }
 }

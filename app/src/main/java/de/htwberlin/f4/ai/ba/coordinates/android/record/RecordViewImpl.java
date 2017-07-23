@@ -170,12 +170,12 @@ public class RecordViewImpl extends Fragment implements RecordView {
     }
 
     @Override
-    public void updateCompassFusion(Integer value) {
+    public void updateCompassFusion(int value) {
         compassFusion.setText(getString(R.string.compass_fusion) + ": " + value);
     }
 
     @Override
-    public void updateCompassSimple(Integer value) {
+    public void updateCompassSimple(int value) {
         compassSimple.setText(getString(R.string.compass_simple) + ": " + value);
     }
 

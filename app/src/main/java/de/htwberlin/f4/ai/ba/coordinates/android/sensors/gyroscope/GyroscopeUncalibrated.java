@@ -7,12 +7,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 /**
  * Created by benni on 22.07.2017.
  */
 
-public class GyroscopeUncalibrated implements Gyroscope, SensorEventListener {
+public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
+
+    private static final SensorType sensorType = SensorType.GYROSCOPE_UNCALIBRATED;
 
     private SensorManager sensorManager;
     private Sensor gyroscopeSensor;
@@ -41,7 +44,7 @@ public class GyroscopeUncalibrated implements Gyroscope, SensorEventListener {
     }
 
     @Override
-    public float[] getValue() {
+    public float[] getValues() {
         return values;
     }
 
@@ -57,6 +60,11 @@ public class GyroscopeUncalibrated implements Gyroscope, SensorEventListener {
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public SensorType getSensorType() {
+        return sensorType;
     }
 
     @Override

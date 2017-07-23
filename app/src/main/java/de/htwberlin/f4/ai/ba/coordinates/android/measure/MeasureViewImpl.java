@@ -62,7 +62,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     }
 
     @Override
-    public void updatePressure(Float pressure) {
+    public void updatePressure(float pressure) {
         barometerView.setText(getString(R.string.measure_pressure) + " " + String.valueOf(pressure));
     }
 
