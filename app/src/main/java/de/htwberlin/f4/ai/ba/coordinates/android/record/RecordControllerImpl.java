@@ -37,27 +37,42 @@ public class RecordControllerImpl implements RecordController {
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
             public void valueChanged(float[] values, SensorType sensorType) {
-                if (sensorType == SensorType.ACCELEROMETER_SIMPLE) {
-                    view.updateAcceleration(values);
-                } else if (sensorType == SensorType.ACCELEROMETER_LINEAR) {
-                    view.updateAccelerationLinear(values);
-                } else if (sensorType == SensorType.GRAVITY) {
-                    view.updateGravity(values);
-                } else if (sensorType == SensorType.GYROSCOPE) {
-                    view.updateGyroscope(values);
-                } else if (sensorType == SensorType.GYROSCOPE_UNCALIBRATED) {
-                    view.updateGyroscopeUncalibrated(values);
-                } else if (sensorType == SensorType.MAGNETIC_FIELD) {
-                    view.updateMagneticField(values);
-                } else if (sensorType == SensorType.COMPASS_FUSION) {
-                    view.updateCompassFusion((int) values[0]);
-                } else if (sensorType == SensorType.COMPASS_SIMPLE) {
-                    view.updateCompassSimple((int) values[0]);
-                } else if (sensorType == SensorType.BAROMETER) {
-                    view.updatePressure(values[0]);
+                switch (sensorType) {
+
+                    case ACCELEROMETER_SIMPLE:
+                        view.updateAcceleration(values);
+                        break;
+                    case ACCELEROMETER_LINEAR:
+                        view.updateAccelerationLinear(values);
+                        break;
+                    case GRAVITY:
+                        view.updateGravity(values);
+                        break;
+                    case GYROSCOPE:
+                        view.updateGyroscope(values);
+                        break;
+                    case GYROSCOPE_UNCALIBRATED:
+                        view.updateGyroscopeUncalibrated(values);
+                        break;
+                    case MAGNETIC_FIELD:
+                        view.updateMagneticField(values);
+                        break;
+                    case COMPASS_FUSION:
+                        view.updateCompassFusion((int) values[0]);
+                        break;
+                    case COMPASS_SIMPLE:
+                        view.updateCompassSimple((int) values[0]);
+                        break;
+                    case BAROMETER:
+                        view.updatePressure(values[0]);
+                        break;
+                    default:
+                        break;
+
                 }
             }
         });
+
         indoorMeasurement.start(SensorType.ACCELEROMETER_SIMPLE,
                                 SensorType.ACCELEROMETER_LINEAR,
                                 SensorType.GRAVITY,

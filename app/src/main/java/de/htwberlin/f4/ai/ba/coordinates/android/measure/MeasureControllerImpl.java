@@ -30,15 +30,24 @@ public class MeasureControllerImpl implements MeasureController {
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
             public void valueChanged(float[] values, SensorType sensorType) {
-                if (sensorType == SensorType.COMPASS_FUSION) {
-                    view.updateAzimuth((int) values[0]);
-                } else if (sensorType == SensorType.COMPASS_SIMPLE) {
-                    view.updateAzimuth2((int) values[0]);
-                } else if (sensorType == SensorType.BAROMETER) {
-                    view.updatePressure(values[0]);
+                switch (sensorType) {
+
+                    case COMPASS_FUSION:
+                        view.updateAzimuth((int) values[0]);
+                        break;
+                    case COMPASS_SIMPLE:
+                        view.updateAzimuth2((int) values[0]);
+                        break;
+                    case BAROMETER:
+                        view.updatePressure(values[0]);
+                        break;
+                    default:
+                        break;
+
                 }
             }
         });
+
         indoorMeasurement.start(SensorType.COMPASS_FUSION,
                                 SensorType.COMPASS_SIMPLE,
                                 SensorType.BAROMETER);
