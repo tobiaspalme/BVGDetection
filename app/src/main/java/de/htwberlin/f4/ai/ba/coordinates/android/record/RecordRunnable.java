@@ -34,6 +34,8 @@ public class RecordRunnable implements Runnable {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Log.d("recordtimer", String.valueOf(timestamp));
         Log.d("recordtimer2", String.valueOf(timestamp.getTime()));
+
+        /*
         // make sure to make a REAL copy of the map containing sensor datas, otherwise
         // we will get always the same data, if working with references
         Map<SensorType, float[]> originalMap = indoorMeasurement.getSensorValues();
@@ -42,10 +44,10 @@ public class RecordRunnable implements Runnable {
             float[] copyArray = new float[entry.getValue().length];
             System.arraycopy(entry.getValue(), 0, copyArray, 0, entry.getValue().length);
             copyMap.put(entry.getKey(), copyArray);
-        }
+        }*/
 
 
-        model.insertData(copyMap);
+        model.insertData(indoorMeasurement.getSensorValues());
         handler.postDelayed(this, period);
     }
 }
