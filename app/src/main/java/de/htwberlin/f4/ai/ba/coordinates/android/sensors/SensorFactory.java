@@ -1,7 +1,8 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.sensors;
 
 /**
- * Created by benni on 23.07.2017.
+ * SensorFactory interface, so we can hide any android related stuff (Context in this case) from IndoorMeasurement
+ * and keep it seperated
  */
 
 public interface SensorFactory {

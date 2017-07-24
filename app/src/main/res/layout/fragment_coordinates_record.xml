@@ -281,12 +281,32 @@
     </LinearLayout>
 
 
+
+
     <TextView
         android:id="@+id/fragment_record_barometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
         android:text="@string/measure_pressure" />
+
+
+    <TextView
+        android:id="@+id/fragment_record_periodhint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/period_hint" />
+
+    <TextView
+        android:id="@+id/fragment_record_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0" />
+
+    <SeekBar
+        android:id="@+id/fragment_record_period_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="1000"/>
 
     <Button
         android:id="@+id/fragment_record_start_btn"
@@ -299,6 +319,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/record_stop" />
+
 
 
 </LinearLayout>

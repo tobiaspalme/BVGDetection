@@ -1,7 +1,9 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
@@ -11,7 +13,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 /**
  * Class which implements IndoorMeasurement interface
  *
- * TODO: move to other package?
+ *
  */
 
 public class IndoorMeasurementImpl implements IndoorMeasurement {
@@ -31,6 +33,10 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     }
 
+    /**
+     * start one or more sensors
+     * @param sensorType
+     */
     @Override
     public void start(SensorType... sensorType) {
 
@@ -67,5 +73,16 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     @Override
     public void setListener(IndoorMeasurementListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public Map<SensorType, float[]> getSensorValues() {
+        Map<SensorType, float[]> sensorValues = new HashMap<>();
+
+        for (Sensor sensor : sensorList) {
+            sensorValues.put(sensor.getSensorType(), sensor.getValues());
+        }
+
+        return sensorValues;
     }
 }

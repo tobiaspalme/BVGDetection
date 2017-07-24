@@ -10,4 +10,5 @@ public interface RecordController {
     void onStartClicked();
     void onStopClicked();
     void onPause();
+    void onSavePeriodChanged(int value);
 }

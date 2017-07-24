@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
@@ -53,8 +54,12 @@ public class RecordViewImpl extends Fragment implements RecordView {
 
     private TextView barometer;
 
+    private TextView periodValue;
+
+    private SeekBar periodSeekbar;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_coordinates_record, container, false);
 
@@ -90,6 +95,31 @@ public class RecordViewImpl extends Fragment implements RecordView {
 
         barometer = (TextView) root.findViewById(R.id.fragment_record_barometer);
 
+        periodValue = (TextView) root.findViewById(R.id.fragment_record_period);
+
+        periodSeekbar = (SeekBar) root.findViewById(R.id.fragment_record_period_seekbar);
+        periodSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                periodValue.setText(String.valueOf(i));
+                if (controller != null) {
+                    controller.onSavePeriodChanged(i);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        periodSeekbar.setProgress(250);
+
+
         Button btnStart = (Button) root.findViewById(R.id.fragment_record_start_btn);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -107,6 +137,8 @@ public class RecordViewImpl extends Fragment implements RecordView {
                 }
             }
         });
+
+
 
         return root;
     }

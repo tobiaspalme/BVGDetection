@@ -33,6 +33,7 @@
     <string name="record_stop">Stop</string>
     <string name="compass_simple">Compass Simple</string>
     <string name="compass_fusion">Compass Fusion</string>
+    <string name="period_hint">Bitte wählen Sie in welchem Zeitabstand (ms) die Werte gespeichert werden sollen</string>
 
     <!-- new_activity_main -->
     <string name="record_button">Node aufnehmen</string>
