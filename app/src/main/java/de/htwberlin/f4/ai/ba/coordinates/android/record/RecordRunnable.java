@@ -4,8 +4,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 
 /**
@@ -31,7 +34,18 @@ public class RecordRunnable implements Runnable {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Log.d("recordtimer", String.valueOf(timestamp));
         Log.d("recordtimer2", String.valueOf(timestamp.getTime()));
-        model.insertData(indoorMeasurement.getSensorValues());
+        // make sure to make a REAL copy of the map containing sensor datas, otherwise
+        // we will get always the same data, if working with references
+        Map<SensorType, float[]> originalMap = indoorMeasurement.getSensorValues();
+        Map<SensorType, float[]> copyMap = new HashMap<>();
+        for (Map.Entry<SensorType, float[]> entry : originalMap.entrySet()) {
+            float[] copyArray = new float[entry.getValue().length];
+            System.arraycopy(entry.getValue(), 0, copyArray, 0, entry.getValue().length);
+            copyMap.put(entry.getKey(), copyArray);
+        }
+
+
+        model.insertData(copyMap);
         handler.postDelayed(this, period);
     }
 }
