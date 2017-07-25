@@ -31,7 +31,9 @@ public class StepCounter implements Sensor, SensorEventListener{
 
     @Override
     public void start() {
-        stepCount = 0;
+        // initialize with -1, because as soon as we start the sensor the event onSensorChanged() gets triggered,
+        // without doing any steps
+        stepCount = -1;
         stepCounterSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_DETECTOR);
         if (stepCounterSensor != null) {
             sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);

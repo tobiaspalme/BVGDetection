@@ -9,8 +9,10 @@ public interface CalibrateController {
     void setView(CalibrateView view);
     void onStartStepSetupClick();
     void onStopStepSetupClick();
-    void onSaveClicked();
+    void onNextClicked(int currentStep);
+    void onBackClicked(int currentStep);
     void onStepIncreaseClicked();
     void onStepDecreaseClicked();
+    void onDistanceChange(float distance);
     void onPause();
 }

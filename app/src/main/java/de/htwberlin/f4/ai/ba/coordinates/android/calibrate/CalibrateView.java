@@ -10,5 +10,9 @@ public interface CalibrateView {
 
     void setController(CalibrateController controller);
     void updateStepCount(int stepCount);
+    void loadCalibrateStep(int setupStep);
+    void updateAverageStepdistance(float distance);
+    void updateAverageStepperiod(int period);
+    void updateAzimuth(int azimuth);
     Context getContext();
 }

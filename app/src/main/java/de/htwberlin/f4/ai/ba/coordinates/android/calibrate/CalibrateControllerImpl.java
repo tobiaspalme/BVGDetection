@@ -1,10 +1,11 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
-import android.widget.Toast;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
@@ -19,16 +20,26 @@ public class CalibrateControllerImpl implements CalibrateController {
     private CalibrateView view;
     private IndoorMeasurement indoorMeasurement;
 
+    private int stepCount;
+    // for calculating the avg step period
+    private List<Long> stepTimes;
+    private float stepDistance;
+    private int stepPeriod;
+
     @Override
     public void onStartStepSetupClick() {
 
+        stepTimes = new ArrayList<>();
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
             public void valueChanged(float[] values, SensorType sensorType) {
                 if (sensorType == SensorType.STEPCOUNTER) {
-                    view.updateStepCount((int) values[0]);
+                    stepCount = (int) values[0];
+                    view.updateStepCount(stepCount);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    stepTimes.add(timestamp.getTime());
                 }
             }
         });
@@ -43,21 +54,74 @@ public class CalibrateControllerImpl implements CalibrateController {
     }
 
     @Override
-    public void onSaveClicked() {
-        Toast toast = Toast.makeText(view.getContext(), "save", Toast.LENGTH_SHORT);
-        toast.show();
+    public void onNextClicked(int currentStep) {
+        // stop all sensors
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
+        }
+
+        if (currentStep == 1) {
+            view.loadCalibrateStep(2);
+            stepPeriod = calculateAverageStepperiod(stepTimes);
+            view.updateAverageStepperiod(stepPeriod);
+        } else if (currentStep == 2) {
+            view.loadCalibrateStep(3);
+
+            if (indoorMeasurement != null) {
+                indoorMeasurement.setListener(new IndoorMeasurementListener() {
+                    @Override
+                    public void valueChanged(float[] values, SensorType sensorType) {
+                        if (sensorType == SensorType.COMPASS_FUSION) {
+                            view.updateAzimuth((int) values[0]);
+                        }
+                    }
+                });
+            }
+            indoorMeasurement.start(SensorType.COMPASS_FUSION);
+
+        } else if (currentStep == 3) {
+            if (indoorMeasurement != null) {
+                indoorMeasurement.stop();
+            }
+            //TODO: save calibration
+        }
+
     }
 
     @Override
+    public void onBackClicked(int currentStep) {
+        // stop all sensors
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
+        }
+
+        if (currentStep == 2) {
+            view.loadCalibrateStep(1);
+        } else if (currentStep == 3) {
+            view.loadCalibrateStep(2);
+        }
+    }
+
+
+    @Override
     public void onStepIncreaseClicked() {
-        Toast toast = Toast.makeText(view.getContext(), "step inc", Toast.LENGTH_SHORT);
-        toast.show();
+        stepCount++;
+        view.updateStepCount(stepCount);
     }
 
     @Override
     public void onStepDecreaseClicked() {
-        Toast toast = Toast.makeText(view.getContext(), "step dec", Toast.LENGTH_SHORT);
-        toast.show();
+        stepCount--;
+        view.updateStepCount(stepCount);
+    }
+
+    @Override
+    public void onDistanceChange(float distance) {
+        stepDistance = distance;
+
+        if (stepCount != 0 && distance != 0) {
+            view.updateAverageStepdistance(distance / stepCount);
+        }
     }
 
     @Override
@@ -72,5 +136,29 @@ public class CalibrateControllerImpl implements CalibrateController {
         this.view = view;
     }
 
+    private int calculateAverageStepperiod(List<Long> timestamps) {
+        List<Long> stepDurations = new ArrayList<>();
+
+        // calculate the durations between each step
+        for (int i = 0; i < timestamps.size(); i++) {
+            if (i < timestamps.size() -1) {
+                Long start = timestamps.get(i);
+                Long end = timestamps.get(i+1);
+                Long difference = end - start;
+                stepDurations.add(difference);
+            }
+        }
+
+        // sum up all durations
+        Long durationSum = 0L;
+        for (Long duration : stepDurations) {
+            durationSum += duration;
+        }
+
+        // calculate avg
+        int result = (int) (durationSum / (stepDurations.size()));
+
+        return result;
+    }
 
 }

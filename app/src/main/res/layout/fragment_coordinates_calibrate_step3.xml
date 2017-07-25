@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"    >
+
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_compasshint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:text="@string/step_setup_compass_hint" />
+
+    <ImageView
+        android:id="@+id/coordinates_calibrate_compass_iv"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/compass" />
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_compass_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/coordinates_calibrate_next_3"
+        android:layout_marginTop="20dp"
+        android:text="0°"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+    <Button
+        android:id="@+id/coordinates_calibrate_next_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_done"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        />
+
+
+    <Button
+        android:id="@+id/coordinates_calibrate_back_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        />
+
+
+
+</RelativeLayout>
