@@ -55,6 +55,9 @@
     <string name="wlan_name_text">WLAN Name:</string>
     <string name="node_name_text">Node Name:</string>
     <string name="minutes_text">Minuten</string>
+    <string name="save_node_button_text">Node speichern</string>
+    <string name="standard_wifi_name">BVG Wi-Fi</string>
+    <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
 
     <!-- acitvity_node_detail -->
     <string name="coordinates_text">Coordinates:</string>

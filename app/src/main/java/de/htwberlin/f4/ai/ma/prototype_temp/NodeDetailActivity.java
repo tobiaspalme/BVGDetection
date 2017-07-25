@@ -151,7 +151,7 @@ public class NodeDetailActivity extends Activity {
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx)
                         .setTitle("Löschen?")
-                        .setMessage("Soll der Node " + nodeName + " wirklich gelöscht werden?")
+                        .setMessage("Soll der Node \"" + nodeName + "\" wirklich gelöscht werden?")
                         .setCancelable(false)
                         .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

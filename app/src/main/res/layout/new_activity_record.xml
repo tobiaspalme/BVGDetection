@@ -73,7 +73,8 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/edTx_WLan" />
+            android:id="@+id/edTx_WLan"
+            android:text="@string/standard_wifi_name"/>
     </LinearLayout>
 
     <LinearLayout
@@ -98,7 +99,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Messen"
+        android:text="@string/measure_wifi_button_text"
         android:id="@+id/b_record" />
 
     <Button
@@ -136,8 +137,15 @@
     -->
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/camera_imageview" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_node_button"
+        android:text="@string/save_node_button_text"
+        />
 
 </LinearLayout>

@@ -48,6 +48,7 @@ public class RecordActivity extends AppCompatActivity {
 
     Button recordButton;
     Button captureButton;
+    Button saveNodeButton;
     ImageView cameraImageView;
     EditText idName;
     EditText recordTimeText;
@@ -56,7 +57,11 @@ public class RecordActivity extends AppCompatActivity {
     Node node;
     NodeFactory nodeFactory;
     DatabaseHandler databaseHandler;
+
     Boolean pictureTaken;
+    Boolean fingerprintTaken;
+    List<SignalInformation> signalInformationList;
+
 
     static final int CAM_REQUEST = 1;
 
@@ -74,6 +79,7 @@ public class RecordActivity extends AppCompatActivity {
 
         recordButton = (Button) findViewById(R.id.b_record);
         captureButton  = (Button) findViewById(R.id.capture_button);
+        saveNodeButton = (Button) findViewById(R.id.save_node_button);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
 
@@ -88,10 +94,13 @@ public class RecordActivity extends AppCompatActivity {
 
         idName.setText("bitte eingeben");
         recordTimeText.setText("3");
-        wlanNameText.setText("BVG Wi-Fi");
+
         pictureTaken = false;
+        fingerprintTaken = false;
 
 
+
+        // TODO: if Klausel notwendig?
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -124,6 +133,13 @@ public class RecordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        saveNodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveNewNode();
+            }
+        });
     }
 
 
@@ -138,7 +154,7 @@ public class RecordActivity extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                List<SignalInformation> signalInformationList = new ArrayList<>();
+                signalInformationList = new ArrayList<>();
                 while (mProgressStatus < 60 * recordTime) {
                     List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
 
@@ -175,19 +191,7 @@ public class RecordActivity extends AppCompatActivity {
                     }
                 }
 
-
-                // Determine if picture reference has to be added to Node
-                String picPath;
-                if (pictureTaken) {
-                    picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
-                } else {
-                    picPath = null;
-                }
-
-                node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath);
-                //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
-                jsonWriter.writeJSON(node);
-                databaseHandler.insertNode(node);
+                fingerprintTaken = true;
 
                 mProgressStatus = 0;
 
@@ -201,7 +205,7 @@ public class RecordActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         pictureTaken = true;
         String filePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
-        node.setPicturePath(filePath);
+        //node.setPicturePath(filePath);
         Glide.with(this).load(filePath).into(cameraImageView);
     }
 
@@ -215,5 +219,24 @@ public class RecordActivity extends AppCompatActivity {
 
         File imageFile = new File(folder, "Node_" + idName.getText() + ".jpg");
         return imageFile;
+    }
+
+    // Persist the new Node
+    private void saveNewNode() {
+        // Determine if picture reference has to be added to Node
+        String picPath;
+        if (pictureTaken) {
+            picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        } else {
+            picPath = null;
+        }
+
+        if (fingerprintTaken) {
+            node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath);
+            //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
+            jsonWriter.writeJSON(node);
+            databaseHandler.insertNode(node);
+            finish();
+        }
     }
 }

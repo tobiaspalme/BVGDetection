@@ -21,7 +21,7 @@
         <activity android:name=".Location" />
         <activity android:name=".RecordActivity" />
 
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeListActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.nodelist.NodeListActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>

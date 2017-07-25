@@ -13,6 +13,8 @@ import android.widget.Button;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ma.prototype_temp.nodelist.NodeListActivity;
+
 public class MainActivity extends AppCompatActivity {
     String[] permissions;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;

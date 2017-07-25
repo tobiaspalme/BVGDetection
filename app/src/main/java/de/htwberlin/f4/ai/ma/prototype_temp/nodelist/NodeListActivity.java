@@ -1,8 +1,6 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma.prototype_temp.nodelist;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,6 +17,7 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity;
 
 
 /**
@@ -28,21 +27,24 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 public class NodeListActivity extends Activity {
 
     ListView nodeListView;
-    ArrayList<String> items;
-    ArrayAdapter<String> adapter;
+    ArrayList<String> nodeNames;
+    ArrayList<String> nodePicturePaths;
+
     List<Node> allNodes;
+    NodeListAdapter nodeListAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nodelist);
 
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
-        items = new ArrayList<>();
+        nodeNames = new ArrayList<>();
+        nodePicturePaths = new ArrayList<>();
+
         loadDbData();
 
-        //fill list with adapter
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        nodeListView.setAdapter(adapter);
+        nodeListAdapter = new NodeListAdapter(this, nodeNames, nodePicturePaths);
+        nodeListView.setAdapter(nodeListAdapter);
 
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -52,6 +54,12 @@ public class NodeListActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+
+
+
+
+
     }
 
 
@@ -61,17 +69,19 @@ public class NodeListActivity extends Activity {
         super.onResume();
 
         loadDbData();
-        adapter.notifyDataSetChanged();
+        nodeListAdapter.notifyDataSetChanged();
     }
 
     private void loadDbData() {
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         allNodes = databaseHandler.getAllNodes();
-        this.items.clear();
+        this.nodeNames.clear();
 
         for (Node n : allNodes) {
-            items.add(n.getId().toString());
+            nodeNames.add(n.getId().toString());
+            nodePicturePaths.add(n.getPicturePath());
         }
-        Collections.sort(items);
+        //Collections.sort(nodeNames);
+
     }
 }
