@@ -46,7 +46,10 @@ public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     @Override
     public float[] getValues() {
-        return values;
+        float[] result = new float[values.length];
+        System.arraycopy(values, 0, result, 0, values.length);
+
+        return result;
     }
 
     @Override

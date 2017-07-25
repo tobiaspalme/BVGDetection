@@ -78,11 +78,8 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     @Override
     public Map<SensorType, float[]> getSensorValues() {
         Map<SensorType, float[]> sensorValues = new HashMap<>();
-        //TODO: arraycopy?
         for (Sensor sensor : sensorList) {
-            float[] copy = new float[sensor.getValues().length];
-            System.arraycopy(sensor.getValues(), 0, copy, 0, sensor.getValues().length);
-            sensorValues.put(sensor.getSensorType(), copy);
+            sensorValues.put(sensor.getSensorType(), sensor.getValues());
         }
 
         return sensorValues;

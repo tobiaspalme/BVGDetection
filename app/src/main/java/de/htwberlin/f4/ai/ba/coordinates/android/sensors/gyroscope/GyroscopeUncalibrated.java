@@ -45,7 +45,10 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
 
     @Override
     public float[] getValues() {
-        return values;
+        float[] result = new float[values.length];
+        System.arraycopy(values, 0, result, 0, values.length);
+
+        return result;
     }
 
     @Override
