@@ -16,11 +16,15 @@ import com.example.carol.bvg.R;
 
 import java.io.File;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+
 public class MaxPictureActivity extends Activity {
 
     ImageView maxImageView;
     File sdCard = Environment.getExternalStorageDirectory();
-
+    DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +33,13 @@ public class MaxPictureActivity extends Activity {
 
         maxImageView = (ImageView) findViewById(R.id.maxImageView);
 
-        Intent intent = getIntent();
-        String pictureName = intent.getExtras().get("pictureName").toString();
+        databaseHandler = new DatabaseHandler(this);
 
-        String filePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + pictureName + ".jpg";
-        Glide.with(this).load(filePath).into(maxImageView);
+        Intent intent = getIntent();
+        String nodeName = intent.getExtras().get("nodeName").toString();
+
+        Node node = databaseHandler.getNode(nodeName);
+
+        Glide.with(this).load(node.getPicturePath()).into(maxImageView);
     }
 }

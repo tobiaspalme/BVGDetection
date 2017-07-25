@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Button recordButton;
         Button nodeListButton;
         Button calculateButton;
+        Button importExportButton;
         Button settingsButton;
 
         permissions = new String[]{
@@ -40,19 +41,28 @@ public class MainActivity extends AppCompatActivity {
         recordButton = (Button) findViewById(R.id.record_button);
         nodeListButton = (Button) findViewById(R.id.nodelist_button);
         calculateButton = (Button) findViewById(R.id.calculate_button);
+        importExportButton = (Button) findViewById(R.id.import_export_button);
         settingsButton = (Button) findViewById(R.id.settings_button);
 
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
-
                     //TODO: richtige Startmethode? Betrifft auch andere Buttons unten
                     startActivities(new Intent[]{intent});
                 }
             });
         }
 
+        if (importExportButton != null) {
+            importExportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), ImportExportActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         if (nodeListButton != null) {
             nodeListButton.setOnClickListener(new View.OnClickListener() {

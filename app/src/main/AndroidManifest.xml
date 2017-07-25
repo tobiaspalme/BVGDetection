@@ -24,6 +24,7 @@
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeListActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>
 
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>

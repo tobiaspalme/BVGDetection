@@ -29,6 +29,7 @@
     <string name="record_button">Node aufnehmen</string>
     <string name="nodelist_button">Liste aller Nodes</string>
     <string name="calculate_button">Node berechnen</string>
+    <string name="import_export_button_text">Importieren / Exportieren</string>
     <string name="settings_button">Einstellungen</string>
 
     <!-- new_activity_record -->
@@ -43,5 +44,10 @@
     <string name="coordinates_text">Coordinates:</string>
     <string name="save_button_text">Speichern</string>
     <string name="delete_button_text">Löschen</string>
-    
+    <string name="change_picture_button_text">Bild neu aufnehmen</string>
+
+    <!-- activity_import_export -->
+    <string name="import_button_text">Daten importieren</string>
+    <string name="export_button_text">Daten exportieren</string>
+
 </resources>

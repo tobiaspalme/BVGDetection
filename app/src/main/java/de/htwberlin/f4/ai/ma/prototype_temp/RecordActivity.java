@@ -53,11 +53,13 @@ public class RecordActivity extends AppCompatActivity {
     EditText recordTimeText;
     EditText wlanNameText;
     EditText descriptionEdittext;
+    Node node;
+    NodeFactory nodeFactory;
+    DatabaseHandler databaseHandler;
+    Boolean pictureTaken;
 
     static final int CAM_REQUEST = 1;
 
-    NodeFactory nodeFactory;
-    DatabaseHandler databaseHandler;
 
     File sdCard = Environment.getExternalStorageDirectory();
 
@@ -87,6 +89,8 @@ public class RecordActivity extends AppCompatActivity {
         idName.setText("bitte eingeben");
         recordTimeText.setText("3");
         wlanNameText.setText("BVG Wi-Fi");
+        pictureTaken = false;
+
 
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +120,7 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                intent.putExtra("pictureName", idName.getText());
+                intent.putExtra("nodeName", idName.getText());
                 startActivity(intent);
             }
         });
@@ -172,7 +176,15 @@ public class RecordActivity extends AppCompatActivity {
                 }
 
 
-                Node node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", "");
+                // Determine if picture reference has to be added to Node
+                String picPath;
+                if (pictureTaken) {
+                    picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+                } else {
+                    picPath = null;
+                }
+
+                node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath);
                 //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
                 jsonWriter.writeJSON(node);
                 databaseHandler.insertNode(node);
@@ -185,10 +197,11 @@ public class RecordActivity extends AppCompatActivity {
 
 
 
-    // TODO!
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        pictureTaken = true;
         String filePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        node.setPicturePath(filePath);
         Glide.with(this).load(filePath).into(cameraImageView);
     }
 

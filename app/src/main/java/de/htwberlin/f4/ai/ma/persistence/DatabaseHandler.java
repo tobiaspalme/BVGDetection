@@ -74,7 +74,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         database.insert(NODES_TABLE, null, values);
 
-        Log.d("INSERT_NODE:ID", node.getId());
+        Log.d("DB: insert_node:id:", node.getId());
 
         database.close();
     }
@@ -90,7 +90,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put("coordinates", node.getCoordinates());
         contentValues.put("picture_path", node.getPicturePath());
 
-        Log.d("UPDATE_NODE:ID", node.getId());
+        Log.d("DB: update_node: id:", node.getId());
 
         database.update(NODES_TABLE, contentValues, NODE_ID + "='" + oldNodeId + "'", null);
     }
@@ -108,7 +108,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 node.setId(cursor.getString(0));
                 node.setDescription(cursor.getString(1));
 
-                Log.d("GET_ALL_NODES", cursor.getString(0));
+                Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 //node.setSignalInformationList(); TODO: serialize signalinformationlist?
                 node.setCoordinates(cursor.getString(3));
@@ -125,7 +125,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ nodeName +"'";
         Node node = nodeFactory.getInstance();
 
-        Log.d("SELECT_NODE", nodeName);
+        Log.d("DB: select_node", nodeName);
 
         Cursor cursor = database.rawQuery(selectQuery, null);
 
@@ -144,7 +144,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ node.getId() +"'";
 
-        Log.d("DELETE_NODE", node.getId());
+        Log.d("DB: delete_node", node.getId());
 
         database.execSQL(deleteQuery);
     }

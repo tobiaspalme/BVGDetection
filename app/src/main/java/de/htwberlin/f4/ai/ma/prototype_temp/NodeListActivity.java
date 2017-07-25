@@ -37,7 +37,7 @@ public class NodeListActivity extends Activity {
         setContentView(R.layout.activity_nodelist);
 
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
-
+        items = new ArrayList<>();
         loadDbData();
 
         //fill list with adapter
@@ -45,7 +45,6 @@ public class NodeListActivity extends Activity {
         nodeListView.setAdapter(adapter);
 
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), NodeDetailActivity.class);
@@ -55,12 +54,11 @@ public class NodeListActivity extends Activity {
         });
     }
 
+
     // TODO update List when item deleted
     @Override
     protected void onResume() {
         super.onResume();
-
-        System.out.println("ONRESUME");
 
         loadDbData();
         adapter.notifyDataSetChanged();
@@ -69,13 +67,11 @@ public class NodeListActivity extends Activity {
     private void loadDbData() {
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         allNodes = databaseHandler.getAllNodes();
+        this.items.clear();
 
-        System.out.println("ALLNODES COUNT: " + allNodes.size());
-
-        items = new ArrayList<>();
         for (Node n : allNodes) {
             items.add(n.getId().toString());
         }
-        //Collections.sort(items);
+        Collections.sort(items);
     }
 }
