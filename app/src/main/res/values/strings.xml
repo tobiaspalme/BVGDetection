@@ -14,16 +14,32 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- fragment_coordinates_calibrate -->
-    <string name="step_setup_start">Start step setup</string>
-    <string name="step_setup_stop">Stop step setup</string>
-    <string name="step_setup_instructions">Bitte schreiten Sie eine bekannte Strecke ab. Anschließend geben Sie bitte die zurückgelegte Strecke in Metern an</string>
+    <string name="step_setup_start">Start</string>
+    <string name="step_setup_stop">Stop</string>
+    <string name="step_setup_instructions">Bitte schreiten Sie eine von der Distanz her bekannte Strecke ab (min. 10m).</string>
     <string name="step_count">Schrittanzahl:</string>
     <string name="step_setup_save">Speichern</string>
     <string name="step_setup_distance_hint">Bitte geben Sie die zurückgelegte Strecke in Metern ein</string>
+    <string name="step_setup_next">Weiter</string>
+    <string name="step_setup_back">Zurück</string>
+    <string name="step_setup_done">Fertig</string>
+    <string name="step_setup_average_stepdistance">Schrittlänge:</string>
+    <string name="step_setup_average_stepperiod">Schrittdauer:</string>
+    <string name="step_setup_compass_hint">Bitte Kompass überprüfen und bei Bedarf kalibrieren!</string>
 
     <!-- fragment_coordinates_measure -->
     <string name="measure_start">Start</string>
     <string name="measure_pressure">Luftdruck:</string>
+
+    <!-- fragment_coordinates_record -->
+    <string name="x_caption">X:</string>
+    <string name="y_caption">Y:</string>
+    <string name="z_caption">Z:</string>
+    <string name="record_start">Start</string>
+    <string name="record_stop">Stop</string>
+    <string name="compass_simple">Compass Simple</string>
+    <string name="compass_fusion">Compass Fusion</string>
+    <string name="period_hint">Bitte wählen Sie in welchem Zeitabstand (ms) die Werte gespeichert werden sollen</string>
 
     <!-- new_activity_main -->
     <string name="record_button">Node aufnehmen</string>

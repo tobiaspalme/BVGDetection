@@ -7,17 +7,16 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
+
 
 /**
- * Created by benni on 21.07.2017.
- *
- * If no gyroscope is available, we just use the TYPE_ACCELEROMETER and TYPE_MAGNETIC_FIELD sensor.
- *
- * Note: the value is much more unstable than TYPE_ROTATION_VECTOR
- *
+ * Created by benni on 23.07.2017.
  */
 
-public class CompassSimple implements Compass, SensorEventListener {
+public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor{
+
+    private static final SensorType sensorType = SensorType.COMPASS_SIMPLE;
 
     private SensorManager sensorManager;
     private SensorListener listener;
@@ -39,8 +38,8 @@ public class CompassSimple implements Compass, SensorEventListener {
     @Override
     public void start() {
         azimuth = 0;
-        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        accelerometerSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
+        magneticFieldSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
 
 
         if ((accelerometerSensor != null) && (magneticFieldSensor != null)) {
@@ -58,8 +57,19 @@ public class CompassSimple implements Compass, SensorEventListener {
     }
 
     @Override
-    public Integer getValue() {
-        return azimuth;
+    public float[] getValues() {
+        return new float[]{azimuth};
+    }
+
+
+    @Override
+    public boolean isSensorAvailable() {
+        if ((sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER) == null) ||
+                (sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD) == null)) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -68,10 +78,16 @@ public class CompassSimple implements Compass, SensorEventListener {
     }
 
     @Override
+    public SensorType getSensorType() {
+        return sensorType;
+    }
+
+
+    @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_ACCELEROMETER) {
             System.arraycopy(sensorEvent.values, 0, accelerometerValues, 0, sensorEvent.values.length);
-        } else if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+        } else if (sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(sensorEvent.values, 0, magneticValues, 0, sensorEvent.values.length);
         }
 
@@ -80,12 +96,12 @@ public class CompassSimple implements Compass, SensorEventListener {
         azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
         if (listener != null) {
-            listener.valueChanged(azimuth);
+            listener.valueChanged(new float[]{azimuth});
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(android.hardware.Sensor sensor, int i) {
 
     }
 }

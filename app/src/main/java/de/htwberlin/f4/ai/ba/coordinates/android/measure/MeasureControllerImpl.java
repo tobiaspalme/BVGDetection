@@ -1,12 +1,12 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.barometer.Barometer;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.barometer.BarometerImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.barometer.BarometerListener;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.Compass;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.CompassImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.CompassListener;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.CompassSimple;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
 
 /**
  * Created by benni on 18.07.2017.
@@ -15,9 +15,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass.CompassSimple;
 public class MeasureControllerImpl implements MeasureController {
 
     private MeasureView view;
-    private Compass compass;
-    private Compass compass2;
-    private Barometer barometer;
+    private IndoorMeasurement indoorMeasurement;
 
     @Override
     public void setView(MeasureView view) {
@@ -26,54 +24,47 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
-        compass = new CompassImpl(view.getContext());
-        compass.setListener(new CompassListener() {
-            @Override
-            public void valueChanged(Integer newValue) {
-                view.updateAzimuth(newValue);
-            }
-        });
-        compass.start();
 
-        compass2 = new CompassSimple(view.getContext());
-        compass2.setListener(new CompassListener() {
+        SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
+        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
+        indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
-            public void valueChanged(Integer newValue) {
-                view.updateAzimuth2(newValue);
-            }
-        });
-        compass2.start();
+            public void valueChanged(float[] values, SensorType sensorType) {
+                switch (sensorType) {
 
-        barometer = new BarometerImpl(view.getContext());
-        barometer.setListener(new BarometerListener() {
-            @Override
-            public void valueChanged(Float newValue) {
-                view.updatePressure(newValue);
+                    case COMPASS_FUSION:
+                        view.updateAzimuth((int) values[0]);
+                        break;
+                    case COMPASS_SIMPLE:
+                        view.updateAzimuth2((int) values[0]);
+                        break;
+                    case BAROMETER:
+                        view.updatePressure(values[0]);
+                        break;
+                    default:
+                        break;
+
+                }
             }
         });
-        barometer.start();
+
+        indoorMeasurement.start(SensorType.COMPASS_FUSION,
+                                SensorType.COMPASS_SIMPLE,
+                                SensorType.BAROMETER);
     }
 
     @Override
     public void onStopClicked() {
-        stopSensors();
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
+        }
     }
 
     @Override
     public void onPause() {
-        stopSensors();
+        if (indoorMeasurement != null) {
+            indoorMeasurement.stop();
+        }
     }
 
-    private void stopSensors() {
-        if (compass != null) {
-            compass.stop();
-        }
-        if (compass2 != null) {
-            compass2.stop();
-        }
-        if (barometer != null) {
-            barometer.stop();
-        }
-
-    }
 }

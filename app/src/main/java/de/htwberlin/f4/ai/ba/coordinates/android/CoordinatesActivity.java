@@ -24,6 +24,10 @@ import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureController;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureControllerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureView;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordController;
+import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordControllerImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordView;
+import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl;
 
 public class CoordinatesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,7 +47,11 @@ public class CoordinatesActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        loadCalibrateFragment();
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -91,6 +99,8 @@ public class CoordinatesActivity extends AppCompatActivity
             loadSettingsFragment();
         } else if (id == R.id.coordinates_nav_import) {
             loadImportFragment();
+        } else if (id == R.id.coordinates_nav_record) {
+            loadRecordFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,5 +152,16 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    private void loadRecordFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        RecordView view = new RecordViewImpl();
+        RecordController controller = new RecordControllerImpl();
+        controller.setView(view);
+        view.setController(controller);
+
+        fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
+        fragmentTransaction.commit();
+    }
 
 }

@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/coordinates_calibrate_tv_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/step_setup_instructions"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/coordinates_calibrate_counter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:weightSum="1.0">
+
+        <TextView
+            android:id="@+id/coordinates_calibrate_tv_step"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textSize="80sp"
+            android:layout_weight="0.8"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="0.1">
+
+            <Button
+                android:id="@+id/coordinates_calibrate_btn_stepinc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/coordinates_calibrate_btn_stepdec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="-" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_above="@+id/coordinates_calibrate_next_1"
+        android:layout_marginBottom="50dp"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/coordinates_calibrate_btn_stepstart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/step_setup_start"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:id="@+id/coordinates_calibrate_btn_stepstop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/step_setup_stop"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/coordinates_calibrate_next_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step_setup_next"
+        android:enabled="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+
+
+</RelativeLayout>
