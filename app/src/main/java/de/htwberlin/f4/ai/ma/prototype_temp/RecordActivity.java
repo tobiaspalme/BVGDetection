@@ -58,9 +58,11 @@ public class RecordActivity extends AppCompatActivity {
     NodeFactory nodeFactory;
     DatabaseHandler databaseHandler;
 
-    Boolean pictureTaken;
-    Boolean fingerprintTaken;
+    boolean pictureTaken;
+    boolean fingerprintTaken;
     List<SignalInformation> signalInformationList;
+
+    String picturePath;
 
 
     static final int CAM_REQUEST = 1;
@@ -94,6 +96,7 @@ public class RecordActivity extends AppCompatActivity {
 
         idName.setText("bitte eingeben");
         recordTimeText.setText("3");
+        picturePath = null;
 
         pictureTaken = false;
         fingerprintTaken = false;
@@ -129,7 +132,7 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                intent.putExtra("nodeName", idName.getText());
+                intent.putExtra("picturePath", picturePath);
                 startActivity(intent);
             }
         });
@@ -181,7 +184,7 @@ public class RecordActivity extends AppCompatActivity {
                         public void run() {
 
                             mProgress.setProgress(mProgressStatus);
-                            progressText.setText(mProgress.getProgress() + "/" + mProgress.getMax());
+                            progressText.setText(mProgress.getMax() - mProgress.getProgress() + "s");
                         }
                     });
                     try {
@@ -204,9 +207,9 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         pictureTaken = true;
-        String filePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
         //node.setPicturePath(filePath);
-        Glide.with(this).load(filePath).into(cameraImageView);
+        Glide.with(this).load(picturePath).into(cameraImageView);
     }
 
 
@@ -233,7 +236,6 @@ public class RecordActivity extends AppCompatActivity {
 
         if (fingerprintTaken) {
             node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath);
-            //de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node = new Node(id, 0, signalInformationList);
             jsonWriter.writeJSON(node);
             databaseHandler.insertNode(node);
             finish();

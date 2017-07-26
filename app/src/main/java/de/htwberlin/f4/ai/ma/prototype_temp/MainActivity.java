@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         if (calculateButton != null) {
             calculateButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), Location.class);
+                    Intent intent = new Intent(getApplicationContext(), LocationActivity.class);
                     startActivities(new Intent[]{intent});
                 }
             });

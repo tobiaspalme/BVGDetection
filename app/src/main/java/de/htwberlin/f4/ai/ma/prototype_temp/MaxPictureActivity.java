@@ -36,10 +36,13 @@ public class MaxPictureActivity extends Activity {
         databaseHandler = new DatabaseHandler(this);
 
         Intent intent = getIntent();
-        String nodeName = intent.getExtras().get("nodeName").toString();
+        //String nodeName = intent.getExtras().get("nodeName").toString();
+        String picturePath = intent.getExtras().get("picturePath").toString();
 
-        Node node = databaseHandler.getNode(nodeName);
 
-        Glide.with(this).load(node.getPicturePath()).into(maxImageView);
+        //Node node = databaseHandler.getNode(nodeName);
+
+        //Glide.with(this).load(node.getPicturePath()).into(maxImageView);
+        Glide.with(this).load(picturePath).into(maxImageView);
     }
 }

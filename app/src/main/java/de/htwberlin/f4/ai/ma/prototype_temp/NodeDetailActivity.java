@@ -87,7 +87,7 @@ public class NodeDetailActivity extends Activity {
 
         idEditText.setText(node.getId());
         //TODO wlan-name ermitteln
-        //wlanEditText.setText(node.getSignalInformation().hashCode());
+        //wlanEditText.setText(node.getSignalInformation());
         descriptionEditText.setText(node.getDescription());
         coordinatesEditText.setText(node.getCoordinates());
 
@@ -104,7 +104,7 @@ public class NodeDetailActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                intent.putExtra("nodeName", node.getId());
+                intent.putExtra("picturePath", node.getPicturePath());
                 startActivity(intent);
             }
         });
@@ -135,13 +135,13 @@ public class NodeDetailActivity extends Activity {
                     try {
                         copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + ".jpg"));
                         node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + ".jpg");
-                        System.out.println("saved picpath: " + sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + ".jpg");
                     } catch (IOException ioException) {
                         System.out.println("IOException while copying image from temp folder to picture folder");
                     }
                 }
                 databaseHandler.updateNode(node, oldNodeId);
 
+                finish();
             }
         });
 

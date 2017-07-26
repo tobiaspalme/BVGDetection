@@ -52,7 +52,7 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformatio
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.JsonReader;
 
-public class Location extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity {
     private List<String> macAdresses = new ArrayList<>();
     private int count = 0;
     String[] permissions;
@@ -221,7 +221,7 @@ public class Location extends AppCompatActivity {
     }
 
 //    private List<de.htwberlin.f4.ai.ma.fingerprint.Node> getMeasuredNode() {
-//        if(hasPermissions(Location.this, permissions)){
+//        if(hasPermissions(LocationActivity.this, permissions)){
 //
 //            EditText editText = (EditText)findViewById(R.id.edTx_WlanNameLocation);
 //            String wlanName = editText.getText().toString();
@@ -286,7 +286,7 @@ public class Location extends AppCompatActivity {
                     //check if there is a new measurement
                      if(wifiScanList.get(0).timestamp == timestampWifiManager && times == 1)
                         {
-                            Location.this.runOnUiThread(new Runnable() {
+                            LocationActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     textView.setText("Bitte neu versuchen");
                                 }
@@ -301,7 +301,7 @@ public class Location extends AppCompatActivity {
                     for (final ScanResult sr : wifiScanList) {
 
 
-                        Location.this.runOnUiThread(new Runnable() {
+                        LocationActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 test.setText(String.valueOf(sr.timestamp));
                             }
@@ -371,7 +371,7 @@ public class Location extends AppCompatActivity {
         fingerprint.setActuallyNode(actuallyNode);
         actually = fingerprint.getCalculatedPOI();
 
-        Location.this.runOnUiThread(new Runnable() {
+        LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 LocationResult locationResult;
                 if (actually != null) {
@@ -402,7 +402,7 @@ public class Location extends AppCompatActivity {
 //                List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 //                for (final ScanResult sr : wifiScanList) {
 //
-//                    Location.this.runOnUiThread(new Runnable() {
+//                    LocationActivity.this.runOnUiThread(new Runnable() {
 //                        public void run() {
 //                            test.setText(String.valueOf(sr.timestamp));
 //                        }

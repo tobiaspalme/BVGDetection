@@ -28,7 +28,7 @@
 
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.Location"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.LocationActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity"/>
 
 

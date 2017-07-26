@@ -13,9 +13,11 @@ import com.example.carol.bvg.R;
 class ViewHolder {
     ImageView nodeImageView;
     TextView nodeIdTextView;
+    TextView nodeDescriptionTextView;
 
     ViewHolder(View view) {
         nodeImageView = (ImageView) view.findViewById(R.id.preview_imageview);
         nodeIdTextView = (TextView) view.findViewById(R.id.node_name);
+        nodeDescriptionTextView = (TextView) view.findViewById(R.id.node_description);
     }
 }

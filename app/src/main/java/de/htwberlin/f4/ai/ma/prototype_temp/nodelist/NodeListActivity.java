@@ -28,6 +28,7 @@ public class NodeListActivity extends Activity {
 
     ListView nodeListView;
     ArrayList<String> nodeNames;
+    ArrayList<String> nodeDescriptions;
     ArrayList<String> nodePicturePaths;
 
     List<Node> allNodes;
@@ -38,12 +39,14 @@ public class NodeListActivity extends Activity {
         setContentView(R.layout.activity_nodelist);
 
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
+
         nodeNames = new ArrayList<>();
+        nodeDescriptions = new ArrayList<>();
         nodePicturePaths = new ArrayList<>();
 
         loadDbData();
 
-        nodeListAdapter = new NodeListAdapter(this, nodeNames, nodePicturePaths);
+        nodeListAdapter = new NodeListAdapter(this, nodeNames, nodeDescriptions, nodePicturePaths);
         nodeListView.setAdapter(nodeListAdapter);
 
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,12 +57,6 @@ public class NodeListActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
     }
 
 
@@ -79,6 +76,7 @@ public class NodeListActivity extends Activity {
 
         for (Node n : allNodes) {
             nodeNames.add(n.getId().toString());
+            nodeDescriptions.add(n.getDescription());
             nodePicturePaths.add(n.getPicturePath());
         }
         //Collections.sort(nodeNames);

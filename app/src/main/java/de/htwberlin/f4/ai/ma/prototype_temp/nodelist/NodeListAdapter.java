@@ -22,14 +22,16 @@ class NodeListAdapter extends ArrayAdapter {
 
     Activity context;
     ArrayList<String> nodeNames;
+    ArrayList<String> nodeDescriptions;
     ArrayList<String> nodePicturePaths;
 
 
-    public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodePicturePaths) {
+    public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
         super(context, R.layout.item_nodes_listview);
 
         this.context = context;
         this.nodeNames = nodeNames;
+        this.nodeDescriptions = nodeDescriptions;
         this.nodePicturePaths = nodePicturePaths;
     }
 
@@ -54,6 +56,8 @@ class NodeListAdapter extends ArrayAdapter {
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
         System.out.println("#### nodeNames.get POSITION:" + position + " nodeName: " + nodeNames.get(position));
         System.out.println("#### nodePicturePaths.get POSITION:" + position + " nodePicturePath: " + nodePicturePaths.get(position));
+
+        viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
         Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
 
         return row;
