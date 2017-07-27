@@ -23,8 +23,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 public class MaxPictureActivity extends Activity {
 
     ImageView maxImageView;
-    File sdCard = Environment.getExternalStorageDirectory();
-    DatabaseHandler databaseHandler;
+    //File sdCard = Environment.getExternalStorageDirectory();
+    //DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MaxPictureActivity extends Activity {
 
         maxImageView = (ImageView) findViewById(R.id.maxImageView);
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandler = new DatabaseHandler(this);
 
         Intent intent = getIntent();
         //String nodeName = intent.getExtras().get("nodeName").toString();

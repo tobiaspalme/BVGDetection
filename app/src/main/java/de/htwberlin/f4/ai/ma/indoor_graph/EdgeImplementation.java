@@ -6,12 +6,22 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
  * Created by Johann Winter
  */
 
-class EdgeImplementation implements Edge{
+public class EdgeImplementation implements Edge{
 
-    int id;
-    Node nodeA;
-    Node nodeB;
-    boolean accessibly;
+    private int id;
+    private String nodeA;
+    private String nodeB;
+    private boolean accessibly;
+
+
+    public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly) {
+        this.id = id;
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
+        this.accessibly = accessibly;
+    }
+
+    public EdgeImplementation() {}
 
 
     @Override
@@ -25,22 +35,22 @@ class EdgeImplementation implements Edge{
     }
 
     @Override
-    public Node getNodeA() {
+    public String getNodeA() {
         return this.nodeA;
     }
 
     @Override
-    public void setNodeA(Node nodeA) {
+    public void setNodeA(String nodeA) {
         this.nodeA = nodeA;
     }
 
     @Override
-    public Node getNodeB() {
+    public String getNodeB() {
         return this.nodeB;
     }
 
     @Override
-    public void setNodeB(Node nodeB) {
+    public void setNodeB(String nodeB) {
         this.nodeB = nodeB;
     }
 

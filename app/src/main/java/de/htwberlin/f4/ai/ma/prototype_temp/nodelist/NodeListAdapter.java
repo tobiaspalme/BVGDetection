@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 class NodeListAdapter extends ArrayAdapter {
 
-    Activity context;
-    ArrayList<String> nodeNames;
-    ArrayList<String> nodeDescriptions;
-    ArrayList<String> nodePicturePaths;
+    private Activity context;
+    private ArrayList<String> nodeNames;
+    private ArrayList<String> nodeDescriptions;
+    private ArrayList<String> nodePicturePaths;
 
 
     public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
@@ -52,13 +52,13 @@ class NodeListAdapter extends ArrayAdapter {
         } else {
             viewHolder = (ViewHolder) row.getTag();
         }
-
+//
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
-        System.out.println("#### nodeNames.get POSITION:" + position + " nodeName: " + nodeNames.get(position));
-        System.out.println("#### nodePicturePaths.get POSITION:" + position + " nodePicturePath: " + nodePicturePaths.get(position));
-
         viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
         Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+
+        //System.out.println("#### nodeNames.get POSITION:" + position + " nodeName: " + nodeNames.get(position));
+        //System.out.println("#### nodePicturePaths.get POSITION:" + position + " nodePicturePath: " + nodePicturePaths.get(position));
 
         return row;
     }

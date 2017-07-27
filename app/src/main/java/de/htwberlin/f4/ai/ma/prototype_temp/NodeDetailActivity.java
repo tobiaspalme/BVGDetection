@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.LibraryGlideModule;
 import com.example.carol.bvg.R;
 
 import java.io.File;
@@ -72,6 +74,7 @@ public class NodeDetailActivity extends Activity {
         final Intent intent = getIntent();
         final String nodeName = intent.getExtras().get("nodeName").toString();
 
+
         // Create picture folders
         if (!pictureFolder.exists()) {
             pictureFolder.mkdirs();
@@ -87,7 +90,7 @@ public class NodeDetailActivity extends Activity {
 
         idEditText.setText(node.getId());
         //TODO wlan-name ermitteln
-        //wlanEditText.setText(node.getSignalInformation());
+        //wlanEditText.setText(node.getSignalInformation().hashCode());
         descriptionEditText.setText(node.getDescription());
         coordinatesEditText.setText(node.getCoordinates());
 
@@ -114,6 +117,7 @@ public class NodeDetailActivity extends Activity {
         changePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tempFile = null;
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 tempFile = new File(tempFolder, "Node_" + node.getId() + ".jpg");
 
@@ -129,12 +133,16 @@ public class NodeDetailActivity extends Activity {
                 node.setId(idEditText.getText().toString());
                 node.setDescription(descriptionEditText.getText().toString());
                 node.setCoordinates(coordinatesEditText.getText().toString());
-                //node.setPicturePath(picturePath);
+                node.setPicturePath(picturePath);
+
+                // TODO Übergangslösung
+                int rnd = (int) (Math.random()*100);
+                System.out.println("+++++++++++ RAND. " + rnd);
 
                 if (tempFile != null) {
                     try {
-                        copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + ".jpg"));
-                        node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + ".jpg");
+                        copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + "_" + rnd + ".jpg"));
+                        node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + "_" + rnd +  ".jpg");
                     } catch (IOException ioException) {
                         System.out.println("IOException while copying image from temp folder to picture folder");
                     }
@@ -178,9 +186,9 @@ public class NodeDetailActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("TEMPFILEEEEEEE " + tempFile.getAbsolutePath());
         Glide.with(this).load(tempFile).into(cameraImageView);
     }
-
 
     // Copy temporary image file to image folder
     public static void copyFile(File source, File destination) throws IOException {

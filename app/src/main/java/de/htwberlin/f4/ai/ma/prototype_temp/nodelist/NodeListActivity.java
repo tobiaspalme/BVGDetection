@@ -31,23 +31,27 @@ public class NodeListActivity extends Activity {
     ArrayList<String> nodeDescriptions;
     ArrayList<String> nodePicturePaths;
 
-    List<Node> allNodes;
+    ArrayList<Node> allNodes;
     NodeListAdapter nodeListAdapter;
+    DatabaseHandler databaseHandler;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nodelist);
 
+        databaseHandler = new DatabaseHandler(this);
+
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
 
+        allNodes = new ArrayList<>();
         nodeNames = new ArrayList<>();
         nodeDescriptions = new ArrayList<>();
         nodePicturePaths = new ArrayList<>();
 
-        loadDbData();
-
         nodeListAdapter = new NodeListAdapter(this, nodeNames, nodeDescriptions, nodePicturePaths);
         nodeListView.setAdapter(nodeListAdapter);
+
+        loadDbData();
 
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,15 +68,24 @@ public class NodeListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
         loadDbData();
-        nodeListAdapter.notifyDataSetChanged();
     }
 
+    /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        loadDbData();
+        System.out.println("### Onactivityresult");
+    }*/
+
     private void loadDbData() {
-        DatabaseHandler databaseHandler = new DatabaseHandler(this);
-        allNodes = databaseHandler.getAllNodes();
-        this.nodeNames.clear();
+
+        nodeDescriptions.clear();
+        nodeNames.clear();
+        nodePicturePaths.clear();
+        allNodes.clear();
+
+        allNodes.addAll(databaseHandler.getAllNodes());
 
         for (Node n : allNodes) {
             nodeNames.add(n.getId().toString());
@@ -81,5 +94,6 @@ public class NodeListActivity extends Activity {
         }
         //Collections.sort(nodeNames);
 
+        nodeListAdapter.notifyDataSetChanged();
     }
 }

@@ -13,21 +13,27 @@ import android.widget.Button;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity;
+import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationActivity;
 import de.htwberlin.f4.ai.ma.prototype_temp.nodelist.NodeListActivity;
 
 public class MainActivity extends AppCompatActivity {
     String[] permissions;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
+
+
+    private Button recordButton;
+    private Button nodeListButton;
+    private Button calculateButton;
+    private Button edgesManagerButton;
+    private Button importExportButton;
+    private Button settingsButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_activity_main);
-
-        Button recordButton;
-        Button nodeListButton;
-        Button calculateButton;
-        Button importExportButton;
-        Button settingsButton;
 
         permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -43,9 +49,11 @@ public class MainActivity extends AppCompatActivity {
         recordButton = (Button) findViewById(R.id.record_button);
         nodeListButton = (Button) findViewById(R.id.nodelist_button);
         calculateButton = (Button) findViewById(R.id.calculate_button);
+        edgesManagerButton = (Button) findViewById(R.id.edges_manager_button);
         importExportButton = (Button) findViewById(R.id.import_export_button);
         settingsButton = (Button) findViewById(R.id.settings_button);
 
+        // TODO: if clause sinnvoll?
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -74,6 +82,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        if (edgesManagerButton != null) {
+            edgesManagerButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), EdgesManagerActivity.class);
+                    startActivities(new Intent[]{intent});
+                }
+            });
+        }
+
 
         if (calculateButton != null) {
             calculateButton.setOnClickListener(new View.OnClickListener() {

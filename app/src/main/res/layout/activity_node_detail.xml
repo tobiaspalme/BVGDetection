@@ -105,7 +105,6 @@
             android:layout_below="@+id/delete_button"
             android:id="@+id/change_picture_button"
             android:text="@string/change_picture_button_text"/>
-
     </RelativeLayout>
 
 

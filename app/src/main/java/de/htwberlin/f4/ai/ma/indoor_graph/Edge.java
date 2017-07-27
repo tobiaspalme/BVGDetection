@@ -11,11 +11,11 @@ public interface Edge {
     int getId();
     void setID(int id);
 
-    Node getNodeA();
-    void setNodeA(Node nodeA);
+    String getNodeA();
+    void setNodeA(String nodeA);
 
-    Node getNodeB();
-    void setNodeB(Node nodeB);
+    String getNodeB();
+    void setNodeB(String nodeB);
 
     boolean getAccessibly();
     void setAccessibly(boolean accessibly);

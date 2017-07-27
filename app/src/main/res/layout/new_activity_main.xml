@@ -38,9 +38,16 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/edges_manager_button"
+        android:id="@+id/edges_manager_button"
+        android:layout_below="@+id/calculate_button"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="@string/import_export_button_text"
         android:id="@+id/import_export_button"
-        android:layout_below="@+id/calculate_button"
+        android:layout_below="@+id/edges_manager_button"
         android:layout_centerHorizontal="true" />
 
     <Button

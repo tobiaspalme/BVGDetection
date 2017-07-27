@@ -25,10 +25,11 @@
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity"/>
 
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.LocationActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity"/>
 
 

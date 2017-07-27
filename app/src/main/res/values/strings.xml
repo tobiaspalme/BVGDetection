@@ -43,8 +43,9 @@
 
     <!-- new_activity_main -->
     <string name="record_button">Node aufnehmen</string>
-    <string name="nodelist_button">Liste aller Nodes</string>
-    <string name="calculate_button">Node berechnen</string>
+    <string name="nodelist_button">Nodes verwalten</string>
+    <string name="calculate_button">Standort ermitteln</string>
+    <string name="edges_manager_button">Kanten verwalten</string>
     <string name="import_export_button_text">Importieren / Exportieren</string>
     <string name="settings_button">Einstellungen</string>
 
@@ -68,5 +69,9 @@
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>
     <string name="export_button_text">Daten exportieren</string>
+
+    <!-- activity_edges_manager -->
+    <string name="connect_nodes_button_text">Verbinden</string>
+    <string name="accessibly_checkbox_text">Barrierefrei</string>
 
 </resources>

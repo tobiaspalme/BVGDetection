@@ -1,19 +1,15 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -50,12 +46,11 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.JsonReader;
 
 public class LocationActivity extends AppCompatActivity {
     private List<String> macAdresses = new ArrayList<>();
     private int count = 0;
-    String[] permissions;
+    //String[] permissions;
     Fingerprint fingerprint = FingerprintFactory.getInstance();
     NodeFactory nodeFactory;
     DatabaseHandler databaseHandler;
@@ -73,10 +68,11 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        permissions = new String[]{
+
+       /* permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
-
+*/
         mainWifiObj= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         Button measurementButton = (Button) findViewById(R.id.b_measurement);
@@ -98,15 +94,18 @@ public class LocationActivity extends AppCompatActivity {
                 + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPrefs.getString("pref_knnNeighbours", "3") ;
 
         //read Json file
-        JsonReader jsonReader = new JsonReader();
-        final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
+        //JsonReader jsonReader = new JsonReader();
+        //final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
+
+        databaseHandler = new DatabaseHandler(this);
+        final List<Node> allNodes = databaseHandler.getAllNodes();
 
 
         //a dropdown list with name of all existing nodes
         dropdown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> items = new ArrayList<>();
-        for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node id : allNodes) {
-            items.add(id.getId().toString());
+        for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
+            items.add(node.getId().toString());
         }
         Collections.sort(items);
 
@@ -114,9 +113,19 @@ public class LocationActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         //fill result list with content
-        final ArrayList<LocationResult> arrayOfResults = loadJson();
-        resultAdapterdapter = new LocationResultAdapter(this, arrayOfResults);
+        //final ArrayList<LocationResultImpl> arrayOfResults = loadJson();
+
+
+
+
+        final ArrayList<LocationResultImpl> allResults = databaseHandler.getAllLocationResults();
+
+
+
+
+        resultAdapterdapter = new LocationResultAdapter(this, allResults);
         listView.setAdapter(resultAdapterdapter);
+
 
         //delete entry with long click
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -124,20 +133,24 @@ public class LocationActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 new AlertDialog.Builder(view.getContext())
                         .setTitle("Eintrag löschen")
-                        .setMessage("möchten sie den Eintrag löschen?")
+                        .setMessage("Möchten sie den Eintrag löschen?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    String jsonString = loadJSON(getApplicationContext());
+                                //try {
+
+                                    // TODO!!! delete from DB
+
+                                   /* String jsonString = loadJSON(getApplicationContext());
                                     JSONObject jsonObj = new JSONObject(jsonString);
                                     JSONArray jsonResult = jsonObj.getJSONArray("Results");
-                                    jsonResult.remove(position);
-                                    saveJsonObject(jsonObj);
-                                    resultAdapterdapter.remove(arrayOfResults.get(position));
+                                    jsonResult.remove(position);*/
+
+                                    //saveJsonObject(jsonObj);
+                                    resultAdapterdapter.remove(allResults.get(position));
                                     resultAdapterdapter.notifyDataSetChanged();
-                                } catch (final JSONException e) {
-                                    Log.e("JSON", "Json parsing error: " + e.getMessage());
-                                }
+                                //} catch (final JSONException e) {
+                                 //   Log.e("JSON", "Json parsing error: " + e.getMessage());
+                                //}
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -361,27 +374,30 @@ public class LocationActivity extends AppCompatActivity {
 
         }
 
-
         Node node = nodeFactory.getInstance(null, 0, "", signalInformationList, "", "");
-
-       // de.htwberlin.f4.ai.ma.prototype_temp.Node node = new de.htwberlin.f4.ai.ma.prototype_temp.Node(null, 0, signalInformationList);
         actuallyNode.add(node);
-
 
         fingerprint.setActuallyNode(actuallyNode);
         actually = fingerprint.getCalculatedPOI();
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-                LocationResult locationResult;
+                LocationResultImpl locationResult;
                 if (actually != null) {
                     textView.setText(actually);
-                    locationResult = new LocationResult(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
+                    locationResult = new LocationResultImpl(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
                 } else {
                     textView.setText("kein POI gefunden");
-                    locationResult = new LocationResult(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
+                    locationResult = new LocationResultImpl(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
                 }
-                makeJson(locationResult);
+                //makeJson(locationResult);
+
+
+
+                databaseHandler.insertLocationResult(locationResult);
+
+
+
                 resultAdapterdapter.add(locationResult);
                 resultAdapterdapter.notifyDataSetChanged();
             }
@@ -420,27 +436,29 @@ public class LocationActivity extends AppCompatActivity {
 //        //}
 //    };
 
+/*
     /**
      * make json Object for results and save
      * @param locationResult
      */
-    private void makeJson(LocationResult locationResult) {
+    /*
+    private void makeJson(LocationResultImpl locationResult) {
         try {
             String jsonString = loadJSON(getApplicationContext());
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArrayOld = jsonObject.getJSONArray("Results");
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObjectSetting = new JSONObject();
-            jsonObjectSetting.put("Setting", locationResult.settings);
+            jsonObjectSetting.put("Setting", locationResult.getSettings());
             jsonArray.put(jsonObjectSetting);
             JSONObject jsonObjectTime = new JSONObject();
-            jsonObjectTime.put("Time", locationResult.measuredTime);
+            jsonObjectTime.put("Time", locationResult.getMeasuredTime());
             jsonArray.put(jsonObjectTime);
             JSONObject jsonObjectPoi = new JSONObject();
-            jsonObjectPoi.put("Poi", locationResult.poi);
+            jsonObjectPoi.put("Poi", locationResult.getSelectedNode());
             jsonArray.put(jsonObjectPoi);
             JSONObject jsonObjectMeasuredPoi = new JSONObject();
-            jsonObjectMeasuredPoi.put("MeasuredPoi", locationResult.measuredPoi);
+            jsonObjectMeasuredPoi.put("MeasuredPoi", locationResult.getMeasuredNode());
             jsonArray.put(jsonObjectMeasuredPoi);
 
             jsonArrayOld.put(jsonArray);
@@ -451,14 +469,15 @@ public class LocationActivity extends AppCompatActivity {
         }
 
     }
-
+*/ /*
     /**
      * save json Object to file
      * @param jsonObject
      */
+    /*
     private void saveJsonObject(JSONObject jsonObject) {
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Files");
+        File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
         dir.mkdirs();
         File file = new File(dir, "jsonResultFile.txt");
         //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonResultFile.txt");
@@ -473,8 +492,11 @@ public class LocationActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<LocationResult> loadJson() {
-        ArrayList<LocationResult> locationResultArrayList = new ArrayList<>();
+    */
+
+/*
+    private ArrayList<LocationResultImpl> loadJson() {
+        ArrayList<LocationResultImpl> locationResultArrayList = new ArrayList<>();
         String jsonString = loadJSON(getApplicationContext());
         JSONObject jsonObject = null;
         try {
@@ -487,7 +509,7 @@ public class LocationActivity extends AppCompatActivity {
                 String poi = jsonArrayResult.getJSONObject(2).getString("Poi");
                 String measuredPoi = jsonArrayResult.getJSONObject(3).getString("MeasuredPoi");
 
-                LocationResult locationResult = new LocationResult(setting, time, poi, measuredPoi);
+                LocationResultImpl locationResult = new LocationResultImpl(setting, time, poi, measuredPoi);
                 locationResultArrayList.add(locationResult);
             }
         } catch (JSONException e) {
@@ -495,18 +517,21 @@ public class LocationActivity extends AppCompatActivity {
         }
         return locationResultArrayList;
     }
+    */
+
+/*
 
     /**
      * load and read .txt file
      * @param context
      * @return json string
-     */
+     */ /*
     private String loadJSON(Context context) {
         String json = null;
         try {
             //TODO Exception abfangen
             File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/Files");
+            File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
             dir.mkdirs();
             File file = new File(dir, "jsonResultFile.txt");
             //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonResultFile.txt");
@@ -528,8 +553,9 @@ public class LocationActivity extends AppCompatActivity {
         }
         return json;
     }
+*/
 
-
+    /*
     private boolean hasPermissions(Context context, String[] permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -540,4 +566,6 @@ public class LocationActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    */
 }
