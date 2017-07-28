@@ -3,12 +3,12 @@ package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,19 +21,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.example.carol.bvg.R;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,22 +37,30 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 
+
 public class LocationActivity extends AppCompatActivity {
+
     private List<String> macAdresses = new ArrayList<>();
     private int count = 0;
-    //String[] permissions;
-    Fingerprint fingerprint = FingerprintFactory.getInstance();
-    NodeFactory nodeFactory;
-    DatabaseHandler databaseHandler;
+    private Button measurementButton;
+    private Button measurementButtonMoreTomes;
 
-    ListView listView;
-    String settings;
-    Spinner dropdown;
-    LocationResultAdapter resultAdapterdapter;
-    String actually;
-    WifiManager mainWifiObj;
-    Multimap<String, Integer> multiMap;
-    long timestampWifiManager = 0;
+    //String[] permissions;
+    private Fingerprint fingerprint = FingerprintFactory.getInstance();
+    private DatabaseHandler databaseHandler;
+    private SharedPreferences sharedPrefs;
+    private NodeFactory nodeFactory;
+
+    private ListView listView;
+    private String settings;
+    private Spinner dropdown;
+    private LocationResultAdapter resultAdapterdapter;
+    private String actually;
+    private WifiManager mainWifiObj;
+    private Multimap<String, Integer> multiMap;
+    private long timestampWifiManager = 0;
+
+    private Integer locationsCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +73,23 @@ public class LocationActivity extends AppCompatActivity {
 */
         mainWifiObj= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        Button measurementButton = (Button) findViewById(R.id.b_measurement);
-        Button measurementButtonMoreTomes = (Button) findViewById(R.id.b_measurementMoreTimes);
+        measurementButton = (Button) findViewById(R.id.b_measurement);
+        measurementButtonMoreTomes = (Button) findViewById(R.id.b_measurementMoreTimes);
         listView = (ListView) findViewById(R.id.LV_results);
 
         //check Preferences
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean movingAverage = sharedPrefs.getBoolean("pref_movingAverage", true);
         boolean kalmanFilter = sharedPrefs.getBoolean("pref_kalman", false);
         boolean euclideanDistance = sharedPrefs.getBoolean("pref_euclideanDistance", false);
         boolean knnAlgorithm = sharedPrefs.getBoolean("pref_knnAlgorithm", true);
+
+        locationsCounter = sharedPrefs.getInt("locationsCounter", -1);
+        if (locationsCounter.equals(-1)) {
+            locationsCounter = 1;
+        }
+
 
 
         settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPrefs.getString("pref_movivngAverageOrder", "3")
@@ -103,25 +107,20 @@ public class LocationActivity extends AppCompatActivity {
 
         //a dropdown list with name of all existing nodes
         dropdown = (Spinner) findViewById(R.id.spinner);
-        final ArrayList<String> items = new ArrayList<>();
+        final ArrayList<String> nodeItems = new ArrayList<>();
         for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
-            items.add(node.getId().toString());
+            nodeItems.add(node.getId().toString());
         }
-        Collections.sort(items);
+        Collections.sort(nodeItems);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeItems);
         dropdown.setAdapter(adapter);
 
         //fill result list with content
         //final ArrayList<LocationResultImpl> arrayOfResults = loadJson();
 
 
-
-
         final ArrayList<LocationResultImpl> allResults = databaseHandler.getAllLocationResults();
-
-
-
 
         resultAdapterdapter = new LocationResultAdapter(this, allResults);
         listView.setAdapter(resultAdapterdapter);
@@ -136,21 +135,10 @@ public class LocationActivity extends AppCompatActivity {
                         .setMessage("Möchten sie den Eintrag löschen?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                //try {
 
-                                    // TODO!!! delete from DB
-
-                                   /* String jsonString = loadJSON(getApplicationContext());
-                                    JSONObject jsonObj = new JSONObject(jsonString);
-                                    JSONArray jsonResult = jsonObj.getJSONArray("Results");
-                                    jsonResult.remove(position);*/
-
-                                    //saveJsonObject(jsonObj);
-                                    resultAdapterdapter.remove(allResults.get(position));
-                                    resultAdapterdapter.notifyDataSetChanged();
-                                //} catch (final JSONException e) {
-                                 //   Log.e("JSON", "Json parsing error: " + e.getMessage());
-                                //}
+                                databaseHandler.deleteLocationResult(allResults.get(position));
+                                resultAdapterdapter.remove(allResults.get(position));
+                                resultAdapterdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -385,18 +373,17 @@ public class LocationActivity extends AppCompatActivity {
                 LocationResultImpl locationResult;
                 if (actually != null) {
                     textView.setText(actually);
-                    locationResult = new LocationResultImpl(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
+                    locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
                 } else {
                     textView.setText("kein POI gefunden");
-                    locationResult = new LocationResultImpl(settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
+                    locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
                 }
                 //makeJson(locationResult);
 
-
+                locationsCounter++;
+                sharedPrefs.edit().putInt("locationsCounter", locationsCounter);
 
                 databaseHandler.insertLocationResult(locationResult);
-
-
 
                 resultAdapterdapter.add(locationResult);
                 resultAdapterdapter.notifyDataSetChanged();
