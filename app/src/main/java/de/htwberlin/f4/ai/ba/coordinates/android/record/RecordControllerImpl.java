@@ -69,39 +69,30 @@ public class RecordControllerImpl implements RecordController {
 
                     case ACCELEROMETER_SIMPLE:
                         view.updateAcceleration(values);
-                        //Log.d("accelerometer", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case ACCELEROMETER_LINEAR:
                         view.updateAccelerationLinear(values);
-                        //Log.d("accelerometerlinear", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case GRAVITY:
                         view.updateGravity(values);
-                        //Log.d("gravity", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case GYROSCOPE:
                         view.updateGyroscope(values);
-                        //Log.d("gyroscope", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case GYROSCOPE_UNCALIBRATED:
                         view.updateGyroscopeUncalibrated(values);
-                        //Log.d("gyroscopeuncalibrated", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case MAGNETIC_FIELD:
                         view.updateMagneticField(values);
-                        //Log.d("magneticfield", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case COMPASS_FUSION:
                         view.updateCompassFusion((int) values[0]);
-                        //Log.d("compassfusion", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case COMPASS_SIMPLE:
                         view.updateCompassSimple((int) values[0]);
-                        //Log.d("compasssimple", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     case BAROMETER:
                         view.updatePressure(values[0]);
-                        //Log.d("barometer", String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()));
                         break;
                     default:
                         break;
@@ -110,7 +101,7 @@ public class RecordControllerImpl implements RecordController {
             }
         });
 
-        indoorMeasurement.start(SensorType.ACCELEROMETER_SIMPLE,
+        indoorMeasurement.startSensors(SensorType.ACCELEROMETER_SIMPLE,
                                 SensorType.ACCELEROMETER_LINEAR,
                                 SensorType.GRAVITY,
                                 SensorType.GYROSCOPE,

@@ -43,7 +43,7 @@ public class CalibrateControllerImpl implements CalibrateController {
                 }
             }
         });
-        indoorMeasurement.start(SensorType.STEPCOUNTER);
+        indoorMeasurement.startSensors(SensorType.STEPCOUNTER);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CalibrateControllerImpl implements CalibrateController {
                     }
                 });
             }
-            indoorMeasurement.start(SensorType.COMPASS_FUSION);
+            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION);
 
         } else if (currentStep == 3) {
             if (indoorMeasurement != null) {
