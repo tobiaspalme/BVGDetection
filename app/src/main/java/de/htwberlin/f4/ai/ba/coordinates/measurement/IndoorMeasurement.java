@@ -15,11 +15,14 @@ public interface IndoorMeasurement {
     // calibrate air pressure, steep length
     void calibrate();
 
-    // start sensors, multiple sensors can be used at once
-    void start(SensorType... sensorType);
+    // start recording for postion calculcation
+    void start(IndoorMeasurementType indoorMeasurementType);
 
     // stop sensors
     void stop();
+
+    // start specific sensors
+    void startSensors(SensorType... sensorType);
 
     // get the relative coordinates
     String getCoordinates();

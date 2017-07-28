@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleImpl;
 
 /**
  * Class which implements IndoorMeasurement interface
@@ -21,11 +25,13 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private SensorFactory sensorFactory;
     private IndoorMeasurementListener listener;
     private List<Sensor> sensorList;
-
+    private PositionModule positionModule;
+    private SensorDataModel dataModel;
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
         sensorList = new ArrayList<>();
+        dataModel = new SensorDataModelImpl();
     }
 
     @Override
@@ -33,13 +39,23 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     }
 
-    /**
-     * start one or more sensors
-     * @param sensorType
-     */
     @Override
-    public void start(SensorType... sensorType) {
+    public void start(IndoorMeasurementType indoorMeasurementType) {
 
+        if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
+            positionModule = new PositionModuleImpl(dataModel);
+        }
+    }
+
+    @Override
+    public void stop() {
+        for (Sensor sensor : sensorList) {
+            sensor.stop();
+        }
+    }
+
+    @Override
+    public void startSensors(SensorType... sensorType) {
         sensorList.clear();
 
         for (final SensorType type : sensorType) {
@@ -54,14 +70,6 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             });
             sensor.start();
             sensorList.add(sensor);
-        }
-    }
-
-
-    @Override
-    public void stop() {
-        for (Sensor sensor : sensorList) {
-            sensor.stop();
         }
     }
 

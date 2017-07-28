@@ -48,7 +48,7 @@ public class MeasureControllerImpl implements MeasureController {
             }
         });
 
-        indoorMeasurement.start(SensorType.COMPASS_FUSION,
+        indoorMeasurement.startSensors(SensorType.COMPASS_FUSION,
                                 SensorType.COMPASS_SIMPLE,
                                 SensorType.BAROMETER);
     }
