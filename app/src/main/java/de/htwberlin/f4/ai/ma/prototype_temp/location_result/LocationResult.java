@@ -6,6 +6,9 @@ package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
 
 public interface LocationResult {
 
+    int getId();
+    void setId(int id);
+
     String getSettings();
     void setSettings(String settings);
 

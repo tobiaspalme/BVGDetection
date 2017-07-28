@@ -67,7 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 NODE_PICTURE_PATH + " TEXT)";
 
         String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
-                RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                RESULT_ID + " INTEGER PRIMARY KEY," +
                 RESULT_SETTINGS + " TEXT," +
                 RESULT_MEASURED_TIME + " TEXT," +
                 RESULT_SELECTED_NODE + " TEXT," +
@@ -87,6 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
+
 
 
     //----------------- N O D E S ------------------------------------------------------------------------------------------
@@ -195,6 +196,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put("id", locationResult.getId());
         values.put("settings", locationResult.getSettings());
         values.put("measuredtime", locationResult.getMeasuredTime());
         values.put("selectednode", locationResult.getSelectedNode());
@@ -221,10 +223,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 Log.d("DB: get_all_locations", "###########");
 
-                locationResultImpl.setSettings(cursor.getString(0));
-                locationResultImpl.setMeasuredTime(cursor.getString(1));
-                locationResultImpl.setSelectedNode(cursor.getString(2));
-                locationResultImpl.setMeasuredNode(cursor.getString(3));
+                locationResultImpl.setId(Integer.valueOf(cursor.getString(0)));
+                locationResultImpl.setSettings(cursor.getString(1));
+                locationResultImpl.setMeasuredTime(cursor.getString(2));
+                locationResultImpl.setSelectedNode(cursor.getString(3));
+                locationResultImpl.setMeasuredNode(cursor.getString(4));
 
                 allResults.add(locationResultImpl);
             } while (cursor.moveToNext());
@@ -235,11 +238,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
+    // Delete LocatonResult
+    public void deleteLocationResult(LocationResult locationResult) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='"+ locationResult.getId() +"'";
+
+        Log.d("DB: delete_LOCRESULT", "" + locationResult.getId());
+        System.out.println("REM LOCRES: " + locationResult.getSelectedNode());
+
+        database.execSQL(deleteQuery);
+    }
+
+
 
 
     //----------- E D G E S -------------------------------------------------------------------------------------
-
-
 
     // Insert
     public void insertEdge(Edge edge) {
@@ -269,8 +282,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 Edge edge = new EdgeImplementation();
 
-                Log.d("DB: get_all_EDGES", "###########");
-
                 // TODO Cast entfernen
                 edge.setID(Integer.valueOf(cursor.getString(0)));
                 edge.setNodeA(cursor.getString(1));
@@ -288,6 +299,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         database.close();
         return allEdges;
+    }
+
+
+    // Delete Edge
+    public void deleteEdge(Edge edge) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='"+ edge.getId() +"'";
+
+        Log.d("DB: delete_EDGE", "" + edge.getId());
+
+        database.execSQL(deleteQuery);
     }
 
 }

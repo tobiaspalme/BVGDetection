@@ -4,12 +4,15 @@ package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
  * a class for the location result with important information
  */
 public class LocationResultImpl implements LocationResult{
+
+    private int id;
     private String settings;
     private String measuredTime;
     private String selectedNode;
     private String measuredNode;
 
-    public LocationResultImpl(String settings, String measuredTime, String selectedNode, String measuredNode) {
+    public LocationResultImpl(int id, String settings, String measuredTime, String selectedNode, String measuredNode) {
+        this.id = id;
         this.settings = settings;
         this.measuredTime = measuredTime;
         this.selectedNode = selectedNode;
@@ -17,6 +20,11 @@ public class LocationResultImpl implements LocationResult{
     }
 
     public LocationResultImpl() {};
+
+    public int getId() { return this.id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSettings() { return this.settings; }
     public void setSettings(String settings) { this.settings = settings; }
