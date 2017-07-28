@@ -23,16 +23,20 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     private Sensor accelerometerSensor;
     private Sensor magneticFieldSensor;
 
-    private float[] orientation = new float[3];
-    private float[] rotationMatrix = new float[9];
-    private float[] accelerometerValues = new float[3];
-    private float[] magneticValues = new float[3];
+    private float[] orientation;
+    private float[] rotationMatrix;
+    private float[] accelerometerValues;
+    private float[] magneticValues;
 
 
     private int azimuth;
 
     public CompassSimple(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        orientation = new float[3];
+        rotationMatrix = new float[9];
+        accelerometerValues = new float[3];
+        magneticValues = new float[3];
     }
 
     @Override

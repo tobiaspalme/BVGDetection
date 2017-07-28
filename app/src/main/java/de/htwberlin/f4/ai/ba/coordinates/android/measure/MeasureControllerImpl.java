@@ -35,9 +35,6 @@ public class MeasureControllerImpl implements MeasureController {
                     case COMPASS_FUSION:
                         view.updateAzimuth((int) values[0]);
                         break;
-                    case COMPASS_SIMPLE:
-                        view.updateAzimuth2((int) values[0]);
-                        break;
                     case BAROMETER:
                         view.updatePressure(values[0]);
                         break;
@@ -58,6 +55,11 @@ public class MeasureControllerImpl implements MeasureController {
         if (indoorMeasurement != null) {
             indoorMeasurement.stop();
         }
+    }
+
+    @Override
+    public void onAddClicked() {
+
     }
 
     @Override

@@ -11,6 +11,7 @@ public interface MeasureController {
     void setView(MeasureView view);
     void onStartClicked();
     void onStopClicked();
+    void onAddClicked();
     void onPause();
 
 }

@@ -29,7 +29,12 @@
 
     <!-- fragment_coordinates_measure -->
     <string name="measure_start">Start</string>
+    <string name="measure_stop">Stop</string>
+    <string name="measure_add">Add</string>
     <string name="measure_pressure">Luftdruck:</string>
+    <string name="measure_steps">Schritte:</string>
+    <string name="measure_distance">Distanz:</string>
+    <string name="measure_height">Höhe:</string>
 
     <!-- fragment_coordinates_record -->
     <string name="x_caption">X:</string>

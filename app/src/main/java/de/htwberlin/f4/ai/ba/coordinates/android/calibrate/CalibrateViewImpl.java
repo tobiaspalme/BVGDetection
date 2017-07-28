@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     private TextView stepPeriodView;
     private ImageView compassView;
     private TextView azimuthView;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

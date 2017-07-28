@@ -75,6 +75,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     @Override
     public String getCoordinates() {
+        /*if (positionModule != null) {
+            positionModule.getPosition();
+        }*/
         return null;
     }
 
