@@ -10,9 +10,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
 public class AltitudeModuleImpl implements AltitudeModule {
 
     private SensorDataModel dataModel;
+    private float airPressure;
 
-    public AltitudeModuleImpl(SensorDataModel dataModel) {
+    public AltitudeModuleImpl(SensorDataModel dataModel, float airPressure) {
         this.dataModel = dataModel;
+        this.airPressure = airPressure;
     }
 
     @Override

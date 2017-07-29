@@ -28,6 +28,28 @@ public class SensorDataModelImpl implements SensorDataModel {
     }
 
     @Override
+    public Map<SensorType, List<SensorData>> getDataInInterval(long start, long end) {
+        Map<SensorType, List<SensorData>> result = new HashMap<>();
+
+        // loop through all sensor datas
+        for (Map.Entry<SensorType, List<SensorData>> entry : data.entrySet()) {
+            SensorType sensorType = entry.getKey();
+            List<SensorData> sensorDataFiltered = new ArrayList<>();
+            List<SensorData> sensorDataUnfiltered = entry.getValue();
+            // check if sensordata is in interval
+            for (SensorData data : sensorDataUnfiltered) {
+                if ( (data.getTimestamp() >= start) && (data.getTimestamp() <= end) ) {
+                    // add sensordata to filtered list
+                    sensorDataFiltered.add(data);
+                }
+            }
+            result.put(sensorType, sensorDataFiltered);
+        }
+
+        return result;
+    }
+
+    @Override
     public void insertData(SensorData sensorData) {
         boolean keyExists = false;
 

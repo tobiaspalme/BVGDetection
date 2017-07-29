@@ -12,8 +12,14 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.AltitudeModuleImpl;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.DistanceModuleImpl;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModuleImpl;
+
 
 /**
  * Class which implements IndoorMeasurement interface
@@ -26,8 +32,11 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private SensorFactory sensorFactory;
     private IndoorMeasurementListener listener;
     private List<Sensor> sensorList;
-    private PositionModule positionModule;
     private SensorDataModel dataModel;
+
+    private AltitudeModule altitudeModule;
+    private DistanceModule distanceModule;
+    private OrientationModule orientationModule;
 
     private float stepLength;
     private int stepPeriod;
@@ -50,8 +59,23 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     @Override
     public void start(IndoorMeasurementType indoorMeasurementType) {
 
+        Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
+        stepSensor.setListener(new SensorListener() {
+            @Override
+            public void valueChanged(SensorData newValue) {
+                // calculate new position with every step
+                // berechnung vielleicht in thread auslagern?
+            }
+        });
+        stepSensor.start();
+        sensorList.add(stepSensor);
+
         if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
-            positionModule = new PositionModuleImpl(dataModel);
+            altitudeModule = new AltitudeModuleImpl(dataModel, pressure);
+            distanceModule = new DistanceModuleImpl(dataModel, stepLength);
+            orientationModule = new OrientationModuleImpl(dataModel);
+
+            // sensoren listener registrieren und werte automatisch ins model schieben
         }
     }
 
