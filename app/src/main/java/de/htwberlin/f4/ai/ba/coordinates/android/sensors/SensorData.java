@@ -11,7 +11,8 @@ public class SensorData {
     private SensorType sensorType;
 
     public SensorData() {
-        // initialize with 0 so we dont have to deal with null pointers
+        // initialize with 0 so we dont have to deal with null pointers in case
+        // we want to retrieve values but sensor hasn't delivered any yet
         values = new float[]{0.0f, 0.0f, 0.0f};
     }
 

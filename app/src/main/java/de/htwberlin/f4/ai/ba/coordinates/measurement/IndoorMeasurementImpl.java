@@ -29,15 +29,22 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private PositionModule positionModule;
     private SensorDataModel dataModel;
 
+    private float stepLength;
+    private int stepPeriod;
+    private float pressure;
+
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
         sensorList = new ArrayList<>();
         dataModel = new SensorDataModelImpl();
     }
 
-    @Override
-    public void calibrate() {
 
+    @Override
+    public void calibrate(float stepLength, int stepPeriod, float pressure) {
+        this.stepLength = stepLength;
+        this.stepPeriod = stepPeriod;
+        this.pressure = pressure;
     }
 
     @Override

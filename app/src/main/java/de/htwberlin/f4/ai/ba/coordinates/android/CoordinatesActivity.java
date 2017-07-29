@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +30,9 @@ import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordController;
 import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordControllerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordView;
 import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 
 public class CoordinatesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +53,13 @@ public class CoordinatesActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadCalibrateFragment();
+        // check if the user calibrated the device already
+        if (!alreadyCalibrated()) {
+            loadCalibrateFragment();
+        } else {
+            loadMeasureFragment();
+        }
+
     }
 
 
@@ -162,6 +173,31 @@ public class CoordinatesActivity extends AppCompatActivity
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         fragmentTransaction.commit();
+    }
+
+    private boolean alreadyCalibrated() {
+        float stepLength;
+        int stepPeriod;
+        float pressure;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
+
+        // just checking if the keys exist, maybe we should check if the value is != 0 too...
+        if (sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_pressure)) &&
+                sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_steplength)) &&
+                sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_stepperiod))) {
+
+            stepLength = sharedPreferences.getFloat(getString(R.string.coordinates_shared_preferences_steplength), 0.0f);
+            stepPeriod = sharedPreferences.getInt(getString(R.string.coordinates_shared_preferences_stepperiod), 0);
+            pressure = sharedPreferences.getFloat(getString(R.string.coordinates_shared_preferences_pressure), 0.0f);
+
+            SensorFactory sensorFactory = new SensorFactoryImpl(this);
+            IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory).calibrate(stepLength, stepPeriod, pressure);
+
+            return true;
+        }
+
+        return false;
     }
 
 }

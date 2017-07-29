@@ -1,5 +1,10 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.example.carol.bvg.R;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +29,9 @@ public class CalibrateControllerImpl implements CalibrateController {
     private int stepCount;
     // for calculating the avg step period
     private List<Long> stepTimes;
-    private float stepDistance;
+    private float stepLength;
     private int stepPeriod;
+    private float pressure;
 
     @Override
     public void onStartStepSetupClick() {
@@ -74,17 +80,24 @@ public class CalibrateControllerImpl implements CalibrateController {
                     public void valueChanged(SensorData sensorData) {
                         if (sensorData.getSensorType() == SensorType.COMPASS_FUSION) {
                             view.updateAzimuth((int) sensorData.getValues()[0]);
+                        } else if (sensorData.getSensorType() == SensorType.BAROMETER) {
+                            // TODO: maybe calc avg?
+                            pressure = sensorData.getValues()[0];
                         }
+
                     }
                 });
             }
-            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION);
+            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION,
+                                           SensorType.BAROMETER);
 
         } else if (currentStep == 3) {
             if (indoorMeasurement != null) {
                 indoorMeasurement.stop();
             }
-            //TODO: save calibration
+
+            saveSettings();
+
         }
 
     }
@@ -118,10 +131,9 @@ public class CalibrateControllerImpl implements CalibrateController {
 
     @Override
     public void onDistanceChange(float distance) {
-        stepDistance = distance;
-
         if (stepCount != 0 && distance != 0) {
-            view.updateAverageStepdistance(distance / stepCount);
+            stepLength = distance / stepCount;
+            view.updateAverageStepdistance(stepLength);
         }
     }
 
@@ -160,6 +172,16 @@ public class CalibrateControllerImpl implements CalibrateController {
         int result = (int) (durationSum / (stepDurations.size()));
 
         return result;
+    }
+
+    private void saveSettings() {
+        SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(view.getContext().getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(view.getContext().getString(R.string.coordinates_shared_preferences_pressure), pressure);
+        editor.putFloat(view.getContext().getString(R.string.coordinates_shared_preferences_steplength), stepLength);
+        editor.putInt(view.getContext().getString(R.string.coordinates_shared_preferences_stepperiod), stepPeriod);
+
+        editor.commit();
     }
 
 }
