@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
@@ -34,9 +35,9 @@ public class CalibrateControllerImpl implements CalibrateController {
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
-            public void valueChanged(float[] values, SensorType sensorType) {
-                if (sensorType == SensorType.STEPCOUNTER) {
-                    stepCount = (int) values[0];
+            public void valueChanged(SensorData sensorData) {
+                if (sensorData.getSensorType() == SensorType.STEPCOUNTER) {
+                    stepCount = (int) sensorData.getValues()[0];
                     view.updateStepCount(stepCount);
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                     stepTimes.add(timestamp.getTime());
@@ -70,9 +71,9 @@ public class CalibrateControllerImpl implements CalibrateController {
             if (indoorMeasurement != null) {
                 indoorMeasurement.setListener(new IndoorMeasurementListener() {
                     @Override
-                    public void valueChanged(float[] values, SensorType sensorType) {
-                        if (sensorType == SensorType.COMPASS_FUSION) {
-                            view.updateAzimuth((int) values[0]);
+                    public void valueChanged(SensorData sensorData) {
+                        if (sensorData.getSensorType() == SensorType.COMPASS_FUSION) {
+                            view.updateAzimuth((int) sensorData.getValues()[0]);
                         }
                     }
                 });

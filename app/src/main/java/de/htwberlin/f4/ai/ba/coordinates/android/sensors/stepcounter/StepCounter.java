@@ -5,6 +5,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
@@ -15,18 +18,20 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class StepCounter implements Sensor, SensorEventListener{
 
-    private static final SensorType sensorType = SensorType.STEPCOUNTER;
+    private static final SensorType SENSORTYPE = SensorType.STEPCOUNTER;
 
     private SensorManager sensorManager;
     private SensorListener listener;
     private android.hardware.Sensor stepCounterSensor;
 
     private Integer stepCount;
-
+    private SensorData sensorData;
 
 
     public StepCounter(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
@@ -48,8 +53,8 @@ public class StepCounter implements Sensor, SensorEventListener{
     }
 
     @Override
-    public float[] getValues() {
-        return new float[]{stepCount};
+    public SensorData getValues() {
+        return sensorData;
     }
 
 
@@ -69,15 +74,24 @@ public class StepCounter implements Sensor, SensorEventListener{
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_STEP_DETECTOR) {
             stepCount++;
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[]{stepCount};
+
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(new float[]{stepCount});
+                listener.valueChanged(sensorData);
             }
         }
     }

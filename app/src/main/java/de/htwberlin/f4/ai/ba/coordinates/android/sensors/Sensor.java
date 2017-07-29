@@ -8,7 +8,7 @@ public interface Sensor {
 
     void start();
     void stop();
-    float[] getValues();
+    SensorData getValues();
     boolean isSensorAvailable();
     void setListener(SensorListener listener);
     SensorType getSensorType();

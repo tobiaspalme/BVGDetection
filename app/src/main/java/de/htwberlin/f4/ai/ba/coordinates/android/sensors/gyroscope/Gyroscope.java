@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -15,21 +18,22 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class Gyroscope implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
 
-    private static final SensorType sensorType = SensorType.GYROSCOPE;
+    private static final SensorType SENSORTYPE = SensorType.GYROSCOPE;
 
     private SensorManager sensorManager;
     private Sensor gyroscopeSensor;
     private SensorListener listener;
 
-    private float[] values;
+    private SensorData sensorData;
 
     public Gyroscope(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
     public void start() {
-        values = new float[3];
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         if (gyroscopeSensor != null) {
             sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_UI);
@@ -44,11 +48,8 @@ public class Gyroscope implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
     }
 
     @Override
-    public float[] getValues() {
-        float[] result = new float[values.length];
-        System.arraycopy(values, 0, result, 0, values.length);
-
-        return result;
+    public SensorData getValues() {
+        return sensorData;
     }
 
     @Override
@@ -67,16 +68,24 @@ public class Gyroscope implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[sensorEvent.values.length];
             System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
 
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(values);
+                listener.valueChanged(sensorData);
             }
         }
     }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
@@ -62,9 +63,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             Sensor sensor = sensorFactory.getSensor(type);
             sensor.setListener(new SensorListener() {
                 @Override
-                public void valueChanged(float[] newValue) {
+                public void valueChanged(SensorData newValue) {
                     if (listener != null) {
-                        listener.valueChanged(newValue, type);
+                        listener.valueChanged(newValue);
                     }
                 }
             });
@@ -87,8 +88,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public Map<SensorType, float[]> getSensorValues() {
-        Map<SensorType, float[]> sensorValues = new HashMap<>();
+    public Map<SensorType, SensorData> getLastSensorValues() {
+        Map<SensorType, SensorData> sensorValues = new HashMap<>();
+
         for (Sensor sensor : sensorList) {
             sensorValues.put(sensor.getSensorType(), sensor.getValues());
         }

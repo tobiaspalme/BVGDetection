@@ -1,5 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
@@ -29,14 +30,15 @@ public class MeasureControllerImpl implements MeasureController {
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
-            public void valueChanged(float[] values, SensorType sensorType) {
+            public void valueChanged(SensorData sensorData) {
+                SensorType sensorType = sensorData.getSensorType();
                 switch (sensorType) {
 
                     case COMPASS_FUSION:
-                        view.updateAzimuth((int) values[0]);
+                        view.updateAzimuth((int) sensorData.getValues()[0]);
                         break;
                     case BAROMETER:
-                        view.updatePressure(values[0]);
+                        view.updatePressure(sensorData.getValues()[0]);
                         break;
                     default:
                         break;

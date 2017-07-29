@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
@@ -64,35 +66,37 @@ public class RecordControllerImpl implements RecordController {
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
         indoorMeasurement.setListener(new IndoorMeasurementListener() {
             @Override
-            public void valueChanged(float[] values, SensorType sensorType) {
+            public void valueChanged(SensorData sensorData) {
+                SensorType sensorType = sensorData.getSensorType();
+
                 switch (sensorType) {
 
                     case ACCELEROMETER_SIMPLE:
-                        view.updateAcceleration(values);
+                        view.updateAcceleration(sensorData.getValues());
                         break;
                     case ACCELEROMETER_LINEAR:
-                        view.updateAccelerationLinear(values);
+                        view.updateAccelerationLinear(sensorData.getValues());
                         break;
                     case GRAVITY:
-                        view.updateGravity(values);
+                        view.updateGravity(sensorData.getValues());
                         break;
                     case GYROSCOPE:
-                        view.updateGyroscope(values);
+                        view.updateGyroscope(sensorData.getValues());
                         break;
                     case GYROSCOPE_UNCALIBRATED:
-                        view.updateGyroscopeUncalibrated(values);
+                        view.updateGyroscopeUncalibrated(sensorData.getValues());
                         break;
                     case MAGNETIC_FIELD:
-                        view.updateMagneticField(values);
+                        view.updateMagneticField(sensorData.getValues());
                         break;
                     case COMPASS_FUSION:
-                        view.updateCompassFusion((int) values[0]);
+                        view.updateCompassFusion((int) sensorData.getValues()[0]);
                         break;
                     case COMPASS_SIMPLE:
-                        view.updateCompassSimple((int) values[0]);
+                        view.updateCompassSimple((int) sensorData.getValues()[0]);
                         break;
                     case BAROMETER:
-                        view.updatePressure(values[0]);
+                        view.updatePressure(sensorData.getValues()[0]);
                         break;
                     default:
                         break;
@@ -136,7 +140,7 @@ public class RecordControllerImpl implements RecordController {
     private void startTimer() {
         timerHandler = new Handler(Looper.getMainLooper());
         recordRunnable = new RecordRunnable(sensorDataModel, indoorMeasurement, timerHandler, savePeriod);
-        timerHandler.postDelayed(recordRunnable, 100);
+        timerHandler.postDelayed(recordRunnable, 250);
     }
 
     private void stopTimer() {
@@ -160,7 +164,7 @@ public class RecordControllerImpl implements RecordController {
      * and Android prevents user access to files unless you have rooted your device.
      *
      * Write Sensordatas to file in csv format
-     * timestamp;sensortype;value[0];value[1];value[2]
+     * sensortype;timestamp;value[0];value[1];value[2]
      */
     private void saveRecordData() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -179,25 +183,20 @@ public class RecordControllerImpl implements RecordController {
 
         try {
             outputStream = new FileOutputStream(file);
-            Map<Long, Map<SensorType, float[]>> data = sensorDataModel.getData();
-            // loop through the whole map
-            // each entry contains a timestamp and ALL sensor datas for that time
-            // key = timestamp
-            // value = Map<SensorType, float[]>
-            for (Map.Entry<Long, Map<SensorType, float[]>> entry : data.entrySet()) {
-                Long time = entry.getKey();
-                Map<SensorType, float[]> sensorData = entry.getValue();
-                // loop through the sensordata map
-                // key = SensorType
-                // value = float[]  --> values from sensors
-                for (Map.Entry<SensorType, float[]> sensorentry : sensorData.entrySet()) {
-                    SensorType sensorType = sensorentry.getKey();
-                    float[] sensorValues = sensorentry.getValue();
-                    StringBuilder builder = new StringBuilder();
-                    builder.append(time + ";" + sensorType);
+            Map<SensorType, List<SensorData>> data = sensorDataModel.getData();
+            // loop through the sensortypes
+            for (Map.Entry<SensorType, List<SensorData>> entry : data.entrySet()) {
+                SensorType sensorType = entry.getKey();
+                List<SensorData> sensorValues = entry.getValue();
 
-                    for (int i = 0; i < sensorValues.length; i++) {
-                        builder.append(";" + sensorValues[i]);
+                // loop through the sensordata list
+                for (SensorData valueEntry : sensorValues) {
+
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(sensorType + ";" + valueEntry.getTimestamp());
+
+                    for (int i = 0; i < valueEntry.getValues().length; i++) {
+                        builder.append(";" + valueEntry.getValues()[i]);
                     }
 
                     builder.append(";");

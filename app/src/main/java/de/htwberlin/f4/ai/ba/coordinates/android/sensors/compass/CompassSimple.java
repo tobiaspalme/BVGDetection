@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -16,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor{
 
-    private static final SensorType sensorType = SensorType.COMPASS_SIMPLE;
+    private static final SensorType SENSORTYPE = SensorType.COMPASS_SIMPLE;
 
     private SensorManager sensorManager;
     private SensorListener listener;
@@ -30,9 +33,12 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
 
 
     private int azimuth;
+    private SensorData sensorData;
 
     public CompassSimple(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
         orientation = new float[3];
         rotationMatrix = new float[9];
         accelerometerValues = new float[3];
@@ -41,10 +47,8 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     @Override
     public void start() {
-        azimuth = 0;
         accelerometerSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
         magneticFieldSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
-
 
         if ((accelerometerSensor != null) && (magneticFieldSensor != null)) {
             sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
@@ -61,8 +65,8 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     }
 
     @Override
-    public float[] getValues() {
-        return new float[]{azimuth};
+    public SensorData getValues() {
+        return sensorData;
     }
 
 
@@ -83,7 +87,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
 
@@ -99,8 +103,17 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         SensorManager.getOrientation(rotationMatrix, orientation);
         azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        long realTimestamp = timestamp.getTime();
+        float[] values = new float[]{azimuth};
+
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
+        sensorData.setTimestamp(realTimestamp);
+        sensorData.setValues(values);
+
         if (listener != null) {
-            listener.valueChanged(new float[]{azimuth});
+            listener.valueChanged(sensorData);
         }
     }
 

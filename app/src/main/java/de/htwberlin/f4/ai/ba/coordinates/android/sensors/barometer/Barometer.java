@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -15,20 +18,22 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
 
-    private static final SensorType sensorType = SensorType.BAROMETER;
+    private static final SensorType SENSORTYPE = SensorType.BAROMETER;
 
     private SensorManager sensorManager;
     private SensorListener listener;
-    private float pressure;
+
+    private SensorData sensorData;
 
 
     public Barometer(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
     public void start() {
-        pressure = 0.0f;
         Sensor barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         if (barometerSensor != null) {
             sensorManager.registerListener(this, barometerSensor, SensorManager.SENSOR_DELAY_UI);
@@ -43,8 +48,8 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
     }
 
     @Override
-    public float[] getValues() {
-        return new float[]{pressure};
+    public SensorData getValues() {
+        return sensorData;
     }
 
     @Override
@@ -63,15 +68,24 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_PRESSURE) {
-            pressure = sensorEvent.values[0];
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[sensorEvent.values.length];
+            System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
+
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(new float[]{pressure});
+                listener.valueChanged(sensorData);
             }
         }
     }

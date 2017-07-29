@@ -6,5 +6,5 @@ package de.htwberlin.f4.ai.ba.coordinates.android.sensors;
 
 public interface SensorListener {
 
-    void valueChanged(float[] newValue);
+    void valueChanged(SensorData newValue);
 }

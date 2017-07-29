@@ -119,5 +119,10 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         heightView.setText(String.valueOf(height));
     }
 
+    @Override
+    public void insertStep() {
+
+    }
+
 
 }

@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -15,17 +18,20 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
 
-    private static final SensorType sensorType = SensorType.THERMOMETER;
+    private static final SensorType SENSORTYPE = SensorType.THERMOMETER;
 
     private SensorManager sensorManager;
     private Sensor temperatureSensor;
     private SensorListener listener;
 
     private float value;
+    private SensorData sensorData;
 
 
     public Thermometer(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
@@ -45,8 +51,8 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
     }
 
     @Override
-    public float[] getValues() {
-        return new float[]{value};
+    public SensorData getValues() {
+        return sensorData;
     }
 
 
@@ -66,7 +72,7 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     /**
@@ -78,8 +84,17 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
         if (sensorEvent.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             value = sensorEvent.values[0];
 
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[]{value};
+
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(new float[]{value});
+                listener.valueChanged(sensorData);
             }
         }
     }

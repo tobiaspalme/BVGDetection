@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -16,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor{
 
-    private static final SensorType sensorType = SensorType.COMPASS_FUSION;
+    private static final SensorType SENSORTYPE = SensorType.COMPASS_FUSION;
 
     private SensorManager sensorManager;
     private SensorListener listener;
@@ -26,13 +29,16 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float[] rotationMatrix = new float[9];
     private Integer azimuth;
 
+    private SensorData sensorData;
+
     public CompassFusion(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
     public void start() {
-        azimuth = 0;
         rotationSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
         if (rotationSensor != null) {
             sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
@@ -47,8 +53,8 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
     }
 
     @Override
-    public float[] getValues() {
-        return new float[]{azimuth};
+    public SensorData getValues() {
+        return sensorData;
     }
 
 
@@ -68,7 +74,7 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     @Override
@@ -79,8 +85,17 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
             // original values are within [-180,180]
             azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[]{azimuth};
+
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(new float[]{azimuth});
+                listener.valueChanged(sensorData);
             }
         }
     }

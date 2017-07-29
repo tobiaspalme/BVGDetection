@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -15,22 +18,23 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
 
-    private static final SensorType sensorType = SensorType.GRAVITY;
+    private static final SensorType SENSORTYPE = SensorType.GRAVITY;
 
     private SensorManager sensorManager;
     private Sensor gravitySensor;
     private SensorListener listener;
 
-    private float[] values;
+    private SensorData sensorData;
 
 
     public GravitySensor(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
     public void start() {
-        values = new float[3];
         gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         if (gravitySensor != null) {
             sensorManager.registerListener(this, gravitySensor, SensorManager.SENSOR_DELAY_UI);
@@ -45,11 +49,8 @@ public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba
     }
 
     @Override
-    public float[] getValues() {
-        float[] result = new float[values.length];
-        System.arraycopy(values, 0, result, 0, values.length);
-
-        return result;
+    public SensorData getValues() {
+        return sensorData;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     /**
@@ -80,10 +81,18 @@ public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_GRAVITY) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[sensorEvent.values.length];
             System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
 
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(values);
+                listener.valueChanged(sensorData);
             }
         }
     }

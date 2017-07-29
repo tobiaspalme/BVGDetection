@@ -1,8 +1,10 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 
+import java.util.List;
 import java.util.Map;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 /**
@@ -33,5 +35,5 @@ public interface IndoorMeasurement {
     // get the last values of every registered sensor, so we can read them
     // at a specific time. That's required because every sensor got a different
     // interval.
-    Map<SensorType, float[]> getSensorValues();
+    Map<SensorType, SensorData> getLastSensorValues();
 }

@@ -5,8 +5,10 @@ import android.util.Log;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
@@ -35,19 +37,11 @@ public class RecordRunnable implements Runnable {
         Log.d("recordtimer", String.valueOf(timestamp));
         Log.d("recordtimer2", String.valueOf(timestamp.getTime()));
 
-        /*
-        // make sure to make a REAL copy of the map containing sensor datas, otherwise
-        // we will get always the same data, if working with references
-        Map<SensorType, float[]> originalMap = indoorMeasurement.getSensorValues();
-        Map<SensorType, float[]> copyMap = new HashMap<>();
-        for (Map.Entry<SensorType, float[]> entry : originalMap.entrySet()) {
-            float[] copyArray = new float[entry.getValue().length];
-            System.arraycopy(entry.getValue(), 0, copyArray, 0, entry.getValue().length);
-            copyMap.put(entry.getKey(), copyArray);
-        }*/
+        Map<SensorType, SensorData> sensorValues = indoorMeasurement.getLastSensorValues();
+        for (Map.Entry<SensorType, SensorData> entry : sensorValues.entrySet()) {
+            model.insertData(entry.getValue());
+        }
 
-
-        model.insertData(indoorMeasurement.getSensorValues());
         handler.postDelayed(this, period);
     }
 }

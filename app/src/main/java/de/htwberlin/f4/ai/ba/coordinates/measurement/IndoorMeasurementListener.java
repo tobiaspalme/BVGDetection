@@ -1,5 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 /**
@@ -8,5 +9,5 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public interface IndoorMeasurementListener {
 
-    void valueChanged(float[] values, SensorType sensorType);
+    void valueChanged(SensorData sensorData);
 }

@@ -15,6 +15,7 @@ public interface MeasureView {
     void updateDistance(float distance);
     void updateCoordinates(float[] coordinates);
     void updateHeight(float height);
+    void insertStep();
     Context getContext();
 
 }

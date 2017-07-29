@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.sql.Timestamp;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -15,21 +18,22 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public class MagneticFieldSensor implements SensorEventListener, de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor {
 
-    private static final SensorType sensorType = SensorType.MAGNETIC_FIELD;
+    private static final SensorType SENSORTYPE = SensorType.MAGNETIC_FIELD;
 
     private SensorManager sensorManager;
     private Sensor magneticFieldSensor;
     private SensorListener listener;
 
-    private float[] values;
+    private SensorData sensorData;
 
     public MagneticFieldSensor(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensorData = new SensorData();
+        sensorData.setSensorType(SENSORTYPE);
     }
 
     @Override
     public void start() {
-        values = new float[3];
         magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (magneticFieldSensor != null) {
             sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_UI);
@@ -44,11 +48,8 @@ public class MagneticFieldSensor implements SensorEventListener, de.htwberlin.f4
     }
 
     @Override
-    public float[] getValues() {
-        float[] result = new float[values.length];
-        System.arraycopy(values, 0, result, 0, values.length);
-
-        return result;
+    public SensorData getValues() {
+        return sensorData;
     }
 
 
@@ -69,16 +70,24 @@ public class MagneticFieldSensor implements SensorEventListener, de.htwberlin.f4
 
     @Override
     public SensorType getSensorType() {
-        return sensorType;
+        return SENSORTYPE;
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+            float[] values = new float[sensorEvent.values.length];
             System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
 
+            sensorData = new SensorData();
+            sensorData.setSensorType(SENSORTYPE);
+            sensorData.setTimestamp(realTimestamp);
+            sensorData.setValues(values);
+
             if (listener != null) {
-                listener.valueChanged(values);
+                listener.valueChanged(sensorData);
             }
         }
     }
