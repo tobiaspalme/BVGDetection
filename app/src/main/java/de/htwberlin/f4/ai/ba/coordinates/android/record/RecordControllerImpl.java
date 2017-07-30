@@ -1,36 +1,22 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.record;
 
-import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.accelerometer.AccelerometerLinear;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.accelerometer.AccelerometerSimple;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.barometer.Barometer;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.gravity.GravitySensor;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.gyroscope.Gyroscope;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.gyroscope.GyroscopeUncalibrated;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.magneticfield.MagneticFieldSensor;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
@@ -64,7 +50,7 @@ public class RecordControllerImpl implements RecordController {
 
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
-        indoorMeasurement.setListener(new IndoorMeasurementListener() {
+        indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {
                 SensorType sensorType = sensorData.getSensorType();

@@ -110,8 +110,8 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     }
 
     @Override
-    public void updateCoordinates(float[] coordinates) {
-        coordinatesView.setText(coordinates[0] + " / " + coordinates[1] + " / " + coordinates[2]);
+    public void updateCoordinates(float x, float y, float z) {
+        coordinatesView.setText(x + " / " + y + " / " + z);
     }
 
     @Override

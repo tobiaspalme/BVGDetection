@@ -1,10 +1,5 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.example.carol.bvg.R;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +7,7 @@ import java.util.List;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
@@ -39,7 +35,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         stepTimes = new ArrayList<>();
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
-        indoorMeasurement.setListener(new IndoorMeasurementListener() {
+        indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {
                 if (sensorData.getSensorType() == SensorType.STEPCOUNTER) {
@@ -49,6 +45,7 @@ public class CalibrateControllerImpl implements CalibrateController {
                     stepTimes.add(timestamp.getTime());
                 }
             }
+
         });
         indoorMeasurement.startSensors(SensorType.STEPCOUNTER);
     }
@@ -75,7 +72,7 @@ public class CalibrateControllerImpl implements CalibrateController {
             view.loadCalibrateStep(3);
 
             if (indoorMeasurement != null) {
-                indoorMeasurement.setListener(new IndoorMeasurementListener() {
+                indoorMeasurement.setSensorListener(new SensorListener() {
                     @Override
                     public void valueChanged(SensorData sensorData) {
                         if (sensorData.getSensorType() == SensorType.COMPASS_FUSION) {
@@ -86,10 +83,10 @@ public class CalibrateControllerImpl implements CalibrateController {
                         }
 
                     }
+
                 });
             }
-            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION,
-                                           SensorType.BAROMETER);
+            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION);
 
         } else if (currentStep == 3) {
             if (indoorMeasurement != null) {
@@ -175,13 +172,8 @@ public class CalibrateControllerImpl implements CalibrateController {
     }
 
     private void saveSettings() {
-        SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(view.getContext().getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(view.getContext().getString(R.string.coordinates_shared_preferences_pressure), pressure);
-        editor.putFloat(view.getContext().getString(R.string.coordinates_shared_preferences_steplength), stepLength);
-        editor.putInt(view.getContext().getString(R.string.coordinates_shared_preferences_stepperiod), stepPeriod);
-
-        editor.commit();
+        CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
+        calibratePersistance.save(stepLength, stepPeriod);
     }
 
 }

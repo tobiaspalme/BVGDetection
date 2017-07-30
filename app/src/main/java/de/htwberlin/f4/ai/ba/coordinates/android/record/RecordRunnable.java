@@ -33,10 +33,6 @@ public class RecordRunnable implements Runnable {
 
     @Override
     public void run() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Log.d("recordtimer", String.valueOf(timestamp));
-        Log.d("recordtimer2", String.valueOf(timestamp.getTime()));
-
         Map<SensorType, SensorData> sensorValues = indoorMeasurement.getLastSensorValues();
         for (Map.Entry<SensorType, SensorData> entry : sensorValues.entrySet()) {
             model.insertData(entry.getValue());

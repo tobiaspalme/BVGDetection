@@ -13,7 +13,7 @@ public interface MeasureView {
     void updateAzimuth(int azimuth);
     void updateStepCount(int stepCount);
     void updateDistance(float distance);
-    void updateCoordinates(float[] coordinates);
+    void updateCoordinates(float x, float y, float z);
     void updateHeight(float height);
     void insertStep();
     Context getContext();

@@ -30,7 +30,8 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModule
 public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private SensorFactory sensorFactory;
-    private IndoorMeasurementListener listener;
+    private IndoorMeasurementListener indoorMeasurementListener;
+    private SensorListener sensorListener;
     private List<Sensor> sensorList;
     private SensorDataModel dataModel;
 
@@ -40,7 +41,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private float stepLength;
     private int stepPeriod;
-    private float pressure;
+    private float airPressure;
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
@@ -50,14 +51,18 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
 
     @Override
-    public void calibrate(float stepLength, int stepPeriod, float pressure) {
+    public void calibrate(float stepLength, int stepPeriod, float airPressure) {
         this.stepLength = stepLength;
         this.stepPeriod = stepPeriod;
-        this.pressure = pressure;
+        this.airPressure = airPressure;
     }
 
     @Override
-    public void start(IndoorMeasurementType indoorMeasurementType) {
+    public void start(final IndoorMeasurementType indoorMeasurementType) {
+
+
+
+
 
         Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
         stepSensor.setListener(new SensorListener() {
@@ -65,15 +70,40 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             public void valueChanged(SensorData newValue) {
                 // calculate new position with every step
                 // berechnung vielleicht in thread auslagern?
+                float altitude = 0.0f;
+                float distance = 0.0f;
+                float orientation = 0.0f;
+
+                if (altitudeModule != null) {
+                    altitude = altitudeModule.getAltitude();
+                }
+                if (distanceModule != null) {
+                    distance = distanceModule.getDistance();
+                }
+                if (orientationModule != null) {
+                    orientation = orientationModule.getOrientation();
+                }
+
+                // combine these 3 values to calculate new position
+
+                // inform listener about new coordinates
+                if (indoorMeasurementListener != null) {
+                    indoorMeasurementListener.onNewCoordinates(0.0f, 0.0f, altitude);
+                }
             }
         });
         stepSensor.start();
         sensorList.add(stepSensor);
 
         if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
-            altitudeModule = new AltitudeModuleImpl(dataModel, pressure);
-            distanceModule = new DistanceModuleImpl(dataModel, stepLength);
-            orientationModule = new OrientationModuleImpl(dataModel);
+            altitudeModule = new AltitudeModuleImpl(sensorFactory, airPressure);
+            distanceModule = new DistanceModuleImpl(sensorFactory, stepLength);
+            orientationModule = new OrientationModuleImpl(sensorFactory);
+
+            altitudeModule.start();
+            distanceModule.start();
+            orientationModule.start();
+
 
             // sensoren listener registrieren und werte automatisch ins model schieben
         }
@@ -81,8 +111,21 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     @Override
     public void stop() {
+        // stop all sensors controlled by this class
         for (Sensor sensor : sensorList) {
             sensor.stop();
+        }
+        // stop all sensors controlled by altitudemodule
+        if (altitudeModule != null) {
+            altitudeModule.stop();
+        }
+        // stop all sensors controlled by distancemodul
+        if (distanceModule != null) {
+            distanceModule.stop();
+        }
+        // stop all sensors controlled by orientationmodule
+        if (orientationModule != null) {
+            orientationModule.stop();
         }
     }
 
@@ -95,8 +138,8 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             sensor.setListener(new SensorListener() {
                 @Override
                 public void valueChanged(SensorData newValue) {
-                    if (listener != null) {
-                        listener.valueChanged(newValue);
+                    if (sensorListener != null) {
+                        sensorListener.valueChanged(newValue);
                     }
                 }
             });
@@ -114,8 +157,13 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public void setListener(IndoorMeasurementListener listener) {
-        this.listener = listener;
+    public void setSensorListener(SensorListener listener) {
+        sensorListener = listener;
+    }
+
+    @Override
+    public void setIndoorMeasurementListener(IndoorMeasurementListener listener) {
+        indoorMeasurementListener = listener;
     }
 
     @Override

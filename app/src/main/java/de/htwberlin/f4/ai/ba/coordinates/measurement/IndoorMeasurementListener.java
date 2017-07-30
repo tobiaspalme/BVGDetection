@@ -9,5 +9,5 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 public interface IndoorMeasurementListener {
 
-    void valueChanged(SensorData sensorData);
+    void onNewCoordinates(float x, float y, float z);
 }

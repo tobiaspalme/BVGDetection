@@ -1,13 +1,26 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.barometer.Barometer;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 
 /**
  * Created by benni on 18.07.2017.
@@ -15,20 +28,44 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
 
 public class MeasureControllerImpl implements MeasureController {
 
+    private static final int CALIBRATION_TIME = 3000;
+
     private MeasureView view;
     private IndoorMeasurement indoorMeasurement;
+    private Handler timerHandler;
+    private PressureCalibration pressureCalibration;
+    private SensorDataModel sensorDataModel;
+    private boolean airPressureCalibrated;
+    private AlertDialog calibrationDialog;
 
     @Override
     public void setView(MeasureView view) {
         this.view = view;
     }
 
+
     @Override
     public void onStartClicked() {
 
+
+
+        airPressureCalibrated = false;
+        sensorDataModel = new SensorDataModelImpl();
+
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
-        indoorMeasurement.setListener(new IndoorMeasurementListener() {
+
+
+
+        indoorMeasurement.setIndoorMeasurementListener(new IndoorMeasurementListener() {
+
+            @Override
+            public void onNewCoordinates(float x, float y, float z) {
+
+            }
+        });
+
+        indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {
                 SensorType sensorType = sensorData.getSensorType();
@@ -39,6 +76,12 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
                     case BAROMETER:
                         view.updatePressure(sensorData.getValues()[0]);
+                        // store barometer data in model, while airpressure calibration
+                        // isn't finished
+                        if (!airPressureCalibrated) {
+                            sensorDataModel.insertData(sensorData);
+                        }
+
                         break;
                     default:
                         break;
@@ -48,8 +91,16 @@ public class MeasureControllerImpl implements MeasureController {
         });
 
         indoorMeasurement.startSensors(SensorType.COMPASS_FUSION,
-                                SensorType.COMPASS_SIMPLE,
                                 SensorType.BAROMETER);
+
+        calibratePressure();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setMessage("Bitte warten");
+        alertDialogBuilder.setTitle("Kalibrierung im gange");
+        calibrationDialog = alertDialogBuilder.create();
+        calibrationDialog.setCancelable(false);
+        calibrationDialog.show();
+
     }
 
     @Override
@@ -71,4 +122,29 @@ public class MeasureControllerImpl implements MeasureController {
         }
     }
 
+    private void calibratePressure() {
+        timerHandler = new Handler(Looper.getMainLooper());
+        pressureCalibration = new PressureCalibration(sensorDataModel);
+
+        pressureCalibration.setListener(new PressureCalibrationListener() {
+            @Override
+            public void onFinish(float airPressure) {
+                calibrationDialog.dismiss();
+                timerHandler.removeCallbacks(pressureCalibration);
+                airPressureCalibrated = true;
+                // load calibration
+                CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
+                if (calibratePersistance.load()) {
+                    // calibrate
+                    indoorMeasurement.calibrate(calibratePersistance.getStepLength(), calibratePersistance.getStepPeriod(), airPressure);
+                    // start measurement
+                    indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
+                }
+            }
+        });
+
+        timerHandler.postDelayed(pressureCalibration, CALIBRATION_TIME);
+
+
+    }
 }

@@ -20,6 +20,8 @@ import com.example.carol.bvg.R;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateController;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateControllerImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateView;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureController;
@@ -176,28 +178,8 @@ public class CoordinatesActivity extends AppCompatActivity
     }
 
     private boolean alreadyCalibrated() {
-        float stepLength;
-        int stepPeriod;
-        float pressure;
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
-
-        // just checking if the keys exist, maybe we should check if the value is != 0 too...
-        if (sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_pressure)) &&
-                sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_steplength)) &&
-                sharedPreferences.contains(getString(R.string.coordinates_shared_preferences_stepperiod))) {
-
-            stepLength = sharedPreferences.getFloat(getString(R.string.coordinates_shared_preferences_steplength), 0.0f);
-            stepPeriod = sharedPreferences.getInt(getString(R.string.coordinates_shared_preferences_stepperiod), 0);
-            pressure = sharedPreferences.getFloat(getString(R.string.coordinates_shared_preferences_pressure), 0.0f);
-
-            SensorFactory sensorFactory = new SensorFactoryImpl(this);
-            IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory).calibrate(stepLength, stepPeriod, pressure);
-
-            return true;
-        }
-
-        return false;
+        CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(this);
+        return calibratePersistance.load();
     }
 
 }
