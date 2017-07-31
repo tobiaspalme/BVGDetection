@@ -40,12 +40,13 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
 
-        Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
+        final Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStartClicked();
                 }
+                btnStart.setEnabled(false);
             }
         });
 
@@ -55,6 +56,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
                 if (controller != null) {
                     controller.onStopClicked();
                 }
+                btnStart.setEnabled(true);
             }
         });
 

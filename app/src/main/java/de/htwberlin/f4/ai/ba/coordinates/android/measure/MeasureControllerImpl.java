@@ -33,7 +33,7 @@ public class MeasureControllerImpl implements MeasureController {
     private SensorDataModel sensorDataModel;
     private boolean calibrated;
     private AlertDialog calibrationDialog;
-    private int stepCount = -1;
+    private int stepCount;
 
     @Override
     public void setView(MeasureView view) {
@@ -43,7 +43,10 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
-
+        stepCount = 0;
+        view.updateStepCount(stepCount);
+        view.updateCoordinates(0.0f, 0.0f, 0.0f);
+        view.updatePressure(0.0f);
 
 
         calibrated = false;

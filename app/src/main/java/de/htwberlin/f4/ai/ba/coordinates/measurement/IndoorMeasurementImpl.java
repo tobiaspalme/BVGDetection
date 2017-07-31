@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private float airPressure;
     private float azimuth;
 
+    private boolean reversed;
+    private boolean firstReverseCalc;
+
     private float[] coordinates;
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
@@ -61,48 +66,80 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         this.azimuth = azimuth;
     }
 
+    private void calcNewPosition(float altitude, float distance, float orientation) {
+        // calculate new position with every step
+        // berechnung vielleicht in thread auslagern?
+
+        // combine these 3 values to calculate new position
+
+        // orientation stuff
+        double sina = Math.sin(Math.toRadians(90 - orientation));
+        double cosa = Math.cos(Math.toRadians(90 - orientation));
+        float x = (float)cosa * distance;
+        float y = (float)sina * distance;
+
+        Log.d("tmp", "original x: " + x);
+        Log.d("tmp", "original y: " + y);
+
+        // check if the user made a turn
+        if (Math.abs(orientation) > 90) {
+            firstReverseCalc = true;
+            if (!reversed) {
+                reversed = true;
+            } else {
+                reversed = false;
+            }
+        }
+
+        // crappy calculation
+        // when a user made a turn, y is always negative,
+        // so we have to compensate for that by using a flag if it's
+        // the first calculation since the user made a turn...
+        // should be improved
+        if (reversed) {
+            coordinates[0] -= x;
+            if (firstReverseCalc) {
+                coordinates[1] += y;
+                firstReverseCalc = false;
+            } else {
+                coordinates[1] -= y;
+            }
+
+        }
+
+        if (!reversed) {
+            coordinates[0] += x;
+            if (firstReverseCalc) {
+                coordinates[1] -= y;
+                firstReverseCalc = false;
+            } else {
+                coordinates[1] += y;
+            }
+        }
+
+
+
+        // altitude
+        coordinates[2] += altitude;
+    }
+
     @Override
     public void start(IndoorMeasurementType indoorMeasurementType) {
         // coordinates[0] = x = movement left / right
         // coordinates[1] = y = movement forward / backward
         // coordinates[2] = z = movement upward / downward
         coordinates = new float[]{0.0f, 0.0f, 0.0f};
+        reversed = false;
+        firstReverseCalc = false;
 
         Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
         stepSensor.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {
-                // calculate new position with every step
-                // berechnung vielleicht in thread auslagern?
-                float altitude = 0.0f;
-                float distance = 0.0f;
-                float orientation = 0.0f;
-
-                if (altitudeModule != null) {
-                    // get altitude difference to last step
-                    altitude = altitudeModule.getAltitude();
-                }
-                if (distanceModule != null) {
-                    distance = distanceModule.getDistance();
-                }
-                if (orientationModule != null) {
-                    // get orientation difference to last step
-                    orientation = orientationModule.getOrientation();
+                if (altitudeModule != null && distanceModule != null && orientationModule != null) {
+                    calcNewPosition(altitudeModule.getAltitude(), distanceModule.getDistance(), orientationModule.getOrientation());
                 }
 
-                // combine these 3 values to calculate new position
-
-                // orientation stuff
-                double sina = Math.sin(Math.toRadians(90 - orientation));
-                double cosa = Math.cos(Math.toRadians(90 - orientation));
-                float x = (float)cosa * distance;
-                float y = (float)sina * distance;
-
-                coordinates[0] += x;
-                coordinates[1] += y;
-
-                // altitude
-                coordinates[2] += altitude;
 
                 // inform listener about new coordinates
                 if (indoorMeasurementListener != null) {
@@ -123,8 +160,6 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             distanceModule.start();
             orientationModule.start();
 
-
-            // sensoren listener registrieren und werte automatisch ins model schieben
         }
     }
 
