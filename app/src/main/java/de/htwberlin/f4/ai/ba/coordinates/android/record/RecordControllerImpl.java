@@ -76,10 +76,10 @@ public class RecordControllerImpl implements RecordController {
                         view.updateMagneticField(sensorData.getValues());
                         break;
                     case COMPASS_FUSION:
-                        view.updateCompassFusion((int) sensorData.getValues()[0]);
+                        view.updateCompassFusion(sensorData.getValues()[0]);
                         break;
                     case COMPASS_SIMPLE:
-                        view.updateCompassSimple((int) sensorData.getValues()[0]);
+                        view.updateCompassSimple(sensorData.getValues()[0]);
                         break;
                     case BAROMETER:
                         view.updatePressure(sensorData.getValues()[0]);

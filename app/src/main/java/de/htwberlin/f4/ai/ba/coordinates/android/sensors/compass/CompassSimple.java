@@ -32,7 +32,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float[] magneticValues;
 
 
-    private int azimuth;
+    private float azimuth;
     private SensorData sensorData;
 
     public CompassSimple(Context context) {
@@ -101,7 +101,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
 
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magneticValues);
         SensorManager.getOrientation(rotationMatrix, orientation);
-        azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
+        azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long realTimestamp = timestamp.getTime();

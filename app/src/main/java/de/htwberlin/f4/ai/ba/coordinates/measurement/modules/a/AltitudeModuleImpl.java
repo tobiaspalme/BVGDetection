@@ -1,6 +1,10 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 
+import android.util.Log;
+
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
@@ -25,13 +29,14 @@ public class AltitudeModuleImpl implements AltitudeModule {
     private float airPressure;
     private Sensor airPressureSensor;
     private long lastStepTimestamp;
-    private float altitude;
+    private float lastAltitude;
 
     public AltitudeModuleImpl(SensorFactory sensorFactory, float airPressure) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         this.airPressure = airPressure;
-        altitude = calcAltitude(airPressure);
+        lastAltitude = calcAltitude(airPressure);
+        lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
     }
 
     // simple altitude calculation, using the same formula as SensorManager.getAltitude() does,
@@ -40,6 +45,7 @@ public class AltitudeModuleImpl implements AltitudeModule {
     // since we are not interested in an precise absolute altitude, we use this method to calculate
     // the relative altitude between two points
     // sea-level-standard temperature / temperature lapse rate = 44330
+    // 1.2mbar ~= 10m
     private float calcAltitude(float pressure) {
         float a = pressure / PRESSURE_STANDARD;
         double aHigh = Math.pow(a, (1/5.255));
@@ -47,15 +53,29 @@ public class AltitudeModuleImpl implements AltitudeModule {
         return (float) result;
     }
 
+    // because pressure drifts over time, we calculate the relative altitude change
+    // compared to previous step
     @Override
     public float getAltitude() {
+        float currentAirPressure;
+        float currentAltitude;
+        float altitudeDiff = 0.0f;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
+        // just picking the last value in the interval
+        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
+        List<SensorData> dataValues = intervalData.get(SensorType.BAROMETER);
+        if (dataValues != null) {
+            currentAirPressure = dataValues.get(dataValues.size()-1).getValues()[0];
+            currentAltitude = calcAltitude(currentAirPressure);
+            altitudeDiff = currentAltitude - lastAltitude;
+            //Log.d("tmp", "currentAltitude: " + currentAltitude + " lastAltitude: " + lastAltitude + " altitudiff: " + altitudeDiff);
+            // set new values
+            lastStepTimestamp = currentStepTimestamp;
+            lastAltitude = currentAltitude;
+        }
 
-
-        // set new timestamp
-        lastStepTimestamp = currentStepTimestamp;
-        return airPressure;
+        return altitudeDiff;
     }
 
     @Override
@@ -68,7 +88,7 @@ public class AltitudeModuleImpl implements AltitudeModule {
             }
         });
         airPressureSensor.start();
-        lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+
     }
 
     @Override

@@ -1,12 +1,8 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
@@ -33,10 +29,11 @@ public class MeasureControllerImpl implements MeasureController {
     private MeasureView view;
     private IndoorMeasurement indoorMeasurement;
     private Handler timerHandler;
-    private PressureCalibration pressureCalibration;
+    private MeasureCalibration pressureCalibration;
     private SensorDataModel sensorDataModel;
-    private boolean airPressureCalibrated;
+    private boolean calibrated;
     private AlertDialog calibrationDialog;
+    private int stepCount = -1;
 
     @Override
     public void setView(MeasureView view) {
@@ -49,7 +46,7 @@ public class MeasureControllerImpl implements MeasureController {
 
 
 
-        airPressureCalibrated = false;
+        calibrated = false;
         sensorDataModel = new SensorDataModelImpl();
 
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
@@ -61,7 +58,9 @@ public class MeasureControllerImpl implements MeasureController {
 
             @Override
             public void onNewCoordinates(float x, float y, float z) {
-
+                view.updateCoordinates(x, y, z);
+                stepCount++;
+                view.updateStepCount(stepCount);
             }
         });
 
@@ -72,13 +71,18 @@ public class MeasureControllerImpl implements MeasureController {
                 switch (sensorType) {
 
                     case COMPASS_FUSION:
-                        view.updateAzimuth((int) sensorData.getValues()[0]);
+                        view.updateAzimuth(sensorData.getValues()[0]);
+                        // store compass data in model, while calibration
+                        // isn't finished
+                        if (!calibrated) {
+                            sensorDataModel.insertData(sensorData);
+                        }
                         break;
                     case BAROMETER:
                         view.updatePressure(sensorData.getValues()[0]);
                         // store barometer data in model, while airpressure calibration
                         // isn't finished
-                        if (!airPressureCalibrated) {
+                        if (!calibrated) {
                             sensorDataModel.insertData(sensorData);
                         }
 
@@ -124,19 +128,19 @@ public class MeasureControllerImpl implements MeasureController {
 
     private void calibratePressure() {
         timerHandler = new Handler(Looper.getMainLooper());
-        pressureCalibration = new PressureCalibration(sensorDataModel);
+        pressureCalibration = new MeasureCalibration(sensorDataModel);
 
-        pressureCalibration.setListener(new PressureCalibrationListener() {
+        pressureCalibration.setListener(new MeasureCalibrationListener() {
             @Override
-            public void onFinish(float airPressure) {
+            public void onFinish(float airPressure, float azimuth) {
                 calibrationDialog.dismiss();
                 timerHandler.removeCallbacks(pressureCalibration);
-                airPressureCalibrated = true;
+                calibrated = true;
                 // load calibration
                 CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
                 if (calibratePersistance.load()) {
                     // calibrate
-                    indoorMeasurement.calibrate(calibratePersistance.getStepLength(), calibratePersistance.getStepPeriod(), airPressure);
+                    indoorMeasurement.calibrate(calibratePersistance.getStepLength(), calibratePersistance.getStepPeriod(), airPressure, azimuth);
                     // start measurement
                     indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
                 }

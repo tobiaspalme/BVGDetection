@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by benni on 22.07.2017.
@@ -202,12 +199,12 @@ public class RecordViewImpl extends Fragment implements RecordView {
     }
 
     @Override
-    public void updateCompassFusion(int value) {
+    public void updateCompassFusion(float value) {
         compassFusion.setText(getString(R.string.compass_fusion) + ": " + value);
     }
 
     @Override
-    public void updateCompassSimple(int value) {
+    public void updateCompassSimple(float value) {
         compassSimple.setText(getString(R.string.compass_simple) + ": " + value);
     }
 

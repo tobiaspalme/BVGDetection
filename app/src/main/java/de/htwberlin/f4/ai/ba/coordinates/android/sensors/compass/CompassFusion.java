@@ -27,7 +27,7 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
 
     private float[] orientation = new float[3];
     private float[] rotationMatrix = new float[9];
-    private Integer azimuth;
+    private float azimuth;
 
     private SensorData sensorData;
 
@@ -83,8 +83,7 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
         if(sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_ROTATION_VECTOR ){
             SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values );
             // original values are within [-180,180]
-            azimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
-
+            azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             long realTimestamp = timestamp.getTime();
             float[] values = new float[]{azimuth};

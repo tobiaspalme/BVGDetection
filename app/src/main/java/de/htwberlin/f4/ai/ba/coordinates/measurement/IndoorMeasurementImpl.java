@@ -42,6 +42,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private float stepLength;
     private int stepPeriod;
     private float airPressure;
+    private float azimuth;
+
+    private float[] coordinates;
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
@@ -51,18 +54,19 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
 
     @Override
-    public void calibrate(float stepLength, int stepPeriod, float airPressure) {
+    public void calibrate(float stepLength, int stepPeriod, float airPressure, float azimuth) {
         this.stepLength = stepLength;
         this.stepPeriod = stepPeriod;
         this.airPressure = airPressure;
+        this.azimuth = azimuth;
     }
 
     @Override
-    public void start(final IndoorMeasurementType indoorMeasurementType) {
-
-
-
-
+    public void start(IndoorMeasurementType indoorMeasurementType) {
+        // coordinates[0] = x = movement left / right
+        // coordinates[1] = y = movement forward / backward
+        // coordinates[2] = z = movement upward / downward
+        coordinates = new float[]{0.0f, 0.0f, 0.0f};
 
         Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
         stepSensor.setListener(new SensorListener() {
@@ -75,30 +79,45 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
                 float orientation = 0.0f;
 
                 if (altitudeModule != null) {
+                    // get altitude difference to last step
                     altitude = altitudeModule.getAltitude();
                 }
                 if (distanceModule != null) {
                     distance = distanceModule.getDistance();
                 }
                 if (orientationModule != null) {
+                    // get orientation difference to last step
                     orientation = orientationModule.getOrientation();
                 }
 
                 // combine these 3 values to calculate new position
 
+                // orientation stuff
+                double sina = Math.sin(Math.toRadians(90 - orientation));
+                double cosa = Math.cos(Math.toRadians(90 - orientation));
+                float x = (float)cosa * distance;
+                float y = (float)sina * distance;
+
+                coordinates[0] += x;
+                coordinates[1] += y;
+
+                // altitude
+                coordinates[2] += altitude;
+
                 // inform listener about new coordinates
                 if (indoorMeasurementListener != null) {
-                    indoorMeasurementListener.onNewCoordinates(0.0f, 0.0f, altitude);
+                    indoorMeasurementListener.onNewCoordinates(coordinates[0], coordinates[1], coordinates[2]);
                 }
             }
         });
         stepSensor.start();
         sensorList.add(stepSensor);
 
+
         if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
             altitudeModule = new AltitudeModuleImpl(sensorFactory, airPressure);
             distanceModule = new DistanceModuleImpl(sensorFactory, stepLength);
-            orientationModule = new OrientationModuleImpl(sensorFactory);
+            orientationModule = new OrientationModuleImpl(sensorFactory, azimuth);
 
             altitudeModule.start();
             distanceModule.start();

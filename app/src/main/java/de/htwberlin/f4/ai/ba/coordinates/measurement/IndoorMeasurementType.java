@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 /**
- * Created by benni on 28.07.2017.
+ * enum for different ways to get relative coordinates in a closed room
  */
 
 public enum IndoorMeasurementType {

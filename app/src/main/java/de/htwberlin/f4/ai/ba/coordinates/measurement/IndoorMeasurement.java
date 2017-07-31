@@ -16,7 +16,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 public interface IndoorMeasurement {
 
     // calibrate steplength (m), stepperiod (ms), airpressure
-    void calibrate(float stepLength, int stepPeriod, float airPressure);
+    void calibrate(float stepLength, int stepPeriod, float airPressure, float azimuth);
 
     // start recording for postion calculcation
     void start(IndoorMeasurementType indoorMeasurementType);

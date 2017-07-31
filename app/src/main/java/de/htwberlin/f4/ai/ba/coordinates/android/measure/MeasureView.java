@@ -10,7 +10,7 @@ public interface MeasureView {
 
     void setController(MeasureController controller);
     void updatePressure(float pressure);
-    void updateAzimuth(int azimuth);
+    void updateAzimuth(float azimuth);
     void updateStepCount(int stepCount);
     void updateDistance(float distance);
     void updateCoordinates(float x, float y, float z);

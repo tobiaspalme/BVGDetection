@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
-import org.w3c.dom.Text;
-
 
 public class MeasureViewImpl extends Fragment implements MeasureView{
 
@@ -39,7 +37,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         stepCounterView = (TextView) root.findViewById(R.id.coordinates_measure_stepvalue);
         distanceView = (TextView) root.findViewById(R.id.coordinates_measure_distancevalue);
         barometerView = (TextView) root.findViewById(R.id.coordinates_measure_pressurevalue);
-        heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
+        //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
 
         Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
@@ -94,14 +92,14 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     }
 
     @Override
-    public void updateAzimuth(int azimuth) {
+    public void updateAzimuth(float azimuth) {
         compassView.setText(String.valueOf(azimuth));
         compassImageView.setRotation(-azimuth);
     }
 
     @Override
     public void updateStepCount(int stepCount) {
-        stepCounterView. setText(String.valueOf(stepCount));
+        stepCounterView.setText(String.valueOf(stepCount));
     }
 
     @Override
