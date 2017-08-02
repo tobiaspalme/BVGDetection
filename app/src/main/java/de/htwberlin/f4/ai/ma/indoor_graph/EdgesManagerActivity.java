@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 /**
  * Created by Johann Winter
@@ -35,7 +36,8 @@ public class EdgesManagerActivity extends Activity {
     private ArrayList<String> itemsSpinnerB;
     private ArrayList<String> itemsEdgesList;
     private ArrayList<Edge> allEdges;
-    private DatabaseHandler databaseHandler;
+    //private DatabaseHandlerImplementation databaseHandlerImplementation;
+    DatabaseHandler databaseHandler;
     private CheckBox accessiblyCheckbox;
     private String lastSelectedItemA;
     private Integer edgesCounter;
@@ -53,7 +55,8 @@ public class EdgesManagerActivity extends Activity {
         edgesListView = (ListView) findViewById(R.id.edges_listview);
         accessiblyCheckbox = (CheckBox) findViewById(R.id.accessibly_checkbox);
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
+        databaseHandler = new DatabaseHandlerImplementation(this);
 
         itemsSpinnerA = new ArrayList<>();
         itemsSpinnerB = new ArrayList<>();
@@ -70,7 +73,9 @@ public class EdgesManagerActivity extends Activity {
             edgesCounter = 1;
         }
 
+        //allNodes = databaseHandlerImplementation.getAllNodes();
         allNodes = databaseHandler.getAllNodes();
+
 
         for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
             itemsSpinnerA.add(node.getId());
@@ -115,10 +120,12 @@ public class EdgesManagerActivity extends Activity {
                 boolean accessibly = false;
                 if (accessiblyCheckbox.isChecked()) { accessibly = true; }
 
-                // TODO ID!!!
-                Edge edge = new EdgeImplementation(edgesCounter, spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly );
+                // TODO set expenditure...
+                Edge edge = new EdgeImplementation(edgesCounter, spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly, 0);
 
+                //databaseHandlerImplementation.insertEdge(edge);
                 databaseHandler.insertEdge(edge);
+
 
                 if (accessibly) {
                     itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB() + "        " + accessiblyString);
@@ -136,6 +143,7 @@ public class EdgesManagerActivity extends Activity {
 
 
         // Load edges list
+        //for (Edge e : databaseHandlerImplementation.getAllEdges()) {
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibly()) {
@@ -156,7 +164,8 @@ public class EdgesManagerActivity extends Activity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                databaseHandler.deleteEdge(allEdges.get(position));
+                                //databaseHandlerImplementation.deleteEdge(allEdges.get(allEdges.get(position).getId()));
+                                databaseHandler.deleteEdge(allEdges.get(allEdges.get(position).getId()));
                                 edgesListAdapter.remove(itemsEdgesList.get(position));
                                 edgesListAdapter.notifyDataSetChanged();
                             }

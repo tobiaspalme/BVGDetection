@@ -12,10 +12,14 @@ public interface IndoorGraph {
 
     Path getPath(Node startNode, Node endNode);
 
+    //TODO
     void setEdge(Node nodeA, Node nodeB);
 
-    List<Node> listAllNodes();
+    List<Node> getAllNodes();
 
     // TODO: komplettes Management von Nodes
+
+
+    //void getIndoorGraph();
 
 }

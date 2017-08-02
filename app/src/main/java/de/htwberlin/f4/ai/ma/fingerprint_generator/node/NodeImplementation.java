@@ -17,8 +17,8 @@ class NodeImplementation implements Node {
     float zValue;
     List<SignalInformation> signalInformationList;
     String coordinates;
-    //Image picture;
     String picturePath;
+    String additionalInfo;
 
     @Override
     public void setId(String id) {
@@ -65,17 +65,16 @@ class NodeImplementation implements Node {
         this.picturePath = picturePath;
     }
 
-    /*
     @Override
-    public Image getPicture() {
-        return this.picture;
+    public String getAdditionalInfo() {
+        return this.additionalInfo;
     }
 
     @Override
-    public void setPicture(Image picture) {
-        this.picture = picture;
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
-    */
+
 
     @Override
     public List<SignalInformation> getSignalInformation() {
@@ -84,7 +83,7 @@ class NodeImplementation implements Node {
 
 
 
-    public NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath) {
+    public NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
         this.id = id;
         //this.xValue = xValue;
         //this.yValue = yValue;
@@ -93,7 +92,8 @@ class NodeImplementation implements Node {
         this.coordinates = coordinates;
         this.picturePath = picturePath;
         this.signalInformationList = signalInformationList;
+        this.additionalInfo = additionalInfo;
     }
 
-    public NodeImplementation(){}
+    //public NodeImplementation(){}
 }

@@ -19,4 +19,7 @@ public interface Edge {
 
     boolean getAccessibly();
     void setAccessibly(boolean accessibly);
+
+    int getExpenditure();
+    void setExpenditure(int expenditure);
 }

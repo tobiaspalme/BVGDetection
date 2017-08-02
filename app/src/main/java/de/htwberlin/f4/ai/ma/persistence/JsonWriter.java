@@ -96,6 +96,7 @@ public class JsonWriter {
             jsonObjectNode.put("description", node.getDescription());
             jsonObjectNode.put("coordinates", node.getCoordinates());
             jsonObjectNode.put("picturePath", node.getPicturePath());
+            jsonObjectNode.put("additionalInfo", node.getAdditionalInfo());
 
 
             JSONArray signalJsonArray = new JSONArray();

@@ -12,16 +12,29 @@ public class EdgeImplementation implements Edge{
     private String nodeA;
     private String nodeB;
     private boolean accessibly;
+    private int expenditure;
 
 
+    public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly, int expenditure) {
+        this.id = id;
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
+        this.accessibly = accessibly;
+        this.expenditure = expenditure;
+    }
+
+    /*
+    // TODO temporary, until expenditure is implemented
     public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly) {
         this.id = id;
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessibly = accessibly;
-    }
+        this.expenditure = expenditure;
+    }*/
 
-    public EdgeImplementation() {}
+
+    //public EdgeImplementation() {}
 
 
     @Override
@@ -62,6 +75,16 @@ public class EdgeImplementation implements Edge{
     @Override
     public void setAccessibly(boolean accessibly) {
         this.accessibly = accessibly;
+    }
+
+    @Override
+    public int getExpenditure() {
+        return this.expenditure;
+    }
+
+    @Override
+    public void setExpenditure(int expenditure) {
+        this.expenditure = expenditure;
     }
 
 

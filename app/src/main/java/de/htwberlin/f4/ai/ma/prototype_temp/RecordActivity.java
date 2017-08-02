@@ -31,44 +31,43 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 import de.htwberlin.f4.ai.ma.persistence.JsonWriter;
 
 
 public class RecordActivity extends AppCompatActivity {
 
-    String id;
-    String description;
-    String wlanName;
-    int recordTime;
-    int mProgressStatus = 0;
-    Handler mHandler;
-    ProgressBar mProgress;
-    JsonWriter jsonWriter;
-    TextView progressText;
+    private String id;
+    private String description;
+    private String wlanName;
+    private int recordTime;
+    private int progressStatus = 0;
+    private Handler mHandler;
+    private ProgressBar progressBar;
+    private JsonWriter jsonWriter;
+    private TextView progressText;
 
-    Button recordButton;
-    Button captureButton;
-    Button saveNodeButton;
-    ImageView cameraImageView;
-    EditText idName;
-    EditText recordTimeText;
-    EditText wlanNameText;
-    EditText descriptionEdittext;
-    Node node;
-    NodeFactory nodeFactory;
-    DatabaseHandler databaseHandler;
+    private Button recordButton;
+    private Button captureButton;
+    private Button saveNodeButton;
+    private ImageView cameraImageView;
+    private EditText idName;
+    private EditText recordTimeText;
+    private EditText wlanNameText;
+    private EditText descriptionEdittext;
+    private NodeFactory nodeFactory;
+   // DatabaseHandlerImplementation databaseHandlerImplementation;
+    private DatabaseHandler databaseHandler;
 
-    boolean pictureTaken;
-    boolean fingerprintTaken;
-    List<SignalInformation> signalInformationList;
+    private boolean pictureTaken;
+    private boolean fingerprintTaken;
+    private List<SignalInformation> signalInformationList;
 
-    String picturePath;
+    private String picturePath;
 
+    private static final int CAM_REQUEST = 1;
 
-    static final int CAM_REQUEST = 1;
-
-
-    File sdCard = Environment.getExternalStorageDirectory();
+    private File sdCard = Environment.getExternalStorageDirectory();
 
 
     @Override
@@ -76,7 +75,9 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_activity_record);
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
+        databaseHandler = new DatabaseHandlerImplementation(this);
+
         jsonWriter = new JsonWriter(this);
 
         recordButton = (Button) findViewById(R.id.b_record);
@@ -91,7 +92,7 @@ public class RecordActivity extends AppCompatActivity {
 
         progressText = (TextView) findViewById(R.id.tx_progress);
 
-        mProgress = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mHandler = new Handler();
 
         idName.setText("bitte eingeben");
@@ -112,6 +113,7 @@ public class RecordActivity extends AppCompatActivity {
                     wlanName = wlanNameText.getText().toString();
                     recordTime = Integer.parseInt(recordTimeText.getText().toString());
                     measureNode();
+                    recordButton.setEnabled(false);
                 }
             });
         }
@@ -151,14 +153,14 @@ public class RecordActivity extends AppCompatActivity {
      */
     private void measureNode() {
 
-        mProgress.setMax(60 * recordTime);
-        mProgress.setProgress(0);
+        progressBar.setMax(60 * recordTime);
+        progressBar.setProgress(0);
 
 
         new Thread(new Runnable() {
             public void run() {
                 signalInformationList = new ArrayList<>();
-                while (mProgressStatus < 60 * recordTime) {
+                while (progressStatus < 60 * recordTime) {
                     List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
 
                     WifiManager mainWifiObj;
@@ -178,13 +180,13 @@ public class RecordActivity extends AppCompatActivity {
                     SignalInformation signalInformation = new SignalInformation(format, signalStrenghtList);
                     signalInformationList.add(signalInformation);
 
-                    mProgressStatus += 1;
+                    progressStatus += 1;
 
                     mHandler.post(new Runnable() {
                         public void run() {
 
-                            mProgress.setProgress(mProgressStatus);
-                            progressText.setText(mProgress.getMax() - mProgress.getProgress() + "s");
+                            progressBar.setProgress(progressStatus);
+                            progressText.setText(progressBar.getMax() - progressBar.getProgress() + "s");
                         }
                     });
                     try {
@@ -195,11 +197,14 @@ public class RecordActivity extends AppCompatActivity {
                 }
 
                 fingerprintTaken = true;
-
-                mProgressStatus = 0;
-
+                progressStatus = 0;
+                System.out.println("aaaaaaaaaa");
+                //TODO recordButton.setEnabled(true);
             }
+
         }).start();
+
+
     }
 
 
@@ -235,9 +240,11 @@ public class RecordActivity extends AppCompatActivity {
         }
 
         if (fingerprintTaken) {
-            node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath);
+            Node node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath , "");
             jsonWriter.writeJSON(node);
+            //databaseHandlerImplementation.insertNode(node);
             databaseHandler.insertNode(node);
+
             finish();
         }
     }

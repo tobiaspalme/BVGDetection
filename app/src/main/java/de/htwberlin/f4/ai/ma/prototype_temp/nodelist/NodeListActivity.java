@@ -1,22 +1,22 @@
 package de.htwberlin.f4.ai.ma.prototype_temp.nodelist;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 import de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity;
 
 
@@ -33,13 +33,16 @@ public class NodeListActivity extends Activity {
 
     ArrayList<Node> allNodes;
     NodeListAdapter nodeListAdapter;
+    //DatabaseHandlerImplementation databaseHandlerImplementation;
     DatabaseHandler databaseHandler;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nodelist);
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
+        databaseHandler = new DatabaseHandlerImplementation(this);
+
 
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
 
@@ -53,6 +56,7 @@ public class NodeListActivity extends Activity {
 
         loadDbData();
 
+        // Click on Item -> show Node in NodeDetailActivity
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -61,10 +65,38 @@ public class NodeListActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+
+
+        // Long click on Node -> delete dialog
+        nodeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(view.getContext())
+                        .setTitle("Eintrag löschen?")
+                        .setMessage("Soll der Node \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+//                                databaseHandlerImplementation.deleteNode(allNodes.get(position));
+
+                                databaseHandler.deleteNode(allNodes.get(position));
+                                loadDbData();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return true;
+            }
+        });
     }
 
 
-    // TODO update List when item deleted
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,7 +117,9 @@ public class NodeListActivity extends Activity {
         nodePicturePaths.clear();
         allNodes.clear();
 
+        //allNodes.addAll(databaseHandlerImplementation.getAllNodes());
         allNodes.addAll(databaseHandler.getAllNodes());
+
 
         for (Node n : allNodes) {
             nodeNames.add(n.getId().toString());

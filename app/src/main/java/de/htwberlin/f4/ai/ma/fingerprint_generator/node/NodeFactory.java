@@ -8,11 +8,11 @@ import java.util.List;
 
 public class NodeFactory {
 
-    public static Node getInstance() {
+    /*public static Node getInstance() {
         return new NodeImplementation();
-    }
+    }*/
 
-    public static Node getInstance(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath) {
-        return new NodeImplementation(id, zValue, description, signalInformationList, coordinates, picturePath);
+    public static Node getInstance(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
+        return new NodeImplementation(id, zValue, description, signalInformationList, coordinates, picturePath, additionalInfo);
     }
 }

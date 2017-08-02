@@ -20,13 +20,11 @@ public interface Node {
     String getCoordinates();
     void setCoordinates(String coordinates);
 
-    /*
-    Image getPicture();
-    void setPicture(Image picture);
-    */
-
     String getPicturePath();
     void setPicturePath(String picturePath);
+
+    String getAdditionalInfo();
+    void setAdditionalInfo(String additionalInfo);
 
 }
 

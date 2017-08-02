@@ -3,7 +3,6 @@ package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
@@ -36,6 +35,7 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
 public class LocationActivity extends AppCompatActivity {
@@ -47,6 +47,7 @@ public class LocationActivity extends AppCompatActivity {
 
     //String[] permissions;
     private Fingerprint fingerprint = FingerprintFactory.getInstance();
+    //private DatabaseHandlerImplementation databaseHandlerImplementation;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPrefs;
     private NodeFactory nodeFactory;
@@ -101,7 +102,9 @@ public class LocationActivity extends AppCompatActivity {
         //JsonReader jsonReader = new JsonReader();
         //final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
+        //final List<Node> allNodes = databaseHandlerImplementation.getAllNodes();
+        databaseHandler = new DatabaseHandlerImplementation(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
 
@@ -120,7 +123,9 @@ public class LocationActivity extends AppCompatActivity {
         //final ArrayList<LocationResultImpl> arrayOfResults = loadJson();
 
 
+        //final ArrayList<LocationResultImpl> allResults = databaseHandlerImplementation.getAllLocationResults();
         final ArrayList<LocationResultImpl> allResults = databaseHandler.getAllLocationResults();
+
 
         resultAdapterdapter = new LocationResultAdapter(this, allResults);
         listView.setAdapter(resultAdapterdapter);
@@ -136,6 +141,7 @@ public class LocationActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
+                                //databaseHandlerImplementation.deleteLocationResult(allResults.get(position));
                                 databaseHandler.deleteLocationResult(allResults.get(position));
                                 resultAdapterdapter.remove(allResults.get(position));
                                 resultAdapterdapter.notifyDataSetChanged();
@@ -362,7 +368,7 @@ public class LocationActivity extends AppCompatActivity {
 
         }
 
-        Node node = nodeFactory.getInstance(null, 0, "", signalInformationList, "", "");
+        Node node = nodeFactory.getInstance(null, 0, "", signalInformationList, "", "", "");
         actuallyNode.add(node);
 
         fingerprint.setActuallyNode(actuallyNode);
@@ -382,6 +388,8 @@ public class LocationActivity extends AppCompatActivity {
 
                 locationsCounter++;
                 sharedPrefs.edit().putInt("locationsCounter", locationsCounter);
+
+               // databaseHandlerImplementation.insertLocationResult(locationResult);
 
                 databaseHandler.insertLocationResult(locationResult);
 

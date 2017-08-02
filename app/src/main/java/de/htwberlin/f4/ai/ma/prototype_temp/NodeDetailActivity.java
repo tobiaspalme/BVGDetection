@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.LibraryGlideModule;
 import com.example.carol.bvg.R;
 
 import java.io.File;
@@ -27,8 +25,8 @@ import java.nio.channels.FileChannel;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
-import static de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity.CAM_REQUEST;
 
 /**
  * Created by Johann Winter
@@ -36,25 +34,28 @@ import static de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity.CAM_REQUEST;
 
 public class NodeDetailActivity extends Activity {
 
-    EditText idEditText;
-    EditText wlanEditText;
-    EditText descriptionEditText;
-    EditText coordinatesEditText;
-    ImageView cameraImageView;
-    Button saveButton;
-    Button deleteButton;
-    Button changePictureButton;
-    Context ctx = this;
-    String oldNodeId;
-    String picturePath;
+    private EditText idEditText;
+    private EditText wlanEditText;
+    private EditText descriptionEditText;
+    private EditText coordinatesEditText;
+    private ImageView cameraImageView;
+    private Button saveButton;
+    private Button deleteButton;
+    private Button changePictureButton;
+    private Context ctx = this;
+    private String oldNodeId;
+    private String picturePath;
 
-    Node node;
-    DatabaseHandler databaseHandler;
+    private Node node;
+    //DatabaseHandlerImplementation databaseHandlerImplementation;
+    private DatabaseHandler databaseHandler;
 
-    File tempFile;
-    final File sdCard = Environment.getExternalStorageDirectory();
-    final File pictureFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
-    final File tempFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/.temp");
+    private File tempFile;
+    private final File sdCard = Environment.getExternalStorageDirectory();
+    private final File pictureFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
+    private final File tempFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/.temp");
+
+    private static final int CAM_REQUEST = 1;
 
 
     @Override
@@ -84,7 +85,9 @@ public class NodeDetailActivity extends Activity {
         }
 
 
-        databaseHandler = new DatabaseHandler(this);
+        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
+       // node = databaseHandlerImplementation.getNode(nodeName);
+        databaseHandler = new DatabaseHandlerImplementation(this);
         node = databaseHandler.getNode(nodeName);
         oldNodeId = node.getId();
 
@@ -147,6 +150,7 @@ public class NodeDetailActivity extends Activity {
                         System.out.println("IOException while copying image from temp folder to picture folder");
                     }
                 }
+                //databaseHandlerImplementation.updateNode(node, oldNodeId);
                 databaseHandler.updateNode(node, oldNodeId);
 
                 finish();
@@ -161,16 +165,18 @@ public class NodeDetailActivity extends Activity {
                         .setTitle("Löschen?")
                         .setMessage("Soll der Node \"" + nodeName + "\" wirklich gelöscht werden?")
                         .setCancelable(false)
-                        .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                //databaseHandlerImplementation.deleteNode(node);
                                 databaseHandler.deleteNode(node);
+
                                 File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
                                 File imageFile = new File(folder, "Node_" + node.getId() + ".jpg");
                                 imageFile.delete();
                                 finish();
                             }
                         })
-                        .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }

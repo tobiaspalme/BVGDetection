@@ -1,9 +1,13 @@
 package de.htwberlin.f4.ai.ma.indoor_graph;
 
+import android.content.Context;
+
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+
 
 /**
  * Created by Johann Winter
@@ -11,7 +15,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 
 class IndoorGraphImplementation implements IndoorGraph {
 
-    DatabaseHandler databaseHandler;
+    Context ctx;
+    DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(ctx);
 
     @Override
     public Path getPath(Node startNode, Node endNode) {
@@ -21,9 +26,13 @@ class IndoorGraphImplementation implements IndoorGraph {
     @Override
     public void setEdge(Node nodeA, Node nodeB) {}
 
-    public List<Node> listAllNodes() {
+    public List<Node> getAllNodes() {
+        //List<Node> allNodes = databaseHandlerImplementation.getAllNodes();
         List<Node> allNodes = databaseHandler.getAllNodes();
+
         return allNodes;
     }
+
+
 
 }

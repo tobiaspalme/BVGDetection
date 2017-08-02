@@ -79,6 +79,7 @@ public class JsonReader {
                     String description = jsonObjectNode.getString("description");
                     String coordinates = jsonObjectNode.getString("coordinates");
                     String picturePath = jsonObjectNode.getString("picturePath");
+                    String additionalInfo = jsonObjectNode.getString("additionalInfo");
 
 
                     JSONArray signalJsonArray = jsonObjectNode.getJSONArray("signalInformation");
@@ -102,7 +103,7 @@ public class JsonReader {
                     }
 
 
-                    Node node = nodeFactory.getInstance(id, z, description, signalInformationList, coordinates, picturePath);
+                    Node node = nodeFactory.getInstance(id, z, description, signalInformationList, coordinates, picturePath, additionalInfo);
                     //de.htwberlin.f4.ai.ma.prototype_temp.Node node = new Node(id, z, signalInformationList);
                     allNodes.add(node);
                 }
