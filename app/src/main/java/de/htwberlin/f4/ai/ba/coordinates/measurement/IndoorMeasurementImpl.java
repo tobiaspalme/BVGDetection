@@ -46,10 +46,8 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private float airPressure;
     private float azimuth;
 
-    private boolean reversed;
-    private boolean firstReverseCalc;
-
     private float[] coordinates;
+
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
@@ -78,9 +76,11 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         float x = (float)cosa * distance;
         float y = (float)sina * distance;
 
-        Log.d("tmp", "original x: " + x);
-        Log.d("tmp", "original y: " + y);
+        Log.d("tmp", "orientation: " + orientation);
+        Log.d("tmp", "calculated x movement: " + x);
+        Log.d("tmp", "calculated y movement: " + y);
 
+        /*
         // check if the user made a turn
         if (Math.abs(orientation) > 90) {
             firstReverseCalc = true;
@@ -116,9 +116,12 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
                 coordinates[1] += y;
             }
         }
-
-
-
+        */
+        coordinates[0] += x;
+        coordinates[1] += y;
+        Log.d("tmp", "new x: " + coordinates[0]);
+        Log.d("tmp", "new y: " + coordinates[1]);
+        Log.d("tmp", "--------------------");
         // altitude
         coordinates[2] += altitude;
     }
@@ -129,8 +132,42 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         // coordinates[1] = y = movement forward / backward
         // coordinates[2] = z = movement upward / downward
         coordinates = new float[]{0.0f, 0.0f, 0.0f};
-        reversed = false;
-        firstReverseCalc = false;
+
+
+        /*
+        // schritt nach vorn
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+
+
+        // 90° rechts
+        calcNewPosition(0.0f, 1.0f, 90.1f);
+        calcNewPosition(0.0f, 1.0f, 90.1f);
+        calcNewPosition(0.0f, 1.0f, 90.1f);
+        // 90° links -> wieder nach vorne gehen
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+        calcNewPosition(0.0f, 1.0f, 0.1f);
+        // 180° rechts
+        calcNewPosition(0.0f, 1.0f, 180.1f);
+        calcNewPosition(0.0f, 1.0f, 180.1f);
+        calcNewPosition(0.0f, 1.0f, 180.1f);
+
+
+        // 90° links
+        calcNewPosition(0.0f, 1.0f, -90.1f);
+        calcNewPosition(0.0f, 1.0f, -90.1f);
+        calcNewPosition(0.0f, 1.0f, -90.1f);
+
+        // 180° links
+        calcNewPosition(0.0f, 1.0f, -180.1f);
+        calcNewPosition(0.0f, 1.0f, -180.1f);
+        calcNewPosition(0.0f, 1.0f, -180.1f);
+        */
+
+
+
 
         Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
         stepSensor.setListener(new SensorListener() {
@@ -161,6 +198,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             orientationModule.start();
 
         }
+
     }
 
     @Override

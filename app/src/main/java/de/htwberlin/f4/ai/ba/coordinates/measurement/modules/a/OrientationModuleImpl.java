@@ -45,12 +45,12 @@ public class OrientationModuleImpl implements OrientationModule {
         // just picking the last value in the interval
         Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
         List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_FUSION);
-        if (dataValues != null) {
+        if (dataValues != null && dataValues.size() > 0) {
             float currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             orientationDiff = currentOrientation - lastOrientation;
 
             lastStepTimestamp = currentStepTimestamp;
-            lastOrientation = currentOrientation;
+            //lastOrientation = currentOrientation;
         }
         Log.d("orientation", String.valueOf(orientationDiff));
         return orientationDiff;

@@ -137,6 +137,7 @@
             android:text="x / y / z"
             android:textSize="24sp"/>
 
+
         <!-- buttons -->
         <LinearLayout
             android:layout_width="match_parent"

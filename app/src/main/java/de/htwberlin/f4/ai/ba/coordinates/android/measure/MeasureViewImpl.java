@@ -24,6 +24,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private TextView heightView;
     private TextView coordinatesView;
 
+
     private ExpandableListView stepListView;
 
 
@@ -39,6 +40,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         barometerView = (TextView) root.findViewById(R.id.coordinates_measure_pressurevalue);
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
+
 
         final Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
