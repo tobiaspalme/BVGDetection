@@ -16,7 +16,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 public interface IndoorMeasurement {
 
     // calibrate steplength (m), stepperiod (ms), airpressure
-    void calibrate(float stepLength, int stepPeriod, float airPressure, float azimuth);
+    void calibrate(CalibrationData calibrationData);
 
     // start recording for postion calculcation
     void start(IndoorMeasurementType indoorMeasurementType);
@@ -28,14 +28,10 @@ public interface IndoorMeasurement {
     void startSensors(SensorType... sensorType);
 
     // get the relative coordinates
-    String getCoordinates();
+    float[] getCoordinates();
 
     // set the listener which receives updates from sensors
     void setSensorListener(SensorListener listener);
-
-    // set the listener which receives updates from indoormeasurement e.g.
-    // when we calculated new coordinates
-    void setIndoorMeasurementListener(IndoorMeasurementListener listener);
 
     // get the last values of every registered sensor, so we can read them
     // at a specific time. That's required because every sensor got a different

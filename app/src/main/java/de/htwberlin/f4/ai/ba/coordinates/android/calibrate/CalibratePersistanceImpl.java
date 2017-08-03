@@ -7,6 +7,7 @@ import com.example.carol.bvg.R;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 
 /**
@@ -24,20 +25,21 @@ public class CalibratePersistanceImpl implements CalibratePersistance {
     }
 
     @Override
-    public boolean load() {
+    public CalibrationData load() {
+        CalibrationData calibrationData = null;
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
 
         // just checking if the keys exist, maybe we should check if the value is != 0 too...
         if (sharedPreferences.contains(context.getString(R.string.coordinates_shared_preferences_steplength)) &&
                 sharedPreferences.contains(context.getString(R.string.coordinates_shared_preferences_stepperiod))) {
 
-            stepLength = sharedPreferences.getFloat(context.getString(R.string.coordinates_shared_preferences_steplength), 0.0f);
-            stepPeriod = sharedPreferences.getInt(context.getString(R.string.coordinates_shared_preferences_stepperiod), 0);
+            calibrationData = new CalibrationData();
+            calibrationData.setStepLength(sharedPreferences.getFloat(context.getString(R.string.coordinates_shared_preferences_steplength), 0.0f));
+            calibrationData.setStepPeriod(sharedPreferences.getInt(context.getString(R.string.coordinates_shared_preferences_stepperiod), 0));
 
-            return true;
         }
 
-        return false;
+        return calibrationData;
     }
 
     @Override
@@ -50,13 +52,4 @@ public class CalibratePersistanceImpl implements CalibratePersistance {
         editor.commit();
     }
 
-    @Override
-    public float getStepLength() {
-        return stepLength;
-    }
-
-    @Override
-    public int getStepPeriod() {
-        return stepPeriod;
-    }
 }
