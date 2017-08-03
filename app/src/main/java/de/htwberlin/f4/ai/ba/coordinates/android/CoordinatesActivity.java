@@ -179,7 +179,7 @@ public class CoordinatesActivity extends AppCompatActivity
 
     private boolean alreadyCalibrated() {
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(this);
-        return calibratePersistance.load();
+        return calibratePersistance.load() != null;
     }
 
 }

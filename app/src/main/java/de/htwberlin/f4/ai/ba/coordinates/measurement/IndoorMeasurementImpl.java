@@ -18,9 +18,11 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.stepcounter.StepCounter
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.AltitudeModuleImpl;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.DistanceModuleImpl;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModuleImpl;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleImpl;
 
 
 /**
@@ -32,135 +34,31 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModule
 public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private SensorFactory sensorFactory;
-    private IndoorMeasurementListener indoorMeasurementListener;
     private SensorListener sensorListener;
     private List<Sensor> sensorList;
-    private SensorDataModel dataModel;
+    private CalibrationData calibrationData;
 
-    private AltitudeModule altitudeModule;
-    private DistanceModule distanceModule;
-    private OrientationModule orientationModule;
+    private PositionModule positionModule;
 
-    private float stepLength;
-    private int stepPeriod;
-    private float airPressure;
-    private float azimuth;
-
-    private boolean reversed;
-    private boolean firstReverseCalc;
-
-    private float[] coordinates;
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
         sensorList = new ArrayList<>();
-        dataModel = new SensorDataModelImpl();
     }
 
 
     @Override
-    public void calibrate(float stepLength, int stepPeriod, float airPressure, float azimuth) {
-        this.stepLength = stepLength;
-        this.stepPeriod = stepPeriod;
-        this.airPressure = airPressure;
-        this.azimuth = azimuth;
-    }
-
-    private void calcNewPosition(float altitude, float distance, float orientation) {
-        // calculate new position with every step
-        // berechnung vielleicht in thread auslagern?
-
-        // combine these 3 values to calculate new position
-
-        // orientation stuff
-        double sina = Math.sin(Math.toRadians(90 - orientation));
-        double cosa = Math.cos(Math.toRadians(90 - orientation));
-        float x = (float)cosa * distance;
-        float y = (float)sina * distance;
-
-        Log.d("tmp", "original x: " + x);
-        Log.d("tmp", "original y: " + y);
-
-        // check if the user made a turn
-        if (Math.abs(orientation) > 90) {
-            firstReverseCalc = true;
-            if (!reversed) {
-                reversed = true;
-            } else {
-                reversed = false;
-            }
-        }
-
-        // crappy calculation
-        // when a user made a turn, y is always negative,
-        // so we have to compensate for that by using a flag if it's
-        // the first calculation since the user made a turn...
-        // should be improved
-        if (reversed) {
-            coordinates[0] -= x;
-            if (firstReverseCalc) {
-                coordinates[1] += y;
-                firstReverseCalc = false;
-            } else {
-                coordinates[1] -= y;
-            }
-
-        }
-
-        if (!reversed) {
-            coordinates[0] += x;
-            if (firstReverseCalc) {
-                coordinates[1] -= y;
-                firstReverseCalc = false;
-            } else {
-                coordinates[1] += y;
-            }
-        }
-
-
-
-        // altitude
-        coordinates[2] += altitude;
+    public void calibrate(CalibrationData calibrationData) {
+        this.calibrationData = calibrationData;
     }
 
     @Override
     public void start(IndoorMeasurementType indoorMeasurementType) {
-        // coordinates[0] = x = movement left / right
-        // coordinates[1] = y = movement forward / backward
-        // coordinates[2] = z = movement upward / downward
-        coordinates = new float[]{0.0f, 0.0f, 0.0f};
-        reversed = false;
-        firstReverseCalc = false;
-
-        Sensor stepSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER);
-        stepSensor.setListener(new SensorListener() {
-            @Override
-            public void valueChanged(SensorData newValue) {
-                if (altitudeModule != null && distanceModule != null && orientationModule != null) {
-                    calcNewPosition(altitudeModule.getAltitude(), distanceModule.getDistance(), orientationModule.getOrientation());
-                }
-
-
-                // inform listener about new coordinates
-                if (indoorMeasurementListener != null) {
-                    indoorMeasurementListener.onNewCoordinates(coordinates[0], coordinates[1], coordinates[2]);
-                }
-            }
-        });
-        stepSensor.start();
-        sensorList.add(stepSensor);
-
-
         if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
-            altitudeModule = new AltitudeModuleImpl(sensorFactory, airPressure);
-            distanceModule = new DistanceModuleImpl(sensorFactory, stepLength);
-            orientationModule = new OrientationModuleImpl(sensorFactory, azimuth);
-
-            altitudeModule.start();
-            distanceModule.start();
-            orientationModule.start();
-
+            positionModule = new PositionModuleImpl(sensorFactory, calibrationData);
+            positionModule.start();
         }
+
     }
 
     @Override
@@ -169,17 +67,8 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         for (Sensor sensor : sensorList) {
             sensor.stop();
         }
-        // stop all sensors controlled by altitudemodule
-        if (altitudeModule != null) {
-            altitudeModule.stop();
-        }
-        // stop all sensors controlled by distancemodul
-        if (distanceModule != null) {
-            distanceModule.stop();
-        }
-        // stop all sensors controlled by orientationmodule
-        if (orientationModule != null) {
-            orientationModule.stop();
+        if (positionModule != null) {
+            positionModule.stop();
         }
     }
 
@@ -203,21 +92,18 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public String getCoordinates() {
-        /*if (positionModule != null) {
-            positionModule.getPosition();
-        }*/
-        return null;
+    public float[] getCoordinates() {
+        float[] result = null;
+
+        if (positionModule != null) {
+            result = positionModule.calculatePosition();
+        }
+        return result;
     }
 
     @Override
     public void setSensorListener(SensorListener listener) {
         sensorListener = listener;
-    }
-
-    @Override
-    public void setIndoorMeasurementListener(IndoorMeasurementListener listener) {
-        indoorMeasurementListener = listener;
     }
 
     @Override
