@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,22 +14,32 @@ import android.widget.Button;
 
 import com.example.carol.bvg.R;
 
+import java.io.File;
+
 import de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity;
+import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraph;
+//import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphFactory;
+import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationActivity;
 import de.htwberlin.f4.ai.ma.prototype_temp.nodelist.NodeListActivity;
 
 public class MainActivity extends AppCompatActivity {
+
     String[] permissions;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
 
+    Button recordButton;
+    Button nodeListButton;
+    Button calculateButton;
+    Button edgesManagerButton;
+    Button importExportButton;
+    Button settingsButton;
 
-    private Button recordButton;
-    private Button nodeListButton;
-    private Button calculateButton;
-    private Button edgesManagerButton;
-    private Button importExportButton;
-    private Button settingsButton;
 
+    // Test
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         edgesManagerButton = (Button) findViewById(R.id.edges_manager_button);
         importExportButton = (Button) findViewById(R.id.import_export_button);
         settingsButton = (Button) findViewById(R.id.settings_button);
+
 
         // TODO: if clause sinnvoll?
         if (recordButton != null) {
@@ -110,6 +122,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+
+/*
+        IndoorGraphFactory indoorGraphFactory = new IndoorGraphFactory();
+        IndoorGraph indoorGraph = indoorGraphFactory.createInstance();
+        System.out.println(indoorGraph.getIndoorGraphDB().getAllNodes().get(1));
+*/
+
+       // IndoorGraph indoorGraph = new IndoorGraphImplementation();
+       // indoorGraph.getIndoorGraphDB();
 
 
     }

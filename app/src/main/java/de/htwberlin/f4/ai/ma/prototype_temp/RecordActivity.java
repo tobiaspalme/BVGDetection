@@ -48,8 +48,8 @@ public class RecordActivity extends AppCompatActivity {
     private TextView progressText;
 
     private Button recordButton;
-    private Button captureButton;
-    private Button saveNodeButton;
+    Button captureButton;
+    Button saveNodeButton;
     private ImageView cameraImageView;
     private EditText idName;
     private EditText recordTimeText;
@@ -240,7 +240,7 @@ public class RecordActivity extends AppCompatActivity {
         }
 
         if (fingerprintTaken) {
-            Node node = nodeFactory.getInstance(id, 0, description, signalInformationList, "", picPath , "");
+            Node node = nodeFactory.createInstance(id, 0, description, signalInformationList, "", picPath , "");
             jsonWriter.writeJSON(node);
             //databaseHandlerImplementation.insertNode(node);
             databaseHandler.insertNode(node);

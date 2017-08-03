@@ -29,14 +29,15 @@ public class EdgesManagerActivity extends Activity {
 
     private Spinner spinnerA;
     private Spinner spinnerB;
-    private Button connectButton;
-    private ListView edgesListView;
-    private ArrayList<Node> allNodes;
-    private ArrayList<String> itemsSpinnerA;
+
+    Button connectButton;
+    ListView edgesListView;
+    ArrayList<Node> allNodes;
+    ArrayList<String> itemsSpinnerA;
+
     private ArrayList<String> itemsSpinnerB;
     private ArrayList<String> itemsEdgesList;
     private ArrayList<Edge> allEdges;
-    //private DatabaseHandlerImplementation databaseHandlerImplementation;
     DatabaseHandler databaseHandler;
     private CheckBox accessiblyCheckbox;
     private String lastSelectedItemA;
@@ -55,7 +56,6 @@ public class EdgesManagerActivity extends Activity {
         edgesListView = (ListView) findViewById(R.id.edges_listview);
         accessiblyCheckbox = (CheckBox) findViewById(R.id.accessibly_checkbox);
 
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
         databaseHandler = new DatabaseHandlerImplementation(this);
 
         itemsSpinnerA = new ArrayList<>();
@@ -73,7 +73,6 @@ public class EdgesManagerActivity extends Activity {
             edgesCounter = 1;
         }
 
-        //allNodes = databaseHandlerImplementation.getAllNodes();
         allNodes = databaseHandler.getAllNodes();
 
 
@@ -81,6 +80,12 @@ public class EdgesManagerActivity extends Activity {
             itemsSpinnerA.add(node.getId());
             itemsSpinnerB.add(node.getId());
         }
+
+        // Disable connect-button if spinnerB has no elements (spinnerA has one or less elements)
+        if (itemsSpinnerA.size() < 2) {
+            connectButton.setEnabled(false);
+        }
+
 
         final ArrayAdapter<String> adapterA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsSpinnerA);
         spinnerA.setAdapter(adapterA);
@@ -99,7 +104,7 @@ public class EdgesManagerActivity extends Activity {
 
                 String selectedA = spinnerA.getSelectedItem().toString();
 
-                if (selectedA != lastSelectedItemA) {
+                if (!selectedA.equals(lastSelectedItemA)) {
                     if (!lastSelectedItemA.equals("")) {
                         itemsSpinnerB.add(lastSelectedItemA);
                     }
@@ -123,9 +128,7 @@ public class EdgesManagerActivity extends Activity {
                 // TODO set expenditure...
                 Edge edge = new EdgeImplementation(edgesCounter, spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly, 0);
 
-                //databaseHandlerImplementation.insertEdge(edge);
                 databaseHandler.insertEdge(edge);
-
 
                 if (accessibly) {
                     itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB() + "        " + accessiblyString);
@@ -143,7 +146,6 @@ public class EdgesManagerActivity extends Activity {
 
 
         // Load edges list
-        //for (Edge e : databaseHandlerImplementation.getAllEdges()) {
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibly()) {
@@ -164,8 +166,9 @@ public class EdgesManagerActivity extends Activity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //databaseHandlerImplementation.deleteEdge(allEdges.get(allEdges.get(position).getId()));
-                                databaseHandler.deleteEdge(allEdges.get(allEdges.get(position).getId()));
+                               // databaseHandler.deleteEdge(allEdges.get(allEdges.get(position).getId()));
+                                databaseHandler.deleteEdge(allEdges.get(position));
+                                allEdges.remove(position);
                                 edgesListAdapter.remove(itemsEdgesList.get(position));
                                 edgesListAdapter.notifyDataSetChanged();
                             }
@@ -179,7 +182,6 @@ public class EdgesManagerActivity extends Activity {
                 return false;
             }
         });
-
 
 
     }

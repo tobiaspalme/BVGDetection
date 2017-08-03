@@ -42,8 +42,8 @@ public class LocationActivity extends AppCompatActivity {
 
     private List<String> macAdresses = new ArrayList<>();
     private int count = 0;
-    private Button measurementButton;
-    private Button measurementButtonMoreTomes;
+    Button measurementButton;
+    Button measurementButtonMoreTomes;
 
     //String[] permissions;
     private Fingerprint fingerprint = FingerprintFactory.getInstance();
@@ -52,7 +52,7 @@ public class LocationActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private NodeFactory nodeFactory;
 
-    private ListView listView;
+    ListView listView;
     private String settings;
     private Spinner dropdown;
     private LocationResultAdapter resultAdapterdapter;
@@ -112,7 +112,7 @@ public class LocationActivity extends AppCompatActivity {
         dropdown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> nodeItems = new ArrayList<>();
         for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
-            nodeItems.add(node.getId().toString());
+            nodeItems.add(node.getId());
         }
         Collections.sort(nodeItems);
 
@@ -120,11 +120,10 @@ public class LocationActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         //fill result list with content
-        //final ArrayList<LocationResultImpl> arrayOfResults = loadJson();
+        //final ArrayList<LocationResultImplementation> arrayOfResults = loadJson();
 
 
-        //final ArrayList<LocationResultImpl> allResults = databaseHandlerImplementation.getAllLocationResults();
-        final ArrayList<LocationResultImpl> allResults = databaseHandler.getAllLocationResults();
+        final ArrayList<LocationResultImplementation> allResults = databaseHandler.getAllLocationResults();
 
 
         resultAdapterdapter = new LocationResultAdapter(this, allResults);
@@ -347,7 +346,7 @@ public class LocationActivity extends AppCompatActivity {
 
         final List<Node> actuallyNode = new ArrayList<>();
 
-        List<SignalInformation> signalInformationList = new ArrayList<>();
+        final List<SignalInformation> signalInformationList = new ArrayList<>();
 
         for (String blub : bssid) {
             int value = 0;
@@ -368,7 +367,7 @@ public class LocationActivity extends AppCompatActivity {
 
         }
 
-        Node node = nodeFactory.getInstance(null, 0, "", signalInformationList, "", "", "");
+        Node node = nodeFactory.createInstance(null, 0, "", signalInformationList, "", "", "");
         actuallyNode.add(node);
 
         fingerprint.setActuallyNode(actuallyNode);
@@ -376,20 +375,18 @@ public class LocationActivity extends AppCompatActivity {
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-                LocationResultImpl locationResult;
+                LocationResultImplementation locationResult;
                 if (actually != null) {
                     textView.setText(actually);
-                    locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
                 } else {
                     textView.setText("kein POI gefunden");
-                    locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
                 }
                 //makeJson(locationResult);
 
                 locationsCounter++;
                 sharedPrefs.edit().putInt("locationsCounter", locationsCounter);
-
-               // databaseHandlerImplementation.insertLocationResult(locationResult);
 
                 databaseHandler.insertLocationResult(locationResult);
 
@@ -437,7 +434,7 @@ public class LocationActivity extends AppCompatActivity {
      * @param locationResult
      */
     /*
-    private void makeJson(LocationResultImpl locationResult) {
+    private void makeJson(LocationResultImplementation locationResult) {
         try {
             String jsonString = loadJSON(getApplicationContext());
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -490,8 +487,8 @@ public class LocationActivity extends AppCompatActivity {
     */
 
 /*
-    private ArrayList<LocationResultImpl> loadJson() {
-        ArrayList<LocationResultImpl> locationResultArrayList = new ArrayList<>();
+    private ArrayList<LocationResultImplementation> loadJson() {
+        ArrayList<LocationResultImplementation> locationResultArrayList = new ArrayList<>();
         String jsonString = loadJSON(getApplicationContext());
         JSONObject jsonObject = null;
         try {
@@ -504,7 +501,7 @@ public class LocationActivity extends AppCompatActivity {
                 String poi = jsonArrayResult.getJSONObject(2).getString("Poi");
                 String measuredPoi = jsonArrayResult.getJSONObject(3).getString("MeasuredPoi");
 
-                LocationResultImpl locationResult = new LocationResultImpl(setting, time, poi, measuredPoi);
+                LocationResultImplementation locationResult = new LocationResultImplementation(setting, time, poi, measuredPoi);
                 locationResultArrayList.add(locationResult);
             }
         } catch (JSONException e) {

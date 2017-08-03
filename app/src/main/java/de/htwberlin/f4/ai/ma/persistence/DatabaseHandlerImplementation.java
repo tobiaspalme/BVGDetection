@@ -5,8 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
@@ -14,13 +19,13 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.indoor_graph.Edge;
 import de.htwberlin.f4.ai.ma.indoor_graph.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResult;
-import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImpl;
+import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImplementation;
 
 /**
  * Created by Johann Winter
  */
 
-public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler{
+public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler {
 
     private static final String DATABASE_NAME = "indoor_data.db";
     private static final int DATABASE_VERSION = 1;
@@ -49,19 +54,22 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String EDGE_ACCESSIBLY = "accessibly";
     private static final String EDGE_EXPENDITURE = "expenditure";
 
-    //TODO
+
     private NodeFactory nodeFactory;
 
     private JSONConverter jsonConverter = new JSONConverter();
 
+    private Context context;
+
 
     public DatabaseHandlerImplementation(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         String createNodeTableQuery = "CREATE TABLE " + NODES_TABLE + " (" +
                 NODE_ID + " TEXT PRIMARY KEY," +
                 NODE_DESCRIPTION + " TEXT," +
@@ -93,8 +101,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
-
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    }
 
 
     //----------------- N O D E S ------------------------------------------------------------------------------------------
@@ -124,7 +132,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         ContentValues contentValues = new ContentValues();
 
         contentValues.put("id", node.getId());
-        contentValues.put("description",node.getDescription());
+        contentValues.put("description", node.getDescription());
         // TODO? Oder unnötig?               contentValues.put("signalstrengthinformationlist", node.getSignalInformation());
         contentValues.put("coordinates", node.getCoordinates());
         contentValues.put("picture_path", node.getPicturePath());
@@ -146,7 +154,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         if (cursor.moveToFirst()) {
             do {
-                Node node = nodeFactory.getInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Node node = nodeFactory.createInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -160,12 +168,12 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Get single Node
     public Node getNode(String nodeName) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ nodeName +"'";
+        String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + nodeName + "'";
         Node node = null;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            node = nodeFactory.getInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            node = nodeFactory.createInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
             Log.d("DB: select_node", nodeName);
         }
         database.close();
@@ -176,14 +184,12 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Delete Node
     public void deleteNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='"+ node.getId() +"'";
+        String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + node.getId() + "'";
 
         Log.d("DB: delete_node", node.getId());
 
         database.execSQL(deleteQuery);
     }
-
-
 
 
     //----------------- R E S U L T S ------------------------------------------------------------------------------------------
@@ -208,25 +214,25 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
 
     // Get all LocationResults
-    public ArrayList<LocationResultImpl> getAllLocationResults() {
-        ArrayList<LocationResultImpl> allResults = new ArrayList<>();
+    public ArrayList<LocationResultImplementation> getAllLocationResults() {
+        ArrayList<LocationResultImplementation> allResults = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                LocationResultImpl locationResultImpl = new LocationResultImpl();
+                LocationResultImplementation locationResultImplementation = new LocationResultImplementation();
 
                 Log.d("DB: get_all_locations", "###########");
 
-                locationResultImpl.setId(Integer.valueOf(cursor.getString(0)));
-                locationResultImpl.setSettings(cursor.getString(1));
-                locationResultImpl.setMeasuredTime(cursor.getString(2));
-                locationResultImpl.setSelectedNode(cursor.getString(3));
-                locationResultImpl.setMeasuredNode(cursor.getString(4));
+                locationResultImplementation.setId(Integer.valueOf(cursor.getString(0)));
+                locationResultImplementation.setSettings(cursor.getString(1));
+                locationResultImplementation.setMeasuredTime(cursor.getString(2));
+                locationResultImplementation.setSelectedNode(cursor.getString(3));
+                locationResultImplementation.setMeasuredNode(cursor.getString(4));
 
-                allResults.add(locationResultImpl);
+                allResults.add(locationResultImplementation);
             } while (cursor.moveToNext());
         }
 
@@ -238,15 +244,13 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Delete LocatonResult
     public void deleteLocationResult(LocationResult locationResult) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='"+ locationResult.getId() +"'";
+        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
 
         Log.d("DB: delete_LOCRESULT", "" + locationResult.getId());
         System.out.println("REM LOCRES: " + locationResult.getSelectedNode());
 
         database.execSQL(deleteQuery);
     }
-
-
 
 
     //----------- E D G E S -------------------------------------------------------------------------------------
@@ -307,12 +311,70 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Delete Edge
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='"+ edge.getId() +"'";
+        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
 
         Log.d("DB: delete_EDGE", "" + edge.getId());
 
         database.execSQL(deleteQuery);
     }
+
+
+    /*TODO
+    //-------------I M P O R T ------------------------------------------------------------------
+
+    private String DB_FILEPATH = context.getFilesDir().getPath() + "/databases/indoor_data.db";
+
+    /**
+     * Copies the database file at the specified location over the current
+     * internal application database.
+     */
+    /*
+    public boolean importDatabase(String dbPath) throws IOException {
+
+        // Close the SQLiteOpenHelper so it will commit the created empty database to internal storage
+        close();
+
+        File newDb = new File(dbPath);
+        File oldDb = new File(DB_FILEPATH);
+        if (newDb.exists()) {
+            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+            // Access the copied database so SQLiteHelper will cache it and mark
+            // it as created.
+            getWritableDatabase().close();
+            return true;
+        }
+        return false;
+    }*/
+
+
+    //------------------- E X P O R T ------------------------------------------------------------
+
+    public void exportDatabase() {
+        try {
+
+            File exportFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorPositioning/Exported");
+            if (!exportFolder.exists()) {
+                exportFolder.mkdirs();
+            }
+
+            if (exportFolder.canWrite()) {
+                String currentDBPath = context.getDatabasePath("indoor_data.db").getPath();
+
+                String exportFilename = "indoor_data.db";
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(exportFolder, exportFilename);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch(Exception e) {e.printStackTrace();}
+    }
+
 
 }
 

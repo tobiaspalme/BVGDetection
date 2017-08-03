@@ -26,7 +26,7 @@ class NodeListAdapter extends ArrayAdapter {
     private ArrayList<String> nodePicturePaths;
 
 
-    public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
+    NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
         super(context, R.layout.item_nodes_listview);
 
         this.context = context;

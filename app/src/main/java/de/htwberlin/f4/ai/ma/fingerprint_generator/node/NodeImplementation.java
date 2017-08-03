@@ -10,15 +10,16 @@ import java.util.List;
 
 class NodeImplementation implements Node {
 
-    String id;
+    private String id;
     //float xValue;
     //float yValue;
-    String description;
-    float zValue;
-    List<SignalInformation> signalInformationList;
-    String coordinates;
-    String picturePath;
-    String additionalInfo;
+    private String description;
+    private float zValue;
+    private List<SignalInformation> signalInformationList;
+    private String coordinates;
+    private String picturePath;
+    private String additionalInfo;
+
 
     @Override
     public void setId(String id) {
@@ -83,7 +84,7 @@ class NodeImplementation implements Node {
 
 
 
-    public NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
+    NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
         this.id = id;
         //this.xValue = xValue;
         //this.yValue = yValue;
@@ -95,5 +96,4 @@ class NodeImplementation implements Node {
         this.additionalInfo = additionalInfo;
     }
 
-    //public NodeImplementation(){}
 }

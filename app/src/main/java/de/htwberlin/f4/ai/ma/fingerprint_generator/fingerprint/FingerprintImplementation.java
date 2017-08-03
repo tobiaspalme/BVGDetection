@@ -25,13 +25,13 @@ class FingerprintImplementation implements Fingerprint {
     private boolean euclideanDistance;
     private boolean knn;
 
-    int averageOrder;
-    int knnValue;
-    int kalmanValue;
-    double percentage;
+    private int averageOrder;
+    private int knnValue;
+    private int kalmanValue;
+    private double percentage;
 
-    List<Node> allExistingNodes;
-    List<Node> measuredNode;
+    private List<Node> allExistingNodes;
+    private List<Node> measuredNode;
 
     @Override
     public void setMovingAverage(boolean average) {
@@ -221,7 +221,7 @@ class FingerprintImplementation implements Fingerprint {
             }
 
             //fill restructed Nodes
-            RestructedNode restructedNode = new RestructedNode(node.getId().toString(), multiMap);
+            RestructedNode restructedNode = new RestructedNode(node.getId(), multiMap);
             restructedNodes.add(restructedNode);
 
         }
@@ -269,7 +269,7 @@ class FingerprintImplementation implements Fingerprint {
     }
 
 
-    class KNearestNeighbor {
+    private class KNearestNeighbor {
         /**
          * start knn
          * @param distanceNames names of sorted list
@@ -309,7 +309,7 @@ class FingerprintImplementation implements Fingerprint {
     /**
      * start kalman filter
      */
-    class KalmanFilter {
+    private class KalmanFilter {
 
         private List<RestructedNode> calculationKalman(List<RestructedNode> restructedNodeList) {
 
@@ -410,7 +410,6 @@ class FingerprintImplementation implements Fingerprint {
                 } else {
                     x += Math.pow((average - average), 2);
                 }
-
             }
 
             double temp = ((double) 1 / ((double) count - 1)) * x;

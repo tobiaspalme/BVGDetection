@@ -35,19 +35,18 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 public class NodeDetailActivity extends Activity {
 
     private EditText idEditText;
-    private EditText wlanEditText;
+    EditText wlanEditText;
     private EditText descriptionEditText;
     private EditText coordinatesEditText;
     private ImageView cameraImageView;
-    private Button saveButton;
-    private Button deleteButton;
-    private Button changePictureButton;
+    Button saveButton;
+    Button deleteButton;
+    Button changePictureButton;
     private Context ctx = this;
     private String oldNodeId;
     private String picturePath;
 
     private Node node;
-    //DatabaseHandlerImplementation databaseHandlerImplementation;
     private DatabaseHandler databaseHandler;
 
     private File tempFile;

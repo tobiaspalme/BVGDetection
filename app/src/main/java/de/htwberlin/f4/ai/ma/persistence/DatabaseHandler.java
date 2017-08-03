@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.indoor_graph.Edge;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResult;
-import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImpl;
+import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImplementation;
 
 /**
  * Created by Johann Winter
@@ -20,11 +20,14 @@ public interface DatabaseHandler {
     void deleteNode(Node node);
 
     void insertLocationResult(LocationResult locationResult);
-    ArrayList<LocationResultImpl> getAllLocationResults();
+    ArrayList<LocationResultImplementation> getAllLocationResults();
     void deleteLocationResult(LocationResult locationResult);
 
     void insertEdge(Edge edge);
     ArrayList<Edge> getAllEdges();
     void deleteEdge(Edge edge);
+
+    //boolean importDatabase(String dbPath) throws IOException;
+    void exportDatabase();
 
 }

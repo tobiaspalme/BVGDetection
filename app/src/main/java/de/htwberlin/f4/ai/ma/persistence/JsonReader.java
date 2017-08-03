@@ -103,7 +103,7 @@ public class JsonReader {
                     }
 
 
-                    Node node = nodeFactory.getInstance(id, z, description, signalInformationList, coordinates, picturePath, additionalInfo);
+                    Node node = nodeFactory.createInstance(id, z, description, signalInformationList, coordinates, picturePath, additionalInfo);
                     //de.htwberlin.f4.ai.ma.prototype_temp.Node node = new Node(id, z, signalInformationList);
                     allNodes.add(node);
                 }

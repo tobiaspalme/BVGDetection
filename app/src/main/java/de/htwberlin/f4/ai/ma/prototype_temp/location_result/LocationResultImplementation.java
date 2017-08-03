@@ -3,7 +3,7 @@ package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
 /**
  * a class for the location result with important information
  */
-public class LocationResultImpl implements LocationResult{
+public class LocationResultImplementation implements LocationResult{
 
     private int id;
     private String settings;
@@ -11,7 +11,7 @@ public class LocationResultImpl implements LocationResult{
     private String selectedNode;
     private String measuredNode;
 
-    public LocationResultImpl(int id, String settings, String measuredTime, String selectedNode, String measuredNode) {
+    LocationResultImplementation(int id, String settings, String measuredTime, String selectedNode, String measuredNode) {
         this.id = id;
         this.settings = settings;
         this.measuredTime = measuredTime;
@@ -19,7 +19,7 @@ public class LocationResultImpl implements LocationResult{
         this.measuredNode = measuredNode;
     }
 
-    public LocationResultImpl() {};
+    public LocationResultImplementation() {};
 
     public int getId() { return this.id; }
     public void setId(int id) {

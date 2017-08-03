@@ -18,6 +18,7 @@ class JSONConverter {
 
     // Convert List<SignalInformation> to JSON-String
     String convertSignalInfoToJSON(List<SignalInformation> signalInformationList) {
+
         JSONObject jsonObject = new JSONObject();
         JSONArray signalJsonArray = new JSONArray();
         try {
@@ -48,6 +49,7 @@ class JSONConverter {
 
     // Convert JSON-String to List<SignalInformation>
     List<SignalInformation> convertJsonToSignalInfo(String jsonString) {
+
         List<SignalInformation> signalInformationList = new ArrayList<>();
 
         try {

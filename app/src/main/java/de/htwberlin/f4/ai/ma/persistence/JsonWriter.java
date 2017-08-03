@@ -27,7 +27,7 @@ public class JsonWriter {
      */
     public void writeJSON(de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node) {
         String jsonString = loadJSONFromAsset(context);
-        String nodeId = node.getId().toString();
+        String nodeId = node.getId();
 
         // ### TEST
         /*String description = node.getDescription().toString();

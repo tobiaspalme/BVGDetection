@@ -13,10 +13,12 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
  * Created by Johann Winter
  */
 
-class IndoorGraphImplementation implements IndoorGraph {
+public class IndoorGraphImplementation implements IndoorGraph {
 
-    Context ctx;
-    DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(ctx);
+    //private Context ctx;
+    //private DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(ctx);
+
+    private static DatabaseHandler instance;
 
     @Override
     public Path getPath(Node startNode, Node endNode) {
@@ -26,13 +28,19 @@ class IndoorGraphImplementation implements IndoorGraph {
     @Override
     public void setEdge(Node nodeA, Node nodeB) {}
 
+    /*
     public List<Node> getAllNodes() {
-        //List<Node> allNodes = databaseHandlerImplementation.getAllNodes();
         List<Node> allNodes = databaseHandler.getAllNodes();
-
         return allNodes;
+    }*/
+
+/*
+    public static DatabaseHandler getIndoorGraphDB() {
+            if (instance == null) {
+                instance = new DatabaseHandlerImplementation(null);
+            }
+            return instance;
     }
-
-
+*/
 
 }

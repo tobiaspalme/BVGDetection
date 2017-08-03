@@ -33,14 +33,12 @@ public class NodeListActivity extends Activity {
 
     ArrayList<Node> allNodes;
     NodeListAdapter nodeListAdapter;
-    //DatabaseHandlerImplementation databaseHandlerImplementation;
     DatabaseHandler databaseHandler;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nodelist);
 
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
         databaseHandler = new DatabaseHandlerImplementation(this);
 
 
@@ -103,12 +101,6 @@ public class NodeListActivity extends Activity {
         loadDbData();
     }
 
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        loadDbData();
-        System.out.println("### Onactivityresult");
-    }*/
 
     private void loadDbData() {
 
@@ -117,12 +109,10 @@ public class NodeListActivity extends Activity {
         nodePicturePaths.clear();
         allNodes.clear();
 
-        //allNodes.addAll(databaseHandlerImplementation.getAllNodes());
         allNodes.addAll(databaseHandler.getAllNodes());
 
-
         for (Node n : allNodes) {
-            nodeNames.add(n.getId().toString());
+            nodeNames.add(n.getId());
             nodeDescriptions.add(n.getDescription());
             nodePicturePaths.add(n.getPicturePath());
         }
