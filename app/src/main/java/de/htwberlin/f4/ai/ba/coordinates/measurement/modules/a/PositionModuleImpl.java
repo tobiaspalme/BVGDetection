@@ -20,8 +20,8 @@ public class PositionModuleImpl implements PositionModule {
     private OrientationModule orientationModule;
 
     // coordinates[0] = x = movement left / right
-    // coordinates[1] = y = movement forward / backward
-    // coordinates[2] = z = movement upward / downward
+    // coordinates[1] = y = movement backward / forward
+    // coordinates[2] = z = movement downward / upward
     private float[] coordinates;
 
     public PositionModuleImpl(SensorFactory sensorFactory, CalibrationData calibrationData) {
@@ -34,9 +34,6 @@ public class PositionModuleImpl implements PositionModule {
 
     @Override
     public float[] calculatePosition() {
-        // calculate new position with every step
-        // berechnung vielleicht in thread auslagern?
-
         // calculate new position with these 3 values
         float altitude = altitudeModule.getAltitude();
         float distance = distanceModule.getDistance();
@@ -55,11 +52,12 @@ public class PositionModuleImpl implements PositionModule {
 
         coordinates[0] += x;
         coordinates[1] += y;
+        // altitude
+        coordinates[2] += altitude;
+
         Log.d("tmp", "new x: " + coordinates[0]);
         Log.d("tmp", "new y: " + coordinates[1]);
         Log.d("tmp", "--------------------");
-        // altitude
-        coordinates[2] += altitude;
 
         return coordinates;
     }

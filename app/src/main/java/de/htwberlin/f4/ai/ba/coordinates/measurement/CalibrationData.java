@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 /**
- * Created by benni on 03.08.2017.
+ * SImple class for saving calibration stuff
  */
 
 public class CalibrationData {
@@ -14,6 +14,13 @@ public class CalibrationData {
     public CalibrationData() {
         stepLength = 0.0f;
         stepPeriod = 0;
+        airPressure = 0.0f;
+        azimuth = 0.0f;
+    }
+
+    public CalibrationData(float stepLength, int stepPeriod) {
+        this.stepLength = stepLength;
+        this.stepPeriod = stepPeriod;
         airPressure = 0.0f;
         azimuth = 0.0f;
     }

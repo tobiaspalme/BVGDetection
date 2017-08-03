@@ -9,5 +9,5 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
 public interface CalibratePersistance {
 
     CalibrationData load();
-    void save(float stepLength, int stepPeriod);
+    void save(CalibrationData calibrationData);
 }

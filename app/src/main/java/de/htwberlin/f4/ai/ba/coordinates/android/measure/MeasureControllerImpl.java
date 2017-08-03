@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
@@ -35,6 +38,8 @@ public class MeasureControllerImpl implements MeasureController {
     private AlertDialog calibrationDialog;
     private int stepCount;
 
+    private List<StepData> stepList;
+
     @Override
     public void setView(MeasureView view) {
         this.view = view;
@@ -44,9 +49,10 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onStartClicked() {
         stepCount = 0;
+        stepList = new ArrayList<>();
         view.updateStepCount(stepCount);
         view.updateCoordinates(0.0f, 0.0f, 0.0f);
-        view.updatePressure(0.0f);
+        //view.updatePressure(0.0f);
 
 
         calibrated = false;
@@ -70,7 +76,7 @@ public class MeasureControllerImpl implements MeasureController {
                         }
                         break;
                     case BAROMETER:
-                        view.updatePressure(sensorData.getValues()[0]);
+                        //view.updatePressure(sensorData.getValues()[0]);
                         // store barometer data in model, while airpressure calibration
                         // isn't finished
                         if (!calibrated) {
@@ -79,11 +85,19 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
                     case STEPCOUNTER:
                         // with each step we get the new position
+                        stepCount++;
                         float[] coordinates = indoorMeasurement.getCoordinates();
                         if (coordinates != null) {
                             view.updateCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+                            StepData stepData = new StepData();
+                            stepData.setStepName("Step " + stepCount);
+                            float[] coordCopy = new float[coordinates.length];
+                            System.arraycopy(coordinates, 0, coordCopy, 0, coordinates.length);
+                            stepData.setCoords(coordCopy);
+
+                            view.insertStep(stepData);
                         }
-                        stepCount++;
+
                         view.updateStepCount(stepCount);
                         break;
                     default:

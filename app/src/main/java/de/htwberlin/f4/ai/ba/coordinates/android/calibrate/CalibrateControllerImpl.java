@@ -9,9 +9,9 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
 
 /**
  * Created by benni on 18.07.2017.
@@ -173,7 +173,8 @@ public class CalibrateControllerImpl implements CalibrateController {
 
     private void saveSettings() {
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
-        calibratePersistance.save(stepLength, stepPeriod);
+        CalibrationData calibrationData = new CalibrationData(stepLength, stepPeriod);
+        calibratePersistance.save(calibrationData);
     }
 
 }

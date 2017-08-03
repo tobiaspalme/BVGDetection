@@ -13,177 +13,145 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.4"
         android:weightSum="1">
 
-
-        <ImageView
-            android:id="@+id/coordinates_measure_compass_iv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-
-            app:srcCompat="@drawable/compass" />
-
-        <TextView
-            android:id="@+id/coordinates_measure_compass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="185dp"
-            android:layout_marginTop="20dp"
-            android:text="0°"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="24sp" />
-
-
-        <!-- schritte / meter -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.15"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_marginTop="10dp">
+            android:weightSum="1">
 
-            <!-- schritte -->
-            <TextView
-                android:id="@+id/coordinates_measure_stephint"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_steps"
-                android:layout_weight="0.35"
-                android:textSize="24sp"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1"
+                android:layout_weight="0.5">
 
-            <TextView
-                android:id="@+id/coordinates_measure_stepvalue"
+                <ImageView
+                    android:id="@+id/coordinates_measure_compass_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/compass" />
+
+                <TextView
+                    android:id="@+id/coordinates_measure_compass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0°"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_weight="0.15"
-                android:textSize="24sp"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:weightSum="1"
+                android:orientation="vertical">
 
-            <!-- meter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-            <TextView
-                android:id="@+id/coordinates_measure_distancehint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_distance"
-                android:layout_weight="0.35"
-                android:textSize="24sp"/>
+                    <!-- schritte -->
+                    <TextView
+                        android:id="@+id/coordinates_measure_stephint"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/measure_steps"
+                        android:layout_weight="0.5"
+                        android:textSize="24sp"/>
 
-            <TextView
-                android:id="@+id/coordinates_measure_distancevalue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15"
-                android:text="0"
-                android:textSize="24sp"/>
+                    <TextView
+                        android:id="@+id/coordinates_measure_stepvalue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_weight="0.5"
+                        android:textSize="24sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <!-- meter -->
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_distancehint"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/measure_distance"
+                        android:layout_weight="0.5"
+                        android:textSize="24sp"/>
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_distancevalue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="0"
+                        android:textSize="24sp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <!-- luftdruck / höhe -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.15"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:layout_marginTop="10dp">
-
-            <!-- luftdruck -->
-            <TextView
-                android:id="@+id/coordinates_measure_pressurehint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_pressure"
-                android:layout_weight="0.35"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/coordinates_measure_pressurevalue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_weight="0.3"
-                android:textSize="24sp"/>
-
-            <!-- höhe -->
-            <!--
-            <TextView
-                android:id="@+id/coordinates_measure_heighthint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_height"
-                android:layout_weight="0.35"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/coordinates_measure_heightvalue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15"
-                android:text="0"
-                android:textSize="24sp"/>
-                -->
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/coordinates_measure_coordinates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="x / y / z"
-            android:textSize="24sp"/>
-
-
-        <!-- buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:orientation="horizontal"
-            android:layout_marginLeft="60dp">
-
-            <Button
-                android:id="@+id/coordinates_measure_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_start" />
-
-            <Button
-                android:id="@+id/coordinates_measure_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_stop" />
-
-            <Button
-                android:id="@+id/coordinates_measure_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_add" />
-
-        </LinearLayout>
-
-
-
-
-
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/coordinates_measure_coordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
+        android:text="x / y / z"
+        android:textSize="24sp"/>
 
 
+    <!-- buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:orientation="horizontal">
 
-    <ExpandableListView
+        <Button
+            android:id="@+id/coordinates_measure_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/measure_start" />
+
+        <Button
+            android:id="@+id/coordinates_measure_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/measure_stop" />
+
+        <Button
+            android:id="@+id/coordinates_measure_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/measure_add" />
+
+    </LinearLayout>
+
+    <ListView
         android:id="@+id/coordinates_measure_steplist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3"/>
-
-
-
+        android:layout_weight="0.4"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="false"/>
 
 
 </LinearLayout>

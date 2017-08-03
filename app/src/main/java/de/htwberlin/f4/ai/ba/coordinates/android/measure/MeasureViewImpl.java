@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MeasureViewImpl extends Fragment implements MeasureView{
@@ -25,7 +29,8 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private TextView coordinatesView;
 
 
-    private ExpandableListView stepListView;
+    private ListView stepListView;
+    private StepListAdapter stepListAdapter;
 
 
     @Override
@@ -37,7 +42,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         compassImageView = (ImageView) root.findViewById(R.id.coordinates_measure_compass_iv);
         stepCounterView = (TextView) root.findViewById(R.id.coordinates_measure_stepvalue);
         distanceView = (TextView) root.findViewById(R.id.coordinates_measure_distancevalue);
-        barometerView = (TextView) root.findViewById(R.id.coordinates_measure_pressurevalue);
+
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
 
@@ -71,8 +76,9 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
-        stepListView = (ExpandableListView) root.findViewById(R.id.coordinates_measure_steplist);
-
+        stepListView = (ListView) root.findViewById(R.id.coordinates_measure_steplist);
+        stepListAdapter = new StepListAdapter(getContext(), new ArrayList<StepData>());
+        stepListView.setAdapter(stepListAdapter);
 
         return root;
     }
@@ -122,7 +128,9 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     }
 
     @Override
-    public void insertStep() {
+    public void insertStep(StepData stepData) {
+        stepListAdapter.add(stepData);
+        stepListAdapter.notifyDataSetChanged();
 
     }
 

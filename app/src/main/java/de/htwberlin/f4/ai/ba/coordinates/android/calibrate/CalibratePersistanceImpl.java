@@ -17,8 +17,6 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 public class CalibratePersistanceImpl implements CalibratePersistance {
 
     private Context context;
-    private float stepLength;
-    private int stepPeriod; // in ms
 
     public CalibratePersistanceImpl(Context context) {
         this.context = context;
@@ -43,11 +41,12 @@ public class CalibratePersistanceImpl implements CalibratePersistance {
     }
 
     @Override
-    public void save(float stepLength, int stepPeriod) {
+    public void save(CalibrationData calibrationData) {
+        // just saving steplength and stepperiod, because azimuth and airpressure change with every calibration
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(context.getString(R.string.coordinates_shared_preferences_steplength), stepLength);
-        editor.putInt(context.getString(R.string.coordinates_shared_preferences_stepperiod), stepPeriod);
+        editor.putFloat(context.getString(R.string.coordinates_shared_preferences_steplength), calibrationData.getStepLength());
+        editor.putInt(context.getString(R.string.coordinates_shared_preferences_stepperiod), calibrationData.getStepPeriod());
 
         editor.commit();
     }

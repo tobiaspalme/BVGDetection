@@ -54,7 +54,7 @@ public class AltitudeModuleImpl implements AltitudeModule {
     }
 
     // because pressure drifts over time, we calculate the relative altitude change
-    // compared to previous step
+    // compared to previous altitude
     @Override
     public float getAltitude() {
         float currentAirPressure;
@@ -65,11 +65,10 @@ public class AltitudeModuleImpl implements AltitudeModule {
         // just picking the last value in the interval
         Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
         List<SensorData> dataValues = intervalData.get(SensorType.BAROMETER);
-        if (dataValues != null) {
+        if (dataValues != null && dataValues.size() > 0) {
             currentAirPressure = dataValues.get(dataValues.size()-1).getValues()[0];
             currentAltitude = calcAltitude(currentAirPressure);
             altitudeDiff = currentAltitude - lastAltitude;
-            //Log.d("tmp", "currentAltitude: " + currentAltitude + " lastAltitude: " + lastAltitude + " altitudiff: " + altitudeDiff);
             // set new values
             lastStepTimestamp = currentStepTimestamp;
             lastAltitude = currentAltitude;

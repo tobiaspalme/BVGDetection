@@ -19,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementListener;
+
 
 /**
  * Created by benni on 22.07.2017.

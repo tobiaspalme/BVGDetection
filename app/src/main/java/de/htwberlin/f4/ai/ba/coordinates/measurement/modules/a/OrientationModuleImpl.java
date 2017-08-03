@@ -35,7 +35,7 @@ public class OrientationModuleImpl implements OrientationModule {
         lastOrientation = azimuth;
     }
 
-    // calculate the orientation change from last step
+    // calculate the orientation change from calibrated azimuth
     @Override
     public float getOrientation() {
 
@@ -48,28 +48,10 @@ public class OrientationModuleImpl implements OrientationModule {
         if (dataValues != null && dataValues.size() > 0) {
             float currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             orientationDiff = currentOrientation - lastOrientation;
-
             lastStepTimestamp = currentStepTimestamp;
-            //lastOrientation = currentOrientation;
         }
-        Log.d("orientation", String.valueOf(orientationDiff));
         return orientationDiff;
 
-       /*
-        // calculation
-        // just picking the last value in the interval
-        float currentOrientation = 0.0f;
-        long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
-        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
-        List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_FUSION);
-        if (dataValues != null) {
-            currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
-            lastStepTimestamp = currentStepTimestamp;
-            lastOrientation = currentOrientation;
-        }
-        Log.d("orientation", String.valueOf(currentOrientation));
-
-        return currentOrientation;*/
     }
 
     @Override
