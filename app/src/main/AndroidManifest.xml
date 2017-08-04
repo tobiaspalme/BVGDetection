@@ -26,6 +26,7 @@
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity"/>
 
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>

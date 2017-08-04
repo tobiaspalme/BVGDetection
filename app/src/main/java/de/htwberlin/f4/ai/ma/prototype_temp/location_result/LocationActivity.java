@@ -46,8 +46,7 @@ public class LocationActivity extends AppCompatActivity {
     Button measurementButtonMoreTomes;
 
     //String[] permissions;
-    private Fingerprint fingerprint = FingerprintFactory.getInstance();
-    //private DatabaseHandlerImplementation databaseHandlerImplementation;
+    private Fingerprint fingerprint = FingerprintFactory.createInstance();
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPrefs;
     private NodeFactory nodeFactory;
@@ -61,7 +60,7 @@ public class LocationActivity extends AppCompatActivity {
     private Multimap<String, Integer> multiMap;
     private long timestampWifiManager = 0;
 
-    private Integer locationsCounter;
+    private int locationsCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +86,7 @@ public class LocationActivity extends AppCompatActivity {
         boolean knnAlgorithm = sharedPrefs.getBoolean("pref_knnAlgorithm", true);
 
         locationsCounter = sharedPrefs.getInt("locationsCounter", -1);
-        if (locationsCounter.equals(-1)) {
+        if (locationsCounter == -1) {
             locationsCounter = 1;
         }
 
@@ -200,10 +199,11 @@ public class LocationActivity extends AppCompatActivity {
             measurementButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     //List<de.htwberlin.f4.ai.ma.fingerprint.Node> nodeList = getMeasuredNode(1);
+
                     getMeasuredNode(1);
 
 //                    fingerprint.setActuallyNode(nodeList);
-//                    String actually = fingerprint.getCalculatedPOI();
+//                    String actually = fingerprint.getCalculatedNode();
 //
 //                    TextView textView =(TextView)findViewById(R.id.tx_Location);
 //                    if(actually!=null){
@@ -305,8 +305,6 @@ public class LocationActivity extends AppCompatActivity {
                         Log.d("timestamp", String.valueOf(timestampWifiManager));
 
                     for (final ScanResult sr : wifiScanList) {
-
-
                         LocationActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 test.setText(String.valueOf(sr.timestamp));
@@ -371,7 +369,7 @@ public class LocationActivity extends AppCompatActivity {
         actuallyNode.add(node);
 
         fingerprint.setActuallyNode(actuallyNode);
-        actually = fingerprint.getCalculatedPOI();
+        actually = fingerprint.getCalculatedNode();
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
@@ -380,8 +378,8 @@ public class LocationActivity extends AppCompatActivity {
                     textView.setText(actually);
                     locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
                 } else {
-                    textView.setText("kein POI gefunden");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein POI gefunden");
+                    textView.setText("kein Node gefunden");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein Node gefunden");
                 }
                 //makeJson(locationResult);
 

@@ -8,15 +8,15 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 
 public class EdgeImplementation implements Edge{
 
-    private int id;
+    //private int id;
     private String nodeA;
     private String nodeB;
     private boolean accessibly;
     private int expenditure;
 
-
-    public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly, int expenditure) {
-        this.id = id;
+    //public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly, int expenditure) {
+    public EdgeImplementation(String nodeA, String nodeB, boolean accessibly, int expenditure) {
+        //this.id = id;
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessibly = accessibly;
@@ -37,7 +37,7 @@ public class EdgeImplementation implements Edge{
     //public EdgeImplementation() {}
 
 
-    @Override
+   /* @Override
     public int getId() {
         return this.id;
     }
@@ -46,6 +46,7 @@ public class EdgeImplementation implements Edge{
     public void setID(int id) {
         this.id = id;
     }
+*/
 
     @Override
     public String getNodeA() {

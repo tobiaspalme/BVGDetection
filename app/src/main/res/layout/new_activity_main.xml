@@ -30,24 +30,32 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/edges_manager_button"
+        android:id="@+id/edges_manager_button"
+        android:layout_below="@+id/nodelist_button"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="@string/calculate_button"
         android:id="@+id/calculate_button"
-        android:layout_below="@+id/nodelist_button"
+        android:layout_below="@+id/edges_manager_button"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/edges_manager_button"
-        android:id="@+id/edges_manager_button"
-        android:layout_below="@+id/calculate_button"/>
+        android:id="@+id/navigation_button"
+        android:layout_below="@+id/calculate_button"
+        android:text="@string/navigation_button_text"/>
+
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/import_export_button_text"
         android:id="@+id/import_export_button"
-        android:layout_below="@+id/edges_manager_button"
+        android:layout_below="@+id/navigation_button"
         android:layout_centerHorizontal="true" />
 
     <Button

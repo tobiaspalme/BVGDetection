@@ -41,7 +41,6 @@ public class EdgesManagerActivity extends Activity {
     DatabaseHandler databaseHandler;
     private CheckBox accessiblyCheckbox;
     private String lastSelectedItemA;
-    private Integer edgesCounter;
     private final String accessiblyString = "barrierefrei";
 
 
@@ -64,14 +63,6 @@ public class EdgesManagerActivity extends Activity {
         allEdges = new ArrayList<>();
         lastSelectedItemA = "";
 
-
-        final SharedPreferences sharedPreferences = this.getSharedPreferences(
-                getPackageName(), this.MODE_PRIVATE);
-
-        edgesCounter = sharedPreferences.getInt("edgesCounter", -1);
-        if (edgesCounter.equals(-1)) {
-            edgesCounter = 1;
-        }
 
         allNodes = databaseHandler.getAllNodes();
 
@@ -117,60 +108,64 @@ public class EdgesManagerActivity extends Activity {
         });
 
 
-        // Save new edge
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                boolean accessibly = false;
-                if (accessiblyCheckbox.isChecked()) { accessibly = true; }
-
-                // TODO set expenditure...
-                Edge edge = new EdgeImplementation(edgesCounter, spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly, 0);
-
-                databaseHandler.insertEdge(edge);
-
-                if (accessibly) {
-                    itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB() + "        " + accessiblyString);
-                } else {
-                    itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB());
-                }
-                edgesListAdapter.notifyDataSetChanged();
-
-                edgesCounter++;
-                System.out.println("EdgesCounter: " + edgesCounter);
-                sharedPreferences.edit().putInt("edgesCounter", edgesCounter).apply();
-
-            }
-        });
-
-
         // Load edges list
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibly()) {
-                itemsEdgesList.add(e.getNodeA() + " ---> " + e.getNodeB() + "        " + accessiblyString);
+                itemsEdgesList.add(e.getNodeA() + " ---> " + e.getNodeB() + ",        " + accessiblyString);
             } else {
                 itemsEdgesList.add(e.getNodeA() + " ---> " + e.getNodeB());
             }
         }
 
 
+        // Save new edge
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean accessibly = false;
+                if (accessiblyCheckbox.isChecked()) { accessibly = true; }
+
+                // TODO set expenditure...
+
+                Edge edge = new EdgeImplementation(spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly, 0);
+
+                if (databaseHandler.checkIfEdgeExists(edge)) {
+                    System.out.println("EDGE ALREADY EXISTS. NOT INSERTING");
+                } else {
+                    databaseHandler.insertEdge(edge);
+                    allEdges.add(edge);
+
+                    if (accessibly) {
+                        itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB() + ",        " + accessiblyString);
+                    } else {
+                        itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB());
+                    }
+                    edgesListAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+
+
+
+
+
         // Long click on item -> delete item
         edgesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
                 new AlertDialog.Builder(view.getContext())
                         .setTitle("Eintrag löschen")
                         .setMessage("Möchten sie den Eintrag löschen?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                               // databaseHandler.deleteEdge(allEdges.get(allEdges.get(position).getId()));
                                 databaseHandler.deleteEdge(allEdges.get(position));
                                 allEdges.remove(position);
-                                edgesListAdapter.remove(itemsEdgesList.get(position));
+                                itemsEdgesList.remove(position);
                                 edgesListAdapter.notifyDataSetChanged();
+
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

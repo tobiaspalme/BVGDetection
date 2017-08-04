@@ -32,7 +32,7 @@ public interface Fingerprint {
     void setActuallyNode(List<Node> measuredNodes);
     //List<Node> getMeasuredNode();
 
-    String getCalculatedPOI();
+    String getCalculatedNode();
 
     double getPercentage();
     void setPercentage(double percentage);

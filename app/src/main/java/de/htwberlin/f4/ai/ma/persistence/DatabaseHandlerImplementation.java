@@ -21,6 +21,7 @@ import de.htwberlin.f4.ai.ma.indoor_graph.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResult;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImplementation;
 
+
 /**
  * Created by Johann Winter
  */
@@ -87,7 +88,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 RESULT_MEASURED_NODE + " TEXT)";
 
         String createEdgeTableQuery = "CREATE TABLE " + EDGES_TABLE + " (" +
-                EDGE_ID + " INTEGER PRIMARY KEY," +
+                EDGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 EDGE_NODE_A + " TEXT," +
                 EDGE_NODE_B + " TEXT," +
                 EDGE_ACCESSIBLY + " TEXT," +
@@ -250,6 +251,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         System.out.println("REM LOCRES: " + locationResult.getSelectedNode());
 
         database.execSQL(deleteQuery);
+        database.close();
     }
 
 
@@ -260,7 +262,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("id", edge.getId());
+        //values.put("id", edge.getId());
         values.put("nodeA", edge.getNodeA());
         values.put("nodeB", edge.getNodeB());
         values.put("accessibly", edge.getAccessibly());
@@ -290,7 +292,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                     accessibly = false;
                 }
 
-                Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
+                //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
+                Edge edge = new EdgeImplementation(cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
 
                 /*
                 // TODO Cast entfernen
@@ -302,20 +305,40 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 allEdges.add(edge);
             } while (cursor.moveToNext());
         }
-
         database.close();
         return allEdges;
+    }
+
+
+    // Check if Edge already exists
+    public boolean checkIfEdgeExists(Edge edge) {
+        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB() + "'";
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            return true;
+        } while (cursor.moveToNext());
+
+        database.close();
+        return false;
     }
 
 
     // Delete Edge
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
+        //String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
+        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB() + "'";
 
-        Log.d("DB: delete_EDGE", "" + edge.getId());
+
+//        Log.d("DB: delete_EDGE", "" + edge.getId());
+        Log.d("DB: delete_EDGE", "" + edge.getNodeA() + " " + edge.getNodeB());
+
 
         database.execSQL(deleteQuery);
+        database.close();
     }
 
 

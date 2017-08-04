@@ -129,7 +129,7 @@ class FingerprintImplementation implements Fingerprint {
      * @return calculated Poi
      */
     @Override
-    public String getCalculatedPOI() {
+    public String getCalculatedNode() {
         String poi = null;
 
         List<RestructedNode> restructedNodeList = calculateNewNodeDateSet(allExistingNodes);

@@ -20,6 +20,7 @@ import de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraph;
 //import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphFactory;
 import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphImplementation;
+import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationActivity;
@@ -32,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button recordButton;
     Button nodeListButton;
-    Button calculateButton;
     Button edgesManagerButton;
+    Button calculateButton;
+    Button navigateButton;
     Button importExportButton;
     Button settingsButton;
 
@@ -59,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         recordButton = (Button) findViewById(R.id.record_button);
         nodeListButton = (Button) findViewById(R.id.nodelist_button);
-        calculateButton = (Button) findViewById(R.id.calculate_button);
         edgesManagerButton = (Button) findViewById(R.id.edges_manager_button);
+        calculateButton = (Button) findViewById(R.id.calculate_button);
+        navigateButton = (Button) findViewById(R.id.navigation_button);
         importExportButton = (Button) findViewById(R.id.import_export_button);
         settingsButton = (Button) findViewById(R.id.settings_button);
 
@@ -76,15 +79,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if (importExportButton != null) {
-            importExportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), ImportExportActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
 
         if (nodeListButton != null) {
             nodeListButton.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +104,26 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), LocationActivity.class);
                     startActivities(new Intent[]{intent});
+                }
+            });
+        }
+
+        if (navigateButton != null) {
+            navigateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        if (importExportButton != null) {
+            importExportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), ImportExportActivity.class);
+                    startActivity(intent);
                 }
             });
         }

@@ -25,6 +25,7 @@ public interface DatabaseHandler {
 
     void insertEdge(Edge edge);
     ArrayList<Edge> getAllEdges();
+    boolean checkIfEdgeExists(Edge edge);
     void deleteEdge(Edge edge);
 
     //boolean importDatabase(String dbPath) throws IOException;

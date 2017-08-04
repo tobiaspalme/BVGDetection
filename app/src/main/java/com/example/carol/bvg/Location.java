@@ -189,7 +189,7 @@ public class Location extends AppCompatActivity {
                     getMeasuredNode(1);
 
 //                    fingerprint.setActuallyNode(nodeList);
-//                    String actually = fingerprint.getCalculatedPOI();
+//                    String actually = fingerprint.getCalculatedNode();
 //
 //                    TextView textView =(TextView)findViewById(R.id.tx_Location);
 //                    if(actually!=null){

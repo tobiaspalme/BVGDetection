@@ -8,7 +8,7 @@ public final class FingerprintFactory {
 
     private static Fingerprint instance;
 
-    public static Fingerprint getInstance() {
+    public static Fingerprint createInstance() {
         if (instance == null) {
             instance = new FingerprintImplementation();
         }

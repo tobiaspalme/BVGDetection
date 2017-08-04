@@ -8,8 +8,8 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 
 public interface Edge {
 
-    int getId();
-    void setID(int id);
+    //int getId();
+    //void setID(int id);
 
     String getNodeA();
     void setNodeA(String nodeA);

@@ -56,8 +56,9 @@
     <!-- new_activity_main -->
     <string name="record_button">Node aufnehmen</string>
     <string name="nodelist_button">Nodes verwalten</string>
-    <string name="calculate_button">Standort ermitteln</string>
     <string name="edges_manager_button">Kanten verwalten</string>
+    <string name="calculate_button">Standort ermitteln</string>
+    <string name="navigation_button_text">Navigation</string>
     <string name="import_export_button_text">Importieren / Exportieren</string>
     <string name="settings_button">Einstellungen</string>
 
@@ -85,5 +86,8 @@
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>
     <string name="accessibly_checkbox_text">Barrierefrei</string>
+
+    <!-- acitvity_navigation -->
+    <string name="start_navigation_button_text">Route anzeigen</string>
 
 </resources>
