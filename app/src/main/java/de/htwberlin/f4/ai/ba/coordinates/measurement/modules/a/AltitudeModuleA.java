@@ -19,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
  * Created by benni on 28.07.2017.
  */
 
-public class AltitudeModuleImpl implements AltitudeModule {
+public class AltitudeModuleA implements AltitudeModule {
 
     // copied from sensormanager
     private static final float PRESSURE_STANDARD = 1013.25f;
@@ -31,7 +31,7 @@ public class AltitudeModuleImpl implements AltitudeModule {
     private long lastStepTimestamp;
     private float lastAltitude;
 
-    public AltitudeModuleImpl(SensorFactory sensorFactory, float airPressure) {
+    public AltitudeModuleA(SensorFactory sensorFactory, float airPressure) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         this.airPressure = airPressure;
