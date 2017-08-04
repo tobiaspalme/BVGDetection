@@ -42,7 +42,8 @@ public class MeasureControllerImpl implements MeasureController {
     private AlertDialog calibrationDialog;
     private int stepCount;
 
-
+    private IndoorMeasurementType measurementType;
+    private DatabaseHandler databaseHandler;
 
     @Override
     public void setView(MeasureView view) {
@@ -52,8 +53,8 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-        List<Node> nodeList = databaseHandler.getAllNodes();
+        databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        //List<Node> nodeList = databaseHandler.getAllNodes();
 
 
         stepCount = 0;
@@ -138,7 +139,19 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onAddClicked() {
+    }
 
+    @Override
+    public void onMeasurementTypeSelected(IndoorMeasurementType type) {
+        measurementType = type;
+    }
+
+    @Override
+    public void onNodeSelected(Node node, StepData step) {
+        if (databaseHandler != null) {
+            node.setCoordinates(step.getCoords()[0] + ";" + step.getCoords()[1] + ";" + step.getCoords()[2]);
+            databaseHandler.updateNode(node, node.getId());
+        }
     }
 
     @Override
@@ -169,7 +182,7 @@ public class MeasureControllerImpl implements MeasureController {
                     indoorMeasurement.calibrate(calibrationData);
                     // start measurement
                     //indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
-                    indoorMeasurement.start(IndoorMeasurementType.VARIANT_B);
+                    indoorMeasurement.start(measurementType);
                 }
             }
         });

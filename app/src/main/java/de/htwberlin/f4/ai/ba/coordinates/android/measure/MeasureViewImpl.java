@@ -5,16 +5,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
 public class MeasureViewImpl extends Fragment implements MeasureView{
@@ -32,9 +40,11 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private ListView stepListView;
     private StepListAdapter stepListAdapter;
 
+    private Spinner modeSpinner;
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_coordinates_measure, container, false);
 
@@ -46,6 +56,25 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
 
+        modeSpinner = (Spinner) root.findViewById(R.id.coordinates_measure_spinner);
+        final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
+        spinnerValues.add(IndoorMeasurementType.VARIANT_A);
+        spinnerValues.add(IndoorMeasurementType.VARIANT_B);
+        final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerValues);
+        modeSpinner.setAdapter(spinnerAdapter);
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (controller != null) {
+                    controller.onMeasurementTypeSelected(spinnerAdapter.getItem(i));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         final Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +105,20 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
+
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(getContext());
+        List<Node> nodeList = databaseHandler.getAllNodes();
+
         stepListView = (ListView) root.findViewById(R.id.coordinates_measure_steplist);
-        stepListAdapter = new StepListAdapter(getContext(), new ArrayList<StepData>());
+        stepListAdapter = new StepListAdapter(getContext(), new ArrayList<StepData>(), nodeList);
+        stepListAdapter.setNodeSpinnerListener(new NodeSpinnerListener() {
+            @Override
+            public void onNodeSelected(Node node, StepData step) {
+                if (controller != null) {
+                    controller.onNodeSelected(node, step);
+                }
+            }
+        });
         stepListView.setAdapter(stepListAdapter);
 
         return root;
@@ -130,9 +171,10 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     @Override
     public void insertStep(StepData stepData) {
         stepListAdapter.add(stepData);
-        stepListAdapter.notifyDataSetChanged();
+        //stepListAdapter.notifyDataSetChanged();
 
     }
+
 
 
 }

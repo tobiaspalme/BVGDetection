@@ -6,6 +6,16 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 public enum IndoorMeasurementType {
 
-    VARIANT_A,
-    VARIANT_B
+    VARIANT_A ("Variante A"),
+    VARIANT_B ("Variante B");
+
+    private final String name;
+
+    private IndoorMeasurementType(String s) {
+        name = s;
+    }
+
+    public String toString() {
+        return this.name;
+    }
 }

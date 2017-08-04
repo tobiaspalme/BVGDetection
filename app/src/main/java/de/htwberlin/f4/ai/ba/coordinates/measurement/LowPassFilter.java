@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 /**
- * Lowpass filter to smooth out noise from senors.
+ * Lowpass filter to smooth out noise from sensors.
  * Source: Professional Android Sensor Programming pp. 108
  */
 

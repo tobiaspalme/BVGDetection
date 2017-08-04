@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+
 /**
  * Created by benni on 03.08.2017.
  */
@@ -8,6 +10,7 @@ public class StepData {
 
     private String stepName;
     private float[] coords;
+    private Node node;
 
     public StepData() {
         stepName = "";
@@ -28,5 +31,13 @@ public class StepData {
 
     public void setCoords(float[] coords) {
         this.coords = coords;
+    }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
     }
 }
