@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoor_graph;
+package de.htwberlin.f4.ai.ma.edge;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp.nodelist;
+package de.htwberlin.f4.ai.ma.nodelist;
 
 import android.view.View;
 import android.widget.ImageView;

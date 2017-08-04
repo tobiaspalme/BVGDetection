@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
+package de.htwberlin.f4.ai.ma.location_result;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,12 +1,8 @@
 package de.htwberlin.f4.ai.ma.indoor_graph;
 
-import android.content.Context;
-
-import java.util.List;
-
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.navigation.Path;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
 /**
@@ -33,6 +29,7 @@ public class IndoorGraphImplementation implements IndoorGraph {
         List<Node> allNodes = databaseHandler.getAllNodes();
         return allNodes;
     }*/
+
 
 /*
     public static DatabaseHandler getIndoorGraphDB() {

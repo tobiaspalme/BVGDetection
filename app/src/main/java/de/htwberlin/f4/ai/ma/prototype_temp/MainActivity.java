@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,17 +13,11 @@ import android.widget.Button;
 
 import com.example.carol.bvg.R;
 
-import java.io.File;
-
-import de.htwberlin.f4.ai.ma.indoor_graph.EdgesManagerActivity;
-import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraph;
+import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 //import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphFactory;
-import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphImplementation;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
-import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationActivity;
-import de.htwberlin.f4.ai.ma.prototype_temp.nodelist.NodeListActivity;
+import de.htwberlin.f4.ai.ma.location_result.LocationActivity;
+import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 
 public class MainActivity extends AppCompatActivity {
 

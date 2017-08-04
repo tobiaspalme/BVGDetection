@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.indoor_graph.Edge;
-import de.htwberlin.f4.ai.ma.indoor_graph.EdgeImplementation;
-import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResult;
-import de.htwberlin.f4.ai.ma.prototype_temp.location_result.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
+import de.htwberlin.f4.ai.ma.location_result.LocationResult;
+import de.htwberlin.f4.ai.ma.location_result.LocationResultImplementation;
 
 
 /**
@@ -167,15 +167,15 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
 
     // Get single Node
-    public Node getNode(String nodeName) {
+    public Node getNode(String nodeID) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + nodeName + "'";
+        String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + nodeID + "'";
         Node node = null;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             node = nodeFactory.createInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-            Log.d("DB: select_node", nodeName);
+            Log.d("DB: select_node", nodeID);
         }
         database.close();
         return node;

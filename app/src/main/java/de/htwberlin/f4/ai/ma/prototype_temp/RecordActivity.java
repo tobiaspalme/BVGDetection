@@ -198,7 +198,6 @@ public class RecordActivity extends AppCompatActivity {
 
                 fingerprintTaken = true;
                 progressStatus = 0;
-                System.out.println("aaaaaaaaaa");
                 //TODO recordButton.setEnabled(true);
             }
 

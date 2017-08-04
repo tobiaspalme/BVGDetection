@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp.location_result;
+package de.htwberlin.f4.ai.ma.location_result;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,7 +55,7 @@ public class LocationActivity extends AppCompatActivity {
     private String settings;
     private Spinner dropdown;
     private LocationResultAdapter resultAdapterdapter;
-    private String actually;
+    private String foundNodeName;
     private WifiManager mainWifiObj;
     private Multimap<String, Integer> multiMap;
     private long timestampWifiManager = 0;
@@ -90,8 +90,6 @@ public class LocationActivity extends AppCompatActivity {
             locationsCounter = 1;
         }
 
-
-
         settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPrefs.getString("pref_movivngAverageOrder", "3")
                 + "\r\nKalmann Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPrefs.getString("pref_kalmanValue","2")
                 + "\r\nEculidische Distanz: " + euclideanDistance
@@ -121,9 +119,7 @@ public class LocationActivity extends AppCompatActivity {
         //fill result list with content
         //final ArrayList<LocationResultImplementation> arrayOfResults = loadJson();
 
-
         final ArrayList<LocationResultImplementation> allResults = databaseHandler.getAllLocationResults();
-
 
         resultAdapterdapter = new LocationResultAdapter(this, allResults);
         listView.setAdapter(resultAdapterdapter);
@@ -156,33 +152,6 @@ public class LocationActivity extends AppCompatActivity {
         });
 
 
-//        de.htwberlin.f4.ai.ma.fingerprint.Node actuallyNodeOne = new Node();
-//        de.htwberlin.f4.ai.ma.fingerprint.Node actuallyNodeTwo = new Node();
-//
-//        List<Node.SignalInformation> signalInformationList = new ArrayList<>();
-//        List<Node.SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
-//        Node.SignalStrengthInformation signal = new Node.SignalStrengthInformation("00:81:c4:9d:b3:60",-60);
-//        signalStrenghtList.add(signal);
-//        Node.SignalInformation signalInformation = new Node.SignalInformation("time1",signalStrenghtList);
-//        signalInformationList.add(signalInformation);
-//
-//        List<Node.SignalInformation> signalInformationListTwo = new ArrayList<>();
-//        List<Node.SignalStrengthInformation> signalStrenghtListTwo = new ArrayList<>();
-//        Node.SignalStrengthInformation signalTwo = new Node.SignalStrengthInformation("00:81:c4:9d:b3:6f",-71);
-//        signalStrenghtListTwo.add(signalTwo);
-//        Node.SignalInformation signalInformationTwo = new Node.SignalInformation("time2",signalStrenghtListTwo);
-//        signalInformationListTwo.add(signalInformationTwo);
-//
-//        actuallyNodeOne.setId("test");
-//        actuallyNodeOne.setSignalInformationList(signalInformationList);
-//
-//        actuallyNodeTwo.setId("test2");
-//        actuallyNodeTwo.setSignalInformationList(signalInformationListTwo);
-//
-//        actuallyNode.add(actuallyNodeOne);
-//        actuallyNode.add(actuallyNodeTwo);
-
-
         //set all preferences
         fingerprint.setMovingAverage(movingAverage);
         fingerprint.setKalman(kalmanFilter);
@@ -203,11 +172,11 @@ public class LocationActivity extends AppCompatActivity {
                     getMeasuredNode(1);
 
 //                    fingerprint.setActuallyNode(nodeList);
-//                    String actually = fingerprint.getCalculatedNode();
+//                    String foundNodeName = fingerprint.getCalculatedNode();
 //
 //                    TextView textView =(TextView)findViewById(R.id.tx_Location);
-//                    if(actually!=null){
-//                        textView.setText(actually);
+//                    if(foundNodeName!=null){
+//                        textView.setText(foundNodeName);
 //                    }
 //                    else {
 //                        textView.setText("kein POI gefunden");
@@ -226,37 +195,6 @@ public class LocationActivity extends AppCompatActivity {
 
     }
 
-//    private List<de.htwberlin.f4.ai.ma.fingerprint.Node> getMeasuredNode() {
-//        if(hasPermissions(LocationActivity.this, permissions)){
-//
-//            EditText editText = (EditText)findViewById(R.id.edTx_WlanNameLocation);
-//            String wlanName = editText.getText().toString();
-//            WifiManager mainWifiObj;
-//            mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-//            List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-//            List<de.htwberlin.f4.ai.ma.fingerprint.Node> actuallyNode = new ArrayList<>();
-//
-//            for (ScanResult sr : wifiScanList) {
-//
-//                if (sr.SSID.equals(wlanName)) {
-//                    List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
-//                    List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
-//                    de.htwberlin.f4.ai.ma.fingerprint.Node.SignalStrengthInformation signal = new de.htwberlin.f4.ai.ma.fingerprint.Node.SignalStrengthInformation(sr.BSSID,sr.level);
-//                    signalStrenghtList.add(signal);
-//                    de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation signalInformation = new de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation("",signalStrenghtList);
-//                    signalInformationList.add(signalInformation);
-//                    Node node = new Node(null,0,signalInformationList);
-//                    actuallyNode.add(node);
-//                }
-//            }
-//            return actuallyNode;
-//        }
-//        else
-//        {
-//            return null;
-//        }
-//
-//    }
 
     /**
      * check wlan signal strength and and save to multimap
@@ -369,14 +307,14 @@ public class LocationActivity extends AppCompatActivity {
         actuallyNode.add(node);
 
         fingerprint.setActuallyNode(actuallyNode);
-        actually = fingerprint.getCalculatedNode();
+        foundNodeName = fingerprint.getCalculatedNode();
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 LocationResultImplementation locationResult;
-                if (actually != null) {
-                    textView.setText(actually);
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), actually + " "+fingerprint.getPercentage() +"%");
+                if (foundNodeName != null) {
+                    textView.setText(foundNodeName);
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
                 } else {
                     textView.setText("kein Node gefunden");
                     locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein Node gefunden");
@@ -385,7 +323,6 @@ public class LocationActivity extends AppCompatActivity {
 
                 locationsCounter++;
                 sharedPrefs.edit().putInt("locationsCounter", locationsCounter);
-
                 databaseHandler.insertLocationResult(locationResult);
 
                 resultAdapterdapter.add(locationResult);
@@ -395,167 +332,4 @@ public class LocationActivity extends AppCompatActivity {
 
     }
 
-//    private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context c, Intent intent) {
-//            // This condition is not necessary if you listen to only one action
-//            //if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-//                final TextView test = (TextView) findViewById(R.id.tx_test);
-//                EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
-//                String wlanName = editText.getText().toString();
-//
-//                //mainWifiObj.startScan();
-//                List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-//                for (final ScanResult sr : wifiScanList) {
-//
-//                    LocationActivity.this.runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            test.setText(String.valueOf(sr.timestamp));
-//                        }
-//                    });
-//
-//                    if (sr.SSID.equals(wlanName)) {
-//                        multiMap.put(sr.BSSID, sr.level);
-//                        long timestamp = sr.timestamp;
-//                        Log.d("timestamp", String.valueOf(timestamp));
-//                    }
-//                }
-//
-//                makeFingerprint(1);
-//            }
-//        //}
-//    };
-
-/*
-    /**
-     * make json Object for results and save
-     * @param locationResult
-     */
-    /*
-    private void makeJson(LocationResultImplementation locationResult) {
-        try {
-            String jsonString = loadJSON(getApplicationContext());
-            JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray jsonArrayOld = jsonObject.getJSONArray("Results");
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObjectSetting = new JSONObject();
-            jsonObjectSetting.put("Setting", locationResult.getSettings());
-            jsonArray.put(jsonObjectSetting);
-            JSONObject jsonObjectTime = new JSONObject();
-            jsonObjectTime.put("Time", locationResult.getMeasuredTime());
-            jsonArray.put(jsonObjectTime);
-            JSONObject jsonObjectPoi = new JSONObject();
-            jsonObjectPoi.put("Poi", locationResult.getSelectedNode());
-            jsonArray.put(jsonObjectPoi);
-            JSONObject jsonObjectMeasuredPoi = new JSONObject();
-            jsonObjectMeasuredPoi.put("MeasuredPoi", locationResult.getMeasuredNode());
-            jsonArray.put(jsonObjectMeasuredPoi);
-
-            jsonArrayOld.put(jsonArray);
-            jsonObject.put("Results", jsonArrayOld);
-            saveJsonObject(jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-*/ /*
-    /**
-     * save json Object to file
-     * @param jsonObject
-     */
-    /*
-    private void saveJsonObject(JSONObject jsonObject) {
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
-        dir.mkdirs();
-        File file = new File(dir, "jsonResultFile.txt");
-        //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonResultFile.txt");
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = new FileOutputStream(file);
-            outputStream.write(jsonObject.toString().getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    */
-
-/*
-    private ArrayList<LocationResultImplementation> loadJson() {
-        ArrayList<LocationResultImplementation> locationResultArrayList = new ArrayList<>();
-        String jsonString = loadJSON(getApplicationContext());
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray("Results");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONArray jsonArrayResult = jsonArray.getJSONArray(i);
-                String setting = jsonArrayResult.getJSONObject(0).getString("Setting");
-                String time = jsonArrayResult.getJSONObject(1).getString("Time");
-                String poi = jsonArrayResult.getJSONObject(2).getString("Poi");
-                String measuredPoi = jsonArrayResult.getJSONObject(3).getString("MeasuredPoi");
-
-                LocationResultImplementation locationResult = new LocationResultImplementation(setting, time, poi, measuredPoi);
-                locationResultArrayList.add(locationResult);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return locationResultArrayList;
-    }
-    */
-
-/*
-
-    /**
-     * load and read .txt file
-     * @param context
-     * @return json string
-     */ /*
-    private String loadJSON(Context context) {
-        String json = null;
-        try {
-            //TODO Exception abfangen
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
-            dir.mkdirs();
-            File file = new File(dir, "jsonResultFile.txt");
-            //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonResultFile.txt");
-            if (file.exists()) {
-                FileInputStream is = new FileInputStream(file);
-                //InputStream is = context.getAssets().open("ergebnisse.txt");
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-                json = new String(buffer, "UTF-8");
-            } else {
-                json = "{Results: []}";
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-*/
-
-    /*
-    private boolean hasPermissions(Context context, String[] permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    */
 }

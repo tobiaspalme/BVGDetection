@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoor_graph;
+package de.htwberlin.f4.ai.ma.navigation;
 
 import java.util.List;
 

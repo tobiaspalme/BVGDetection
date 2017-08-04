@@ -323,42 +323,7 @@ class FingerprintImplementation implements Fingerprint {
                 double average;
                 double Xk, Pk, Kk, Pkt, Xkt, value, deviation;
 
-//                    int counterTest = 0;
-//                    int tempAverageTest = 0;
-//                    double averageTest;
-//                    double XkTest, PkTest, KkTest, PktTest, XktTest, valueTest, deviationTest;
-//                    Integer [] ValuesTest = {-52,-53,-51,-50, -51, -50,  -54, -52, -51, -49, -50, -49,  -47, -53, -52, -53, -49,  -54, -51, -53, -53, -52, -53, -50, -53, -50, -48, -50, -51,  -49, -51,-52,  -53};
-//                    ArrayList<Double> calculatedValuesTest = new ArrayList<>();
-//                    for (Integer Signal : ValuesTest) {
-//                        if (Signal != null) {
-//                            counterTest++;
-//                            tempAverageTest += Signal;
-//                        }
-//                    }
-//                    averageTest = (double) tempAverageTest / (double) counterTest;
-//
-//                    XkTest = averageTest;
-//                    PkTest = 2;
-//
-//                    deviationTest = calculateDeviation(ValuesTest, averageTest, counterTest);
-//                    //deviationTest = 0.1;
-//
-//                    for (int j = 0; j < ValuesTest.length; j++) {
-//
-//                        if (ValuesTest[j] != null) {
-//                            valueTest = ValuesTest[j];
-//                        } else {
-//                            valueTest = averageTest;
-//                        }
-//
-//                        KkTest = (PkTest) / (PkTest + deviationTest);
-//                        PktTest = ((double) 1 - KkTest) * PkTest;
-//                        PkTest = PktTest;
-//                        XktTest = XkTest + KkTest * (valueTest - XkTest);
-//                        XkTest = XktTest;
-//
-//                        calculatedValuesTest.add(j, XktTest);
-//                    }
+
 
                 for (String Key : Node.restructedSignals.keySet()) {
                     int counter = 0;
