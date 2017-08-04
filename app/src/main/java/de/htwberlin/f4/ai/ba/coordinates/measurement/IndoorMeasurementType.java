@@ -6,5 +6,6 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
 public enum IndoorMeasurementType {
 
-    VARIANT_A
+    VARIANT_A,
+    VARIANT_B
 }

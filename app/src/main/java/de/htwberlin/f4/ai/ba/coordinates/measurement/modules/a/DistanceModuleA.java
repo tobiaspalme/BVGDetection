@@ -10,13 +10,13 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
  * step length
  */
 
-public class DistanceModuleImpl implements DistanceModule {
+public class DistanceModuleA implements DistanceModule {
 
     private SensorDataModel dataModel;
     private SensorFactory sensorFactory;
     private float stepLength;
 
-    public DistanceModuleImpl(SensorFactory sensorFactory, float stepLength) {
+    public DistanceModuleA(SensorFactory sensorFactory, float stepLength) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         this.stepLength = stepLength;

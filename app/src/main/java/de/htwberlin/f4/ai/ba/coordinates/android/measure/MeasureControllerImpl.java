@@ -21,6 +21,10 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+
 /**
  * Created by benni on 18.07.2017.
  */
@@ -38,7 +42,7 @@ public class MeasureControllerImpl implements MeasureController {
     private AlertDialog calibrationDialog;
     private int stepCount;
 
-    private List<StepData> stepList;
+
 
     @Override
     public void setView(MeasureView view) {
@@ -48,8 +52,12 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        List<Node> nodeList = databaseHandler.getAllNodes();
+
+
         stepCount = 0;
-        stepList = new ArrayList<>();
+
         view.updateStepCount(stepCount);
         view.updateCoordinates(0.0f, 0.0f, 0.0f);
         //view.updatePressure(0.0f);
@@ -160,7 +168,8 @@ public class MeasureControllerImpl implements MeasureController {
                     // calibrate the indoormeasurement
                     indoorMeasurement.calibrate(calibrationData);
                     // start measurement
-                    indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
+                    //indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
+                    indoorMeasurement.start(IndoorMeasurementType.VARIANT_B);
                 }
             }
         });

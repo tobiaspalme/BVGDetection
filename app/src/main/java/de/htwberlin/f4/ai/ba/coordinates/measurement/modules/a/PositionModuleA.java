@@ -13,21 +13,21 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
  * Created by benni on 03.08.2017.
  */
 
-public class PositionModuleImpl implements PositionModule {
+public class PositionModuleA implements PositionModule {
 
-    private AltitudeModule altitudeModule;
-    private DistanceModule distanceModule;
-    private OrientationModule orientationModule;
+    protected AltitudeModule altitudeModule;
+    protected DistanceModule distanceModule;
+    protected OrientationModule orientationModule;
 
     // coordinates[0] = x = movement left / right
     // coordinates[1] = y = movement backward / forward
     // coordinates[2] = z = movement downward / upward
     private float[] coordinates;
 
-    public PositionModuleImpl(SensorFactory sensorFactory, CalibrationData calibrationData) {
-        altitudeModule = new AltitudeModuleImpl(sensorFactory, calibrationData.getAirPressure());
-        distanceModule = new DistanceModuleImpl(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleImpl(sensorFactory, calibrationData.getAzimuth());
+    public PositionModuleA(SensorFactory sensorFactory, CalibrationData calibrationData) {
+        altitudeModule = new AltitudeModuleA(sensorFactory, calibrationData.getAirPressure());
+        distanceModule = new DistanceModuleA(sensorFactory, calibrationData.getStepLength());
+        orientationModule = new OrientationModuleA(sensorFactory, calibrationData.getAzimuth());
         // set start point to 0,0,0
         coordinates = new float[]{0.0f, 0.0f, 0.0f};
     }

@@ -115,7 +115,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.05"
         android:text="x / y / z"
-        android:textSize="24sp"/>
+        android:textSize="20sp"/>
 
 
     <!-- buttons -->

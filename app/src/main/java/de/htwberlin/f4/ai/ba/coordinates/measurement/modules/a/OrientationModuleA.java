@@ -19,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
  * Created by benni on 28.07.2017.
  */
 
-public class OrientationModuleImpl implements OrientationModule {
+public class OrientationModuleA implements OrientationModule {
 
     private SensorDataModel dataModel;
     private SensorFactory sensorFactory;
@@ -28,7 +28,7 @@ public class OrientationModuleImpl implements OrientationModule {
     private float lastOrientation;
     private long lastStepTimestamp;
 
-    public OrientationModuleImpl(SensorFactory sensorFactory, float azimuth) {
+    public OrientationModuleA(SensorFactory sensorFactory, float azimuth) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
