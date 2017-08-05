@@ -1,5 +1,10 @@
 package de.htwberlin.f4.ai.ma.indoor_graph;
 
+import android.content.Context;
+
+import java.util.ArrayList;
+
+import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.Path;
 
@@ -12,9 +17,29 @@ public interface IndoorGraph {
     Path getPath(Node startNode, Node endNode);
 
     //TODO
-    void setEdge(Node nodeA, Node nodeB);
+    //void setEdge(Node nodeA, Node nodeB);
 
-    //List<Node> getAllNodes();
+
+
+
+
+    void insertNode(Node node);
+    void updateNode(Node node, String oldNodeId);
+    Node getNode(String nodeID);
+    ArrayList<Node> getAllNodes();
+    void deleteNode(Node node);
+
+    void insertEdge(Edge edge);
+    boolean checkIfEdgeExists(Edge edge);
+    ArrayList<Edge> getAllEdges();
+    void deleteEdge(Edge edge);
+
+    //Context getContext();
+
+
+
+    //void exportDatabase();
+
 
     // TODO: komplettes Management von Nodes
 

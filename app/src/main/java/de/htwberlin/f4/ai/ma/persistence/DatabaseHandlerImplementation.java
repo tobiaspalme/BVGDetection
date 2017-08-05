@@ -182,6 +182,15 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     }
 
 
+    // Return true if Node with this nodeID (name) already exists.
+    public boolean checkIfNodeExists(String nodeID) {
+        if (getNode(nodeID) != null) {
+            return true;
+        }
+        else { return false; }
+    }
+
+
     // Delete Node
     public void deleteNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -195,7 +204,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     //----------------- R E S U L T S ------------------------------------------------------------------------------------------
 
-    // Insert
+    // Insert LocationResult
     public void insertLocationResult(LocationResult locationResult) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -257,7 +266,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     //----------- E D G E S -------------------------------------------------------------------------------------
 
-    // Insert
+    // Insert Edge
     public void insertEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();

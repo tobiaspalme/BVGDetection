@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -230,21 +231,28 @@ public class RecordActivity extends AppCompatActivity {
 
     // Persist the new Node
     private void saveNewNode() {
-        // Determine if picture reference has to be added to Node
-        String picPath;
-        if (pictureTaken) {
-            picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+
+        // Check if nodeID isn't already in use
+        if (databaseHandler.checkIfNodeExists(idName.getText().toString())) {
+            Toast.makeText(this, "Node existiert bereits: Bitte neuen Namen wählen.",
+                    Toast.LENGTH_LONG).show();
         } else {
-            picPath = null;
-        }
+            // Determine if picture reference has to be added to Node
+            String picPath;
+            if (pictureTaken) {
+                picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+            } else {
+                picPath = null;
+            }
 
-        if (fingerprintTaken) {
-            Node node = nodeFactory.createInstance(id, 0, description, signalInformationList, "", picPath , "");
-            jsonWriter.writeJSON(node);
-            //databaseHandlerImplementation.insertNode(node);
-            databaseHandler.insertNode(node);
+            if (fingerprintTaken) {
+                Node node = nodeFactory.createInstance(id, 0, description, signalInformationList, "", picPath , "");
 
-            finish();
+                jsonWriter.writeJSON(node);
+                databaseHandler.insertNode(node);
+
+                finish();
+            }
         }
     }
 }

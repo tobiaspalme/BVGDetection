@@ -1,20 +1,33 @@
 package de.htwberlin.f4.ai.ma.indoor_graph;
 
+import android.content.Context;
+
+import java.util.ArrayList;
+
+import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.Path;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
 /**
  * Created by Johann Winter
  */
 
-public class IndoorGraphImplementation implements IndoorGraph {
+class IndoorGraphImplementation implements IndoorGraph {
 
-    //private Context ctx;
-    //private DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(ctx);
+    private Context context;
+    private DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(context);
 
     private static DatabaseHandler instance;
+
+
+    IndoorGraphImplementation(Context context) {
+        this.context = context;
+    }
+
+
 
     @Override
     public Path getPath(Node startNode, Node endNode) {
@@ -22,13 +35,59 @@ public class IndoorGraphImplementation implements IndoorGraph {
     }
 
     @Override
-    public void setEdge(Node nodeA, Node nodeB) {}
+    public void insertNode(Node node) {
+        databaseHandler.insertNode(node);
+    }
 
-    /*
-    public List<Node> getAllNodes() {
-        List<Node> allNodes = databaseHandler.getAllNodes();
-        return allNodes;
-    }*/
+    @Override
+    public void updateNode(Node node, String oldNodeId) {
+        databaseHandler.updateNode(node, oldNodeId);
+    }
+
+    @Override
+    public Node getNode(String nodeID) {
+        return databaseHandler.getNode(nodeID);
+    }
+
+
+    @Override
+    public ArrayList<Node> getAllNodes() {
+        return databaseHandler.getAllNodes();
+    }
+
+    @Override
+    public void deleteNode(Node node) {
+        databaseHandler.deleteNode(node);
+    }
+
+    @Override
+    public void insertEdge(Edge edge) {
+        databaseHandler.insertEdge(edge);
+    }
+
+    @Override
+    public boolean checkIfEdgeExists(Edge edge) {
+        return databaseHandler.checkIfEdgeExists(edge);
+    }
+
+    @Override
+    public ArrayList<Edge> getAllEdges() {
+        return databaseHandler.getAllEdges();
+    }
+
+    @Override
+    public void deleteEdge(Edge edge) {
+        databaseHandler.deleteEdge(edge);
+    }
+
+
+
+
+
+        /*
+    @Override
+    public void setEdge(Node nodeA, Node nodeB) {}
+*/
 
 
 /*

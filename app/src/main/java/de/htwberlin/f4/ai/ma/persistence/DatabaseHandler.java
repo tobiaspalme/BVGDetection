@@ -17,6 +17,7 @@ public interface DatabaseHandler {
     void updateNode(Node node, String oldNodeId);
     ArrayList<Node> getAllNodes();
     Node getNode(String nodeID);
+    boolean checkIfNodeExists(String nodeID);
     void deleteNode(Node node);
 
     void insertLocationResult(LocationResult locationResult);
