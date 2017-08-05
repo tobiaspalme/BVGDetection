@@ -36,6 +36,9 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private TextView heightView;
     private TextView coordinatesView;
 
+    private Button btnStart;
+    private Button btnStop;
+    private Button btnAdd;
 
     private ListView stepListView;
     private StepListAdapter stepListAdapter;
@@ -76,27 +79,33 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
-        final Button btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
+        btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStartClicked();
                 }
                 btnStart.setEnabled(false);
+                btnStop.setEnabled(true);
+                btnAdd.setEnabled(true);
+
+                stepListAdapter.clear();
             }
         });
 
-        Button btnStop = (Button) root.findViewById(R.id.coordinates_measure_stop);
+        btnStop = (Button) root.findViewById(R.id.coordinates_measure_stop);
         btnStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStopClicked();
                 }
                 btnStart.setEnabled(true);
+                btnStop.setEnabled(false);
+                btnAdd.setEnabled(false);
             }
         });
 
-        Button btnAdd = (Button) root.findViewById(R.id.coordinates_measure_add);
+        btnAdd = (Button) root.findViewById(R.id.coordinates_measure_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
@@ -137,10 +146,6 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         this.controller = controller;
     }
 
-    @Override
-    public void updatePressure(float pressure) {
-        barometerView.setText(String.valueOf(pressure));
-    }
 
     @Override
     public void updateAzimuth(float azimuth) {
@@ -163,10 +168,6 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         coordinatesView.setText(x + " / " + y + " / " + z);
     }
 
-    @Override
-    public void updateHeight(float height) {
-        heightView.setText(String.valueOf(height));
-    }
 
     @Override
     public void insertStep(StepData stepData) {

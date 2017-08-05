@@ -86,7 +86,9 @@ public class AltitudeModuleB implements AltitudeModule {
                 List<SensorData> oldValues = sensorData.get(SensorType.BAROMETER);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    newValue.setValues(new float[]{filteredValue});
                 }
 
                 dataModel.insertData(newValue);

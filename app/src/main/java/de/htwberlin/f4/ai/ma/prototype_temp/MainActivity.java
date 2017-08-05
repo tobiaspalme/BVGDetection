@@ -13,8 +13,9 @@ import android.widget.Button;
 
 import com.example.carol.bvg.R;
 
-import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
+
 //import de.htwberlin.f4.ai.ma.indoor_graph.IndoorGraphFactory;
+import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
 import de.htwberlin.f4.ai.ma.location_result.LocationActivity;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;

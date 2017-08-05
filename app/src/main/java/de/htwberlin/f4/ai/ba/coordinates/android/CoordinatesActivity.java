@@ -66,6 +66,7 @@ public class CoordinatesActivity extends AppCompatActivity
 
 
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,6 +131,7 @@ public class CoordinatesActivity extends AppCompatActivity
         view.setController(controller);
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
+        //fragmentTransaction.addToBackStack("measure fragment");
         fragmentTransaction.commit();
     }
 
@@ -144,6 +146,7 @@ public class CoordinatesActivity extends AppCompatActivity
         view.setController(controller);
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
+        //fragmentTransaction.addToBackStack("calibrate fragment");
         fragmentTransaction.commit();
     }
 
@@ -153,6 +156,7 @@ public class CoordinatesActivity extends AppCompatActivity
         SettingsFragment settingsFragment = new SettingsFragment();
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, settingsFragment);
+        //fragmentTransaction.addToBackStack("settings fragment");
         fragmentTransaction.commit();
     }
 
@@ -162,6 +166,7 @@ public class CoordinatesActivity extends AppCompatActivity
         ImportFragment importFragment = new ImportFragment();
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, importFragment);
+        //fragmentTransaction.addToBackStack("import fragment");
         fragmentTransaction.commit();
     }
 
@@ -174,6 +179,7 @@ public class CoordinatesActivity extends AppCompatActivity
         view.setController(controller);
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
+        //fragmentTransaction.addToBackStack("record fragment");
         fragmentTransaction.commit();
     }
 

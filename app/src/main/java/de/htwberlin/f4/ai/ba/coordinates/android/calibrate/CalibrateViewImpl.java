@@ -31,14 +31,20 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     private ImageView compassView;
     private TextView azimuthView;
 
+    private Button btnStepIncStepOne;
+    private Button btnStepDecStepOne;
+    private Button btnNextStepOne;
+    private Button btnStartStepOne;
+    private Button btnStopStepOne;
+
+    private Button btnNextStepTwo;
+    private Button btnBackStepTwo;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, container, false);
-
-
 
         return root;
     }
@@ -110,27 +116,29 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
 
         stepCountView = (TextView) view.findViewById(R.id.coordinates_calibrate_tv_step);
 
-        final Button btnStepInc = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepinc);
-        btnStepInc.setOnClickListener(new View.OnClickListener() {
+        btnStepIncStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepinc);
+        btnStepIncStepOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStepIncreaseClicked();
                 }
             }
         });
+        btnStepIncStepOne.setEnabled(false);
 
 
-        final Button btnStepDec = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepdec);
-        btnStepDec.setOnClickListener(new View.OnClickListener() {
+        btnStepDecStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepdec);
+        btnStepDecStepOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStepDecreaseClicked();
                 }
             }
         });
+        btnStepDecStepOne.setEnabled(false);
 
-        final Button btnNext = (Button) view.findViewById(R.id.coordinates_calibrate_next_1);
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        btnNextStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_next_1);
+        btnNextStepOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (controller != null) {
@@ -138,36 +146,35 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
                 }
             }
         });
+        btnNextStepOne.setEnabled(false);
 
-        Button btnStepSetupStart = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepstart);
-        btnStepSetupStart.setOnClickListener(new View.OnClickListener() {
+        btnStartStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepstart);
+        btnStartStepOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStartStepSetupClick();
                 }
-                btnStepInc.setEnabled(false);
-                btnStepDec.setEnabled(false);
-                btnNext.setEnabled(true);
+                btnStepIncStepOne.setEnabled(false);
+                btnStepDecStepOne.setEnabled(false);
+                btnStartStepOne.setEnabled(false);
+                btnNextStepOne.setEnabled(true);
+                btnStopStepOne.setEnabled(true);
             }
         });
 
-        Button btnStepSetupStop = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepstop);
-        btnStepSetupStop.setOnClickListener(new View.OnClickListener() {
+        btnStopStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepstop);
+        btnStopStepOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStopStepSetupClick();
                 }
-                btnStepInc.setEnabled(true);
-                btnStepDec.setEnabled(true);
+                btnStepIncStepOne.setEnabled(true);
+                btnStepDecStepOne.setEnabled(true);
+                btnStartStepOne.setEnabled(true);
+                btnStopStepOne.setEnabled(false);
             }
         });
-
-
-
-
-
-
-
+        btnStopStepOne.setEnabled(false);
     }
 
     private void loadStepTwoView() {
@@ -177,8 +184,8 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
         rootView.removeAllViews();
         rootView.addView(view);
 
-        Button btnNext = (Button) view.findViewById(R.id.coordinates_calibrate_next_2);
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        btnNextStepTwo = (Button) view.findViewById(R.id.coordinates_calibrate_next_2);
+        btnNextStepTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (controller != null) {
@@ -186,9 +193,10 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
                 }
             }
         });
+        btnNextStepTwo.setEnabled(false);
 
-        Button btnBack = (Button) view.findViewById(R.id.coordinates_calibrate_back_2);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnBackStepTwo = (Button) view.findViewById(R.id.coordinates_calibrate_back_2);
+        btnBackStepTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (controller != null) {
@@ -215,6 +223,7 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
                     // check if there is any text, !.equals() doesn't seem to work
                     if (etDistance.getText().toString().length() > 0) {
                         controller.onDistanceChange(Float.valueOf(etDistance.getText().toString()));
+                        btnNextStepTwo.setEnabled(true);
                     }
                 }
             }

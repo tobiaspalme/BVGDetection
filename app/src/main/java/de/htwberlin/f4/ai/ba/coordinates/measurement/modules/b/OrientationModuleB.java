@@ -60,12 +60,14 @@ public class OrientationModuleB implements OrientationModule {
             @Override
             public void valueChanged(SensorData newValue) {
                 Map<SensorType, List<SensorData>> sensorData = dataModel.getData();
-                List<SensorData> oldValues = sensorData.get(SensorType.BAROMETER);
+                List<SensorData> oldValues = sensorData.get(SensorType.COMPASS_FUSION);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
-                    newValue.getValues()[1] = LowPassFilter.filter(latestValue[1], newValue.getValues()[1], 0.1f);
-                    newValue.getValues()[2] = LowPassFilter.filter(latestValue[2], newValue.getValues()[2], 0.1f);
+                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    newValue.setValues(new float[]{filteredValue});
+                    //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    //newValue.getValues()[1] = LowPassFilter.filter(latestValue[1], newValue.getValues()[1], 0.1f);
+                    //newValue.getValues()[2] = LowPassFilter.filter(latestValue[2], newValue.getValues()[2], 0.1f);
                 }
 
                 dataModel.insertData(newValue);

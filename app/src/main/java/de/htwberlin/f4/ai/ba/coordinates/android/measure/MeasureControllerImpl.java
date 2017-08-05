@@ -137,8 +137,23 @@ public class MeasureControllerImpl implements MeasureController {
         }
     }
 
+    // just a temporary solution if we want to get coords without doing a step
     @Override
     public void onAddClicked() {
+        stepCount++;
+        float[] coordinates = indoorMeasurement.getCoordinates();
+        if (coordinates != null) {
+            view.updateCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+            StepData stepData = new StepData();
+            stepData.setStepName("Step " + stepCount);
+            float[] coordCopy = new float[coordinates.length];
+            System.arraycopy(coordinates, 0, coordCopy, 0, coordinates.length);
+            stepData.setCoords(coordCopy);
+
+            view.insertStep(stepData);
+        }
+
+        view.updateStepCount(stepCount);
     }
 
     @Override
@@ -163,7 +178,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     private void calibrate() {
         timerHandler = new Handler(Looper.getMainLooper());
-        pressureCalibration = new MeasureCalibration(sensorDataModel);
+        pressureCalibration = new MeasureCalibration(sensorDataModel, measurementType);
 
         pressureCalibration.setListener(new MeasureCalibrationListener() {
             @Override

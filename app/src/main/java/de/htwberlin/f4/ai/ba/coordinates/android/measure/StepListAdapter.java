@@ -27,6 +27,7 @@ import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 
 public class StepListAdapter extends ArrayAdapter<StepData> {
 
+    // TODO: map für nodename node?
     private List<Node> nodeList;
     private List<String> nodeNames;
     private NodeSpinnerListener listener;
@@ -83,6 +84,7 @@ public class StepListAdapter extends ArrayAdapter<StepData> {
             name.setText(stepData.getStepName());
             coords.setText(stepData.getCoords()[0] + " / " + stepData.getCoords()[1] + " / " + stepData.getCoords()[2]);
 
+            // set previously selected node
             if (stepData.getNode() != null) {
                 // +1 because nodelist doesnt contain "default_node"
                 spinner.setSelection(nodeList.indexOf(stepData.getNode())+1);

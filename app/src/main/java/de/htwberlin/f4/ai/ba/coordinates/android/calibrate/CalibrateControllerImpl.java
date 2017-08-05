@@ -32,6 +32,7 @@ public class CalibrateControllerImpl implements CalibrateController {
     @Override
     public void onStartStepSetupClick() {
 
+        stepCount = 0;
         stepTimes = new ArrayList<>();
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
@@ -48,6 +49,7 @@ public class CalibrateControllerImpl implements CalibrateController {
 
         });
         indoorMeasurement.startSensors(SensorType.STEPCOUNTER);
+        view.updateStepCount(stepCount);
     }
 
     @Override

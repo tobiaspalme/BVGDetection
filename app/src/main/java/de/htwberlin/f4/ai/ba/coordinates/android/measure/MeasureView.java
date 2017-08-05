@@ -11,12 +11,10 @@ import java.util.List;
 public interface MeasureView {
 
     void setController(MeasureController controller);
-    void updatePressure(float pressure);
     void updateAzimuth(float azimuth);
     void updateStepCount(int stepCount);
     void updateDistance(float distance);
     void updateCoordinates(float x, float y, float z);
-    void updateHeight(float height);
     void insertStep(StepData stepData);
     Context getContext();
 
