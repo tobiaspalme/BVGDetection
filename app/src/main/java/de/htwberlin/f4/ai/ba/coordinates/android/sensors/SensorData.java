@@ -16,6 +16,16 @@ public class SensorData {
         values = new float[]{0.0f, 0.0f, 0.0f};
     }
 
+    // little helper constructor for testing data
+    public SensorData(SensorType sensorType,long timestamp, float x, float y, float z) {
+        this.sensorType = sensorType;
+        values = new float[3];
+        this.timestamp = timestamp;
+        values[0] = x;
+        values[1] = y;
+        values[2] = z;
+    }
+
     public long getTimestamp() {
         return timestamp;
     }

@@ -36,7 +36,7 @@ public class AccelerometerLinear implements SensorEventListener, de.htwberlin.f4
     public void start() {
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         if (accelerometerSensor != null) {
-            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
     }
 

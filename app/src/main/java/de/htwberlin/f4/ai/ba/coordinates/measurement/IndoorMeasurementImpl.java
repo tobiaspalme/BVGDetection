@@ -110,12 +110,14 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     @Override
     public float[] getCoordinates() {
+        //TODO: model neuerstellen, damit jedesmal nur die daten zwischen 2 schritten verarbeitet werden müssen?
         StepDirection direction = directionDetect.getLastStepDirection(dataModel);
         Context context = CoordinatesActivity.getInstance().getApplicationContext();
         Toast toast = Toast.makeText(context, "Direction: " + direction, Toast.LENGTH_SHORT);
         toast.show();
 
         Log.d("tmp", "Direction: " + direction);
+        dataModel.clearData();
 
         float[] result = null;
 

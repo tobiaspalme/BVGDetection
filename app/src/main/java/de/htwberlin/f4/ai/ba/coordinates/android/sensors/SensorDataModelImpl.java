@@ -73,4 +73,9 @@ public class SensorDataModelImpl implements SensorDataModel {
             data.put(sensorData.getSensorType(), valueList);
         }
     }
+
+    @Override
+    public void clearData() {
+        data.clear();
+    }
 }
