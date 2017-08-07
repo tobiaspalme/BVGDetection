@@ -8,12 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
@@ -33,6 +36,7 @@ public class NavigationActivity extends Activity {
     ArrayList<String> navigationResultsList;
     ArrayList<Node> allNodes;
     DatabaseHandler databaseHandler;
+    private String selectedStartNode;
     private String lastSelectedStartNode;
 
     @Override
@@ -73,8 +77,8 @@ public class NavigationActivity extends Activity {
         final ArrayAdapter<String> adapterB = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsDestNodeSpinner);
         destinationNodeSpinner.setAdapter(adapterB);
 
-        final ArrayAdapter<String> edgesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, navigationResultsList);
-        navigationResultListview.setAdapter(edgesListAdapter);
+        final ArrayAdapter<String> resultListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, navigationResultsList);
+        navigationResultListview.setAdapter(resultListAdapter);
 
 
         // Exclude on spinnerA selected item on spinnerB
@@ -82,7 +86,7 @@ public class NavigationActivity extends Activity {
             public void onItemSelected(AdapterView<?> parentView,
                                        View selectedItemView, int position, long id) {
 
-                String selectedStartNode = startNodeSpinner.getSelectedItem().toString();
+                selectedStartNode = startNodeSpinner.getSelectedItem().toString();
 
                 if (!selectedStartNode.equals(lastSelectedStartNode)) {
                     if (!lastSelectedStartNode.equals("")) {
@@ -97,5 +101,29 @@ public class NavigationActivity extends Activity {
         });
 
 
+        startNavigationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext());
+
+                dijkstraAlgorithm.execute(selectedStartNode);
+
+                LinkedList<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
+
+                if (route == null) {
+                    navigationResultsList.clear();
+                    navigationResultsList.add("Keine Route gefunden!");
+                    resultListAdapter.notifyDataSetChanged();
+
+                } else {
+                    navigationResultsList.clear();
+                    for (Node n : route) {
+                        navigationResultsList.add(n.getId());
+                        resultListAdapter.notifyDataSetChanged();
+                    }
+                }
+
+            }
+        });
     }
 }

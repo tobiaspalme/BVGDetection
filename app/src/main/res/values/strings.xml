@@ -89,5 +89,6 @@
 
     <!-- acitvity_navigation -->
     <string name="start_navigation_button_text">Route anzeigen</string>
+    <string name="navigation_result_header">Ihre Route:</string>
 
 </resources>

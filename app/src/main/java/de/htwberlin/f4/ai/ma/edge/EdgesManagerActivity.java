@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
@@ -111,9 +112,9 @@ public class EdgesManagerActivity extends Activity {
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibly()) {
-                itemsEdgesList.add(e.getNodeA() + " ---> " + e.getNodeB() + ",        " + accessiblyString);
+                itemsEdgesList.add(e.getNodeA().getId() + " ---> " + e.getNodeB().getId() + ",        " + accessiblyString);
             } else {
-                itemsEdgesList.add(e.getNodeA() + " ---> " + e.getNodeB());
+                itemsEdgesList.add(e.getNodeA().getId() + " ---> " + e.getNodeB().getId());
             }
         }
 
@@ -127,18 +128,21 @@ public class EdgesManagerActivity extends Activity {
 
                 // TODO set expenditure...
 
-                Edge edge = new EdgeImplementation(spinnerA.getSelectedItem().toString(), spinnerB.getSelectedItem().toString(), accessibly, 0);
+                Node nodeA = databaseHandler.getNode(spinnerA.getSelectedItem().toString());
+                Node nodeB = databaseHandler.getNode(spinnerB.getSelectedItem().toString());
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, 0);
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
-                    System.out.println("EDGE ALREADY EXISTS. NOT INSERTING");
+                    Toast.makeText(getApplicationContext(), "Edge existiert bereits.",
+                            Toast.LENGTH_LONG).show();
                 } else {
                     databaseHandler.insertEdge(edge);
                     allEdges.add(edge);
 
                     if (accessibly) {
-                        itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB() + ",        " + accessiblyString);
+                        itemsEdgesList.add(edge.getNodeA().getId() + " ---> " + edge.getNodeB().getId() + ",        " + accessiblyString);
                     } else {
-                        itemsEdgesList.add(edge.getNodeA() + " ---> " + edge.getNodeB());
+                        itemsEdgesList.add(edge.getNodeA().getId() + " ---> " + edge.getNodeB().getId());
                     }
                     edgesListAdapter.notifyDataSetChanged();
                 }

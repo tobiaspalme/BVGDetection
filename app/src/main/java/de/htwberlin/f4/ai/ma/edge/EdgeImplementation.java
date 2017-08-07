@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ma.edge;
 
+import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+
 /**
  * Created by Johann Winter
  */
@@ -7,13 +9,13 @@ package de.htwberlin.f4.ai.ma.edge;
 public class EdgeImplementation implements Edge{
 
     //private int id;
-    private String nodeA;
-    private String nodeB;
+    private Node nodeA;
+    private Node nodeB;
     private boolean accessibly;
     private int expenditure;
 
     //public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly, int expenditure) {
-    public EdgeImplementation(String nodeA, String nodeB, boolean accessibly, int expenditure) {
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, int expenditure) {
         //this.id = id;
         this.nodeA = nodeA;
         this.nodeB = nodeB;
@@ -47,22 +49,22 @@ public class EdgeImplementation implements Edge{
 */
 
     @Override
-    public String getNodeA() {
+    public Node getNodeA() {
         return this.nodeA;
     }
 
     @Override
-    public void setNodeA(String nodeA) {
+    public void setNodeA(Node nodeA) {
         this.nodeA = nodeA;
     }
 
     @Override
-    public String getNodeB() {
+    public Node getNodeB() {
         return this.nodeB;
     }
 
     @Override
-    public void setNodeB(String nodeB) {
+    public void setNodeB(Node nodeB) {
         this.nodeB = nodeB;
     }
 
@@ -77,12 +79,12 @@ public class EdgeImplementation implements Edge{
     }
 
     @Override
-    public int getExpenditure() {
+    public int getWeight() {
         return this.expenditure;
     }
 
     @Override
-    public void setExpenditure(int expenditure) {
+    public void setWeight(int expenditure) {
         this.expenditure = expenditure;
     }
 

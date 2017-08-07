@@ -11,15 +11,15 @@ public interface Edge {
     //int getId();
     //void setID(int id);
 
-    String getNodeA();
-    void setNodeA(String nodeA);
+    Node getNodeA();
+    void setNodeA(Node nodeA);
 
-    String getNodeB();
-    void setNodeB(String nodeB);
+    Node getNodeB();
+    void setNodeB(Node nodeB);
 
     boolean getAccessibly();
     void setAccessibly(boolean accessibly);
 
-    int getExpenditure();
-    void setExpenditure(int expenditure);
+    int getWeight();
+    void setWeight(int expenditure);
 }

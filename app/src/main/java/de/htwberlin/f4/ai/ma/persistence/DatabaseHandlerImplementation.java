@@ -272,14 +272,14 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         ContentValues values = new ContentValues();
 
         //values.put("id", edge.getId());
-        values.put("nodeA", edge.getNodeA());
-        values.put("nodeB", edge.getNodeB());
+        values.put("nodeA", edge.getNodeA().getId());
+        values.put("nodeB", edge.getNodeB().getId());
         values.put("accessibly", edge.getAccessibly());
-        values.put("expenditure", edge.getExpenditure());
+        values.put("expenditure", edge.getWeight());
 
         database.insert(EDGES_TABLE, null, values);
 
-        Log.d("DB: insert_EDGE", edge.getNodeA() + " " + edge.getNodeB());
+        Log.d("DB: insert_EDGE", edge.getNodeA().getId() + " " + edge.getNodeB().getId());
 
         database.close();
     }
@@ -301,15 +301,18 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                     accessibly = false;
                 }
 
+
+                Node nodeA = getNode(cursor.getString(1));
+                Node nodeB = getNode(cursor.getString(2));
                 //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                Edge edge = new EdgeImplementation(cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, cursor.getInt(4));
 
                 /*
                 // TODO Cast entfernen
                 edge.setID(Integer.valueOf(cursor.getString(0)));
                 edge.setNodeA(cursor.getString(1));
                 edge.setNodeB(cursor.getString(2));
-                edge.setExpenditure(cursor.getInt(4));*/
+                edge.setWeight(cursor.getInt(4));*/
 
                 allEdges.add(edge);
             } while (cursor.moveToNext());
@@ -321,7 +324,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     // Check if Edge already exists
     public boolean checkIfEdgeExists(Edge edge) {
-        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB() + "'";
+        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'";
 
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -339,11 +342,11 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         //String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
-        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB() + "'";
+        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'";
 
 
 //        Log.d("DB: delete_EDGE", "" + edge.getId());
-        Log.d("DB: delete_EDGE", "" + edge.getNodeA() + " " + edge.getNodeB());
+        Log.d("DB: delete_EDGE", "" + edge.getNodeA().getId() + " " + edge.getNodeB().getId());
 
 
         database.execSQL(deleteQuery);

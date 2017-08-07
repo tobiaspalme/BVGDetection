@@ -109,12 +109,18 @@ public class RecordActivity extends AppCompatActivity {
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    id = idName.getText().toString();
-                    description = descriptionEdittext.getText().toString();
-                    wlanName = wlanNameText.getText().toString();
-                    recordTime = Integer.parseInt(recordTimeText.getText().toString());
-                    measureNode();
-                    recordButton.setEnabled(false);
+
+                    if (databaseHandler.checkIfNodeExists(idName.getText().toString())) {
+                        Toast.makeText(getApplicationContext(), "Node existiert bereits: Bitte neuen Namen wählen.",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        id = idName.getText().toString();
+                        description = descriptionEdittext.getText().toString();
+                        wlanName = wlanNameText.getText().toString();
+                        recordTime = Integer.parseInt(recordTimeText.getText().toString());
+                        measureNode();
+                        recordButton.setEnabled(false);
+                    }
                 }
             });
         }
@@ -231,12 +237,6 @@ public class RecordActivity extends AppCompatActivity {
 
     // Persist the new Node
     private void saveNewNode() {
-
-        // Check if nodeID isn't already in use
-        if (databaseHandler.checkIfNodeExists(idName.getText().toString())) {
-            Toast.makeText(this, "Node existiert bereits: Bitte neuen Namen wählen.",
-                    Toast.LENGTH_LONG).show();
-        } else {
             // Determine if picture reference has to be added to Node
             String picPath;
             if (pictureTaken) {
@@ -254,5 +254,5 @@ public class RecordActivity extends AppCompatActivity {
                 finish();
             }
         }
-    }
+
 }

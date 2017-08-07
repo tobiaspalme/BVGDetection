@@ -36,19 +36,28 @@
             </LinearLayout>
 
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/start_dest_spinners">
 
 
-                <ListView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/navigation_result_listview" />
+                    android:text="@string/navigation_result_header"
+                    android:id="@+id/navigation_result_header_textview"/>
+
+                <ListView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_result_listview"
+                    android:layout_below="@+id/navigation_result_header_textview"/>
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
     </RelativeLayout>
 
