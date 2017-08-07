@@ -25,18 +25,21 @@ public class Gyroscope implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
-    public Gyroscope(Context context) {
+
+    public Gyroscope(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         if (gyroscopeSensor != null) {
-            sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, gyroscopeSensor, sensorRate);
         }
     }
 

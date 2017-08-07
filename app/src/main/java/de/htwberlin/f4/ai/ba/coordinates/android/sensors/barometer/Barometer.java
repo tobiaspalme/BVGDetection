@@ -24,19 +24,21 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ba.coo
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
 
-    public Barometer(Context context) {
+    public Barometer(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         Sensor barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         if (barometerSensor != null) {
-            sensorManager.registerListener(this, barometerSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, barometerSensor, sensorRate);
         }
     }
 

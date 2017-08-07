@@ -109,11 +109,11 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public void startSensors(SensorType... sensorType) {
+    public void startSensors(int sensorRate, SensorType... sensorType) {
         sensorList.clear();
 
         for (final SensorType type : sensorType) {
-            Sensor sensor = sensorFactory.getSensor(type);
+            Sensor sensor = sensorFactory.getSensor(type, sensorRate);
             sensor.setListener(new SensorListener() {
                 @Override
                 public void valueChanged(SensorData newValue) {

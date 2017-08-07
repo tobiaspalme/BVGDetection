@@ -25,18 +25,21 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
-    public GyroscopeUncalibrated(Context context) {
+
+    public GyroscopeUncalibrated(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         if (gyroscopeSensor != null) {
-            sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, gyroscopeSensor, sensorRate);
         }
     }
 

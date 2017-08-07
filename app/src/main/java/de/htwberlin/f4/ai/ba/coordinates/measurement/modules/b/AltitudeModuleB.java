@@ -78,7 +78,7 @@ public class AltitudeModuleB implements AltitudeModule {
 
     @Override
     public void start() {
-        airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER);
+        airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER, Sensor.SENSOR_RATE_MEASUREMENT);
         airPressureSensor.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {

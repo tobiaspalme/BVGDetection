@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
@@ -49,7 +50,7 @@ public class CalibrateControllerImpl implements CalibrateController {
             }
 
         });
-        indoorMeasurement.startSensors(SensorType.STEPCOUNTER);
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_FASTEST, SensorType.STEPCOUNTER);
         view.updateStepCount(stepCount);
     }
 
@@ -89,7 +90,7 @@ public class CalibrateControllerImpl implements CalibrateController {
 
                 });
             }
-            indoorMeasurement.startSensors(SensorType.COMPASS_FUSION);
+            indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI, SensorType.COMPASS_FUSION);
 
         } else if (currentStep == 3) {
             if (indoorMeasurement != null) {

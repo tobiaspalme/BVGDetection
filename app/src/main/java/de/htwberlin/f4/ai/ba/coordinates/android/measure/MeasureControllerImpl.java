@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
@@ -86,7 +87,7 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
                     case BAROMETER:
                         //view.updatePressure(sensorData.getValues()[0]);
-                        // store barometer data in model, while airpressure calibration
+                        // store barometer data in model, while calibration
                         // isn't finished
                         if (!calibrated) {
                             sensorDataModel.insertData(sensorData);
@@ -116,7 +117,8 @@ public class MeasureControllerImpl implements MeasureController {
             }
         });
 
-        indoorMeasurement.startSensors(SensorType.COMPASS_FUSION,
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_MEASUREMENT,
+                                       SensorType.COMPASS_FUSION,
                                        SensorType.BAROMETER,
                                        SensorType.STEPCOUNTER);
 

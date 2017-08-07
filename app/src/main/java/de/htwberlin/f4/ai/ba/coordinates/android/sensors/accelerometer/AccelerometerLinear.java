@@ -25,18 +25,20 @@ public class AccelerometerLinear implements SensorEventListener, de.htwberlin.f4
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
-    public AccelerometerLinear(Context context){
+    public AccelerometerLinear(Context context, int sensorRate){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         if (accelerometerSensor != null) {
-            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
+            sensorManager.registerListener(this, accelerometerSensor, sensorRate);
         }
     }
 

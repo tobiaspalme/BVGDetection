@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
@@ -91,7 +92,8 @@ public class RecordControllerImpl implements RecordController {
             }
         });
 
-        indoorMeasurement.startSensors(SensorType.ACCELEROMETER_SIMPLE,
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI,
+                                SensorType.ACCELEROMETER_SIMPLE,
                                 SensorType.ACCELEROMETER_LINEAR,
                                 SensorType.GRAVITY,
                                 SensorType.GYROSCOPE,

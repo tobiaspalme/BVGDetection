@@ -7,5 +7,5 @@ package de.htwberlin.f4.ai.ba.coordinates.android.sensors;
 
 public interface SensorFactory {
 
-    Sensor getSensor(SensorType sensorType);
+    Sensor getSensor(SensorType sensorType, int sensorRate);
 }

@@ -58,7 +58,7 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
 
     private void initSensor() {
         // saving data from accelerator_linear sensor, so we can check for step direction
-        sensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_LINEAR);
+        sensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_LINEAR, Sensor.SENSOR_RATE_FASTEST);
         sensor.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {

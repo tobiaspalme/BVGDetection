@@ -56,7 +56,7 @@ public class OrientationModuleA implements OrientationModule {
 
     @Override
     public void start() {
-        compass = sensorFactory.getSensor(SensorType.COMPASS_FUSION);
+        compass = sensorFactory.getSensor(SensorType.COMPASS_FUSION, Sensor.SENSOR_RATE_MEASUREMENT);
         compass.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {

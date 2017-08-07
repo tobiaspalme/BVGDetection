@@ -27,31 +27,31 @@ public class SensorFactoryImpl implements SensorFactory{
     }
 
     @Override
-    public Sensor getSensor(SensorType sensorType) {
+    public Sensor getSensor(SensorType sensorType, int sensorRate) {
 
         switch (sensorType) {
             case ACCELEROMETER_LINEAR:
-                return new AccelerometerLinear(context);
+                return new AccelerometerLinear(context, sensorRate);
             case ACCELEROMETER_SIMPLE:
-                return new AccelerometerSimple(context);
+                return new AccelerometerSimple(context, sensorRate);
             case BAROMETER:
-                return new Barometer(context);
+                return new Barometer(context, sensorRate);
             case COMPASS_FUSION:
-                return new CompassFusion(context);
+                return new CompassFusion(context, sensorRate);
             case COMPASS_SIMPLE:
-                return new CompassSimple(context);
+                return new CompassSimple(context, sensorRate);
             case GRAVITY:
-                return new GravitySensor(context);
+                return new GravitySensor(context, sensorRate);
             case GYROSCOPE:
-                return new Gyroscope(context);
+                return new Gyroscope(context, sensorRate);
             case GYROSCOPE_UNCALIBRATED:
-                return new GyroscopeUncalibrated(context);
+                return new GyroscopeUncalibrated(context, sensorRate);
             case MAGNETIC_FIELD:
-                return new MagneticFieldSensor(context);
+                return new MagneticFieldSensor(context, sensorRate);
             case STEPCOUNTER:
-                return new StepCounter(context);
+                return new StepCounter(context, sensorRate);
             case THERMOMETER:
-                return new Thermometer(context);
+                return new Thermometer(context, sensorRate);
             default:
                 return null;
         }

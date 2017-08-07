@@ -25,7 +25,7 @@ public interface IndoorMeasurement {
     void stop();
 
     // start specific sensors
-    void startSensors(SensorType... sensorType);
+    void startSensors(int sensorRate, SensorType... sensorType);
 
     // get the relative coordinates
     float[] getCoordinates();
