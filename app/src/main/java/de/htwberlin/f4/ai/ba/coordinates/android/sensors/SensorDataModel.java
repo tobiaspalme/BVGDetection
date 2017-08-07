@@ -17,4 +17,6 @@ public interface SensorDataModel {
     Map<SensorType, List<SensorData>> getDataInInterval(long start, long end);
     // insert sensor data into model, mapped by timestamp
     void insertData(SensorData sensorData);
+
+    void clearData();
 }

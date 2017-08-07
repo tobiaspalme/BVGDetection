@@ -25,19 +25,21 @@ public class GravitySensor implements SensorEventListener, de.htwberlin.f4.ai.ba
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
 
-    public GravitySensor(Context context) {
+    public GravitySensor(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         if (gravitySensor != null) {
-            sensorManager.registerListener(this, gravitySensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, gravitySensor, sensorRate);
         }
     }
 

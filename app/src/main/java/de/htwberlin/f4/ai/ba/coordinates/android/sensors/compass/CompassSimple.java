@@ -31,11 +31,12 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float[] accelerometerValues;
     private float[] magneticValues;
 
-
     private float azimuth;
     private SensorData sensorData;
+    private int sensorRate;
 
-    public CompassSimple(Context context) {
+
+    public CompassSimple(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
@@ -43,6 +44,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         rotationMatrix = new float[9];
         accelerometerValues = new float[3];
         magneticValues = new float[3];
+        this.sensorRate = sensorRate;
     }
 
     @Override
@@ -51,8 +53,8 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         magneticFieldSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
 
         if ((accelerometerSensor != null) && (magneticFieldSensor != null)) {
-            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
-            sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, accelerometerSensor, sensorRate);
+            sensorManager.registerListener(this, magneticFieldSensor, sensorRate);
         }
     }
 

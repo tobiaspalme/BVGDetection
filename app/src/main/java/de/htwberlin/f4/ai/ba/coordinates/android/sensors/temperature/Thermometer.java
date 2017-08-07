@@ -26,12 +26,14 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
 
     private float value;
     private SensorData sensorData;
+    private int sensorRate;
 
 
-    public Thermometer(Context context) {
+    public Thermometer(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
         value = 0.0f;
         temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
         if (temperatureSensor != null) {
-            sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, temperatureSensor, sensorRate);
         }
     }
 

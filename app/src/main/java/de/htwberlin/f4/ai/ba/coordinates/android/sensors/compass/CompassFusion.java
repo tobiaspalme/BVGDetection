@@ -30,18 +30,20 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float azimuth;
 
     private SensorData sensorData;
+    private int sensorRate;
 
-    public CompassFusion(Context context) {
+    public CompassFusion(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         rotationSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
         if (rotationSensor != null) {
-            sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, rotationSensor, sensorRate);
         }
     }
 

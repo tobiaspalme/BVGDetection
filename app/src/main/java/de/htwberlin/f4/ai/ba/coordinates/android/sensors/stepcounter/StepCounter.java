@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.sql.Timestamp;
 
@@ -28,12 +29,19 @@ public class StepCounter implements Sensor, SensorEventListener{
     private SensorData sensorData;
 
     private boolean firstRun;
+    private long lastStepTimestamp;
+    // if next step occurs < THRESHOLD ms to last one, we dont count it
+    private static final int THRESHOLD = 400;
+    private int sensorRate;
 
-    public StepCounter(Context context) {
+
+    public StepCounter(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
         firstRun = true;
+        lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+        this.sensorRate = sensorRate;
     }
 
     @Override
@@ -43,7 +51,7 @@ public class StepCounter implements Sensor, SensorEventListener{
         stepCount = 0;
         stepCounterSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_DETECTOR);
         if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, stepCounterSensor, sensorRate);
         }
     }
 
@@ -81,25 +89,33 @@ public class StepCounter implements Sensor, SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+
         if (firstRun) {
             firstRun = false;
             return;
         }
 
+        // if a step was fail detected
+        if (currentStepTimestamp - lastStepTimestamp < THRESHOLD) {
+            Log.d("tmp", "failstep");
+            return;
+        }
+
         if (sensorEvent.sensor.getType() == android.hardware.Sensor.TYPE_STEP_DETECTOR) {
             stepCount++;
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            long realTimestamp = timestamp.getTime();
             float[] values = new float[]{stepCount};
 
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);
-            sensorData.setTimestamp(realTimestamp);
+            sensorData.setTimestamp(currentStepTimestamp);
             sensorData.setValues(values);
 
             if (listener != null) {
                 listener.valueChanged(sensorData);
             }
+
+            lastStepTimestamp = currentStepTimestamp;
         }
     }
 

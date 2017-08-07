@@ -25,18 +25,21 @@ public class MagneticFieldSensor implements SensorEventListener, de.htwberlin.f4
     private SensorListener listener;
 
     private SensorData sensorData;
+    private int sensorRate;
 
-    public MagneticFieldSensor(Context context) {
+
+    public MagneticFieldSensor(Context context, int sensorRate) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
+        this.sensorRate = sensorRate;
     }
 
     @Override
     public void start() {
         magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (magneticFieldSensor != null) {
-            sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, magneticFieldSensor, sensorRate);
         }
     }
 

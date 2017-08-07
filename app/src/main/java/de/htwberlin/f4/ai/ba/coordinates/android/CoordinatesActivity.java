@@ -39,9 +39,12 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 public class CoordinatesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static CoordinatesActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         setContentView(R.layout.activity_coordinates);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,7 +125,7 @@ public class CoordinatesActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadMeasureFragment() {
+    public void loadMeasureFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MeasureView view = new MeasureViewImpl();
@@ -135,7 +138,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadCalibrateFragment() {
+    public void loadCalibrateFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -150,7 +153,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadSettingsFragment() {
+    public void loadSettingsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         SettingsFragment settingsFragment = new SettingsFragment();
@@ -160,7 +163,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadImportFragment() {
+    public void loadImportFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ImportFragment importFragment = new ImportFragment();
@@ -170,7 +173,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadRecordFragment() {
+    public void loadRecordFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         RecordView view = new RecordViewImpl();
@@ -186,6 +189,10 @@ public class CoordinatesActivity extends AppCompatActivity
     private boolean alreadyCalibrated() {
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(this);
         return calibratePersistance.load() != null;
+    }
+
+    public static CoordinatesActivity getInstance() {
+        return instance;
     }
 
 }
