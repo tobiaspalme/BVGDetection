@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates.measurement;
+package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection;
 
 import android.util.Log;
 
@@ -9,26 +9,46 @@ import java.util.Map;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
 /**
  * Created by benni on 05.08.2017.
+ *
+ * not working correctly if the step gets detected before the last high / lowpeak occured..
+ * For example: we did a rightstep, the highpeak is right before the step and the lowpeak
+ * would be right after step... so we just found a highpeak and no lowpeak. Since lowpeak got
+ * a default timestamp of "0", the non existent lowpeak occured before highpeak -> detect left step
+ * instead of right step
+ *
+ * A solution would be to use a scheduled thread, which gets executed 50-100ms after the stepdetection,
+ * so we could get the missing low / high peak. Then we need a IndoorMeasurementListener which can
+ * inform about the direction
+ *
  */
 
 public class StepDirectionDetectImpl implements StepDirectionDetect {
 
     private long lastStepTimestamp;
+    private SensorFactory sensorFactory;
+    private Sensor sensor;
+    private SensorDataModel dataModel;
+
     // there seems to be a general lower acceleration for a step left / right
-    // so we choose a quite lower threshold value for those directions
+    // so we chose a quite lower threshold value for those directions
     private static final float THRESHOLD_POSITIVE_X = 2.25f;
     private static final float THRESHOLD_NEGATIVE_X = -2.25f;
-    private static final float THRESHOLD_POSITIVE_Y = 3.0f;
-    private static final float THRESHOLD_NEGATIVE_Y = -3.0f;
+    private static final float THRESHOLD_POSITIVE_Y = 2.75f;
+    private static final float THRESHOLD_NEGATIVE_Y = -2.75f;
 
 
-
-    public StepDirectionDetectImpl() {
+    public StepDirectionDetectImpl(SensorFactory sensorFactory) {
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+        this.sensorFactory = sensorFactory;
+        dataModel = new SensorDataModelImpl();
+        initSensor();
     }
 
     // constructor for testing purpose, remove later
@@ -36,11 +56,24 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
         this.lastStepTimestamp = lastStepTimestamp;
     }
 
+    private void initSensor() {
+        // saving data from accelerator_linear sensor, so we can check for step direction
+        sensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_LINEAR);
+        sensor.setListener(new SensorListener() {
+            @Override
+            public void valueChanged(SensorData newValue) {
+                dataModel.insertData(newValue);
+            }
+        });
+
+        sensor.start();
+    }
+
     // checking for the last high and lowpeaks on x and y axis
     // so we dont get incorrect results if the user shaked the device e.g. without
-    // triggering the stepdetector.
+    // triggering the stepdetector and doing a step afterwards.
     @Override
-    public StepDirection getLastStepDirection(SensorDataModel dataModel) {
+    public StepDirection getLastStepDirection() {
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         StepDirection direction = StepDirection.FORWARD;
 
@@ -50,11 +83,12 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
         List<SensorData> intervalValues = intervalMap.get(SensorType.ACCELEROMETER_LINEAR);
         // if we have data, check for direction
         if (intervalValues != null) {
+            // find last peak on x axis
             SensorData[] peaksX = findPeaksX(intervalValues);
             SensorData highPeakX = peaksX[0];
             SensorData lowPeakX = peaksX[1];
             float peakDiffX = highPeakX.getValues()[0] + Math.abs(lowPeakX.getValues()[0]);
-
+            // find last peak on y axis
             SensorData[] peaksY = findPeaksY(intervalValues);
             SensorData highPeakY = peaksY[0];
             SensorData lowPeakY = peaksY[1];
@@ -67,9 +101,10 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
             Log.d("tmp", "Timestamp highpeakY: " + highPeakY.getTimestamp() + " highpeakY value: " + highPeakY.getValues()[1]);
 
             // check which axis movement happened last
-            // movement along y axis happend last
-            if (highPeakX.getTimestamp() < highPeakY.getTimestamp()) {
 
+            // movement along y axis happend last -> forward / backward
+            if (highPeakX.getTimestamp() < highPeakY.getTimestamp()) {
+                // make sure the highest peak is really on y axis
                 if (peakDiffY > peakDiffX) {
                     // if we have a highpeak, followed by a lowpeak -> forward
                     if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
@@ -95,9 +130,9 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
 
             }
 
-            // movement along x axis happened last
+            // movement along x axis happened last -> left / right
             else if (highPeakX.getTimestamp() > highPeakY.getTimestamp()) {
-
+                // make sure highest peak is really on x axis
                 if (peakDiffX > peakDiffY) {
                     // if we have a highpeak, followed by a lowpeak -> right
                     if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
@@ -130,6 +165,11 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
         lastStepTimestamp = currentStepTimestamp;
 
         return direction;
+    }
+
+    @Override
+    public Sensor getSensor() {
+        return sensor;
     }
 
     // Making a step forward / backward results in change of linear_acceleration on y axis
