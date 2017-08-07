@@ -112,9 +112,9 @@ public class EdgesManagerActivity extends Activity {
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibly()) {
-                itemsEdgesList.add(e.getNodeA().getId() + " ---> " + e.getNodeB().getId() + ",        " + accessiblyString);
+                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId() + ",        " + accessiblyString);
             } else {
-                itemsEdgesList.add(e.getNodeA().getId() + " ---> " + e.getNodeB().getId());
+                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId());
             }
         }
 
@@ -140,9 +140,9 @@ public class EdgesManagerActivity extends Activity {
                     allEdges.add(edge);
 
                     if (accessibly) {
-                        itemsEdgesList.add(edge.getNodeA().getId() + " ---> " + edge.getNodeB().getId() + ",        " + accessiblyString);
+                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId() + ",        " + accessiblyString);
                     } else {
-                        itemsEdgesList.add(edge.getNodeA().getId() + " ---> " + edge.getNodeB().getId());
+                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId());
                     }
                     edgesListAdapter.notifyDataSetChanged();
                 }

@@ -1,6 +1,7 @@
 package de.htwberlin.f4.ai.ma.navigation;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
@@ -17,8 +17,11 @@ import java.util.LinkedList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
+import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity;
+import de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity;
 
 /**
  * Created by Johann Winter
@@ -39,6 +42,11 @@ public class NavigationActivity extends Activity {
     private String selectedStartNode;
     private String lastSelectedStartNode;
 
+    NodeListAdapter resultListAdapter;
+    ArrayList<String> nodeNames;
+    ArrayList<String> nodeDescriptions;
+    ArrayList<String> nodePicturePaths;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,10 @@ public class NavigationActivity extends Activity {
         itemsStartNodeSpinner = new ArrayList<>();
         itemsDestNodeSpinner = new ArrayList<>();
         navigationResultsList = new ArrayList<>();
+
+        nodeNames = new ArrayList<>();
+        nodeDescriptions = new ArrayList<>();
+        nodePicturePaths = new ArrayList<>();
 
         lastSelectedStartNode = "";
 
@@ -77,7 +89,9 @@ public class NavigationActivity extends Activity {
         final ArrayAdapter<String> adapterB = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsDestNodeSpinner);
         destinationNodeSpinner.setAdapter(adapterB);
 
-        final ArrayAdapter<String> resultListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, navigationResultsList);
+        //final ArrayAdapter<String> resultListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, navigationResultsList);
+        // navigationResultListview.setAdapter(resultListAdapter);
+        resultListAdapter = new NodeListAdapter(this, nodeNames, nodeDescriptions, nodePicturePaths);
         navigationResultListview.setAdapter(resultListAdapter);
 
 
@@ -104,26 +118,46 @@ public class NavigationActivity extends Activity {
         startNavigationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //navigationResultsList.clear();
+                nodeNames.clear();
+                nodeDescriptions.clear();
+                nodePicturePaths.clear();
+
                 DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext());
 
                 dijkstraAlgorithm.execute(selectedStartNode);
 
                 LinkedList<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 
+
                 if (route == null) {
-                    navigationResultsList.clear();
-                    navigationResultsList.add("Keine Route gefunden!");
+                    //navigationResultsList.add("Keine Route gefunden!");
+                    //resultListAdapter.notifyDataSetChanged();
                     resultListAdapter.notifyDataSetChanged();
 
                 } else {
-                    navigationResultsList.clear();
                     for (Node n : route) {
-                        navigationResultsList.add(n.getId());
-                        resultListAdapter.notifyDataSetChanged();
+                        //navigationResultsList.add(n.getId());
+                        nodeNames.add(n.getId());
+                        nodeDescriptions.add(databaseHandler.getNode(n.getId()).getDescription());
+                        nodePicturePaths.add(databaseHandler.getNode(n.getId()).getPicturePath());
                     }
+                    //resultListAdapter.notifyDataSetChanged();
+                    resultListAdapter.notifyDataSetChanged();
                 }
 
             }
         });
+
+        // Click on Item -> show Node in NodeEditActivity
+        navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
+                intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());
+                startActivity(intent);
+            }
+        });
+
     }
 }

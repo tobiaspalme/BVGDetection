@@ -148,13 +148,6 @@ public class DijkstraAlgorithm {
             List<DijkstraVertex> adjacentNodes = getNeighbors(node);
             for (DijkstraVertex target : adjacentNodes) {
 
-                /*
-                Log.d("findMinimalDistances", "target=" + target.getId());
-                Log.d("findMinimalDistances", "#####getShortestDistance(target)= " + getShortestDistance(target));
-                Log.d("findMinimalDistances", "#####getShortestDistance(node)= " + getShortestDistance(node));
-                Log.d("findMinimalDistances", "#####getDistance(node, target)= " + getDistance(node, target));
-*/
-
                 if (getShortestDistance(target) > getShortestDistance(node) + getDistance(node, target)) {
                     System.out.println("findMinimalDistances. getshortestDistance(target) > getShortestDistance(node) + getDistance(node, target)");
                     distance.put(target, getShortestDistance(node)
@@ -179,18 +172,12 @@ public class DijkstraAlgorithm {
 
 
             for (DijkstraEdge dijkstraEdge : dijkstraEdges) {
-                //Log.d("getDistance", "dijkstraedge.toString:" + dijkstraEdge.toString());
-
-
-                //Log.d("getDistance", "dijkstraEdge.getSource().getNode().equals(node.getNode()).   " + dijkstraEdge.getSource().getNode().equals(node.getNode()));
                 Log.d("-------", "---------------------------------------------------------");
-
                 Log.d("getDistance", "--- dijkstraEdge.getSource().getNode().getId() = " + dijkstraEdge.getSource().getNode().getId());
                 Log.d("getDistance", "--- node.getNode().getId()= " + node.getNode().getId());
 
                 Log.d("getDistance", "+++ dijkstraEdge.getDestination().getNode().getId() = " + dijkstraEdge.getDestination().getNode().getId());
                 Log.d("getDistance", "+++ target.getNode().getId()= " + target.getNode().getId());
-
                 Log.d("-------", "---------------------------------------------------------");
                 Log.d("getDistance", "SOURCE = node.getNode    " + dijkstraEdge.getSource().getNode().equals(node.getNode()));
                 Log.d("getDistance", "DEST = target.getNode    " + dijkstraEdge.getDestination().getNode().equals(target.getNode()));
@@ -259,9 +246,7 @@ public class DijkstraAlgorithm {
          */
         private double getShortestDistance(DijkstraVertex destinationVertex) {
             Double d = distance.get(destinationVertex);
-            Log.d("getShortestDistance", "distance.get(destinationvertex): " + distance.get(destinationVertex));
             if (d == null) {
-                //Log.d("getShortestDistance" , "return Double.MAX_VALUE");
                 return Double.MAX_VALUE;
             } else {
                 return d;
@@ -273,11 +258,9 @@ public class DijkstraAlgorithm {
          * NULL if no path exists
          */
         public LinkedList<Node> getPath(String targetSourceId) {
-            Log.d("getPath", "GET PATH CALLED");
 
             LinkedList<Node> path = new LinkedList<>();
 
-            //DijkstraVertex step = new DijkstraVertex(graph.getNode(targetSourceId));
             DijkstraVertex step = new DijkstraVertex(databaseHandler.getNode(targetSourceId));
 
             // check if a path exists

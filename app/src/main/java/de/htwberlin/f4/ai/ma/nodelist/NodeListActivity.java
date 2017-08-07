@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
-import de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity;
+import de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity;
 
 
 /**
@@ -54,11 +54,11 @@ public class NodeListActivity extends Activity {
 
         loadDbData();
 
-        // Click on Item -> show Node in NodeDetailActivity
+        // Click on Item -> show Node in NodeEditActivity
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), NodeDetailActivity.class);
+                Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
                 intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
                 startActivity(intent);
             }

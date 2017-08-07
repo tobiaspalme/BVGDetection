@@ -73,7 +73,7 @@
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
 
-    <!-- acitvity_node_detail -->
+    <!-- acitvity_node_edit -->
     <string name="coordinates_text">Coordinates:</string>
     <string name="save_button_text">Speichern</string>
     <string name="delete_button_text">Löschen</string>
@@ -90,5 +90,8 @@
     <!-- acitvity_navigation -->
     <string name="start_navigation_button_text">Route anzeigen</string>
     <string name="navigation_result_header">Ihre Route:</string>
+
+    <!-- activity_node_show -->
+    <string name="image_placeholder">Bild nicht vorhanden</string>
 
 </resources>

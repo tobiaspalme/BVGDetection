@@ -23,7 +23,8 @@
 
         <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeDetailActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity"/>
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity"/>

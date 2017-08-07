@@ -32,7 +32,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
  * Created by Johann Winter
  */
 
-public class NodeDetailActivity extends Activity {
+public class NodeEditActivity extends Activity {
 
     private EditText idEditText;
     EditText wlanEditText;
@@ -60,9 +60,9 @@ public class NodeDetailActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_detail);
+        setContentView(R.layout.activity_node_edit);
 
-        idEditText = (EditText) findViewById(R.id.detail_id_edittext);
+        idEditText = (EditText) findViewById(R.id.edit_id_edittext);
         wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
         descriptionEditText = (EditText) findViewById(R.id.description_edittext);
         coordinatesEditText = (EditText) findViewById(R.id.coordinates_edittext);
@@ -73,7 +73,6 @@ public class NodeDetailActivity extends Activity {
 
         final Intent intent = getIntent();
         final String nodeName = intent.getExtras().get("nodeName").toString();
-
 
         // Create picture folders
         if (!pictureFolder.exists()) {
