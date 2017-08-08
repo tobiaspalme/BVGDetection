@@ -8,10 +8,6 @@ import java.util.List;
 
 public class NodeFactory {
 
-    /*public static Node createInstance() {
-        return new NodeImplementation();
-    }*/
-
     public static Node createInstance(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
         return new NodeImplementation(id, zValue, description, signalInformationList, coordinates, picturePath, additionalInfo);
     }

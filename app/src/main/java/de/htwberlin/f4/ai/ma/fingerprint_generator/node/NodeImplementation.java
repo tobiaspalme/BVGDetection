@@ -11,10 +11,13 @@ import java.util.List;
 class NodeImplementation implements Node {
 
     private String id;
+
     //float xValue;
     //float yValue;
-    private String description;
+    //TODO zValue?
     private float zValue;
+
+    private String description;
     private List<SignalInformation> signalInformationList;
     private String coordinates;
     private String picturePath;

@@ -17,7 +17,7 @@ public class MaxPictureActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.max_picture_activity);
+        setContentView(R.layout.activity_maximize_picture);
 
         maxImageView = (ImageView) findViewById(R.id.maxImageView);
 

@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -10,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:keepScreenOn="true"
-    tools:context="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity">
+    >
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,7 +25,8 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/record_id_edittext" />
+            android:id="@+id/record_id_edittext"
+            />
 
     </LinearLayout>
 
@@ -130,16 +130,11 @@
         android:id="@+id/tx_progress" />
 
 
-    <!-- <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/LV_POIList" />
-    -->
-
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/camera_imageview" />
+        android:id="@+id/camera_imageview"
+        android:contentDescription="@string/image_placeholder"/>
 
     <Button
         android:layout_width="wrap_content"

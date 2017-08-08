@@ -15,7 +15,7 @@
             <!--android:dependency="pref_movingAverage"-->
             <!--android:inputType="number"-->
             <!--/>-->
-        <com.example.carol.bvg.ListPreference
+        <ListPreference
             android:dependency="pref_movingAverage"
             android:key="pref_movivngAverageOrder"
             android:title="Ordnung"
@@ -26,7 +26,7 @@
             android:key="pref_kalman"
             android:title="Kalman Filter"
             android:defaultValue="true" />
-        <com.example.carol.bvg.EditTextPreference
+        <ListPreference
             android:defaultValue="2"
             android:key="pref_kalmanValue"
             android:title="Kalman Wert"
@@ -47,7 +47,7 @@
             android:title="k-nächster-Nachbar Algorithmus"
             android:dependency="pref_euclideanDistance"
             android:defaultValue="true" />
-        <com.example.carol.bvg.EditTextPreference
+        <EditTextPreference
             android:defaultValue="3"
             android:key="pref_knnNeighbours"
             android:title="k Nachbarn"

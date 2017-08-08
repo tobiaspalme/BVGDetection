@@ -57,7 +57,6 @@ public class RecordActivity extends AppCompatActivity {
     private EditText wlanNameText;
     private EditText descriptionEdittext;
     private NodeFactory nodeFactory;
-   // DatabaseHandlerImplementation databaseHandlerImplementation;
     private DatabaseHandler databaseHandler;
 
     private boolean pictureTaken;
@@ -74,9 +73,8 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_activity_record);
+        setContentView(R.layout.activity_record);
 
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
         databaseHandler = new DatabaseHandlerImplementation(this);
 
         jsonWriter = new JsonWriter(this);
@@ -218,8 +216,12 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         pictureTaken = true;
+
+        // TODO necessary?
         picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
         //node.setPicturePath(filePath);
+
+        captureButton.setEnabled(false);
         Glide.with(this).load(picturePath).into(cameraImageView);
     }
 

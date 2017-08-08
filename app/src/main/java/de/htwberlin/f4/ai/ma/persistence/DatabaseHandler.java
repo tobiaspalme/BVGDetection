@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.location_result.LocationResult;
-import de.htwberlin.f4.ai.ma.location_result.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.location.LocationResult;
+import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 
 /**
  * Created by Johann Winter

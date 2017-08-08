@@ -18,8 +18,8 @@ import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.location_result.LocationResult;
-import de.htwberlin.f4.ai.ma.location_result.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.location.LocationResult;
+import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 
 
 /**
@@ -194,11 +194,15 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Delete Node
     public void deleteNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + node.getId() + "'";
+
+        String deleteNodeQuery = "DELETE FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + node.getId() + "'";
+
+        String deleteBelongingEdgeQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + node.getId() + "' OR " + EDGE_NODE_B + " ='" + node.getId() + "'";
 
         Log.d("DB: delete_node", node.getId());
 
-        database.execSQL(deleteQuery);
+        database.execSQL(deleteNodeQuery);
+        database.execSQL(deleteBelongingEdgeQuery);
     }
 
 

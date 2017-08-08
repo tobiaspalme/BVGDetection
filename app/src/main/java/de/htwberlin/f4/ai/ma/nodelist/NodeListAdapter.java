@@ -55,8 +55,9 @@ public class NodeListAdapter extends ArrayAdapter {
 //
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
         viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
-        Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
-
+        if (!nodePicturePaths.get(position).equals("")) {
+            Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+        }
         //System.out.println("#### nodeNames.get POSITION:" + position + " nodeName: " + nodeNames.get(position));
         //System.out.println("#### nodePicturePaths.get POSITION:" + position + " nodePicturePath: " + nodePicturePaths.get(position));
 
