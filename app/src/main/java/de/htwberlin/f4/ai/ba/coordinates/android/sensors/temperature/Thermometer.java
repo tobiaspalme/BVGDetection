@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 
 import java.sql.Timestamp;
 
@@ -90,9 +91,12 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ba.c
             long realTimestamp = timestamp.getTime();
             float[] values = new float[]{value};
 
+            long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+            long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
+
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);
-            sensorData.setTimestamp(realTimestamp);
+            sensorData.setTimestamp(calcTimestamp);
             sensorData.setValues(values);
 
             if (listener != null) {

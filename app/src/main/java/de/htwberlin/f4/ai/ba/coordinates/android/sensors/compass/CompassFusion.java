@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
+import android.util.Log;
 
 import java.sql.Timestamp;
 
@@ -28,6 +30,8 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float[] orientation = new float[3];
     private float[] rotationMatrix = new float[9];
     private float azimuth;
+    private float pitch;
+    private float roll;
 
     private SensorData sensorData;
     private int sensorRate;
@@ -86,13 +90,21 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ba
             SensorManager.getRotationMatrixFromVector(rotationMatrix, sensorEvent.values );
             // original values are within [-180,180]
             azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
+            pitch = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[1]) + 360) % 360;
+            roll = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[2]) + 360) % 360;
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             long realTimestamp = timestamp.getTime();
-            float[] values = new float[]{azimuth};
+            float[] values = new float[]{azimuth, pitch, roll};
+
+            long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+            long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
+
+            //Log.d("tmp", "realtimestamp: " + realTimestamp);
+            //Log.d("tmp", "calctimestamp: " + calcTimestamp);
 
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);
-            sensorData.setTimestamp(realTimestamp);
+            sensorData.setTimestamp(calcTimestamp);
             sensorData.setValues(values);
 
             if (listener != null) {

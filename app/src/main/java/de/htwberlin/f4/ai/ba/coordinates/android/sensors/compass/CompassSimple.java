@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 
 import java.sql.Timestamp;
 
@@ -32,6 +33,8 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float[] magneticValues;
 
     private float azimuth;
+    private float pitch;
+    private float roll;
     private SensorData sensorData;
     private int sensorRate;
 
@@ -104,14 +107,19 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magneticValues);
         SensorManager.getOrientation(rotationMatrix, orientation);
         azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
+        pitch = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[1]) + 360) % 360;
+        roll = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[2]) + 360) % 360;
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long realTimestamp = timestamp.getTime();
-        float[] values = new float[]{azimuth};
+        float[] values = new float[]{azimuth, pitch, roll};
+
+        long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
 
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
-        sensorData.setTimestamp(realTimestamp);
+        sensorData.setTimestamp(calcTimestamp);
         sensorData.setValues(values);
 
         if (listener != null) {

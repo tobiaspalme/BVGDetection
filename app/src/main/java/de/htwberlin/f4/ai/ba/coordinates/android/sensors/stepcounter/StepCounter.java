@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.sql.Timestamp;
@@ -106,9 +107,12 @@ public class StepCounter implements Sensor, SensorEventListener{
             stepCount++;
             float[] values = new float[]{stepCount};
 
+            long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+            long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
+
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);
-            sensorData.setTimestamp(currentStepTimestamp);
+            sensorData.setTimestamp(calcTimestamp);
             sensorData.setValues(values);
 
             if (listener != null) {

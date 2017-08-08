@@ -3,6 +3,7 @@ package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 import android.app.AlertDialog;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,9 @@ public class MeasureControllerImpl implements MeasureController {
 
                     case COMPASS_FUSION:
                         view.updateAzimuth(sensorData.getValues()[0]);
+                        Log.d("tmp", "Compass[0]: " + sensorData.getValues()[0]);
+                        Log.d("tmp", "Compass[1]: " + sensorData.getValues()[1]);
+                        Log.d("tmp", "Compass[2]: " + sensorData.getValues()[2]);
                         // store compass data in model, while calibration
                         // isn't finished
                         if (!calibrated) {

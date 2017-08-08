@@ -47,13 +47,13 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private PositionModule positionModule;
     private StepDirectionDetect directionDetect;
-    private SensorDataModel dataModel;
 
+    // for direction detection
     private Handler timerHandler;
     private StepDirectionRunnable stepDirectionRunnable;
-
-    // delay for the direction detect in ms
+    // delay for the direction detection in ms
     private static final int DIRECTION_DETECT_DELAY = 100;
+
 
     public IndoorMeasurementImpl(SensorFactory sensorFactory) {
         this.sensorFactory = sensorFactory;
@@ -71,7 +71,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         timerHandler = new Handler(Looper.getMainLooper());
         directionDetect = new StepDirectionDetectImpl(sensorFactory);
         stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
-
+        // TODO: inform controller about direction and handle it, if direction != forward
         stepDirectionRunnable.setListener(new StepDirectionDetectListener() {
             @Override
             public void onDirectionDetect(StepDirection stepDirection) {

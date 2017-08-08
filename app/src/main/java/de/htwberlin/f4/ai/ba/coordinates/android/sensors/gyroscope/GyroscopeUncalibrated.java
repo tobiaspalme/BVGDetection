@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 
 import java.sql.Timestamp;
 
@@ -82,9 +83,12 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
             float[] values = new float[sensorEvent.values.length];
             System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
 
+            long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+            long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
+
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);
-            sensorData.setTimestamp(realTimestamp);
+            sensorData.setTimestamp(calcTimestamp);
             sensorData.setValues(values);
 
             if (listener != null) {
