@@ -24,7 +24,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:weightSum="1"
                 android:layout_weight="0.5">
@@ -32,22 +32,15 @@
                 <ImageView
                     android:id="@+id/coordinates_measure_compass_iv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
                     app:srcCompat="@drawable/compass" />
 
-                <TextView
-                    android:id="@+id/coordinates_measure_compass"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0°"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="24sp" />
+                 />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:weightSum="1"
                 android:orientation="vertical">
@@ -55,7 +48,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
                     android:weightSum="1">
 
                     <!-- schritte -->
@@ -64,7 +59,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/measure_steps"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.7"
                         android:textSize="24sp"/>
 
                     <TextView
@@ -72,7 +67,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.3"
                         android:textSize="24sp"/>
 
                 </LinearLayout>
@@ -81,6 +76,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
                     android:weightSum="1">
 
                     <!-- meter -->
@@ -90,18 +87,37 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/measure_distance"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.7"
                         android:textSize="24sp"/>
 
                     <TextView
                         android:id="@+id/coordinates_measure_distancevalue"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.3"
                         android:text="0"
                         android:textSize="24sp"/>
 
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_compass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:text="0°"
+                        android:textSize="24sp" />
+
+                </RelativeLayout>
+
+
+
 
             </LinearLayout>
 
@@ -109,13 +125,24 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/coordinates_measure_coordinates"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.05"
-        android:text="x / y / z"
-        android:textSize="20sp"/>
+        android:layout_weight="0.1"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/coordinates_measure_coordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.075"
+            android:text="x / y / z"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="40sp"/>
+    </RelativeLayout>
+
+
 
 
     <!-- buttons -->
@@ -126,6 +153,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:weightSum="1">
 
         <Spinner

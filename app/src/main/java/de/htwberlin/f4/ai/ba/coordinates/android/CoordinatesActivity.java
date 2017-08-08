@@ -41,12 +41,14 @@ public class CoordinatesActivity extends AppCompatActivity
 
     private static CoordinatesActivity instance;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = this;
         setContentView(R.layout.activity_coordinates);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -66,9 +68,6 @@ public class CoordinatesActivity extends AppCompatActivity
         }
 
     }
-
-
-
 
     @Override
     public void onBackPressed() {
@@ -112,10 +111,6 @@ public class CoordinatesActivity extends AppCompatActivity
             loadMeasureFragment();
         } else if (id == R.id.coordinates_nav_calibrate) {
             loadCalibrateFragment();
-        } else if (id == R.id.coordinates_nav_settings) {
-            loadSettingsFragment();
-        } else if (id == R.id.coordinates_nav_import) {
-            loadImportFragment();
         } else if (id == R.id.coordinates_nav_record) {
             loadRecordFragment();
         }
@@ -136,6 +131,8 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         //fragmentTransaction.addToBackStack("measure fragment");
         fragmentTransaction.commit();
+
+        toolbar.setTitle(getString(R.string.title_measurement));
     }
 
     public void loadCalibrateFragment() {
@@ -151,8 +148,11 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         //fragmentTransaction.addToBackStack("calibrate fragment");
         fragmentTransaction.commit();
+
+        toolbar.setTitle(getString(R.string.title_calibration));
     }
 
+    /*
     public void loadSettingsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -171,7 +171,7 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.coordinates_contentFrame, importFragment);
         //fragmentTransaction.addToBackStack("import fragment");
         fragmentTransaction.commit();
-    }
+    }*/
 
     public void loadRecordFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -184,6 +184,8 @@ public class CoordinatesActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         //fragmentTransaction.addToBackStack("record fragment");
         fragmentTransaction.commit();
+
+        toolbar.setTitle(getString(R.string.title_record));
     }
 
     private boolean alreadyCalibrated() {

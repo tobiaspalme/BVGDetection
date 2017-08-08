@@ -66,7 +66,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
         spinnerValues.add(IndoorMeasurementType.VARIANT_A);
         spinnerValues.add(IndoorMeasurementType.VARIANT_B);
-        final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerValues);
+        final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerValues);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -107,6 +107,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
                 btnAdd.setEnabled(false);
             }
         });
+        btnStop.setEnabled(false);
 
         btnAdd = (Button) root.findViewById(R.id.coordinates_measure_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +159,8 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
 
     @Override
     public void updateAzimuth(float azimuth) {
-        compassView.setText(String.valueOf(azimuth));
+        double roundAzimuth = Math.round(azimuth * 100.0) / 100.0;
+        compassView.setText(String.valueOf(roundAzimuth) + " °");
         compassImageView.setRotation(-azimuth);
     }
 
@@ -174,7 +176,11 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
 
     @Override
     public void updateCoordinates(float x, float y, float z) {
-        coordinatesView.setText(x + " / " + y + " / " + z);
+        double roundX = Math.round(x * 100.0) / 100.0;
+        double roundY = Math.round(y * 100.0) / 100.0;
+        double roundZ = Math.round(z * 100.0) / 100.0;
+
+        coordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
     }
 
 

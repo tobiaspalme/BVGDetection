@@ -13,6 +13,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="title_measurement">Messen</string>
+    <string name="title_calibration">Kalibrieren</string>
+    <string name="title_record">Aufnehmen</string>
 
     <!-- coordinates sharedpreferences stuff -->
     <string name="coordinates_shared_preferences">de.htwberlin.f4.ai.ba.coordinates.PREFERENCE_FILE</string>

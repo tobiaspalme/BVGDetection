@@ -42,7 +42,7 @@
         </activity>
         <activity
             android:name="de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity"
-            android:label="@string/title_activity_coordinates"
+
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
