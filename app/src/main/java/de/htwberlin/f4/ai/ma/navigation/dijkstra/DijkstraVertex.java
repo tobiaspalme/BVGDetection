@@ -1,6 +1,6 @@
 package de.htwberlin.f4.ai.ma.navigation.dijkstra;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
  * Created by Johann Winter

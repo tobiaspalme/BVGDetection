@@ -5,8 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.navigation.Path;
+import de.htwberlin.f4.ai.ma.node.Node;
+//import de.htwberlin.f4.ai.ma.navigation.Path;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
@@ -29,10 +29,10 @@ class IndoorGraphImplementation implements IndoorGraph {
 
 
 
-    @Override
-    public Path getPath(Node startNode, Node endNode) {
-        return null;
-    }
+    //@Override
+    //public Path getPath(Node startNode, Node endNode) {
+    //    return null;
+    //}
 
     @Override
     public void insertNode(Node node) {

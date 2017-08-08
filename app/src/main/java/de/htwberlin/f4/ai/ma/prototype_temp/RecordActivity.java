@@ -27,13 +27,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
-import de.htwberlin.f4.ai.ma.persistence.JsonWriter;
+import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
 public class RecordActivity extends AppCompatActivity {

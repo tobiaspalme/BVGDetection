@@ -28,29 +28,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint.FingerprintFactory;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+//import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
+//import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
+import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
 public class LocationActivity extends AppCompatActivity {
 
-    private List<String> macAdresses = new ArrayList<>();
-    private int count = 0;
+    //private List<String> macAdresses = new ArrayList<>();
+    //private int count = 0;
     Button measurementButton;
     Button measurementButtonMoreTomes;
 
     //String[] permissions;
-    private Fingerprint fingerprint = FingerprintFactory.createInstance();
+    //private Fingerprint fingerprint = FingerprintFactory.createInstance();
     private DatabaseHandler databaseHandler;
-    private SharedPreferences sharedPrefs;
+    private SharedPreferences sharedPreferences;
     private NodeFactory nodeFactory;
-
     ListView listView;
     private String settings;
     private Spinner dropdown;
@@ -61,6 +60,17 @@ public class LocationActivity extends AppCompatActivity {
     private long timestampWifiManager = 0;
 
     private int locationsCounter;
+
+
+    boolean movingAverage;
+    boolean kalmanFilter;
+    boolean euclideanDistance;
+    boolean knnAlgorithm;
+
+    private int knnValue;
+    private int movingAverageOrder;
+    private int kalmanValue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,29 +88,34 @@ public class LocationActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.LV_results);
 
         //check Preferences
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        boolean movingAverage = sharedPrefs.getBoolean("pref_movingAverage", true);
-        boolean kalmanFilter = sharedPrefs.getBoolean("pref_kalman", false);
-        boolean euclideanDistance = sharedPrefs.getBoolean("pref_euclideanDistance", false);
-        boolean knnAlgorithm = sharedPrefs.getBoolean("pref_knnAlgorithm", true);
+        movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
+        kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);
+        euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
+        knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
 
-        locationsCounter = sharedPrefs.getInt("locationsCounter", -1);
+        locationsCounter = sharedPreferences.getInt("locationsCounter", -1);
+        Log.d("LocationActivity", "locationsCounter onCreate= " + locationsCounter);
         if (locationsCounter == -1) {
-            locationsCounter = 1;
+            locationsCounter = 0;
         }
 
-        settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPrefs.getString("pref_movivngAverageOrder", "3")
-                + "\r\nKalmann Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPrefs.getString("pref_kalmanValue","2")
-                + "\r\nEculidische Distanz: " + euclideanDistance
-                + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPrefs.getString("pref_knnNeighbours", "3") ;
+        movingAverageOrder = Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3"));
+        knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
+        kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
+
+
+
+        settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPreferences.getString("pref_movivngAverageOrder", "3")
+                + "\r\nKalman Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPreferences.getString("pref_kalmanValue","2")
+                + "\r\nEuclidische Distanz: " + euclideanDistance
+                + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
 
         //read Json file
         //JsonReader jsonReader = new JsonReader();
         //final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
 
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
-        //final List<Node> allNodes = databaseHandlerImplementation.getAllNodes();
         databaseHandler = new DatabaseHandlerImplementation(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
@@ -108,13 +123,16 @@ public class LocationActivity extends AppCompatActivity {
         //a dropdown list with name of all existing nodes
         dropdown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> nodeItems = new ArrayList<>();
-        for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
+        for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             nodeItems.add(node.getId());
         }
         Collections.sort(nodeItems);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeItems);
         dropdown.setAdapter(adapter);
+
+
+
 
         //fill result list with content
         //final ArrayList<LocationResultImplementation> arrayOfResults = loadJson();
@@ -134,8 +152,6 @@ public class LocationActivity extends AppCompatActivity {
                         .setMessage("Möchten sie den Eintrag löschen?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-
-                                //databaseHandlerImplementation.deleteLocationResult(allResults.get(position));
                                 databaseHandler.deleteLocationResult(allResults.get(position));
                                 resultAdapterdapter.remove(allResults.get(position));
                                 resultAdapterdapter.notifyDataSetChanged();
@@ -152,35 +168,25 @@ public class LocationActivity extends AppCompatActivity {
         });
 
 
+        /*
         //set all preferences
         fingerprint.setMovingAverage(movingAverage);
         fingerprint.setKalman(kalmanFilter);
         fingerprint.setEuclideanDistance(euclideanDistance);
         fingerprint.setKNN(knnAlgorithm);
+*/
 
-        fingerprint.setAverageOrder(Integer.parseInt(sharedPrefs.getString("pref_movivngAverageOrder", "3")));
-        fingerprint.setKNNValue(Integer.parseInt(sharedPrefs.getString("pref_knnNeighbours", "3")));
-        fingerprint.setKalmanValue(Integer.parseInt(sharedPrefs.getString("pref_kalmanValue","2")));
+        /*fingerprint.setAverageOrder(Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3")));
+        fingerprint.setKNNValue(Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3")));
+        fingerprint.setKalmanValue(Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2")));
 
         fingerprint.setAllNodes(allNodes);
+*/
 
         if (measurementButton != null) {
             measurementButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    //List<de.htwberlin.f4.ai.ma.fingerprint.Node> nodeList = getMeasuredNode(1);
-
                     getMeasuredNode(1);
-
-//                    fingerprint.setActuallyNode(nodeList);
-//                    String foundNodeName = fingerprint.getCalculatedNode();
-//
-//                    TextView textView =(TextView)findViewById(R.id.tx_Location);
-//                    if(foundNodeName!=null){
-//                        textView.setText(foundNodeName);
-//                    }
-//                    else {
-//                        textView.setText("kein POI gefunden");
-//                    }
                 }
             });
         }
@@ -221,7 +227,7 @@ public class LocationActivity extends AppCompatActivity {
 
                     mainWifiObj.startScan();
 
-                    final TextView test = (TextView) findViewById(R.id.tx_test);
+                    final TextView testTimestampTextview = (TextView) findViewById(R.id.tx_test);
                     EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
                     String wlanName = editText.getText().toString();
 
@@ -245,7 +251,7 @@ public class LocationActivity extends AppCompatActivity {
                     for (final ScanResult sr : wifiScanList) {
                         LocationActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                test.setText(String.valueOf(sr.timestamp));
+                                testTimestampTextview.setText(String.valueOf(sr.timestamp));
                             }
                         });
 
@@ -273,9 +279,9 @@ public class LocationActivity extends AppCompatActivity {
 
     /**
      * if times measurement is more than one second make a average of values. Try to start a fingerprint and calculate position.
-     * @param time the measured time
+     * @param measuredTime the measured time
      */
-    private void makeFingerprint(final int time) {
+    private void makeFingerprint(final int measuredTime) {
         final TextView textView = (TextView) findViewById(R.id.tx_Location);
 
         Set<String> bssid = multiMap.keySet();
@@ -304,25 +310,39 @@ public class LocationActivity extends AppCompatActivity {
         }
 
         Node node = nodeFactory.createInstance(null, 0, "", signalInformationList, "", "", "");
-        actuallyNode.add(node);
 
-        fingerprint.setActuallyNode(actuallyNode);
-        foundNodeName = fingerprint.getCalculatedNode();
+        foundNodeName = databaseHandler.calculateNodeId(node);
+
+
+/*
+        fingerprint.setMovingAverage(movingAverage);
+        fingerprint.setKalman(kalmanFilter);
+        fingerprint.setEuclideanDistance(euclideanDistance);
+        fingerprint.setKNN(knnAlgorithm);
+
+        //actuallyNode.add(node);
+        //fingerprint.setActuallyNode(actuallyNode);
+        //foundNodeName = fingerprint.getCalculatedNode();
+        */
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 LocationResultImplementation locationResult;
                 if (foundNodeName != null) {
                     textView.setText(foundNodeName);
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
+
+                    // TODO percentage einfügen
+                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), foundNodeName);
                 } else {
                     textView.setText("kein Node gefunden");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(time), dropdown.getSelectedItem().toString(), "kein Node gefunden");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), "kein Node gefunden");
                 }
                 //makeJson(locationResult);
 
                 locationsCounter++;
-                sharedPrefs.edit().putInt("locationsCounter", locationsCounter);
+                Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
+                sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
                 databaseHandler.insertLocationResult(locationResult);
 
                 resultAdapterdapter.add(locationResult);

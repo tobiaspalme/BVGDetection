@@ -1,6 +1,4 @@
-package de.htwberlin.f4.ai.ma.fingerprint_generator.node;
-
-import android.media.Image;
+package de.htwberlin.f4.ai.ma.node;
 
 import java.util.List;
 

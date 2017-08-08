@@ -1,6 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
  * Created by benni on 04.08.2017.

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint;
+package de.htwberlin.f4.ai.ma.persistence.fingerprint;
 
 /**
  * Created by Johann Winter
@@ -13,10 +13,10 @@ import java.util.List;
 /**
  * calculate all euclidean distances
  */
-class EuclideanDistance {
+public class EuclideanDistance {
 
     //TODO evtl. private?
-    List<String> calculateDistance(List<RestructedNode> restructedNodes, List<MeasuredNode> measuredNodeList) {
+    public List<String> calculateDistance(List<RestructedNode> restructedNodes, List<MeasuredNode> measuredNodeList) {
         List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 

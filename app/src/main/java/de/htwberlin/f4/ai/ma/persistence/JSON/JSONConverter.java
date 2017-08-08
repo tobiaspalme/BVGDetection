@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence;
+package de.htwberlin.f4.ai.ma.persistence.JSON;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,17 +7,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 
 /**
  * Created by Johann Winter
  */
 
-class JSONConverter {
+public class JSONConverter {
 
     // Convert List<SignalInformation> to JSON-String
-    String convertSignalInfoToJSON(List<SignalInformation> signalInformationList) {
+    public String convertSignalInfoToJSON(List<SignalInformation> signalInformationList) {
 
         JSONObject jsonObject = new JSONObject();
         JSONArray signalJsonArray = new JSONArray();
@@ -48,7 +48,7 @@ class JSONConverter {
 
 
     // Convert JSON-String to List<SignalInformation>
-    List<SignalInformation> convertJsonToSignalInfo(String jsonString) {
+    public List<SignalInformation> convertJsonToSignalInfo(String jsonString) {
 
         List<SignalInformation> signalInformationList = new ArrayList<>();
 

@@ -127,6 +127,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_red_dark"
         android:id="@+id/tx_progress" />
 
 

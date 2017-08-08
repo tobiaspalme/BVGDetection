@@ -1,12 +1,10 @@
 package de.htwberlin.f4.ai.ma.indoor_graph;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.navigation.Path;
+import de.htwberlin.f4.ai.ma.node.Node;
+//import de.htwberlin.f4.ai.ma.navigation.Path;
 
 /**
  * Created by Johann Winter
@@ -14,7 +12,7 @@ import de.htwberlin.f4.ai.ma.navigation.Path;
 
 public interface IndoorGraph {
 
-    Path getPath(Node startNode, Node endNode);
+    //Path getPath(Node startNode, Node endNode);
 
     //TODO
     //void setEdge(Node nodeA, Node nodeB);

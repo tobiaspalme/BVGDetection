@@ -23,7 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
@@ -107,9 +107,11 @@ public class NodeEditActivity extends Activity {
         cameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                intent.putExtra("picturePath", node.getPicturePath());
-                startActivity(intent);
+                if (node.getPicturePath() != null) {
+                    Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                    intent.putExtra("picturePath", node.getPicturePath());
+                    startActivity(intent);
+                }
             }
         });
 

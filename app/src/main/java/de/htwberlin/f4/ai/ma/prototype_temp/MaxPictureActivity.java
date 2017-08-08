@@ -12,7 +12,6 @@ public class MaxPictureActivity extends Activity {
 
     ImageView maxImageView;
     //File sdCard = Environment.getExternalStorageDirectory();
-    //DatabaseHandlerImplementation databaseHandlerImplementation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +20,9 @@ public class MaxPictureActivity extends Activity {
 
         maxImageView = (ImageView) findViewById(R.id.maxImageView);
 
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
-
         Intent intent = getIntent();
         //String nodeName = intent.getExtras().get("nodeName").toString();
         String picturePath = intent.getExtras().get("picturePath").toString();
-
-
-        //Node node = databaseHandlerImplementation.getNode(nodeName);
 
         //Glide.with(this).load(node.getPicturePath()).into(maxImageView);
         Glide.with(this).load(picturePath).into(maxImageView);

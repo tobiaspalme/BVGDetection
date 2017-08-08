@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.fingerprint_generator.node;
+package de.htwberlin.f4.ai.ma.node;
 
 /**
  * Created by Johann Winter

@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
@@ -52,14 +53,10 @@ public class NodeListAdapter extends ArrayAdapter {
         } else {
             viewHolder = (ViewHolder) row.getTag();
         }
-//
+
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
         viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
-        if (!nodePicturePaths.get(position).equals("")) {
-            Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
-        }
-        //System.out.println("#### nodeNames.get POSITION:" + position + " nodeName: " + nodeNames.get(position));
-        //System.out.println("#### nodePicturePaths.get POSITION:" + position + " nodePicturePath: " + nodePicturePaths.get(position));
+        Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
 
         return row;
     }

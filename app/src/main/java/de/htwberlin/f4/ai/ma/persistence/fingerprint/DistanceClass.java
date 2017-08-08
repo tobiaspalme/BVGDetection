@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint;
+package de.htwberlin.f4.ai.ma.persistence.fingerprint;
 
 /**
  * Created by Johann Winter

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence;
+package de.htwberlin.f4.ai.ma.persistence.JSON;
 
 import android.content.Context;
 import android.os.Environment;
@@ -14,10 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 
 public class JsonReader {
 

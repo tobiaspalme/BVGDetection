@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence;
+package de.htwberlin.f4.ai.ma.persistence.JSON;
 
 import android.content.Context;
 import android.os.Environment;
@@ -25,7 +25,7 @@ public class JsonWriter {
      * write json object to the correct position or create new object
      * @param node the measured node
      */
-    public void writeJSON(de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node) {
+    public void writeJSON(de.htwberlin.f4.ai.ma.node.Node node) {
         String jsonString = loadJSONFromAsset(context);
         String nodeId = node.getId();
 
@@ -87,7 +87,7 @@ public class JsonWriter {
      * @param node measured node
      * @return the new json object
      */
-    private JSONObject makeJsonNode(JSONObject jsonObjectNode, de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node) {
+    private JSONObject makeJsonNode(JSONObject jsonObjectNode, de.htwberlin.f4.ai.ma.node.Node node) {
         try {
             jsonObjectNode.put("id", node.getId());
             jsonObjectNode.put("zValue", 0);

@@ -15,12 +15,11 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
+import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
-import de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity;
 import de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity;
 
 /**
@@ -72,7 +71,7 @@ public class NavigationActivity extends Activity {
 
 
 
-        for (de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node node : allNodes) {
+        for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             itemsStartNodeSpinner.add(node.getId());
             itemsDestNodeSpinner.add(node.getId());
         }
@@ -144,20 +143,22 @@ public class NavigationActivity extends Activity {
                     }
                     //resultListAdapter.notifyDataSetChanged();
                     resultListAdapter.notifyDataSetChanged();
+
+                    // Click on Item -> show Node in NodeEditActivity
+                    navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
+                            intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());
+                            startActivity(intent);
+                        }
+                    });
                 }
 
             }
         });
 
-        // Click on Item -> show Node in NodeEditActivity
-        navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
-                intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());
-                startActivity(intent);
-            }
-        });
+
 
     }
 }

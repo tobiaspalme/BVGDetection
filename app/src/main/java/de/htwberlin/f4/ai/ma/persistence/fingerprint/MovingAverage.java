@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.fingerprint_generator.fingerprint;
+package de.htwberlin.f4.ai.ma.persistence.fingerprint;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -14,10 +14,10 @@ import java.util.List;
 /**
  * start moving average depending on the order three or five
  */
-class MovingAverage {
+public class MovingAverage {
 
     // TODO: evtl. private setzen?
-    List<RestructedNode> calculation(List<RestructedNode> restructedNodeList, int order) {
+    public List<RestructedNode> calculation(List<RestructedNode> restructedNodeList, int order) {
         List<RestructedNode> calculatedNodes = new ArrayList<>();
         Multimap<String, Double> calculadetMultiMap = null;
 
@@ -105,7 +105,6 @@ class MovingAverage {
             }
             calculatedNodes.add(new RestructedNode(Node.id, calculadetMultiMap));
         }
-
         return calculatedNodes;
     }
 }

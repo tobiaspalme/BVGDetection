@@ -2,24 +2,42 @@ package de.htwberlin.f4.ai.ma.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.Node;
-import de.htwberlin.f4.ai.ma.fingerprint_generator.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.EuclideanDistance;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.KNearestNeighbor;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.KalmanFilter;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.MeasuredNode;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.MovingAverage;
+import de.htwberlin.f4.ai.ma.persistence.fingerprint.RestructedNode;
+import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 
 
 /**
@@ -57,10 +75,20 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
 
     private NodeFactory nodeFactory;
-
     private JSONConverter jsonConverter = new JSONConverter();
-
     private Context context;
+
+
+
+    private int averageOrder;
+    private int knnValue;
+    private int kalmanValue;
+    private double percentage;
+
+    private SharedPreferences sharedPreferences;
+
+    //TODO temp:
+    private List<Node> measuredNode;
 
 
     public DatabaseHandlerImplementation(Context context) {
@@ -260,8 +288,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
 
-        Log.d("DB: delete_LOCRESULT", "" + locationResult.getId());
-        System.out.println("REM LOCRES: " + locationResult.getSelectedNode());
+        Log.d("DB: delete_LOCRESULT", "" + locationResult.getSelectedNode() + " id: " + locationResult.getId());
 
         database.execSQL(deleteQuery);
         database.close();
@@ -412,6 +439,165 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 }
             }
         } catch(Exception e) {e.printStackTrace();}
+    }
+
+
+
+
+    //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
+
+    public String calculateNodeId(Node node) {
+
+        measuredNode = new ArrayList<>();
+        measuredNode.add(node);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        boolean movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
+        boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);
+        boolean euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
+        boolean knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
+
+        int movingAverageOrder = Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3"));
+        int knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
+        int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
+
+        String poi = null;
+
+        List<RestructedNode> restructedNodeList = calculateNewNodeDateSet(getAllNodes());
+        List<RestructedNode> calculatedNodeList = new ArrayList<>();
+
+        if (!restructedNodeList.isEmpty()) {
+            if (movingAverage) {
+                MovingAverage movingAverageClass = new MovingAverage();
+                calculatedNodeList = movingAverageClass.calculation(restructedNodeList, averageOrder);
+            } else if (kalmanFilter) {
+                KalmanFilter kalmanFilterClass = new KalmanFilter(kalmanValue);
+                calculatedNodeList = kalmanFilterClass.calculationKalman(restructedNodeList);
+            }
+
+            if (euclideanDistance) {
+                List<MeasuredNode> actuallyNode = getActuallyNode(measuredNode);
+                if (actuallyNode.size() == 0) {
+                    return null;
+                }
+                EuclideanDistance euclideanDistanceClass = new EuclideanDistance();
+                List<String> distanceNames = euclideanDistanceClass.calculateDistance(calculatedNodeList, actuallyNode);
+                if (knnAlgorithm) {
+                    KNearestNeighbor KnnClass = new KNearestNeighbor(knnValue);
+                    poi = KnnClass.calculateKnn(distanceNames);
+                } else {
+                    poi = distanceNames.get(0);
+                }
+            }
+
+            return poi;
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * rewrite actually node to type measured node
+     * @param nodeList list of nodes
+     * @return list of measured node
+     */
+    private List<MeasuredNode> getActuallyNode(List<Node> nodeList) {
+        List<MeasuredNode> measuredNodeList = new ArrayList<>();
+
+        for (int i = 0; i < nodeList.size(); i++) {
+            List<SignalInformation> signalInformation = nodeList.get(i).getSignalInformation();
+            for (SignalInformation test : signalInformation)
+                for (SignalStrengthInformation ssi : test.signalStrengthInformationList) {
+                    String macAdress = ssi.macAdress;
+                    int signalStrenght = ssi.signalStrength;
+                    MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrenght);
+                    measuredNodeList.add(measuredNode);
+                }
+        }
+
+        return measuredNodeList;
+    }
+
+
+    /**
+     * rewrite nodelist to restrucetd nodes and delete weak mac addresses
+     * @param allExistingNodes list of all nodes
+     * @return restructed node list
+     */
+    private List<RestructedNode> calculateNewNodeDateSet(List<Node> allExistingNodes) {
+        List<String> macAddresses;
+        int count = 0;
+
+        List<RestructedNode> restructedNodes = new ArrayList<>();
+        Multimap<String, Double> multiMap = null;
+
+        for (Node node : allExistingNodes) {
+            count = node.getSignalInformation().size();
+            double minValue = (((double) 1 / (double) 3) * (double) count);
+            macAddresses = getMacAddresses(node);
+            multiMap = getMultiMap(node, macAddresses);
+
+            //delete weak addresses
+            for (String checkMacAdress : macAddresses) {
+                int countValue = 0;
+
+                for (Double signalValue : multiMap.get(checkMacAdress)) {
+                    if (signalValue != null) {
+                        countValue++;
+                    }
+                }
+                if (countValue <= minValue) {
+                    multiMap.removeAll(checkMacAdress);
+                }
+            }
+            //fill restructed Nodes
+            RestructedNode restructedNode = new RestructedNode(node.getId(), multiMap);
+            restructedNodes.add(restructedNode);
+        }
+        return restructedNodes;
+    }
+
+
+    /**
+     * create a multimap with mac address and values
+     * @param node
+     * @param macAdresses
+     * @return multimap with mac address and vales
+     */
+    private Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
+        Multimap<String, Double> multiMap = ArrayListMultimap.create();
+        for (SignalInformation signal : node.getSignalInformation()) {
+            HashSet<String> actuallyMacAdresses = new HashSet<>();
+            for (SignalStrengthInformation signalStrength : signal.signalStrengthInformationList) {
+                multiMap.put(signalStrength.macAdress, (double) signalStrength.signalStrength);
+                actuallyMacAdresses.add(signalStrength.macAdress);
+            }
+            for (String checkMacAdress : macAdresses) {
+                if (!actuallyMacAdresses.contains(checkMacAdress)) {
+                    multiMap.put(checkMacAdress, null);
+                }
+            }
+        }
+        return multiMap;
+    }
+
+
+    /**
+     * get all mac addresses
+     * @param node
+     * @return list of unique mac addresses
+     */
+    private List<String> getMacAddresses(Node node) {
+        HashSet<String> macAdresses = new HashSet<String>();
+        for (SignalInformation signal : node.getSignalInformation()) {
+            for (SignalStrengthInformation signalStrength : signal.signalStrengthInformationList) {
+                macAdresses.add(signalStrength.macAdress);
+            }
+        }
+        List<String> uniqueList = new ArrayList<String>(macAdresses);
+        return uniqueList;
     }
 
 
