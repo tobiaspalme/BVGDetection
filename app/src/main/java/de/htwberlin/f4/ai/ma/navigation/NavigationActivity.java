@@ -124,15 +124,15 @@ public class NavigationActivity extends Activity {
                 nodePicturePaths.clear();
 
                 DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext());
-
                 dijkstraAlgorithm.execute(selectedStartNode);
-
                 LinkedList<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
-
 
                 if (route == null) {
                     //navigationResultsList.add("Keine Route gefunden!");
                     //resultListAdapter.notifyDataSetChanged();
+                    nodeNames.add("Keine Route gefunden.");
+                    nodeDescriptions.add("");
+                    nodePicturePaths.add("");
                     resultListAdapter.notifyDataSetChanged();
 
                 } else {

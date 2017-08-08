@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.location_result;
+package de.htwberlin.f4.ai.ma.location;
 
 import android.app.AlertDialog;
 import android.content.Context;

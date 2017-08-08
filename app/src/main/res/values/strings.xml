@@ -53,7 +53,7 @@
     <string name="compass_fusion">Compass Fusion</string>
     <string name="period_hint">Bitte wählen Sie in welchem Zeitabstand (ms) die Werte gespeichert werden sollen</string>
 
-    <!-- new_activity_main -->
+    <!-- activity_main -->
     <string name="record_button">Node aufnehmen</string>
     <string name="nodelist_button">Nodes verwalten</string>
     <string name="edges_manager_button">Kanten verwalten</string>
@@ -62,7 +62,7 @@
     <string name="import_export_button_text">Importieren / Exportieren</string>
     <string name="settings_button">Einstellungen</string>
 
-    <!-- new_activity_record -->
+    <!-- activity_record -->
     <string name="capture_button">Bild aufnehmen</string>
     <string name="description_text">Beschreibung:</string>
     <string name="measure_time_text">Messzeit:</string>
