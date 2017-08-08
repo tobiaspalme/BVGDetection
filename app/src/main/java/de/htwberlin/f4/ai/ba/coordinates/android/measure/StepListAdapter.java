@@ -31,7 +31,7 @@ public class StepListAdapter extends ArrayAdapter<StepData> {
     private List<Node> nodeList;
     private List<String> nodeNames;
     private NodeSpinnerListener listener;
-    private static final String DEFAULT_NODE = "Bitte Node auswählen";
+    private static final String DEFAULT_NODE = "Node zuordnen";
 
     public StepListAdapter(Context context, List<StepData> data, List<Node> nodes) {
         super(context, 0, data);
@@ -56,7 +56,7 @@ public class StepListAdapter extends ArrayAdapter<StepData> {
         TextView coords = (TextView) convertView.findViewById(R.id.listview_group_poi_coords);
 
         Spinner spinner = (Spinner) convertView.findViewById(R.id.listview_group_spinner);
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(convertView.getContext(), android.R.layout.simple_spinner_item, nodeNames);
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(convertView.getContext(), android.R.layout.simple_spinner_dropdown_item, nodeNames);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -82,7 +82,10 @@ public class StepListAdapter extends ArrayAdapter<StepData> {
 
         if (stepData != null) {
             name.setText(stepData.getStepName());
-            coords.setText(stepData.getCoords()[0] + " / " + stepData.getCoords()[1] + " / " + stepData.getCoords()[2]);
+            double roundX = Math.round(stepData.getCoords()[0] * 100.0) / 100.0;
+            double roundY = Math.round(stepData.getCoords()[1] * 100.0) / 100.0;
+            double roundZ = Math.round(stepData.getCoords()[2] * 100.0) / 100.0;
+            coords.setText(roundX + " / " + roundY + " / " + roundZ);
 
             // set previously selected node
             if (stepData.getNode() != null) {

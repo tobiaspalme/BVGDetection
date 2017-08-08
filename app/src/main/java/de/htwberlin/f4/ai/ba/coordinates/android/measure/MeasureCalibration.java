@@ -71,6 +71,7 @@ public class MeasureCalibration implements Runnable {
                     barometerData.get(i).setValues(new float[]{newValue});
                 }
 
+                /*
                 float pressureSum = 0.0f;
 
                 // sum up all airpressure values
@@ -79,7 +80,8 @@ public class MeasureCalibration implements Runnable {
                 }
                 // calculate avg
                 pressureAvg = pressureSum / barometerData.size();
-
+                */
+                pressureAvg = barometerData.get(barometerData.size()-1).getValues()[0];
             }
 
             List<SensorData> compassData = sensorDataModel.getData().get(SensorType.COMPASS_FUSION);
