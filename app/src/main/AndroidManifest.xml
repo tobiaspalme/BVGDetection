@@ -16,10 +16,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".Location" />
-        <activity android:name=".RecordActivity" />
 
         <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
