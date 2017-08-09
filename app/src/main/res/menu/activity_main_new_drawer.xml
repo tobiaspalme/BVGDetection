@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_location_record"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Ort aufnehmen" />
+        <item
+            android:id="@+id/nav_location_manager"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Orte verwalten" />
+        <item
+            android:id="@+id/nav_edges_manager"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Wege verwalten" />
+        <item
+            android:id="@+id/nav_location_detect"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Standort ermitteln" />
+        <item
+            android:id="@+id/nav_navigation"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Navigation" />
+        <item
+            android:id="@+id/nav_import"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Import / Export" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Einstellungen" />
+
+
+
+
+        <item
+            android:id="@+id/coordinates_nav_measurement"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Messen" />
+        <item
+            android:id="@+id/coordinates_nav_calibrate"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Kalibrieren" />
+        <item
+            android:id="@+id/coordinates_nav_record"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Aufnehmen" />
+    </group>
+</menu>

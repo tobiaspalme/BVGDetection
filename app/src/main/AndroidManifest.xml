@@ -15,22 +15,19 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity"/>
-
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity"/>
-
-
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MainActivity" />
+       <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity" />-->
+        <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity" />
+       <!--
         <activity
             android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,10 +37,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        -->
+        <activity
+            android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
 
 </manifest>

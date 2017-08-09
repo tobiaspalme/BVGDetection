@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -15,6 +16,7 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
@@ -26,7 +28,7 @@ import de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity;
  * Created by Johann Winter
  */
 
-public class NavigationActivity extends Activity {
+public class NavigationActivity extends BaseActivity {
 
 
     private Spinner startNodeSpinner;
@@ -49,7 +51,10 @@ public class NavigationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
+        //setContentView(R.layout.activity_navigation);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_navigation, contentFrameLayout);
 
         startNodeSpinner = (Spinner) findViewById(R.id.start_node_spinner);
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);

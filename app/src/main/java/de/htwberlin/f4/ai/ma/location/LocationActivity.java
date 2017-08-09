@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -30,6 +31,7 @@ import java.util.Set;
 
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
@@ -38,7 +40,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
-public class LocationActivity extends AppCompatActivity {
+public class LocationActivity extends BaseActivity {
 
     //private List<String> macAdresses = new ArrayList<>();
     //private int count = 0;
@@ -75,7 +77,10 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        //setContentView(R.layout.activity_location);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
 
        /* permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,

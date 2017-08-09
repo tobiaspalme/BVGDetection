@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -25,7 +27,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
  * Created by Johann Winter
  */
 
-public class EdgesManagerActivity extends Activity {
+public class EdgesManagerActivity extends BaseActivity {
 
     private Spinner spinnerA;
     private Spinner spinnerB;
@@ -47,7 +49,10 @@ public class EdgesManagerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edges_manager);
+        //setContentView(R.layout.activity_edges_manager);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_edges_manager, contentFrameLayout);
+
 
         spinnerA = (Spinner) findViewById(R.id.nodeA_spinner);
         spinnerB = (Spinner) findViewById(R.id.nodeB_spinner);

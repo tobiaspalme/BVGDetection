@@ -8,12 +8,14 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -24,7 +26,7 @@ import de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity;
  * Created by Johann Winter
  */
 
-public class NodeListActivity extends Activity {
+public class NodeListActivity extends BaseActivity {
 
     ListView nodeListView;
     ArrayList<String> nodeNames;
@@ -37,7 +39,10 @@ public class NodeListActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nodelist);
+
+        //setContentView(R.layout.activity_nodelist);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_nodelist, contentFrameLayout);
 
         databaseHandler = new DatabaseHandlerImplementation(this);
 

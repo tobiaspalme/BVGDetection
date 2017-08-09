@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
@@ -16,7 +18,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
  * Created by Johann Winter
  */
 
-public class ImportExportActivity extends Activity {
+public class ImportExportActivity extends BaseActivity {
 
     Button importButton;
     Button exportButton;
@@ -26,7 +28,10 @@ public class ImportExportActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_import_export);
+        //setContentView(R.layout.activity_import_export);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_import_export, contentFrameLayout);
 
         context = getApplicationContext();
 
