@@ -85,6 +85,7 @@ public class DijkstraAlgorithm {
             return vertices;
         }
 
+        // TODO Beschreibung
         /**
          * Map the normal Edge objects from the Graph model to the custom Edge of the Dijkstra
          * algorithm. This is done in order to avoid filling the model objects with logic elements.

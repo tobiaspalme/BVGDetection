@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -32,7 +35,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
  * Created by Johann Winter
  */
 
-public class NodeEditActivity extends Activity {
+public class NodeEditActivity extends BaseActivity {
 
     private EditText idEditText;
     EditText wlanEditText;
@@ -60,7 +63,10 @@ public class NodeEditActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_edit);
+        //setContentView(R.layout.activity_node_edit);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_node_edit, contentFrameLayout);
 
         idEditText = (EditText) findViewById(R.id.edit_id_edittext);
         wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
