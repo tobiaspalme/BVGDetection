@@ -1,15 +1,21 @@
 package de.htwberlin.f4.ai.ma.prototype_temp;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,10 +44,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
-public class RecordActivity extends BaseActivity {
+public class NodeRecordActivity extends BaseActivity {
 
-    private String id;
-    private String description;
     private String wlanName;
     private int recordTime;
     private int progressStatus = 0;
@@ -54,7 +58,10 @@ public class RecordActivity extends BaseActivity {
     Button captureButton;
     Button saveNodeButton;
     private ImageView cameraImageView;
-    private EditText idName;
+    //private EditText idName;
+
+    private EditText nodeIdEdittext;
+
     private EditText recordTimeText;
     private EditText wlanNameText;
     private EditText descriptionEdittext;
@@ -69,16 +76,35 @@ public class RecordActivity extends BaseActivity {
 
     private static final int CAM_REQUEST = 1;
 
+    //TODO permissions auf Startscreen auslagern
+    String[] permissions;
+    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
+
     private File sdCard = Environment.getExternalStorageDirectory();
+
+    private Context context = this;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.activity_record);
+        //setContentView(R.layout.activity_node_record);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.activity_record, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_node_record, contentFrameLayout);
+
+
+        permissions = new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+
+        if(!hasPermissions(this, permissions)){
+            ActivityCompat.requestPermissions(this, permissions, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+        }
+        else {
+            //TODO: Warnmeldung
+        }
 
 
         databaseHandler = new DatabaseHandlerImplementation(this);
@@ -91,7 +117,7 @@ public class RecordActivity extends BaseActivity {
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
 
-        idName = (EditText) findViewById(R.id.record_id_edittext);
+        nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
         recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
         wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
 
@@ -100,7 +126,7 @@ public class RecordActivity extends BaseActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mHandler = new Handler();
 
-        idName.setText("bitte eingeben");
+        nodeIdEdittext.setText("bitte eingeben");
         recordTimeText.setText("3");
         picturePath = null;
 
@@ -114,16 +140,14 @@ public class RecordActivity extends BaseActivity {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if (databaseHandler.checkIfNodeExists(idName.getText().toString())) {
+                    if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
                         Toast.makeText(getApplicationContext(), "Node existiert bereits: Bitte neuen Namen wählen.",
                                 Toast.LENGTH_LONG).show();
                     } else {
-                        id = idName.getText().toString();
-                        description = descriptionEdittext.getText().toString();
+                        recordButton.setEnabled(false);
                         wlanName = wlanNameText.getText().toString();
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
                         measureNode();
-                        recordButton.setEnabled(false);
                     }
                 }
             });
@@ -224,7 +248,7 @@ public class RecordActivity extends BaseActivity {
         pictureTaken = true;
 
         // TODO necessary?
-        picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
         //node.setPicturePath(filePath);
 
         captureButton.setEnabled(false);
@@ -236,31 +260,71 @@ public class RecordActivity extends BaseActivity {
         File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
 
         if (!folder.exists()) {
-            folder.mkdirs();
+            boolean test = folder.mkdirs();
+
+            if (!test) {
+                Log.d("NodeRecordActivity", "DATEI KONNTE NICHT ANGELEGT WERDEN");
+            }
         }
 
-        File imageFile = new File(folder, "Node_" + idName.getText() + ".jpg");
+        File imageFile = new File(folder, "Node_" + nodeIdEdittext.getText() + ".jpg");
         return imageFile;
     }
 
-    // Persist the new Node
+
+    // Create and persist the new Node
     private void saveNewNode() {
-            // Determine if picture reference has to be added to Node
-            String picPath;
-            if (pictureTaken) {
-                picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idName.getText() + ".jpg";
+        // Determine if picture reference has to be added to Node
+        String picPath;
+        if (pictureTaken) {
+            picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
+        } else {
+            picPath = null;
+        }
+
+        String nodeID = nodeIdEdittext.getText().toString();
+        String nodeDescription = descriptionEdittext.getText().toString();
+
+        if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
+            Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            final Node node = nodeFactory.createInstance(nodeID, 0, nodeDescription, signalInformationList, "", picPath , "");
+
+            if (!fingerprintTaken) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Kein Fingerprint")
+                        .setMessage("Soll der Ort \"" + node.getId() + "\" wirklich ohne Fingerprint erstellt werden?")
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                jsonWriter.writeJSON(node);
+                                databaseHandler.insertNode(node);
+                                Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {}
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             } else {
-                picPath = null;
-            }
-
-            if (fingerprintTaken) {
-                Node node = nodeFactory.createInstance(id, 0, description, signalInformationList, "", picPath , "");
-
                 jsonWriter.writeJSON(node);
                 databaseHandler.insertNode(node);
-
-                finish();
+                Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private boolean hasPermissions(Context context, String[] permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 }

@@ -21,28 +21,30 @@ public class JSONConverter {
 
         JSONObject jsonObject = new JSONObject();
         JSONArray signalJsonArray = new JSONArray();
-        try {
-        for (int i = 0; i < signalInformationList.size(); i++) {
 
-            JSONObject signalJsonObject = new JSONObject();
-            JSONArray signalStrengthJsonArray = new JSONArray();
+        if (signalInformationList != null) {
+            try {
+                for (int i = 0; i < signalInformationList.size(); i++) {
 
-            for (int j = 0; j < signalInformationList.get(i).signalStrengthInformationList.size(); j++) {
+                    JSONObject signalJsonObject = new JSONObject();
+                    JSONArray signalStrengthJsonArray = new JSONArray();
 
-                JSONObject signalStrenghtObject = new JSONObject();
-                signalStrenghtObject.put("macAdress", signalInformationList.get(i).signalStrengthInformationList.get(j).macAdress);
-                signalStrenghtObject.put("strength", signalInformationList.get(i).signalStrengthInformationList.get(j).signalStrength);
-                signalStrengthJsonArray.put(signalStrenghtObject);
+                    for (int j = 0; j < signalInformationList.get(i).signalStrengthInformationList.size(); j++) {
+
+                        JSONObject signalStrenghtObject = new JSONObject();
+                        signalStrenghtObject.put("macAdress", signalInformationList.get(i).signalStrengthInformationList.get(j).macAdress);
+                        signalStrenghtObject.put("strength", signalInformationList.get(i).signalStrengthInformationList.get(j).signalStrength);
+                        signalStrengthJsonArray.put(signalStrenghtObject);
+                    }
+                    signalJsonObject.put("timestamp", signalInformationList.get(i).timestamp);
+                    signalJsonObject.put("signalStrength", signalStrengthJsonArray);
+                    signalJsonArray.put(signalJsonObject);
+                }
+                jsonObject.put("signalInformation", signalJsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            signalJsonObject.put("timestamp", signalInformationList.get(i).timestamp);
-            signalJsonObject.put("signalStrength", signalStrengthJsonArray);
-            signalJsonArray.put(signalJsonObject);
         }
-        jsonObject.put("signalInformation", signalJsonArray);
-
-        } catch(
-        JSONException e) { e.printStackTrace(); }
-
         return jsonObject.toString();
     }
 
@@ -54,25 +56,28 @@ public class JSONConverter {
 
         try {
             JSONObject jsonObj = new JSONObject(jsonString);
-            JSONArray signalJsonArray = jsonObj.getJSONArray("signalInformation");
 
-            for (int j = 0; j < signalJsonArray.length(); j++) {
+            if (jsonObj.has("signalInformation")) {
+                JSONArray signalJsonArray = jsonObj.getJSONArray("signalInformation");
 
-                JSONObject signalJsonObject = signalJsonArray.getJSONObject(j);
-                String timestamp = signalJsonObject.getString("timestamp");
+                for (int j = 0; j < signalJsonArray.length(); j++) {
 
-                JSONArray signalStrengthJsonArray = signalJsonObject.getJSONArray("signalStrength");
-                List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
+                    JSONObject signalJsonObject = signalJsonArray.getJSONObject(j);
+                    String timestamp = signalJsonObject.getString("timestamp");
 
-                for (int k = 0; k < signalStrengthJsonArray.length(); k++) {
-                    JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
-                    String macAdress = signalStrenghtObject.getString("macAdress");
-                    int signalStrenght = signalStrenghtObject.getInt("strength");
-                    SignalStrengthInformation signal = new SignalStrengthInformation(macAdress, signalStrenght);
-                    signalStrenghtList.add(signal);
+                    JSONArray signalStrengthJsonArray = signalJsonObject.getJSONArray("signalStrength");
+                    List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
+
+                    for (int k = 0; k < signalStrengthJsonArray.length(); k++) {
+                        JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
+                        String macAdress = signalStrenghtObject.getString("macAdress");
+                        int signalStrenght = signalStrenghtObject.getInt("strength");
+                        SignalStrengthInformation signal = new SignalStrengthInformation(macAdress, signalStrenght);
+                        signalStrenghtList.add(signal);
+                    }
+                    SignalInformation signalInformation = new SignalInformation(timestamp, signalStrenghtList);
+                    signalInformationList.add(signalInformation);
                 }
-                SignalInformation signalInformation = new SignalInformation(timestamp, signalStrenghtList);
-                signalInformationList.add(signalInformation);
             }
 
         } catch (JSONException e) { e.printStackTrace(); }

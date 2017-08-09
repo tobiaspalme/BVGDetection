@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), NodeRecordActivity.class);
                     //TODO: richtige Startmethode? Betrifft auch andere Buttons unten
                     startActivities(new Intent[]{intent});
                 }

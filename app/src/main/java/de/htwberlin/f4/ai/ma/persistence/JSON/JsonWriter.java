@@ -29,12 +29,6 @@ public class JsonWriter {
         String jsonString = loadJSONFromAsset(context);
         String nodeId = node.getId();
 
-        // ### TEST
-        /*String description = node.getDescription().toString();
-        String coordinates = node.getCoordinates().toString();
-        String picturePath = node.getPicturePath().toString();
-        */
-
         boolean idIsContained = false;
 
         if (jsonString != null) {
@@ -54,24 +48,20 @@ public class JsonWriter {
                 }
                 if (idIsContained) {
                     JSONObject newJsonObject = jsonNode.getJSONObject(index);
-                    JSONArray jsonArray = newJsonObject.getJSONArray("signalInformation");
-                    JSONArray jsonArrayAdd= makeJsonNode(newJsonObject, node).getJSONArray("signalInformation");
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        jsonArrayAdd.put(jsonArray.getJSONObject(i));
+                    if (newJsonObject.has("signalInformation")) {
+                        JSONArray jsonArray = newJsonObject.getJSONArray("signalInformation");
+                        JSONArray jsonArrayAdd = makeJsonNode(newJsonObject, node).getJSONArray("signalInformation");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            jsonArrayAdd.put(jsonArray.getJSONObject(i));
+                        }
+                        newJsonObject.put("signalInformation", jsonArrayAdd);
                     }
-
-                    newJsonObject.put("signalInformation",jsonArrayAdd);
                     save(jsonObj);
                 } else {
                     JSONObject jsonObjectNode = new JSONObject();
                     jsonNode.put(makeJsonNode(jsonObjectNode, node));
-
-                    /* ############ TEST
-                    jsonNode.put(description);
-                    jsonNode.put(coordinates);
-                    jsonNode.put(picturePath);
-                    */
 
                     save(jsonObj);
                 }
@@ -99,23 +89,25 @@ public class JsonWriter {
             jsonObjectNode.put("additionalInfo", node.getAdditionalInfo());
 
 
-            JSONArray signalJsonArray = new JSONArray();
-            for (int i = 0; i < node.getSignalInformation().size(); i++) {
+            if (node.getSignalInformation() != null) {
+                JSONArray signalJsonArray = new JSONArray();
+                for (int i = 0; i < node.getSignalInformation().size(); i++) {
 
-                JSONObject signalJsonObject = new JSONObject();
-                JSONArray signalStrengthJsonArray = new JSONArray();
+                    JSONObject signalJsonObject = new JSONObject();
+                    JSONArray signalStrengthJsonArray = new JSONArray();
 
-                for (int j = 0; j < node.getSignalInformation().get(i).signalStrengthInformationList.size(); j++) {
-                    JSONObject signalStrenghtObject = new JSONObject();
-                    signalStrenghtObject.put("macAdress", node.getSignalInformation().get(i).signalStrengthInformationList.get(j).macAdress);
-                    signalStrenghtObject.put("strength", node.getSignalInformation().get(i).signalStrengthInformationList.get(j).signalStrength);
-                    signalStrengthJsonArray.put(signalStrenghtObject);
+                    for (int j = 0; j < node.getSignalInformation().get(i).signalStrengthInformationList.size(); j++) {
+                        JSONObject signalStrenghtObject = new JSONObject();
+                        signalStrenghtObject.put("macAdress", node.getSignalInformation().get(i).signalStrengthInformationList.get(j).macAdress);
+                        signalStrenghtObject.put("strength", node.getSignalInformation().get(i).signalStrengthInformationList.get(j).signalStrength);
+                        signalStrengthJsonArray.put(signalStrenghtObject);
+                    }
+                    signalJsonObject.put("timestamp", node.getSignalInformation().get(i).timestamp);
+                    signalJsonObject.put("signalStrength", signalStrengthJsonArray);
+                    signalJsonArray.put(signalJsonObject);
                 }
-                signalJsonObject.put("timestamp", node.getSignalInformation().get(i).timestamp);
-                signalJsonObject.put("signalStrength", signalStrengthJsonArray);
-                signalJsonArray.put(signalJsonObject);
+                jsonObjectNode.put("signalInformation", signalJsonArray);
             }
-            jsonObjectNode.put("signalInformation", signalJsonArray);
         } catch (final JSONException e) {
             Log.e("JSON", "parsing Error");
         }
