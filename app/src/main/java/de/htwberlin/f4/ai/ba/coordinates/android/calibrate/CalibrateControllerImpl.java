@@ -95,6 +95,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         } else if (currentStep == 3) {
             if (indoorMeasurement != null) {
                 indoorMeasurement.stop();
+                //TODO: finished dialog
                 CoordinatesActivity coordinatesActivity = CoordinatesActivity.getInstance();
                 if (coordinatesActivity != null) {
                     coordinatesActivity.loadMeasureFragment();
@@ -176,7 +177,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         // calculate avg
         int result = (int) (durationSum / (stepDurations.size()));
 
-        return result;
+        return result != 0 ? result : 1;
     }
 
     private void saveSettings() {

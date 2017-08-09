@@ -9,7 +9,6 @@ import android.support.annotation.IntegerRes;
 
 public interface RecordView {
 
-    void setController(RecordController controller);
     void updateAcceleration(float[] values);
     void updateAccelerationLinear(float[] values);
     void updateGravity(float[] values);

@@ -32,18 +32,16 @@
             android:title="Einstellungen" />
 
 
-
-
         <item
-            android:id="@+id/coordinates_nav_measurement"
+            android:id="@+id/nav_measurement"
             android:icon="@drawable/ic_menu_manage"
             android:title="Messen" />
         <item
-            android:id="@+id/coordinates_nav_calibrate"
+            android:id="@+id/nav_calibrate"
             android:icon="@drawable/ic_menu_manage"
             android:title="Kalibrieren" />
         <item
-            android:id="@+id/coordinates_nav_record"
+            android:id="@+id/nav_record"
             android:icon="@drawable/ic_menu_manage"
             android:title="Aufnehmen" />
     </group>

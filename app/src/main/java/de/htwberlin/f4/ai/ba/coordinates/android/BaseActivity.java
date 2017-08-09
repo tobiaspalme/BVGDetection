@@ -11,6 +11,9 @@ import android.view.MenuItem;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl;
 import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.location.LocationActivity;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
@@ -86,6 +89,21 @@ public class BaseActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
 
+                    case R.id.nav_measurement:
+                        loadMeasurement();
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.nav_calibrate:
+                        loadCalibrate();
+                        drawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.nav_record:
+                        loadRecord();
+                        drawerLayout.closeDrawers();
+                        break;
+
 
                     default:
                         break;
@@ -101,5 +119,20 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
+    }
+
+    protected void loadMeasurement() {
+        Intent intent = new Intent(getApplicationContext(), MeasureViewImpl.class);
+        startActivity(intent);
+    }
+
+    protected void loadCalibrate() {
+        Intent intent = new Intent(getApplicationContext(), CalibrateViewImpl.class);
+        startActivity(intent);
+    }
+
+    protected void loadRecord() {
+        Intent intent = new Intent(getApplicationContext(), RecordViewImpl.class);
+        startActivity(intent);
     }
 }

@@ -126,7 +126,7 @@ public class CoordinatesActivity extends AppCompatActivity
         MeasureView view = new MeasureViewImpl();
         MeasureController controller = new MeasureControllerImpl();
         controller.setView(view);
-        view.setController(controller);
+        //view.setController(controller);
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         //fragmentTransaction.addToBackStack("measure fragment");
@@ -179,7 +179,7 @@ public class CoordinatesActivity extends AppCompatActivity
         RecordView view = new RecordViewImpl();
         RecordController controller = new RecordControllerImpl();
         controller.setView(view);
-        view.setController(controller);
+        //view.setController(controller);
 
         fragmentTransaction.replace(R.id.coordinates_contentFrame, (Fragment) view);
         //fragmentTransaction.addToBackStack("record fragment");

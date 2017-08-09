@@ -1,13 +1,16 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -18,6 +21,7 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
@@ -28,7 +32,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
 
-public class MeasureViewImpl extends Fragment implements MeasureView{
+public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
     private MeasureController controller;
     private TextView compassView;
@@ -49,20 +53,28 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     private Spinner modeSpinner;
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_coordinates_measure, container, false);
+    public MeasureViewImpl() {
+        controller = new MeasureControllerImpl();
+        controller.setView(this);
+    }
 
-        compassView = (TextView) root.findViewById(R.id.coordinates_measure_compass);
-        compassImageView = (ImageView) root.findViewById(R.id.coordinates_measure_compass_iv);
-        stepCounterView = (TextView) root.findViewById(R.id.coordinates_measure_stepvalue);
-        distanceView = (TextView) root.findViewById(R.id.coordinates_measure_distancevalue);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.fragment_coordinates_measure, contentFrameLayout);
+
+        compassView = (TextView) findViewById(R.id.coordinates_measure_compass);
+        compassImageView = (ImageView) findViewById(R.id.coordinates_measure_compass_iv);
+        stepCounterView = (TextView) findViewById(R.id.coordinates_measure_stepvalue);
+        distanceView = (TextView) findViewById(R.id.coordinates_measure_distancevalue);
 
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
-        coordinatesView = (TextView) root.findViewById(R.id.coordinates_measure_coordinates);
+        coordinatesView = (TextView) findViewById(R.id.coordinates_measure_coordinates);
 
-        modeSpinner = (Spinner) root.findViewById(R.id.coordinates_measure_spinner);
+        modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
         spinnerValues.add(IndoorMeasurementType.VARIANT_A);
         spinnerValues.add(IndoorMeasurementType.VARIANT_B);
@@ -82,7 +94,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
-        btnStart = (Button) root.findViewById(R.id.coordinates_measure_start);
+        btnStart = (Button) findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
@@ -96,7 +108,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             }
         });
 
-        btnStop = (Button) root.findViewById(R.id.coordinates_measure_stop);
+        btnStop = (Button) findViewById(R.id.coordinates_measure_stop);
         btnStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
@@ -109,7 +121,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         });
         btnStop.setEnabled(false);
 
-        btnAdd = (Button) root.findViewById(R.id.coordinates_measure_add);
+        btnAdd = (Button) findViewById(R.id.coordinates_measure_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
@@ -128,7 +140,7 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(getContext());
         List<Node> nodeList = databaseHandler.getAllNodes();
 
-        stepListView = (ListView) root.findViewById(R.id.coordinates_measure_steplist);
+        stepListView = (ListView) findViewById(R.id.coordinates_measure_steplist);
         stepListAdapter = new StepListAdapter(getContext(), new ArrayList<StepData>(), nodeList);
         stepListAdapter.setNodeSpinnerListener(new NodeSpinnerListener() {
             @Override
@@ -140,7 +152,6 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
         });
         stepListView.setAdapter(stepListAdapter);
 
-        return root;
     }
 
     @Override
@@ -150,12 +161,6 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
             controller.onPause();
         }
     }
-
-    @Override
-    public void setController(MeasureController controller) {
-        this.controller = controller;
-    }
-
 
     @Override
     public void updateAzimuth(float azimuth) {
@@ -187,9 +192,14 @@ public class MeasureViewImpl extends Fragment implements MeasureView{
     @Override
     public void insertStep(StepData stepData) {
         stepListAdapter.add(stepData);
-        //stepListAdapter.notifyDataSetChanged();
-
+        stepListAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
 
     private SensorDataModel createTestData() {
         SensorDataModel dataModel = new SensorDataModelImpl();

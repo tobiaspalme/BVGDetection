@@ -1,21 +1,25 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.record;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+
 /**
  * Created by benni on 22.07.2017.
  */
 
-public class RecordViewImpl extends Fragment implements RecordView {
+public class RecordViewImpl extends BaseActivity implements RecordView {
 
     private RecordController controller;
 
@@ -55,6 +59,96 @@ public class RecordViewImpl extends Fragment implements RecordView {
 
     private SeekBar periodSeekbar;
 
+
+    public RecordViewImpl() {
+        controller = new RecordControllerImpl();
+        controller.setView(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.fragment_coordinates_record, contentFrameLayout);
+
+        accelerationX = (TextView) findViewById(R.id.fragment_record_acc_x);
+        accelerationY = (TextView) findViewById(R.id.fragment_record_acc_y);
+        accelerationZ = (TextView) findViewById(R.id.fragment_record_acc_z);
+
+        accelerationLinearX = (TextView) findViewById(R.id.fragment_record_acc_linear_x);
+        accelerationLinearY = (TextView) findViewById(R.id.fragment_record_acc_linear_y);
+        accelerationLinearZ = (TextView) findViewById(R.id.fragment_record_acc_linear_z);
+
+        gravityX = (TextView) findViewById(R.id.fragment_record_gravity_x);
+        gravityY = (TextView) findViewById(R.id.fragment_record_gravity_y);
+        gravityZ = (TextView) findViewById(R.id.fragment_record_gravity_z);
+
+        gyroscopeX = (TextView) findViewById(R.id.fragment_record_gyroscope_x);
+        gyroscopeY = (TextView) findViewById(R.id.fragment_record_gyroscope_y);
+        gyroscopeZ = (TextView) findViewById(R.id.fragment_record_gyroscope_z);
+
+        gyroscopeUncalibratedX = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_x);
+        gyroscopeUncalibratedY = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_y);
+        gyroscopeUncalibratedZ = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_z);
+        gyroscopeUncalibratedDriftX = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_x);
+        gyroscopeUncalibratedDriftY = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_y);
+        gyroscopeUncalibratedDriftZ = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_z);
+
+        magneticFieldX = (TextView) findViewById(R.id.fragment_record_magneticfield_x);
+        magneticFieldY = (TextView) findViewById(R.id.fragment_record_magneticfield_y);
+        magneticFieldZ = (TextView) findViewById(R.id.fragment_record_magneticfield_z);
+
+        compassFusion = (TextView) findViewById(R.id.fragment_record_compass_fusion);
+        compassSimple = (TextView) findViewById(R.id.fragment_record_compass_simple);
+
+        barometer = (TextView) findViewById(R.id.fragment_record_barometer);
+
+        periodValue = (TextView) findViewById(R.id.fragment_record_period);
+
+        periodSeekbar = (SeekBar) findViewById(R.id.fragment_record_period_seekbar);
+        periodSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                periodValue.setText(String.valueOf(i));
+                if (controller != null) {
+                    controller.onSavePeriodChanged(i);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        periodSeekbar.setProgress(250);
+
+
+        Button btnStart = (Button) findViewById(R.id.fragment_record_start_btn);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.onStartClicked();
+                }
+            }
+        });
+
+        Button btnStop = (Button) findViewById(R.id.fragment_record_stop_btn);
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (controller != null) {
+                    controller.onStopClicked();
+                }
+            }
+        });
+    }
+
+    /*
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -139,6 +233,7 @@ public class RecordViewImpl extends Fragment implements RecordView {
 
         return root;
     }
+*/
 
     @Override
     public void onPause() {
@@ -148,10 +243,6 @@ public class RecordViewImpl extends Fragment implements RecordView {
         }
     }
 
-    @Override
-    public void setController(RecordController controller) {
-        this.controller = controller;
-    }
 
     @Override
     public void updateAcceleration(float[] values) {
@@ -211,6 +302,11 @@ public class RecordViewImpl extends Fragment implements RecordView {
     @Override
     public void updatePressure(float value) {
         barometer.setText(getString(R.string.measure_pressure) + " " + value);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
 }
