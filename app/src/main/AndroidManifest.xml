@@ -27,6 +27,10 @@
        <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity" />-->
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity" />
+
+        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl" />
        <!--
         <activity
             android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"
@@ -40,8 +44,7 @@
         -->
         <activity
             android:name="de.htwberlin.f4.ai.ma.prototype_temp.RecordActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:noHistory="true">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

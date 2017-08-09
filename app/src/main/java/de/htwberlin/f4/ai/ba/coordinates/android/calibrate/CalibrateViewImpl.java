@@ -1,5 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +20,13 @@ import com.example.carol.bvg.R;
 
 import org.w3c.dom.Text;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+
 /**
  * Created by benni on 17.07.2017.
  */
 
-public class CalibrateViewImpl extends Fragment implements CalibrateView {
+public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
     private CalibrateController controller;
     private TextView stepCountView;
@@ -41,6 +45,19 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     private Button btnBackStepTwo;
 
 
+    public CalibrateViewImpl() {
+        controller = new CalibrateControllerImpl();
+        controller.setView(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        loadStepOneView();
+    }
+
+    /*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,7 +70,7 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadStepOneView();
-    }
+    }*/
 
     @Override
     public void onPause() {
@@ -106,12 +123,22 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
         compassView.setRotation(-azimuth);
     }
 
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
     private void loadStepOneView() {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, null);
-        ViewGroup rootView = (ViewGroup) getView();
-        rootView.removeAllViews();
-        rootView.addView(view);
+        //LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+        //View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, null);
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step1, contentFrameLayout);
+
+
+        //ViewGroup rootView = (ViewGroup) getView();
+        //rootView.removeAllViews();
+        //rootView.addView(view);
 
 
         stepCountView = (TextView) view.findViewById(R.id.coordinates_calibrate_tv_step);
@@ -178,11 +205,21 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
     }
 
     private void loadStepTwoView() {
+        /*
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step2, null);
+
+
         ViewGroup rootView = (ViewGroup) getView();
         rootView.removeAllViews();
-        rootView.addView(view);
+        rootView.addView(view);*/
+
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        contentFrameLayout.removeAllViews();
+        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step2, contentFrameLayout);
+
+
 
         btnNextStepTwo = (Button) view.findViewById(R.id.coordinates_calibrate_next_2);
         btnNextStepTwo.setOnClickListener(new View.OnClickListener() {
@@ -231,19 +268,26 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
 
         stepDistanceView = (TextView) view.findViewById(R.id.coordinates_calibrate_avgstepdistance);
         stepPeriodView = (TextView) view.findViewById(R.id.coordinates_calibrate_avgstepperiod);
+
     }
 
     private void loadStepThreeView() {
+        /*
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step3, null);
         ViewGroup rootView = (ViewGroup) getView();
         rootView.removeAllViews();
-        rootView.addView(view);
+        rootView.addView(view);*/
+
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        contentFrameLayout.removeAllViews();
+        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step3, contentFrameLayout);
 
         Button btnNext = (Button) view.findViewById(R.id.coordinates_calibrate_next_3);
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadMeasurement();
                 if (controller != null) {
                     controller.onNextClicked(3);
                 }
@@ -262,5 +306,8 @@ public class CalibrateViewImpl extends Fragment implements CalibrateView {
 
         compassView = (ImageView) view.findViewById(R.id.coordinates_calibrate_compass_iv);
         azimuthView = (TextView) view.findViewById(R.id.coordinates_calibrate_compass_value);
+
+
+
     }
 }

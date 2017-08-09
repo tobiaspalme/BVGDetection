@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MeasureView {
 
-    void setController(MeasureController controller);
+
     void updateAzimuth(float azimuth);
     void updateStepCount(int stepCount);
     void updateDistance(float distance);

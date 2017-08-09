@@ -75,9 +75,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         stepDirectionRunnable.setListener(new StepDirectionDetectListener() {
             @Override
             public void onDirectionDetect(StepDirection stepDirection) {
-                Context context = CoordinatesActivity.getInstance().getApplicationContext();
+                /*Context context = CoordinatesActivity.getInstance().getApplicationContext();
                 Toast toast = Toast.makeText(context, "Direction: " + stepDirection, Toast.LENGTH_SHORT);
-                toast.show();
+                toast.show();*/
             }
         });
 
