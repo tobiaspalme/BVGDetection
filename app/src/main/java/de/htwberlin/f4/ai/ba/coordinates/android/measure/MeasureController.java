@@ -15,7 +15,8 @@ public interface MeasureController {
     void onStopClicked();
     void onAddClicked();
     void onMeasurementTypeSelected(IndoorMeasurementType type);
-    void onNodeSelected(Node node, StepData step);
     void onPause();
+    void onStartNodeSelected(Node node);
+    void onTargetNodeSelected(Node node);
 
 }

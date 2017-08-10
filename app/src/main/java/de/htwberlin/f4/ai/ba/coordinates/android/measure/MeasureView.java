@@ -15,7 +15,10 @@ public interface MeasureView {
     void updateStepCount(int stepCount);
     void updateDistance(float distance);
     void updateCoordinates(float x, float y, float z);
-    void insertStep(StepData stepData);
+    void updateStartNodeCoordinates(float x, float y, float z);
+    void updateTargetNodeCoordinates(float x, float y, float z);
+    void enableStart();
+    void disableStart();
     Context getContext();
 
 }
