@@ -1,5 +1,8 @@
 package de.htwberlin.f4.ai.ma.edge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
@@ -12,15 +15,25 @@ public class EdgeImplementation implements Edge{
     private Node nodeA;
     private Node nodeB;
     private boolean accessibly;
-    private int expenditure;
+    private int weight;
+    private List<String> stepCoordList;
 
-    //public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly, int expenditure) {
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, int expenditure) {
-        //this.id = id;
+
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, int weight) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessibly = accessibly;
-        this.expenditure = expenditure;
+        this.weight = weight;
+        this.stepCoordList = new ArrayList<>();
+    }
+
+
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, List<String> stepCoordList, int weight) {
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
+        this.accessibly = accessibly;
+        this.weight = weight;
+        this.stepCoordList = stepCoordList;
     }
 
     /*
@@ -33,20 +46,6 @@ public class EdgeImplementation implements Edge{
         this.expenditure = expenditure;
     }*/
 
-
-    //public EdgeImplementation() {}
-
-
-   /* @Override
-    public int getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setID(int id) {
-        this.id = id;
-    }
-*/
 
     @Override
     public Node getNodeA() {
@@ -80,12 +79,22 @@ public class EdgeImplementation implements Edge{
 
     @Override
     public int getWeight() {
-        return this.expenditure;
+        return this.weight;
     }
 
     @Override
-    public void setWeight(int expenditure) {
-        this.expenditure = expenditure;
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public void insertStepCoords(String coords) {
+        this.stepCoordList.add(coords);
+    }
+
+    @Override
+    public List<String> getStepCoordsList() {
+        return this.stepCoordList;
     }
 
 

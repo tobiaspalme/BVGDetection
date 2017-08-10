@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -135,7 +137,18 @@ public class EdgesManagerActivity extends BaseActivity {
 
                 Node nodeA = databaseHandler.getNode(spinnerA.getSelectedItem().toString());
                 Node nodeB = databaseHandler.getNode(spinnerB.getSelectedItem().toString());
+
                 Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, 0);
+
+                /*
+                List<String> test = new ArrayList<String>();
+                test.add("step1");
+                test.add("step2");
+                test.add("step3");
+                test.add("asdfasdfgasdfgs");
+
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, test, 0 );
+                */
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
                     Toast.makeText(getApplicationContext(), "Edge existiert bereits.",

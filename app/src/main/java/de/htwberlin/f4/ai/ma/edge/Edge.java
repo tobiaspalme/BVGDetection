@@ -24,5 +24,7 @@ public interface Edge {
 
     int getWeight();
     void setWeight(int expenditure);
-    
+
+    void insertStepCoords(String coords);
+    List<String> getStepCoordsList();
 }
