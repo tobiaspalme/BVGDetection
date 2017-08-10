@@ -177,7 +177,7 @@ public class MeasureControllerImpl implements MeasureController {
                 stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
             }
 
-            Edge edge = new EdgeImplementation(startNode, targetNode, true, stepCoords, 0);
+            Edge edge = new EdgeImplementation(startNode, targetNode, true, stepCoords, 0, "");
             databaseHandler.insertEdge(edge);
             databaseHandler.updateNode(targetNode, targetNode.getId());
 

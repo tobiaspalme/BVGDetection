@@ -143,17 +143,22 @@ public class NodeRecordActivity extends BaseActivity {
         fingerprintTaken = false;
 
 
-        // Scan for WiFi names (SSIDs) and add them to the dropdown
-        mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        mainWifiObj.startScan();
-        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+        if (hasPermissions(this, permissions)) {
+            // Scan for WiFi names (SSIDs) and add them to the dropdown
+            mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            mainWifiObj.startScan();
+            List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
-        ArrayList<String> wifiNamesList = new ArrayList<>();
-        for (ScanResult sr : wifiScanList) {
-            wifiNamesList.add(sr.SSID);
+            ArrayList<String> wifiNamesList = new ArrayList<>();
+            for (ScanResult sr : wifiScanList) {
+                wifiNamesList.add(sr.SSID);
+            }
+            final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
+            wifiNamesDropdown.setAdapter(dropdownAdapter);
+
         }
-        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
-        wifiNamesDropdown.setAdapter(dropdownAdapter);
+
+
 
 
 
