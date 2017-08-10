@@ -185,6 +185,7 @@
 
     </LinearLayout>
 
+    <!--
     <ListView
         android:id="@+id/coordinates_measure_steplist"
         android:layout_width="match_parent"
@@ -192,6 +193,144 @@
         android:layout_weight="0.4"
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="false"/>
+    -->
 
+    <!-- Layout for Start and Target Node -->
+    <!-- divide into 3 parts horizontal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <!-- start node -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.175">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Start Ort"
+                    android:textSize="25sp"
+                    android:layout_centerHorizontal="true"
+                    />
+            </RelativeLayout>
+
+            <Spinner
+                android:id="@+id/coordinates_measure_startnode"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:layout_marginTop="20dp"/>
+
+            <ImageView
+                android:id="@+id/coordinates_measure_start_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:layout_marginTop="10dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.175"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:id="@+id/coordinates_measure_start_coords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="x / y / z"
+                    android:textSize="25sp"
+                    android:layout_centerHorizontal="true"
+                    />
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+        <!-- edge -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/arrow_right"
+                />
+
+
+        </LinearLayout>
+
+        <!-- target node -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.175">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Ziel Ort"
+                    android:textSize="25sp"
+                    android:layout_centerHorizontal="true"
+                    />
+            </RelativeLayout>
+
+
+
+            <Spinner
+                android:id="@+id/coordinates_measure_targetnode"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:layout_marginTop="20dp"/>
+
+            <ImageView
+                android:id="@+id/coordinates_measure_target_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:layout_marginTop="10dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.175"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:id="@+id/coordinates_measure_target_coords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="x / y / z"
+                    android:textSize="25sp"
+                    android:layout_centerHorizontal="true"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </LinearLayout>

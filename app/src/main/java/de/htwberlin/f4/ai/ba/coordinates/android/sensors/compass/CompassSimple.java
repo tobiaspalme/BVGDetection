@@ -1,11 +1,13 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.sensors.compass;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
+import android.view.Surface;
 
 import java.sql.Timestamp;
 
@@ -37,6 +39,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
     private float roll;
     private SensorData sensorData;
     private int sensorRate;
+    private Context context;
 
 
     public CompassSimple(Context context, int sensorRate) {
@@ -44,10 +47,11 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         sensorData = new SensorData();
         sensorData.setSensorType(SENSORTYPE);
         orientation = new float[3];
-        rotationMatrix = new float[9];
+        rotationMatrix = new float[16];
         accelerometerValues = new float[3];
         magneticValues = new float[3];
         this.sensorRate = sensorRate;
+        this.context = context;
     }
 
     @Override
@@ -105,10 +109,67 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ba
         }
 
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magneticValues);
-        SensorManager.getOrientation(rotationMatrix, orientation);
-        azimuth = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0]) + 360) % 360;
-        pitch = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[1]) + 360) % 360;
-        roll = (float) (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[2]) + 360) % 360;
+
+        float[] remapped = new float[16];
+
+        // handle portrait and landscape mode
+        // source: https://stackoverflow.com/questions/18782829/android-sensormanager-strange-how-to-remapcoordinatesystem
+
+        int screenRotation = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+        int axisX = SensorManager.AXIS_X;
+        int axisY = SensorManager.AXIS_Y;
+
+        switch (screenRotation) {
+            case Surface.ROTATION_0:
+                axisX = SensorManager.AXIS_X;
+                axisY = SensorManager.AXIS_Y;
+                break;
+            case Surface.ROTATION_90:
+                axisX = SensorManager.AXIS_Y;
+                axisY = SensorManager.AXIS_MINUS_X;
+                break;
+            case Surface.ROTATION_180:
+                axisX = SensorManager.AXIS_MINUS_X;
+                axisY = SensorManager.AXIS_MINUS_Y;
+                break;
+            case Surface.ROTATION_270:
+                axisX = SensorManager.AXIS_MINUS_Y;
+                axisY = SensorManager.AXIS_X;
+                break;
+            default:
+                break;
+
+        }
+        // remap coordinate system according to screen orientation
+        SensorManager.remapCoordinateSystem(rotationMatrix, axisX, axisY, remapped);
+
+        // default we assume the phone is "laying" on its back in portrait mode, so the azimuth is calculcated
+        // related to the default y axis of the phone (points out from the top edge)
+        // for example: phone is laying on its back towards north -> shows 0°
+        // spin phone while still laying on its back -> change in azimuth
+
+        // original values are within [-180,180]
+        orientation = SensorManager.getOrientation(remapped, orientation);
+
+        azimuth = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
+        pitch = (float) (Math.toDegrees(orientation[1]));
+        roll = (float) (Math.toDegrees(orientation[2]));
+
+        // detect if the phone is "standing" (selfie camera on top or bottom edge) and screen is facing the user.
+        // the normal camera on the backside of the phone points away from the user.
+        // if yes, we have to remap the axis.
+        // Now the azimuth is calculated relative to the camera(on the backside) / z axis of the phone.
+        // we remap the earth coordinates z axis on the phones y axis and calculate the correct azimuth
+        // IMPORTANT: SCREEN MUST POINT TOWARDS USER
+        if (Math.abs(pitch) > 70) {
+            SensorManager.remapCoordinateSystem(remapped, SensorManager.AXIS_X, SensorManager.AXIS_Z, remapped);
+            orientation = SensorManager.getOrientation(remapped, orientation);
+            azimuth = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
+            pitch = (float) (Math.toDegrees(orientation[1]));
+            roll = (float) (Math.toDegrees(orientation[2]));
+        }
+
+
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long realTimestamp = timestamp.getTime();

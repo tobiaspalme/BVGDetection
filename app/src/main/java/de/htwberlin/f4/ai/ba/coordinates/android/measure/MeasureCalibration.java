@@ -105,6 +105,31 @@ public class MeasureCalibration implements Runnable {
                 azimuthAvg = azimuthSum / compassData.size();
             }
 
+        } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_C) {
+            // calc avg barometer
+            List<SensorData> barometerData = sensorDataModel.getData().get(SensorType.BAROMETER);
+            if (barometerData != null) {
+                float pressureSum = 0.0f;
+
+                // sum up all airpressure values
+                for (SensorData data : barometerData) {
+                    pressureSum += data.getValues()[0];
+                }
+                // calculate avg
+                pressureAvg = pressureSum / barometerData.size();
+            }
+            // calc avg azimuth
+            List<SensorData> compassData = sensorDataModel.getData().get(SensorType.COMPASS_SIMPLE);
+            if (compassData != null) {
+                float azimuthSum = 0.0f;
+
+                // sum up all azimuth values
+                for (SensorData data : compassData) {
+                    azimuthSum += data.getValues()[0];
+                }
+                // calculate avg
+                azimuthAvg = azimuthSum / compassData.size();
+            }
         }
 
 

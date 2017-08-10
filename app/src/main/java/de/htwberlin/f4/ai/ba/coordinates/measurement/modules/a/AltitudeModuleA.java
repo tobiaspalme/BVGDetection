@@ -24,12 +24,12 @@ public class AltitudeModuleA implements AltitudeModule {
     // copied from sensormanager
     private static final float PRESSURE_STANDARD = 1013.25f;
 
-    private SensorDataModel dataModel;
-    private SensorFactory sensorFactory;
-    private float airPressure;
-    private Sensor airPressureSensor;
-    private long lastStepTimestamp;
-    private float lastAltitude;
+    protected SensorDataModel dataModel;
+    protected SensorFactory sensorFactory;
+    protected float airPressure;
+    protected Sensor airPressureSensor;
+    protected long lastStepTimestamp;
+    protected float lastAltitude;
 
     public AltitudeModuleA(SensorFactory sensorFactory, float airPressure) {
         dataModel = new SensorDataModelImpl();

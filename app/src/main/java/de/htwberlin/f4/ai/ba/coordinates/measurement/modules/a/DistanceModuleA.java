@@ -12,9 +12,9 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
 
 public class DistanceModuleA implements DistanceModule {
 
-    private SensorDataModel dataModel;
-    private SensorFactory sensorFactory;
-    private float stepLength;
+    protected SensorDataModel dataModel;
+    protected SensorFactory sensorFactory;
+    protected float stepLength;
 
     public DistanceModuleA(SensorFactory sensorFactory, float stepLength) {
         dataModel = new SensorDataModelImpl();

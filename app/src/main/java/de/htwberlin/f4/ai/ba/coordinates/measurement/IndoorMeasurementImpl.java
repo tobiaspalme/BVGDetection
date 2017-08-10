@@ -25,6 +25,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b.PositionModuleB;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c.PositionModuleC;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirectionDetect;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirectionDetectImpl;
@@ -90,6 +91,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
             positionModule.start();
         } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_B) {
             positionModule = new PositionModuleB(sensorFactory, calibrationData);
+            positionModule.start();
+        } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_C) {
+            positionModule = new PositionModuleC(sensorFactory, calibrationData);
             positionModule.start();
         }
     }
