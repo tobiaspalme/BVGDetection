@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.node.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
@@ -289,7 +290,7 @@ public class NodeRecordActivity extends BaseActivity {
             Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
                     Toast.LENGTH_LONG).show();
         } else {
-            final Node node = nodeFactory.createInstance(nodeID, 0, nodeDescription, signalInformationList, "", picPath , "");
+            final Node node = nodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(signalInformationList), "", picPath , "");
 
             if (!fingerprintTaken) {
                 new AlertDialog.Builder(this)

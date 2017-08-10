@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence.fingerprint;
+package de.htwberlin.f4.ai.ma.persistence.calculations;
 
 import java.util.HashMap;
 import java.util.List;

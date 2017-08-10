@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ma.edge;
 
+import java.util.List;
+
 import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
@@ -22,4 +24,5 @@ public interface Edge {
 
     int getWeight();
     void setWeight(int expenditure);
+    
 }

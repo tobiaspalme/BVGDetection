@@ -16,7 +16,8 @@ class NodeImplementation implements Node {
     private float zValue;
 
     private String description;
-    private List<SignalInformation> signalInformationList;
+    //private List<SignalInformation> signalInformationList;
+    private Fingerprint fingerprint;
     private String coordinates;
     private String picturePath;
     private String additionalInfo;
@@ -43,9 +44,25 @@ class NodeImplementation implements Node {
     }
 
     @Override
+    public Fingerprint getFingerprint() {
+        return this.fingerprint;
+    }
+
+    @Override
+    public void setFingerprint(Fingerprint fingerprint) {
+        this.fingerprint = fingerprint;
+    }
+
+    /*
+    @Override
+    public List<SignalInformation> getSignalInformation() {
+        return this.signalInformationList;
+    }
+
+    @Override
     public void setSignalInformationList(List<SignalInformation> signalInformationList) {
         this.signalInformationList = signalInformationList;
-    }
+    }*/
 
     @Override
     public String getCoordinates() {
@@ -78,22 +95,20 @@ class NodeImplementation implements Node {
     }
 
 
-    @Override
-    public List<SignalInformation> getSignalInformation() {
-        return this.signalInformationList;
-    }
 
 
 
-    NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
+    NodeImplementation(String id, String description, Fingerprint fingerprint, String coordinates, String picturePath, String additionalInfo) {
+    //NodeImplementation(String id, float zValue, String description, List<SignalInformation> signalInformationList, String coordinates, String picturePath, String additionalInfo) {
         this.id = id;
         //this.xValue = xValue;
         //this.yValue = yValue;
-        this.zValue = zValue;
+        //this.zValue = zValue;
         this.description = description;
         this.coordinates = coordinates;
         this.picturePath = picturePath;
-        this.signalInformationList = signalInformationList;
+        this.fingerprint = fingerprint;
+        //this.signalInformationList = signalInformationList;
         this.additionalInfo = additionalInfo;
     }
 

@@ -11,11 +11,29 @@ import java.util.List;
 
 public class SignalInformation {
 
-    public String timestamp;
-    public List<SignalStrengthInformation> signalStrengthInformationList;
+    private String timestamp;
+    private List<SignalStrengthInformation> signalStrengthInfoList;
+
 
     public SignalInformation(String timestamp, List<SignalStrengthInformation> signalStrengthInformationList) {
         this.timestamp = timestamp;
-        this.signalStrengthInformationList = signalStrengthInformationList;
+        this.signalStrengthInfoList = signalStrengthInformationList;
+    }
+
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public List<SignalStrengthInformation> getSignalStrengthInfoList() {
+        return signalStrengthInfoList;
+    }
+
+    public void setSignalStrengthInfoList(List<SignalStrengthInformation> signalStrengthInfoList) {
+        this.signalStrengthInfoList = signalStrengthInfoList;
     }
 }
