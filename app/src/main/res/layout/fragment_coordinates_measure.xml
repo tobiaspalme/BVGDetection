@@ -250,7 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="x / y / z"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>
@@ -323,7 +323,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="x / y / z"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>

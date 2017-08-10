@@ -19,8 +19,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +47,14 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private TextView distanceView;
     private TextView heightView;
     private TextView coordinatesView;
+    private TextView startNodeCoordinatesView;
+    private TextView targetNodeCoordinatesView;
 
     private Button btnStart;
     private Button btnStop;
     private Button btnAdd;
 
     private ListView stepListView;
-    private StepListAdapter stepListAdapter;
 
     private Spinner modeSpinner;
     private Spinner startNodeSpinner;
@@ -93,6 +96,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
         targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);
 
+        startNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_start_coords);
+        targetNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_target_coords);
+
         modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
         spinnerValues.add(IndoorMeasurementType.VARIANT_A);
@@ -124,8 +130,22 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 if (startNode.getPicturePath() == null) {
                     startNodeImage.setImageResource(R.drawable.unknown);
                 } else {
+                    Uri imageUri = Uri.parse(startNode.getPicturePath());
+                    File image = new File(imageUri.getPath());
 
-                    startNodeImage.setImageURI(Uri.parse(startNode.getPicturePath()));
+                    if (image.exists()) {
+                        //using glide to reduce ui lag
+                        Glide.with(view.getContext())
+                                .load(startNode.getPicturePath())
+                                .into(startNodeImage);
+
+                        //startNodeImage.setImageURI(Uri.parse(startNode.getPicturePath()));
+                    }
+
+                }
+
+                if (controller != null) {
+                    controller.onStartNodeSelected(startNode);
                 }
             }
 
@@ -146,7 +166,20 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                     targetNodeImage.setImageResource(R.drawable.unknown);
                 } else {
 
-                    targetNodeImage.setImageURI(Uri.parse(targetNode.getPicturePath()));
+                    Uri imageUri = Uri.parse(targetNode.getPicturePath());
+                    File image = new File(imageUri.getPath());
+
+                    if (image.exists()) {
+                        //using glide to reduce ui lag
+                        Glide.with(getApplicationContext())
+                                .load(targetNode.getPicturePath())
+                                .into(targetNodeImage);
+                        //targetNodeImage.setImageURI(Uri.parse(targetNode.getPicturePath()));
+                    }
+                }
+
+                if (controller != null) {
+                    controller.onTargetNodeSelected(targetNode);
                 }
 
             }
@@ -171,7 +204,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 btnStop.setEnabled(true);
                 btnAdd.setEnabled(true);
 
-                stepListAdapter.clear();
+                //stepListAdapter.clear();
             }
         });
 
@@ -255,11 +288,39 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         coordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
     }
 
+    @Override
+    public void updateStartNodeCoordinates(float x, float y, float z) {
+        double roundX = Math.round(x * 100.0) / 100.0;
+        double roundY = Math.round(y * 100.0) / 100.0;
+        double roundZ = Math.round(z * 100.0) / 100.0;
+
+        startNodeCoordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
+    }
 
     @Override
-    public void insertStep(StepData stepData) {
-        stepListAdapter.add(stepData);
-        stepListAdapter.notifyDataSetChanged();
+    public void updateTargetNodeCoordinates(float x, float y, float z) {
+        double roundX = Math.round(x * 100.0) / 100.0;
+        double roundY = Math.round(y * 100.0) / 100.0;
+        double roundZ = Math.round(z * 100.0) / 100.0;
+
+        targetNodeCoordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
+    }
+
+
+
+
+    @Override
+    public void enableStart() {
+        if (btnStart != null) {
+            btnStart.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void disableStart() {
+        if (btnStart != null) {
+            btnStart.setEnabled(false);
+        }
     }
 
     @Override

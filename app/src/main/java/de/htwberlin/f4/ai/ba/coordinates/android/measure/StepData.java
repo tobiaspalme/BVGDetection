@@ -10,7 +10,7 @@ public class StepData {
 
     private String stepName;
     private float[] coords;
-    private Node node;
+
 
     public StepData() {
         stepName = "";
@@ -33,11 +33,4 @@ public class StepData {
         this.coords = coords;
     }
 
-    public Node getNode() {
-        return node;
-    }
-
-    public void setNode(Node node) {
-        this.node = node;
-    }
 }

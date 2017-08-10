@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
@@ -20,6 +23,8 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 
+import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -44,6 +49,12 @@ public class MeasureControllerImpl implements MeasureController {
     private IndoorMeasurementType measurementType;
     private DatabaseHandler databaseHandler;
 
+    private Node startNode;
+    private Node targetNode;
+
+    private List<StepData> stepList;
+    private float[] coords;
+
     @Override
     public void setView(MeasureView view) {
         this.view = view;
@@ -55,10 +66,11 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         //List<Node> nodeList = databaseHandler.getAllNodes();
 
-
+        stepList = new ArrayList<>();
         stepCount = 0;
 
         view.updateStepCount(stepCount);
+        //TODO: set coordinates to startnode coordinates
         view.updateCoordinates(0.0f, 0.0f, 0.0f);
         //view.updatePressure(0.0f);
 
@@ -109,11 +121,11 @@ public class MeasureControllerImpl implements MeasureController {
                             view.updateCoordinates(coordinates[0], coordinates[1], coordinates[2]);
                             StepData stepData = new StepData();
                             stepData.setStepName("Step " + stepCount);
-                            float[] coordCopy = new float[coordinates.length];
-                            System.arraycopy(coordinates, 0, coordCopy, 0, coordinates.length);
-                            stepData.setCoords(coordCopy);
+                            coords = new float[coordinates.length];
+                            System.arraycopy(coordinates, 0, coords, 0, coordinates.length);
+                            stepData.setCoords(coords);
+                            stepList.add(stepData);
 
-                            view.insertStep(stepData);
                         }
 
                         view.updateStepCount(stepCount);
@@ -155,6 +167,22 @@ public class MeasureControllerImpl implements MeasureController {
         if (indoorMeasurement != null) {
             indoorMeasurement.stop();
         }
+
+        if (coords != null) {
+            view.updateTargetNodeCoordinates(coords[0], coords[1], coords[2]);
+            targetNode.setCoordinates(coords[0] + ";" + coords[1] + ";" + coords[2]);
+            List<String> stepCoords = new ArrayList<>();
+            // convert coordinates to string and save into list for edge
+            for (StepData stepData : stepList) {
+                stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
+            }
+
+            Edge edge = new EdgeImplementation(startNode, targetNode, true, stepCoords, 0);
+            databaseHandler.insertEdge(edge);
+            databaseHandler.updateNode(targetNode, targetNode.getId());
+
+        }
+
     }
 
     // just a temporary solution if we want to get coords without doing a step
@@ -166,11 +194,11 @@ public class MeasureControllerImpl implements MeasureController {
             view.updateCoordinates(coordinates[0], coordinates[1], coordinates[2]);
             StepData stepData = new StepData();
             stepData.setStepName("Step " + stepCount);
-            float[] coordCopy = new float[coordinates.length];
-            System.arraycopy(coordinates, 0, coordCopy, 0, coordinates.length);
-            stepData.setCoords(coordCopy);
-
-            view.insertStep(stepData);
+            coords = new float[coordinates.length];
+            System.arraycopy(coordinates, 0, coords, 0, coordinates.length);
+            stepData.setCoords(coords);
+            stepList.add(stepData);
+            //view.insertStep(stepData);
         }
 
         view.updateStepCount(stepCount);
@@ -181,19 +209,72 @@ public class MeasureControllerImpl implements MeasureController {
         measurementType = type;
     }
 
-    @Override
-    public void onNodeSelected(Node node, StepData step) {
-        if (databaseHandler != null) {
-            node.setCoordinates(step.getCoords()[0] + ";" + step.getCoords()[1] + ";" + step.getCoords()[2]);
-            databaseHandler.updateNode(node, node.getId());
-        }
-    }
 
     @Override
     public void onPause() {
         if (indoorMeasurement != null) {
             indoorMeasurement.stop();
         }
+    }
+
+    @Override
+    public void onStartNodeSelected(Node node) {
+        startNode = node;
+
+        // check if targetnode was selected
+        if (targetNode != null) {
+            boolean different = checkNodesDifferent(startNode, targetNode);
+            if (different) {
+                view.enableStart();
+            } else {
+                view.disableStart();
+            }
+        }
+
+        if (startNode.getCoordinates().length() > 0) {
+            String[] coordSplitted = startNode.getCoordinates().split(";");
+            float x = Float.valueOf(coordSplitted[0]);
+            float y = Float.valueOf(coordSplitted[1]);
+            float z = Float.valueOf(coordSplitted[2]);
+
+            view.updateStartNodeCoordinates(x, y, z);
+        } else {
+            view.updateStartNodeCoordinates(0f, 0f, 0f);
+        }
+    }
+
+    @Override
+    public void onTargetNodeSelected(Node node) {
+        targetNode = node;
+
+        // check if startnode was selected
+        if (startNode != null) {
+            boolean different = checkNodesDifferent(startNode, targetNode);
+            if (different) {
+                view.enableStart();
+            } else {
+                view.disableStart();
+            }
+        }
+
+        if (targetNode.getCoordinates().length() > 0) {
+            String[] coordSplitted = targetNode.getCoordinates().split(";");
+            float x = Float.valueOf(coordSplitted[0]);
+            float y = Float.valueOf(coordSplitted[1]);
+            float z = Float.valueOf(coordSplitted[2]);
+
+            view.updateTargetNodeCoordinates(x, y, z);
+        } else {
+            view.updateTargetNodeCoordinates(0f, 0f, 0f);
+        }
+    }
+
+    private boolean checkNodesDifferent(Node node1, Node node2) {
+        // since id is unique, we just check for id
+        if (!node1.getId().equals(node2.getId())) {
+            return true;
+        }
+        return false;
     }
 
     private void calibrate() {
