@@ -12,8 +12,11 @@ public interface Node {
     String getDescription();
     void setDescription(String description);
 
-    List<SignalInformation> getSignalInformation();
-    void setSignalInformationList(List<SignalInformation> signalInformationList);
+    Fingerprint getFingerprint();
+    void setFingerprint(Fingerprint fingerprint);
+
+    //List<SignalInformation> getSignalInformationList();
+    //void setSignalInformationList(List<SignalInformation> signalInformationList);
 
     String getCoordinates();
     void setCoordinates(String coordinates);

@@ -24,12 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.EuclideanDistance;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.KNearestNeighbor;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.KalmanFilter;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.MeasuredNode;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.MovingAverage;
-import de.htwberlin.f4.ai.ma.persistence.fingerprint.RestructedNode;
+import de.htwberlin.f4.ai.ma.node.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -38,6 +33,12 @@ import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
+import de.htwberlin.f4.ai.ma.persistence.calculations.EuclideanDistance;
+import de.htwberlin.f4.ai.ma.persistence.calculations.KNearestNeighbor;
+import de.htwberlin.f4.ai.ma.persistence.calculations.KalmanFilter;
+import de.htwberlin.f4.ai.ma.persistence.calculations.MeasuredNode;
+import de.htwberlin.f4.ai.ma.persistence.calculations.MovingAverage;
+import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
 
 
 /**
@@ -143,7 +144,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         values.put("id", node.getId());
         values.put("description", node.getDescription());
-        values.put("signalinformationlist", jsonConverter.convertSignalInfoToJSON(node.getSignalInformation()));
+        values.put("signalinformationlist", jsonConverter.convertSignalInfoToJSON(node.getFingerprint().getSignalInformationList()));
         values.put("coordinates", node.getCoordinates());
         values.put("picture_path", node.getPicturePath());
         values.put("additional_info", node.getAdditionalInfo());
@@ -162,7 +163,6 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         contentValues.put("id", node.getId());
         contentValues.put("description", node.getDescription());
-        // TODO? Oder unnötig?               contentValues.put("signalstrengthinformationlist", node.getSignalInformation());
         contentValues.put("coordinates", node.getCoordinates());
         contentValues.put("picture_path", node.getPicturePath());
         contentValues.put("additional_info", node.getAdditionalInfo());
@@ -183,7 +183,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         if (cursor.moveToFirst()) {
             do {
-                Node node = nodeFactory.createInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Node node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1), new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -202,7 +202,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            node = nodeFactory.createInstance(cursor.getString(0), 0, cursor.getString(1), jsonConverter.convertJsonToSignalInfo(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1), new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
             Log.d("DB: select_node", nodeID);
         }
         database.close();
@@ -507,9 +507,9 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         List<MeasuredNode> measuredNodeList = new ArrayList<>();
 
         for (int i = 0; i < nodeList.size(); i++) {
-            List<SignalInformation> signalInformation = nodeList.get(i).getSignalInformation();
-            for (SignalInformation test : signalInformation)
-                for (SignalStrengthInformation ssi : test.signalStrengthInformationList) {
+            List<SignalInformation> signalInformation = nodeList.get(i).getFingerprint().getSignalInformationList();
+            for (SignalInformation sigInfo : signalInformation)
+                for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
                     String macAdress = ssi.macAdress;
                     int signalStrenght = ssi.signalStrength;
                     MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrenght);
@@ -534,7 +534,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         Multimap<String, Double> multiMap = null;
 
         for (Node node : allExistingNodes) {
-            count = node.getSignalInformation().size();
+            count = node.getFingerprint().getSignalInformationList().size();
             double minValue = (((double) 1 / (double) 3) * (double) count);
             macAddresses = getMacAddresses(node);
             multiMap = getMultiMap(node, macAddresses);
@@ -568,11 +568,11 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
      */
     private Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
-        for (SignalInformation signal : node.getSignalInformation()) {
+        for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (SignalStrengthInformation signalStrength : signal.signalStrengthInformationList) {
-                multiMap.put(signalStrength.macAdress, (double) signalStrength.signalStrength);
-                actuallyMacAdresses.add(signalStrength.macAdress);
+            for (SignalStrengthInformation ssi : signalInfo.getSignalStrengthInfoList()) {
+                multiMap.put(ssi.macAdress, (double) ssi.signalStrength);
+                actuallyMacAdresses.add(ssi.macAdress);
             }
             for (String checkMacAdress : macAdresses) {
                 if (!actuallyMacAdresses.contains(checkMacAdress)) {
@@ -591,9 +591,9 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
      */
     private List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
-        for (SignalInformation signal : node.getSignalInformation()) {
-            for (SignalStrengthInformation signalStrength : signal.signalStrengthInformationList) {
-                macAdresses.add(signalStrength.macAdress);
+        for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
+            for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
+                macAdresses.add(ssi.macAdress);
             }
         }
         List<String> uniqueList = new ArrayList<String>(macAdresses);

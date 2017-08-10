@@ -9,7 +9,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +31,7 @@ import java.util.Set;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.node.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
@@ -314,7 +314,7 @@ public class LocationActivity extends BaseActivity {
 
         }
 
-        Node node = nodeFactory.createInstance(null, 0, "", signalInformationList, "", "", "");
+        Node node = nodeFactory.createInstance(null, "", new Fingerprint(signalInformationList), "", "", "");
 
         foundNodeName = databaseHandler.calculateNodeId(node);
 

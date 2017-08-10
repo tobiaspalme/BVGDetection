@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence.fingerprint;
+package de.htwberlin.f4.ai.ma.persistence.calculations;
 
 import com.google.common.collect.Multimap;
 

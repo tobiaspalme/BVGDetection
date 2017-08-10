@@ -29,14 +29,14 @@ public class JSONConverter {
                     JSONObject signalJsonObject = new JSONObject();
                     JSONArray signalStrengthJsonArray = new JSONArray();
 
-                    for (int j = 0; j < signalInformationList.get(i).signalStrengthInformationList.size(); j++) {
+                    for (int j = 0; j < signalInformationList.get(i).getSignalStrengthInfoList().size(); j++) {
 
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAdress", signalInformationList.get(i).signalStrengthInformationList.get(j).macAdress);
-                        signalStrenghtObject.put("strength", signalInformationList.get(i).signalStrengthInformationList.get(j).signalStrength);
+                        signalStrenghtObject.put("macAdress", signalInformationList.get(i).getSignalStrengthInfoList().get(j).macAdress);
+                        signalStrenghtObject.put("strength", signalInformationList.get(i).getSignalStrengthInfoList().get(j).signalStrength);
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
-                    signalJsonObject.put("timestamp", signalInformationList.get(i).timestamp);
+                    signalJsonObject.put("timestamp", signalInformationList.get(i).getTimestamp());
                     signalJsonObject.put("signalStrength", signalStrengthJsonArray);
                     signalJsonArray.put(signalJsonObject);
                 }
