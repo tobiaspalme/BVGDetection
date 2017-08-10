@@ -48,7 +48,6 @@ public class LocationActivity extends BaseActivity {
     Button measurementButtonMoreTomes;
 
     //String[] permissions;
-    //private Fingerprint fingerprint = FingerprintFactory.createInstance();
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private NodeFactory nodeFactory;

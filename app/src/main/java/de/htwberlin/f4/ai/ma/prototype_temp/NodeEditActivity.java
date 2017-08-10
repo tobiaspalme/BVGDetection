@@ -1,6 +1,5 @@
 package de.htwberlin.f4.ai.ma.prototype_temp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,11 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -40,7 +39,7 @@ public class NodeEditActivity extends BaseActivity {
     private EditText idEditText;
     EditText wlanEditText;
     private EditText descriptionEditText;
-    private EditText coordinatesEditText;
+    private TextView coordinatesTextview;
     private ImageView cameraImageView;
     Button saveButton;
     Button deleteButton;
@@ -63,7 +62,6 @@ public class NodeEditActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_node_edit);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_edit, contentFrameLayout);
@@ -71,7 +69,7 @@ public class NodeEditActivity extends BaseActivity {
         idEditText = (EditText) findViewById(R.id.edit_id_edittext);
         wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
         descriptionEditText = (EditText) findViewById(R.id.description_edittext);
-        coordinatesEditText = (EditText) findViewById(R.id.coordinates_edittext);
+        coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
         saveButton = (Button) findViewById(R.id.save_button);
         deleteButton = (Button) findViewById(R.id.delete_button);
@@ -99,7 +97,7 @@ public class NodeEditActivity extends BaseActivity {
         //TODO wlan-name ermitteln
         //wlanEditText.setText(node.getSignalInformation().hashCode());
         descriptionEditText.setText(node.getDescription());
-        coordinatesEditText.setText(node.getCoordinates());
+        coordinatesTextview.setText(node.getCoordinates());
 
 
         picturePath = node.getPicturePath();
@@ -107,17 +105,19 @@ public class NodeEditActivity extends BaseActivity {
             Glide.with(this).load(node.getPicturePath()).into(cameraImageView);
 
             System.out.println("picturePath = " + picturePath);
+        } else {
+            Glide.with(this).load(R.drawable.unknown).into(cameraImageView);
         }
 
 
         cameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (node.getPicturePath() != null) {
+                //if (node.getPicturePath() != null) {
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", node.getPicturePath());
                     startActivity(intent);
-                }
+                //}
             }
         });
 
@@ -141,7 +141,7 @@ public class NodeEditActivity extends BaseActivity {
             public void onClick(View view) {
                 node.setId(idEditText.getText().toString());
                 node.setDescription(descriptionEditText.getText().toString());
-                node.setCoordinates(coordinatesEditText.getText().toString());
+                //node.setCoordinates(coordinatesTextview.getText().toString());
                 node.setPicturePath(picturePath);
 
                 // TODO Übergangslösung

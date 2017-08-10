@@ -27,4 +27,7 @@ public interface Edge {
 
     void insertStepCoords(String coords);
     List<String> getStepCoordsList();
+
+    String getAdditionalInfo();
+    void setAdditionalInfo(String additionalInfo);
 }

@@ -3,6 +3,7 @@ package de.htwberlin.f4.ai.ma.prototype_temp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -17,6 +18,8 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 
+import static java.security.AccessController.getContext;
+
 /**
  * Created by Johann Winter
  */
@@ -27,7 +30,6 @@ public class NodeShowActivity extends BaseActivity {
     TextView descriptionTextview;
     TextView coordinatesTextView;
     ImageView cameraImageView;
-    String picturePath;
 
     private Node node;
     DatabaseHandler databaseHandler;
@@ -36,7 +38,7 @@ public class NodeShowActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_node_show);
+
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_show, contentFrameLayout);
 
@@ -55,9 +57,11 @@ public class NodeShowActivity extends BaseActivity {
         descriptionTextview.setText(node.getDescription());
         coordinatesTextView.setText(node.getCoordinates());
 
-        picturePath = node.getPicturePath();
-        if (picturePath != null) {
+
+        if (node.getPicturePath() != null) {
             Glide.with(this).load(node.getPicturePath()).into(cameraImageView);
+        } else {
+            Glide.with(this).load(R.drawable.unknown).into(cameraImageView);
         }
 
         cameraImageView.setOnClickListener(new View.OnClickListener() {

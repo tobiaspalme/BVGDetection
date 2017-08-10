@@ -3,6 +3,7 @@ package de.htwberlin.f4.ai.ma.nodelist;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,12 @@ public class NodeListAdapter extends ArrayAdapter {
 
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
         viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
-        Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+
+        if (nodePicturePaths.get(position) == null) {
+            Glide.with(getContext()).load(R.drawable.unknown).into(viewHolder.nodeImageView);
+        } else {
+            Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+        }
 
         return row;
     }

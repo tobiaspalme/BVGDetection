@@ -17,11 +17,14 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +67,9 @@ public class NodeRecordActivity extends BaseActivity {
     private EditText nodeIdEdittext;
 
     private EditText recordTimeText;
-    private EditText wlanNameText;
+    //private EditText wlanNameText;
+
+    private Spinner wifiNamesDropdown;
     private EditText descriptionEdittext;
     private NodeFactory nodeFactory;
     private DatabaseHandler databaseHandler;
@@ -85,12 +90,14 @@ public class NodeRecordActivity extends BaseActivity {
 
     private Context context = this;
 
+    private WifiManager mainWifiObj;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.activity_node_record);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_record, contentFrameLayout);
 
@@ -120,7 +127,8 @@ public class NodeRecordActivity extends BaseActivity {
 
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
         recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
-        wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
+        //wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
+        wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
 
         progressText = (TextView) findViewById(R.id.tx_progress);
 
@@ -135,6 +143,19 @@ public class NodeRecordActivity extends BaseActivity {
         fingerprintTaken = false;
 
 
+        // Scan for WiFi names (SSIDs) and add them to the dropdown
+        mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        mainWifiObj.startScan();
+        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+
+        ArrayList<String> wifiNamesList = new ArrayList<>();
+        for (ScanResult sr : wifiScanList) {
+            wifiNamesList.add(sr.SSID);
+        }
+        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
+        wifiNamesDropdown.setAdapter(dropdownAdapter);
+
+
 
         // TODO: if Klausel notwendig?
         if (recordButton != null) {
@@ -146,7 +167,9 @@ public class NodeRecordActivity extends BaseActivity {
                                 Toast.LENGTH_LONG).show();
                     } else {
                         recordButton.setEnabled(false);
-                        wlanName = wlanNameText.getText().toString();
+                        //wlanName = wlanNameText.getText().toString();
+                        wlanName = wifiNamesDropdown.getSelectedItem().toString();
+
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
                         measureNode();
                     }
@@ -199,7 +222,6 @@ public class NodeRecordActivity extends BaseActivity {
                 while (progressStatus < 60 * recordTime) {
                     List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
 
-                    WifiManager mainWifiObj;
                     mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     mainWifiObj.startScan();
                     List<ScanResult> wifiScanList = mainWifiObj.getScanResults();

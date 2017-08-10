@@ -20,19 +20,19 @@ public class MaxPictureActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_maximize_picture);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_maximize_picture, contentFrameLayout);
 
-
         maxImageView = (ImageView) findViewById(R.id.maxImageView);
 
         Intent intent = getIntent();
-        //String nodeName = intent.getExtras().get("nodeName").toString();
-        String picturePath = intent.getExtras().get("picturePath").toString();
+        String picturePath = (String) intent.getExtras().get("picturePath");
 
-        //Glide.with(this).load(node.getPicturePath()).into(maxImageView);
-        Glide.with(this).load(picturePath).into(maxImageView);
+        if (picturePath != null) {
+            Glide.with(this).load(picturePath).into(maxImageView);
+        } else {
+            Glide.with(this).load(R.drawable.unknown).into(maxImageView);
+        }
     }
 }

@@ -73,6 +73,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String EDGE_ACCESSIBLY = "accessibly";
     private static final String EDGE_STEPLIST = "steplist";
     private static final String EDGE_WEIGHT = "weight";
+    private static final String EDGE_ADDITIONAL_INFO = "additional_info";
 
 
     private NodeFactory nodeFactory;
@@ -121,7 +122,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 EDGE_NODE_B + " TEXT," +
                 EDGE_ACCESSIBLY + " TEXT," +
                 EDGE_STEPLIST + " TEXT," +
-                EDGE_WEIGHT + " INTEGER);";
+                EDGE_WEIGHT + " INTEGER," +
+                EDGE_ADDITIONAL_INFO + " TEXT);";
 
 
         db.execSQL(createNodeTableQuery);
@@ -317,6 +319,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         values.put("steplist", stepListSb.toString());
         values.put("weight", edge.getWeight());
+        values.put("additional_info", edge.getAdditionalInfo());
 
         database.insert(EDGES_TABLE, null, values);
 
@@ -348,7 +351,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                     List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
                     //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                    Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, stepList, cursor.getInt(5));
+                    Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
 
                     /*
                     // TODO Cast entfernen
