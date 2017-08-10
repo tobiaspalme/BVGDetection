@@ -1,6 +1,8 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.content.Context;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
@@ -51,6 +54,11 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private StepListAdapter stepListAdapter;
 
     private Spinner modeSpinner;
+    private Spinner startNodeSpinner;
+    private Spinner targetNodeSpinner;
+
+    private ImageView startNodeImage;
+    private ImageView targetNodeImage;
 
 
     public MeasureViewImpl() {
@@ -66,6 +74,14 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.fragment_coordinates_measure, contentFrameLayout);
 
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(getContext());
+        final List<Node> nodeList = databaseHandler.getAllNodes();
+        List<String> nodeNames = new ArrayList<>();
+
+        for (Node node : nodeList) {
+            nodeNames.add(node.getId());
+        }
+
         compassView = (TextView) findViewById(R.id.coordinates_measure_compass);
         compassImageView = (ImageView) findViewById(R.id.coordinates_measure_compass_iv);
         stepCounterView = (TextView) findViewById(R.id.coordinates_measure_stepvalue);
@@ -73,6 +89,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) findViewById(R.id.coordinates_measure_coordinates);
+
+        startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
+        targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);
 
         modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
@@ -94,6 +113,53 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
             }
         });
+
+        startNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_startnode);
+        final ArrayAdapter<String> startAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
+        startNodeSpinner.setAdapter(startAdapter);
+        startNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Node startNode = nodeList.get(i);
+                if (startNode.getPicturePath() == null) {
+                    startNodeImage.setImageResource(R.drawable.unknown);
+                } else {
+
+                    startNodeImage.setImageURI(Uri.parse(startNode.getPicturePath()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        targetNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_targetnode);
+        final ArrayAdapter<String> targetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
+        targetNodeSpinner.setAdapter(targetAdapter);
+        targetNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Node targetNode = nodeList.get(i);
+                if (targetNode.getPicturePath() == null) {
+                    targetNodeImage.setImageResource(R.drawable.unknown);
+                } else {
+
+                    targetNodeImage.setImageURI(Uri.parse(targetNode.getPicturePath()));
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
 
         btnStart = (Button) findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +204,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         });
 
 
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(getContext());
-        List<Node> nodeList = databaseHandler.getAllNodes();
 
+
+        /*
         stepListView = (ListView) findViewById(R.id.coordinates_measure_steplist);
         stepListAdapter = new StepListAdapter(getContext(), new ArrayList<StepData>(), nodeList);
         stepListAdapter.setNodeSpinnerListener(new NodeSpinnerListener() {
@@ -152,7 +218,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
         });
         stepListView.setAdapter(stepListAdapter);
-
+        */
     }
 
     @Override
