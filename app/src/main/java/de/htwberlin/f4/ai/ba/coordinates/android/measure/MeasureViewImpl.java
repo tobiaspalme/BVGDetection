@@ -78,6 +78,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
         spinnerValues.add(IndoorMeasurementType.VARIANT_A);
         spinnerValues.add(IndoorMeasurementType.VARIANT_B);
+        spinnerValues.add(IndoorMeasurementType.VARIANT_C);
         final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerValues);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

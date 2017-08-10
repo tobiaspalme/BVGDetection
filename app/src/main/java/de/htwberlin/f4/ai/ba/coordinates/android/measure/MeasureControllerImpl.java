@@ -84,6 +84,15 @@ public class MeasureControllerImpl implements MeasureController {
                             sensorDataModel.insertData(sensorData);
                         }
                         break;
+                    case COMPASS_SIMPLE:
+                        view.updateAzimuth(sensorData.getValues()[0]);
+
+                        // store compass data in model, while calibration
+                        // isn't finished
+                        if (!calibrated) {
+                            sensorDataModel.insertData(sensorData);
+                        }
+                        break;
                     case BAROMETER:
                         //view.updatePressure(sensorData.getValues()[0]);
                         // store barometer data in model, while calibration
@@ -116,8 +125,18 @@ public class MeasureControllerImpl implements MeasureController {
             }
         });
 
+        SensorType compassType = null;
+        // VARIANT_A and VARIANT_B are using COMPASS_FUSION
+        if (measurementType == IndoorMeasurementType.VARIANT_A || measurementType == IndoorMeasurementType.VARIANT_B) {
+            compassType = SensorType.COMPASS_FUSION;
+        }
+        // VARIANT C is using COMPASS_SIMPLE
+        else if (measurementType == IndoorMeasurementType.VARIANT_C) {
+            compassType = SensorType.COMPASS_SIMPLE;
+        }
+
         indoorMeasurement.startSensors(Sensor.SENSOR_RATE_MEASUREMENT,
-                                       SensorType.COMPASS_FUSION,
+                                       compassType,
                                        SensorType.BAROMETER,
                                        SensorType.STEPCOUNTER);
 

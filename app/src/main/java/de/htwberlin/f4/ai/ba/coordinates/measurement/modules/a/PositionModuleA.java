@@ -10,7 +10,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
 
 /**
- * Created by benni on 03.08.2017.
+ * Orientation: CompassFusion
+ * Altitude: Barometer
+ * Distance: Steplength
+ *
+ * No Lowpass filter
  */
 
 public class PositionModuleA implements PositionModule {

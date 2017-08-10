@@ -7,7 +7,8 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement;
 public enum IndoorMeasurementType {
 
     VARIANT_A ("Variante A"),
-    VARIANT_B ("Variante B");
+    VARIANT_B ("Variante B"),
+    VARIANT_C ("Variante C");
 
     private final String name;
 

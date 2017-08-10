@@ -7,7 +7,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.DistanceModuleA;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
 
 /**
- * Same like ModuleA, but we use a lowfilter
+ * Orientation: CompassFusion
+ * Altitude: Barometer
+ * Distance: Steplength
+ *
+ * Lowpass filter
  */
 
 public class PositionModuleB extends PositionModuleA {
