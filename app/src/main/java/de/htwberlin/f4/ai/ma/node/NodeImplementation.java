@@ -13,7 +13,7 @@ class NodeImplementation implements Node {
     //float xValue;
     //float yValue;
     //TODO zValue?
-    private float zValue;
+    //private float zValue;
 
     private String description;
     //private List<SignalInformation> signalInformationList;

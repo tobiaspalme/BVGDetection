@@ -75,6 +75,8 @@ public class NodeRecordActivity extends BaseActivity {
 
     private String picturePath;
 
+    private boolean abortRecording;
+
     private static final int CAM_REQUEST = 1;
 
     //TODO permissions auf Startscreen auslagern
@@ -136,6 +138,7 @@ public class NodeRecordActivity extends BaseActivity {
 
         pictureTaken = false;
         fingerprintTaken = false;
+        abortRecording = false;
 
 
         if (hasPermissions(this, permissions)) {
@@ -170,6 +173,7 @@ public class NodeRecordActivity extends BaseActivity {
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
                         measureNode();
                     }
+                    abortRecording = false;
                 }
             });
         }
@@ -216,7 +220,7 @@ public class NodeRecordActivity extends BaseActivity {
         new Thread(new Runnable() {
             public void run() {
                 signalInformationList = new ArrayList<>();
-                while (progressStatus < 60 * recordTime) {
+                while (progressStatus < 60 * recordTime && !abortRecording) {
                     List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
 
                     mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -286,7 +290,6 @@ public class NodeRecordActivity extends BaseActivity {
                 Log.d("NodeRecordActivity", "DATEI KONNTE NICHT ANGELEGT WERDEN");
             }
         }
-
         File imageFile = new File(folder, "Node_" + nodeIdEdittext.getText() + ".jpg");
         return imageFile;
     }
@@ -321,6 +324,13 @@ public class NodeRecordActivity extends BaseActivity {
                                 jsonWriter.writeJSON(node);
                                 databaseHandler.insertNode(node);
                                 Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
+
+                                // Reset progressBar and progress
+                                abortRecording = true;
+                                progressStatus = 0;
+                                progressText.setText(String.valueOf(progressStatus));
+                                progressBar.setProgress(progressStatus);
+
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

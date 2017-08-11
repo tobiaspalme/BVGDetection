@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nodes_connector_linearlayout">
@@ -24,16 +24,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/nodeB_spinner"
-                android:spinnerMode="dropdown">
+                android:spinnerMode="dropdown"
+                android:layout_toRightOf="@+id/nodeA_spinner">
             </Spinner>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/connect_nodes_button"
-                android:text="@string/connect_nodes_button_text"/>
+                android:text="@string/connect_nodes_button_text"
+                android:layout_below="@+id/nodeA_spinner"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <LinearLayout
