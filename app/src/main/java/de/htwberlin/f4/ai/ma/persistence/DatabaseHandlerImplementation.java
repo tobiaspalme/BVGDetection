@@ -144,12 +144,12 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("id", node.getId());
-        values.put("description", node.getDescription());
-        values.put("signalinformationlist", jsonConverter.convertSignalInfoToJSON(node.getFingerprint().getSignalInformationList()));
-        values.put("coordinates", node.getCoordinates());
-        values.put("picture_path", node.getPicturePath());
-        values.put("additional_info", node.getAdditionalInfo());
+        values.put(NODE_ID, node.getId());
+        values.put(NODE_DESCRIPTION, node.getDescription());
+        values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoToJSON(node.getFingerprint().getSignalInformationList()));
+        values.put(NODE_COORDINATES, node.getCoordinates());
+        values.put(NODE_PICTURE_PATH, node.getPicturePath());
+        values.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
 
         database.insert(NODES_TABLE, null, values);
 
@@ -164,23 +164,20 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         // Update Edges which contain the updated Node
         for (Edge e : getAllEdges()) {
             if (e.getNodeA().getId().equals(oldNodeId)) {
-                Log.d("DB: UPDATE EDGE", "(updateNode fkt.) 'nodeA' = " + node.getId());
                 updateEdge(e, EDGE_NODE_A, node.getId());
             } else if (e.getNodeB().getId().equals(oldNodeId)) {
-                Log.d("DB: UPDATE EDGE", "(updateNode fkt.) 'nodeB' " + node.getId());
                 updateEdge(e, EDGE_NODE_B, node.getId());
             }
         }
 
-
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put("id", node.getId());
-        contentValues.put("description", node.getDescription());
-        contentValues.put("coordinates", node.getCoordinates());
-        contentValues.put("picture_path", node.getPicturePath());
-        contentValues.put("additional_info", node.getAdditionalInfo());
+        contentValues.put(NODE_ID, node.getId());
+        contentValues.put(NODE_DESCRIPTION, node.getDescription());
+        contentValues.put(NODE_COORDINATES, node.getCoordinates());
+        contentValues.put(NODE_PICTURE_PATH, node.getPicturePath());
+        contentValues.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
 
         Log.d("DB: update_node: id:", node.getId());
 
@@ -257,11 +254,11 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("id", locationResult.getId());
-        values.put("settings", locationResult.getSettings());
-        values.put("measuredtime", locationResult.getMeasuredTime());
-        values.put("selectednode", locationResult.getSelectedNode());
-        values.put("measurednode", locationResult.getMeasuredNode());
+        values.put(RESULT_ID, locationResult.getId());
+        values.put(RESULT_SETTINGS, locationResult.getSettings());
+        values.put(RESULT_MEASURED_TIME, locationResult.getMeasuredTime());
+        values.put(RESULT_SELECTED_NODE, locationResult.getSelectedNode());
+        values.put(RESULT_MEASURED_NODE, locationResult.getMeasuredNode());
 
         database.insert(RESULTS_TABLE, null, values);
 
@@ -319,9 +316,9 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         ContentValues values = new ContentValues();
 
         //values.put("id", edge.getId());
-        values.put("nodeA", edge.getNodeA().getId());
-        values.put("nodeB", edge.getNodeB().getId());
-        values.put("accessibly", edge.getAccessibly());
+        values.put(EDGE_NODE_A, edge.getNodeA().getId());
+        values.put(EDGE_NODE_B, edge.getNodeB().getId());
+        values.put(EDGE_ACCESSIBLY, edge.getAccessibly());
 
 
         StringBuilder stepListSb = new StringBuilder();
@@ -331,9 +328,9 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
             stepListSb.append("\t");
         }
 
-        values.put("steplist", stepListSb.toString());
-        values.put("weight", edge.getWeight());
-        values.put("additional_info", edge.getAdditionalInfo());
+        values.put(EDGE_STEPLIST, stepListSb.toString());
+        values.put(EDGE_WEIGHT, edge.getWeight());
+        values.put(EDGE_ADDITIONAL_INFO, edge.getAdditionalInfo());
 
         database.insert(EDGES_TABLE, null, values);
 

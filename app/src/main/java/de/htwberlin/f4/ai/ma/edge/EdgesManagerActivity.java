@@ -140,18 +140,8 @@ public class EdgesManagerActivity extends BaseActivity {
 
                 Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, 0);
 
-                /*
-                List<String> test = new ArrayList<String>();
-                test.add("step1");
-                test.add("step2");
-                test.add("step3");
-                test.add("asdfasdfgasdfgs");
-
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, test, 0 );
-                */
-
                 if (databaseHandler.checkIfEdgeExists(edge)) {
-                    Toast.makeText(getApplicationContext(), "Edge existiert bereits.",
+                    Toast.makeText(getApplicationContext(), "Dieser Weg existiert bereits.",
                             Toast.LENGTH_LONG).show();
                 } else {
                     databaseHandler.insertEdge(edge);

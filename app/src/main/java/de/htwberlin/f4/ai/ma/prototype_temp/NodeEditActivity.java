@@ -169,7 +169,7 @@ public class NodeEditActivity extends BaseActivity {
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx)
                         .setTitle("Löschen?")
-                        .setMessage("Soll der Node \"" + nodeName + "\" wirklich gelöscht werden?")
+                        .setMessage("Soll der Ort \"" + nodeName + "\" wirklich gelöscht werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -198,7 +198,6 @@ public class NodeEditActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("TEMPFILEEEEEEE " + tempFile.getAbsolutePath());
         Glide.with(this).load(tempFile).into(cameraImageView);
     }
 

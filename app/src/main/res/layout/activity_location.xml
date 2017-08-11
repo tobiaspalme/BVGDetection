@@ -22,11 +22,20 @@
             android:text="WLAN Name:"
             android:id="@+id/textView4" />
 
-        <EditText
+        <!-- <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/edTx_WlanNameLocation"
-            android:text="BVG Wi-Fi" />
+            android:text="BVG Wi-Fi" /> -->
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wifi_names_dropdown_location"
+            android:spinnerMode="dropdown">
+        </Spinner>
+
+
+
     </LinearLayout>
 
     <LinearLayout

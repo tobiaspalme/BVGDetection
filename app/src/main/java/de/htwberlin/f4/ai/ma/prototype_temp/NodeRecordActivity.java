@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,16 +61,12 @@ public class NodeRecordActivity extends BaseActivity {
     Button captureButton;
     Button saveNodeButton;
     private ImageView cameraImageView;
-    //private EditText idName;
-
     private EditText nodeIdEdittext;
-
     private EditText recordTimeText;
     //private EditText wlanNameText;
 
     private Spinner wifiNamesDropdown;
     private EditText descriptionEdittext;
-    private NodeFactory nodeFactory;
     private DatabaseHandler databaseHandler;
 
     private boolean pictureTaken;
@@ -159,16 +154,13 @@ public class NodeRecordActivity extends BaseActivity {
         }
 
 
-
-
-
         // TODO: if Klausel notwendig?
         if (recordButton != null) {
             recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "Node existiert bereits: Bitte neuen Namen wählen.",
+                        Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
                                 Toast.LENGTH_LONG).show();
                     } else {
                         recordButton.setEnabled(false);
@@ -317,7 +309,7 @@ public class NodeRecordActivity extends BaseActivity {
             Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
                     Toast.LENGTH_LONG).show();
         } else {
-            final Node node = nodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(signalInformationList), "", picPath , "");
+            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(signalInformationList), "", picPath , "");
 
             if (!fingerprintTaken) {
                 new AlertDialog.Builder(this)

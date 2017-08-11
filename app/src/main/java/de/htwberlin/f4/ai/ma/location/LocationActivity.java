@@ -53,7 +53,8 @@ public class LocationActivity extends BaseActivity {
     private NodeFactory nodeFactory;
     ListView listView;
     private String settings;
-    private Spinner dropdown;
+    private Spinner nodesDropdown;
+    private Spinner wifiDropdown;
     private LocationResultAdapter resultAdapterdapter;
     private String foundNodeName;
     private WifiManager mainWifiObj;
@@ -124,8 +125,23 @@ public class LocationActivity extends BaseActivity {
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
 
-        //a dropdown list with name of all existing nodes
-        dropdown = (Spinner) findViewById(R.id.spinner);
+
+
+        wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
+        mainWifiObj.startScan();
+        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+        ArrayList<String> wifiNamesList = new ArrayList<>();
+        for (ScanResult sr : wifiScanList) {
+            wifiNamesList.add(sr.SSID);
+        }
+        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
+        wifiDropdown.setAdapter(dropdownAdapter);
+
+
+
+
+        //a nodesDropdown list with name of all existing nodes
+        nodesDropdown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> nodeItems = new ArrayList<>();
         for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             nodeItems.add(node.getId());
@@ -133,7 +149,7 @@ public class LocationActivity extends BaseActivity {
         Collections.sort(nodeItems);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeItems);
-        dropdown.setAdapter(adapter);
+        nodesDropdown.setAdapter(adapter);
 
 
 
@@ -232,8 +248,9 @@ public class LocationActivity extends BaseActivity {
                     mainWifiObj.startScan();
 
                     final TextView testTimestampTextview = (TextView) findViewById(R.id.tx_test);
-                    EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
-                    String wlanName = editText.getText().toString();
+                    //EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
+                    //String wlanName = editText.getText().toString();
+                    String wlanName = wifiDropdown.getSelectedItem().toString();
 
                     List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
@@ -336,11 +353,11 @@ public class LocationActivity extends BaseActivity {
                     textView.setText(foundNodeName);
 
                     // TODO percentage einfügen
-                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), foundNodeName);
+                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
                 } else {
                     textView.setText("kein Node gefunden");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), dropdown.getSelectedItem().toString(), "kein Node gefunden");
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), "kein Node gefunden");
                 }
                 //makeJson(locationResult);
 
