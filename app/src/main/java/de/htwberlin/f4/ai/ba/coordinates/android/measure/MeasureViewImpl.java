@@ -104,6 +104,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         spinnerValues.add(IndoorMeasurementType.VARIANT_A);
         spinnerValues.add(IndoorMeasurementType.VARIANT_B);
         spinnerValues.add(IndoorMeasurementType.VARIANT_C);
+        spinnerValues.add(IndoorMeasurementType.VARIANT_D);
         final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerValues);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -321,6 +322,12 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         if (btnStart != null) {
             btnStart.setEnabled(false);
         }
+    }
+
+    @Override
+    public void showAlert(String msg) {
+        Toast toast = Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

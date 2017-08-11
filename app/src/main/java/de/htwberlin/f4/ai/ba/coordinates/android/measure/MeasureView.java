@@ -19,6 +19,7 @@ public interface MeasureView {
     void updateTargetNodeCoordinates(float x, float y, float z);
     void enableStart();
     void disableStart();
+    void showAlert(String msg);
     Context getContext();
 
 }

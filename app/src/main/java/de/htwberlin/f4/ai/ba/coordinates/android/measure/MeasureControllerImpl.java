@@ -1,12 +1,17 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.app.AlertDialog;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
@@ -63,6 +68,13 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
+
+        // check for calibration
+        if (!alreadyCalibrated()) {
+            view.showAlert("Bitte zuerst die Schrittkalibrierung durchführen!");
+            return;
+        }
+
         databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         //List<Node> nodeList = databaseHandler.getAllNodes();
 
@@ -143,7 +155,7 @@ public class MeasureControllerImpl implements MeasureController {
             compassType = SensorType.COMPASS_FUSION;
         }
         // VARIANT C is using COMPASS_SIMPLE
-        else if (measurementType == IndoorMeasurementType.VARIANT_C) {
+        else if (measurementType == IndoorMeasurementType.VARIANT_C || measurementType == IndoorMeasurementType.VARIANT_D) {
             compassType = SensorType.COMPASS_SIMPLE;
         }
 
@@ -182,6 +194,8 @@ public class MeasureControllerImpl implements MeasureController {
             databaseHandler.updateNode(targetNode, targetNode.getId());
 
         }
+
+        save();
 
     }
 
@@ -306,5 +320,43 @@ public class MeasureControllerImpl implements MeasureController {
         timerHandler.postDelayed(pressureCalibration, CALIBRATION_TIME);
 
 
+    }
+
+    private boolean alreadyCalibrated() {
+        CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
+        return calibratePersistance.load() != null;
+    }
+
+    //todo: remove
+    private void save() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        File dir = new File (sdCard.getAbsolutePath() + "/Coordinates/RecordData");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+
+        File file = new File(dir, "steps.txt");
+
+        FileOutputStream outputStream;
+
+
+        try {
+            outputStream = new FileOutputStream(file);
+            for (StepData stepData: stepList) {
+                StringBuilder builder = new StringBuilder();
+                builder.append(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
+                outputStream.write(builder.toString().getBytes());
+                outputStream.write(System.lineSeparator().getBytes());
+            }
+
+
+
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

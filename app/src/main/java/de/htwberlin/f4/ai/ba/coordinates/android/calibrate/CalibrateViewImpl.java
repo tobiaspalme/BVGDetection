@@ -133,6 +133,8 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         //View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, null);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        contentFrameLayout.removeAllViews();
+
         View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step1, contentFrameLayout);
 
 

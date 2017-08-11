@@ -157,15 +157,16 @@ public class CalibrateControllerImpl implements CalibrateController {
 
     private int calculateAverageStepperiod(List<Long> timestamps) {
         List<Long> stepDurations = new ArrayList<>();
-
+        int result = 0;
         // calculate the durations between each step
-        for (int i = 0; i < timestamps.size(); i++) {
-            if (i < timestamps.size() -1) {
-                Long start = timestamps.get(i);
-                Long end = timestamps.get(i+1);
-                Long difference = end - start;
-                stepDurations.add(difference);
-            }
+
+        for (int i = 0; i < timestamps.size()-1; i++) {
+
+            Long start = timestamps.get(i);
+            Long end = timestamps.get(i+1);
+            Long difference = end - start;
+            stepDurations.add(difference);
+
         }
 
         // sum up all durations
@@ -174,10 +175,13 @@ public class CalibrateControllerImpl implements CalibrateController {
             durationSum += duration;
         }
 
-        // calculate avg
-        int result = (int) (durationSum / (stepDurations.size()));
+        if (stepDurations.size() > 0) {
+            // calculate avg
+            result = (int) (durationSum / (stepDurations.size()));
+        }
 
-        return result != 0 ? result : 1;
+
+        return result;
     }
 
     private void saveSettings() {
