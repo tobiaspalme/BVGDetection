@@ -158,8 +158,21 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         database.close();
     }
 
-    // Update
+    // Update Nodes
     public void updateNode(Node node, String oldNodeId) {
+
+        // Update Edges which contain the updated Node
+        for (Edge e : getAllEdges()) {
+            if (e.getNodeA().getId().equals(oldNodeId)) {
+                Log.d("DB: UPDATE EDGE", "(updateNode fkt.) 'nodeA' = " + node.getId());
+                updateEdge(e, EDGE_NODE_A, node.getId());
+            } else if (e.getNodeB().getId().equals(oldNodeId)) {
+                Log.d("DB: UPDATE EDGE", "(updateNode fkt.) 'nodeB' " + node.getId());
+                updateEdge(e, EDGE_NODE_B, node.getId());
+            }
+        }
+
+
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -172,6 +185,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         Log.d("DB: update_node: id:", node.getId());
 
         database.update(NODES_TABLE, contentValues, NODE_ID + "='" + oldNodeId + "'", null);
+
         database.close();
     }
 
@@ -328,6 +342,40 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         database.close();
     }
 
+
+    // Update Edges
+    public void updateEdge(Edge edge, String key, String value) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        if (key.equals(EDGE_NODE_A)) {
+            contentValues.put(EDGE_NODE_A, value);
+            contentValues.put(EDGE_NODE_B, edge.getNodeB().getId());
+
+        } else if (key.equals(EDGE_NODE_B)) {
+            contentValues.put(EDGE_NODE_B, value);
+            contentValues.put(EDGE_NODE_A, edge.getNodeA().getId());
+        }
+
+        contentValues.put("accessibly", edge.getAccessibly());
+
+        StringBuilder stepListSb = new StringBuilder();
+        for (String string : edge.getStepCoordsList())
+        {
+            stepListSb.append(string);
+            stepListSb.append("\t");
+        }
+
+        contentValues.put(EDGE_STEPLIST, stepListSb.toString());
+        contentValues.put(EDGE_WEIGHT, edge.getWeight());
+        contentValues.put(EDGE_ADDITIONAL_INFO, edge.getAdditionalInfo());
+
+        database.update(EDGES_TABLE, contentValues, EDGE_NODE_A + "='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + "='" + edge.getNodeB().getId() + "'", null);
+
+        database.close();
+    }
+
+
     // Get all Edges
     public ArrayList<Edge> getAllEdges() {
         ArrayList<Edge> allEdges = new ArrayList<>();
@@ -371,7 +419,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     // Check if Edge already exists
     public boolean checkIfEdgeExists(Edge edge) {
-        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'";
+        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "' " +
+                " OR " + EDGE_NODE_A + " ='" + edge.getNodeB().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeA().getId() + "' ";
 
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
