@@ -383,30 +383,30 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         if (cursor.moveToFirst()) {
             do {
 
-                boolean accessibly;
+                boolean accessibly = false;
+
                 if (cursor.getInt(3) == 1) {
                     accessibly = true;
-                } else {
-                    accessibly = false;
-
-                    Node nodeA = getNode(cursor.getString(1));
-                    Node nodeB = getNode(cursor.getString(2));
-
-                    String stepListString = cursor.getString(4);
-                    List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
-
-                    //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                    Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
-
-                    /*
-                    // TODO Cast entfernen
-                    edge.setID(Integer.valueOf(cursor.getString(0)));
-                    edge.setNodeA(cursor.getString(1));
-                    edge.setNodeB(cursor.getString(2));
-                    edge.setWeight(cursor.getInt(4));*/
-
-                    allEdges.add(edge);
                 }
+
+                Node nodeA = getNode(cursor.getString(1));
+                Node nodeB = getNode(cursor.getString(2));
+
+                String stepListString = cursor.getString(4);
+                List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
+
+                //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
+
+                /*
+                // TODO Cast entfernen
+                edge.setID(Integer.valueOf(cursor.getString(0)));
+                edge.setNodeA(cursor.getString(1));
+                edge.setNodeB(cursor.getString(2));
+                edge.setWeight(cursor.getInt(4));*/
+
+                allEdges.add(edge);
+
             } while (cursor.moveToNext());
             database.close();
         }

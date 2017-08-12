@@ -237,8 +237,6 @@ public class MeasureControllerImpl implements MeasureController {
             stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
         }
 
-        //check if edge already exists
-        List<Edge> edgeList = databaseHandler.getAllEdges();
         // create a temporary edge object to check if edge already exists
         Edge checkEdge = new EdgeImplementation(startNode, targetNode, true, null, 0, "");
         boolean foundEdge = databaseHandler.checkIfEdgeExists(checkEdge);
@@ -351,7 +349,8 @@ public class MeasureControllerImpl implements MeasureController {
                 if (databaseHandler.checkIfEdgeExists(tmpEdge)) {
                     // edge exists, now we have to find the right one
                     Edge existingEdge = null;
-                    for (Edge edge : databaseHandler.getAllEdges()) {
+                    List<Edge> edgeList = databaseHandler.getAllEdges();
+                    for (Edge edge : edgeList) {
                         if ( (edge.getNodeA().getId().equals(start.getId()) && edge.getNodeB().getId().equals(target.getId())) ||
                                 (edge.getNodeA().getId().equals(target.getId()) && edge.getNodeB().getId().equals(start.getId())) ) {
                             existingEdge = edge;
@@ -381,16 +380,17 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onTestClicked() {
-        startNode.setCoordinates("");
+        /*startNode.setCoordinates("");
         targetNode.setCoordinates("");
         databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         databaseHandler.updateNode(startNode, startNode.getId());
         databaseHandler.updateNode(targetNode, targetNode.getId());
-        /*
+        */
+        databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         List<Edge> edgeList = databaseHandler.getAllEdges();
         for (Edge edge : edgeList) {
             databaseHandler.deleteEdge(edge);
-        }*/
+        }
     }
 
     private boolean checkNodesDifferent(Node node1, Node node2) {
