@@ -224,41 +224,39 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Start Ort"
-                    android:textSize="25sp"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:text="Start Ort"
+                    android:textSize="25sp" />
             </RelativeLayout>
 
             <Spinner
                 android:id="@+id/coordinates_measure_startnode"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.1" />
 
             <ImageView
                 android:id="@+id/coordinates_measure_start_image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.4"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.4" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.175"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.175">
+
                 <TextView
                     android:id="@+id/coordinates_measure_start_coords"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="x / y / z"
-                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:text="x / y / z"
+                    android:textSize="16sp" />
             </RelativeLayout>
-
 
 
         </LinearLayout>
@@ -271,7 +269,6 @@
             android:orientation="vertical">
 
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -280,31 +277,24 @@
                     android:id="@+id/coordinates_measure_edge_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textSize="20sp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="60dp"
-                    />
+                    android:text="0.0"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/coordinates_measure_arrow"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    app:srcCompat="@drawable/arrow_right"
-                    />
+                    app:srcCompat="@drawable/arrow_right" />
 
                 <ImageView
                     android:id="@+id/coordinates_measure_handycapped"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_below="@id/coordinates_measure_arrow"
-                    />
+                    android:layout_below="@id/coordinates_measure_arrow" />
             </RelativeLayout>
-
-
-
-
 
 
         </LinearLayout>
@@ -325,41 +315,39 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Ziel Ort"
-                    android:textSize="25sp"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:text="Ziel Ort"
+                    android:textSize="25sp" />
             </RelativeLayout>
-
 
 
             <Spinner
                 android:id="@+id/coordinates_measure_targetnode"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.1" />
 
             <ImageView
                 android:id="@+id/coordinates_measure_target_image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.4"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.4" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.175"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.175">
+
                 <TextView
                     android:id="@+id/coordinates_measure_target_coords"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="x / y / z"
-                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:text="x / y / z"
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>

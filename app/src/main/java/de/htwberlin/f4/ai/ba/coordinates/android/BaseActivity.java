@@ -13,10 +13,12 @@ import com.example.carol.bvg.R;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.edges.EdgeDetailsViewImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl;
 import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.location.LocationActivity;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
+import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity;
 import de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivity;
@@ -26,6 +28,11 @@ public class BaseActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
+
+    // for passing start and targetnode to our edgedetails activity
+    protected static final String STARTNODE_KEY = "startnode";
+    protected static final String TARGETNODE_KEY = "targetnode";
+    protected static final String EDGE_DETAILS_BUNDLE = "nodeinfos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +140,16 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void loadRecord() {
         Intent intent = new Intent(getApplicationContext(), RecordViewImpl.class);
+        startActivity(intent);
+    }
+
+    protected void loadEdgeDetails(String startNodeID, String targetNodeID) {
+        Bundle bundle = new Bundle();
+        bundle.putString(STARTNODE_KEY, startNodeID);
+        bundle.putString(TARGETNODE_KEY, targetNodeID);
+
+        Intent intent = new Intent(getApplicationContext(), EdgeDetailsViewImpl.class);
+        intent.putExtra(EDGE_DETAILS_BUNDLE, bundle);
         startActivity(intent);
     }
 }

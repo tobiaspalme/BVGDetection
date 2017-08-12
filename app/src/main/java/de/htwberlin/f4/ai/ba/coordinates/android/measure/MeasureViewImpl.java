@@ -68,6 +68,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private ImageView startNodeImage;
     private ImageView targetNodeImage;
     private ImageView handycapImage;
+    private ImageView edgeArrow;
 
 
     public MeasureViewImpl() {
@@ -102,6 +103,17 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
         startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
         targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);
+        edgeArrow = (ImageView) findViewById(R.id.coordinates_measure_arrow);
+
+        edgeArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onEdgeDetailsClicked();
+                }
+            }
+        });
+
         handycapImage = (ImageView) findViewById(R.id.coordinates_measure_handycapped);
         // load handycap image as default
         Glide.with(getContext())
@@ -367,6 +379,11 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     public void showAlert(String msg) {
         Toast toast = Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    public void loadEdgeDetailsView(Node startNode, Node targetNode) {
+        loadEdgeDetails(startNode.getId(), targetNode.getId());
     }
 
     @Override

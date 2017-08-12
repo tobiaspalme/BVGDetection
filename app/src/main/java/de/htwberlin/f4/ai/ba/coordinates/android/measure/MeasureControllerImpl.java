@@ -53,7 +53,6 @@ public class MeasureControllerImpl implements MeasureController {
     private float edgeDistance; // edgedistance in m
 
     private IndoorMeasurementType measurementType;
-    private DatabaseHandler databaseHandler;
 
     private Node startNode;
     private Node targetNode;
@@ -77,8 +76,6 @@ public class MeasureControllerImpl implements MeasureController {
             return;
         }
 
-        databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-        //List<Node> nodeList = databaseHandler.getAllNodes();
 
         stepList = new ArrayList<>();
         stepCount = 0;
@@ -237,6 +234,7 @@ public class MeasureControllerImpl implements MeasureController {
             stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
         }
 
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         // create a temporary edge object to check if edge already exists
         Edge checkEdge = new EdgeImplementation(startNode, targetNode, true, null, 0, "");
         boolean foundEdge = databaseHandler.checkIfEdgeExists(checkEdge);
@@ -308,6 +306,15 @@ public class MeasureControllerImpl implements MeasureController {
         handleNodeSelection(startNode, targetNode);
     }
 
+    @Override
+    public void onEdgeDetailsClicked() {
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        Edge edge = new EdgeImplementation(startNode, targetNode, false, 0);
+        if (databaseHandler.checkIfEdgeExists(edge)) {
+            view.loadEdgeDetailsView(startNode, targetNode );
+        }
+    }
+
     private void handleNodeSelection(Node start, Node target) {
         // check if startnode and targetnode was selected
         if (start != null && target != null) {
@@ -340,10 +347,8 @@ public class MeasureControllerImpl implements MeasureController {
             if (different) {
                 view.enableStart();
 
-                // edge stuff
-                if (databaseHandler == null) {
-                    databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-                }
+                DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+
                 // check if edge already exists
                 Edge tmpEdge = new EdgeImplementation(start, target, true, 0);
                 if (databaseHandler.checkIfEdgeExists(tmpEdge)) {
@@ -357,15 +362,15 @@ public class MeasureControllerImpl implements MeasureController {
                             break;
                         }
                     }
-                    // if we found an edge update view with correct data
+                    // if we found the correct edge update view with correct data
                     if (existingEdge != null) {
                         view.updateEdge(existingEdge);
                     }
-                    // if we didnt find edge, update view with placeholder data
-                    else {
-                        Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
-                        view.updateEdge(placeHolderEdge);
-                    }
+                }
+                // if there isn't an edge, update view with placeholder data
+                else {
+                    Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
+                    view.updateEdge(placeHolderEdge);
                 }
 
             }
@@ -386,7 +391,7 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler.updateNode(startNode, startNode.getId());
         databaseHandler.updateNode(targetNode, targetNode.getId());
         */
-        databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
         List<Edge> edgeList = databaseHandler.getAllEdges();
         for (Edge edge : edgeList) {
             databaseHandler.deleteEdge(edge);

@@ -30,6 +30,8 @@
         <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl" />
         <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl" />
         <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.edges.EdgeDetailsViewImpl"
+            android:windowSoftInputMode="stateHidden"/>
        <!--
         <activity
             android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"

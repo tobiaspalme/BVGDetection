@@ -96,10 +96,7 @@ public class CalibrateControllerImpl implements CalibrateController {
             if (indoorMeasurement != null) {
                 indoorMeasurement.stop();
                 //TODO: finished dialog
-                CoordinatesActivity coordinatesActivity = CoordinatesActivity.getInstance();
-                if (coordinatesActivity != null) {
-                    coordinatesActivity.loadMeasureFragment();
-                }
+
             }
 
             saveSettings();

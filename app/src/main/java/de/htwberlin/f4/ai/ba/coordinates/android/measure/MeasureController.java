@@ -18,6 +18,7 @@ public interface MeasureController {
     void onPause();
     void onStartNodeSelected(Node node);
     void onTargetNodeSelected(Node node);
+    void onEdgeDetailsClicked();
 
     void onTestClicked();
 }

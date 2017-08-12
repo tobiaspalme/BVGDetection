@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
  * Created by benni on 18.07.2017.
@@ -23,6 +24,7 @@ public interface MeasureView {
     void enableStart();
     void disableStart();
     void showAlert(String msg);
+    void loadEdgeDetailsView(Node startNode, Node targetNode);
     Context getContext();
 
 }
