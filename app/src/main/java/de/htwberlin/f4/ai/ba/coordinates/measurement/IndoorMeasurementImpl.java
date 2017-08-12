@@ -1,11 +1,9 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
-import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
@@ -49,6 +47,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private PositionModule positionModule;
     private StepDirectionDetect directionDetect;
+
 
     // for direction detection
     private Handler timerHandler;

@@ -5,10 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.carol.bvg.R;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 
 /**
  * Save / load calibration from SharedPreferences

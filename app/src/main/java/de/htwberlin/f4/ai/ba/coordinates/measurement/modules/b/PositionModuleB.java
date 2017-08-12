@@ -1,9 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.PositionModule;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.DistanceModuleA;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
 
 /**
@@ -21,7 +19,7 @@ public class PositionModuleB extends PositionModuleA {
 
         altitudeModule = new AltitudeModuleB(sensorFactory, calibrationData.getAirPressure());
         distanceModule = new DistanceModuleB(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleB(sensorFactory, calibrationData.getAzimuth());
+        orientationModule = new OrientationModuleB(sensorFactory);
     }
 
 }

@@ -28,30 +28,28 @@ public class OrientationModuleA implements OrientationModule {
     protected float lastOrientation;
     protected long lastStepTimestamp;
 
-    public OrientationModuleA(SensorFactory sensorFactory, float azimuth) {
+    public OrientationModuleA(SensorFactory sensorFactory) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
-        lastOrientation = azimuth;
     }
 
     // calculate the orientation change from calibrated azimuth
     @Override
     public float getOrientation() {
 
-        float orientationDiff = 0.0f;
+        float currentOrientation = 0;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
         // just picking the last value in the interval
         Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
         List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_FUSION);
         if (dataValues != null && dataValues.size() > 0) {
-            float currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
-            orientationDiff = currentOrientation - lastOrientation;
+            currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             lastStepTimestamp = currentStepTimestamp;
         }
-        return orientationDiff;
 
+        return currentOrientation;
     }
 
     @Override

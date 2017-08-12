@@ -17,24 +17,23 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModule
 
 public class OrientationModuleC extends OrientationModuleA{
 
-    public OrientationModuleC(SensorFactory sensorFactory, float azimuth) {
-        super(sensorFactory, azimuth);
+    public OrientationModuleC(SensorFactory sensorFactory) {
+        super(sensorFactory);
     }
 
     @Override
     public float getOrientation() {
-        float orientationDiff = 0.0f;
+        float currentOrientation = 0;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
         // just picking the last value in the interval
         Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
         List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_SIMPLE);
         if (dataValues != null && dataValues.size() > 0) {
-            float currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
-            orientationDiff = currentOrientation - lastOrientation;
+            currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             lastStepTimestamp = currentStepTimestamp;
         }
-        return orientationDiff;
+        return currentOrientation;
     }
 
     @Override

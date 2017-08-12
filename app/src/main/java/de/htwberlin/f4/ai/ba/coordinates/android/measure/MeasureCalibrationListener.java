@@ -6,5 +6,5 @@ package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 public interface MeasureCalibrationListener {
 
-    void onFinish(float airPressure, float azimuth);
+    void onFinish(float airPressure);
 }

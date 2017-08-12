@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
+import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -49,10 +52,12 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private TextView coordinatesView;
     private TextView startNodeCoordinatesView;
     private TextView targetNodeCoordinatesView;
+    private TextView edgeDistanceView;
 
     private Button btnStart;
     private Button btnStop;
     private Button btnAdd;
+    private Button btnTest;
 
     private ListView stepListView;
 
@@ -62,6 +67,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
     private ImageView startNodeImage;
     private ImageView targetNodeImage;
+    private ImageView handycapImage;
 
 
     public MeasureViewImpl() {
@@ -89,12 +95,18 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         compassImageView = (ImageView) findViewById(R.id.coordinates_measure_compass_iv);
         stepCounterView = (TextView) findViewById(R.id.coordinates_measure_stepvalue);
         distanceView = (TextView) findViewById(R.id.coordinates_measure_distancevalue);
+        edgeDistanceView = (TextView) findViewById(R.id.coordinates_measure_edge_distance);
 
         //heightView = (TextView) root.findViewById(R.id.coordinates_measure_heightvalue);
         coordinatesView = (TextView) findViewById(R.id.coordinates_measure_coordinates);
 
         startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
         targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);
+        handycapImage = (ImageView) findViewById(R.id.coordinates_measure_handycapped);
+        // load handycap image as default
+        Glide.with(getContext())
+                .load(R.drawable.barrierefrei)
+                .into(handycapImage);
 
         startNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_start_coords);
         targetNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_target_coords);
@@ -237,6 +249,15 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
         });
 
+        btnTest = (Button) findViewById(R.id.coordinates_measure_test);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onTestClicked();
+                }
+            }
+        });
 
 
 
@@ -277,7 +298,8 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
     @Override
     public void updateDistance(float distance) {
-        distanceView.setText(String.valueOf(distance));
+        double roundDistance = Math.round(distance * 100.0) / 100.0;
+        distanceView.setText(String.valueOf(roundDistance));
     }
 
     @Override
@@ -307,7 +329,24 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         targetNodeCoordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
     }
 
-
+    @Override
+    public void updateEdge(Edge edge) {
+        // handycap friendly
+        if (edge.getAccessibly()) {
+            // load handycap image
+            Glide.with(getContext())
+                    .load(R.drawable.barrierefrei)
+                    .into(handycapImage);
+        } else {
+            // load handycap image
+            Glide.with(getContext())
+                    .load(R.drawable.nicht_barrierefrei)
+                    .into(handycapImage);
+        }
+        // edge weight is in cm, but we use meters, so convert it
+        float edgeDistance = edge.getWeight() / 100.0f;
+        edgeDistanceView.setText(String.valueOf(edgeDistance));
+    }
 
 
     @Override

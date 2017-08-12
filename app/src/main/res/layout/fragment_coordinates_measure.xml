@@ -143,7 +143,11 @@
     </RelativeLayout>
 
 
-
+    <Button
+        android:id="@+id/coordinates_measure_test"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="test" />
 
     <!-- buttons -->
 
@@ -250,7 +254,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="x / y / z"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>
@@ -266,11 +270,41 @@
             android:layout_weight="0.2"
             android:orientation="vertical">
 
-            <ImageView
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                app:srcCompat="@drawable/arrow_right"
-                />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/coordinates_measure_edge_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textSize="20sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="60dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/coordinates_measure_arrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/arrow_right"
+                    />
+
+                <ImageView
+                    android:id="@+id/coordinates_measure_handycapped"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/coordinates_measure_arrow"
+                    />
+            </RelativeLayout>
+
+
+
+
 
 
         </LinearLayout>
@@ -323,7 +357,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="x / y / z"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>

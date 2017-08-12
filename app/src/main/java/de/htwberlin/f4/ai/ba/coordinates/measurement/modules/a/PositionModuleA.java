@@ -3,7 +3,7 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 import android.util.Log;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
@@ -31,9 +31,9 @@ public class PositionModuleA implements PositionModule {
     public PositionModuleA(SensorFactory sensorFactory, CalibrationData calibrationData) {
         altitudeModule = new AltitudeModuleA(sensorFactory, calibrationData.getAirPressure());
         distanceModule = new DistanceModuleA(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleA(sensorFactory, calibrationData.getAzimuth());
+        orientationModule = new OrientationModuleA(sensorFactory);
         // set start point to 0,0,0
-        coordinates = new float[]{0.0f, 0.0f, 0.0f};
+        coordinates = calibrationData.getCoordinates();
     }
 
     @Override

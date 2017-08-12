@@ -1,6 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
-import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 
 /**
  * Created by benni on 30.07.2017.

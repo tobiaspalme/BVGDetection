@@ -11,31 +11,16 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.LowPassFilter;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModuleA;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c.OrientationModuleC;
 
 /**
  * Created by benni on 11.08.2017.
  */
 
-public class OrientationModuleD extends OrientationModuleA {
+public class OrientationModuleD extends OrientationModuleC {
 
-    public OrientationModuleD(SensorFactory sensorFactory, float azimuth) {
-        super(sensorFactory, azimuth);
-    }
-
-    @Override
-    public float getOrientation() {
-        float orientationDiff = 0.0f;
-        long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
-        // calculation
-        // just picking the last value in the interval
-        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
-        List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_SIMPLE);
-        if (dataValues != null && dataValues.size() > 0) {
-            float currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
-            orientationDiff = currentOrientation - lastOrientation;
-            lastStepTimestamp = currentStepTimestamp;
-        }
-        return orientationDiff;
+    public OrientationModuleD(SensorFactory sensorFactory) {
+        super(sensorFactory);
     }
 
     @Override
@@ -50,9 +35,6 @@ public class OrientationModuleD extends OrientationModuleA {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
                     float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
                     newValue.setValues(new float[]{filteredValue});
-                    //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
-                    //newValue.getValues()[1] = LowPassFilter.filter(latestValue[1], newValue.getValues()[1], 0.1f);
-                    //newValue.getValues()[2] = LowPassFilter.filter(latestValue[2], newValue.getValues()[2], 0.1f);
                 }
 
                 dataModel.insertData(newValue);

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ba.coordinates.measurement;
+package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 /**
  * SImple class for saving calibration stuff
@@ -9,20 +9,27 @@ public class CalibrationData {
     private float stepLength;
     private int stepPeriod;
     private float airPressure;
-    private float azimuth;
+    private float[] coordinates;
 
     public CalibrationData() {
         stepLength = 0.0f;
         stepPeriod = 0;
         airPressure = 0.0f;
-        azimuth = 0.0f;
+        coordinates = new float[3];
     }
 
     public CalibrationData(float stepLength, int stepPeriod) {
         this.stepLength = stepLength;
         this.stepPeriod = stepPeriod;
         airPressure = 0.0f;
-        azimuth = 0.0f;
+        coordinates = new float[3];
+    }
+
+    public CalibrationData(float stepLength, int stepPeriod, float[] coordinates) {
+        this.stepLength = stepLength;
+        this.stepPeriod = stepPeriod;
+        airPressure = 0.0f;
+        this.coordinates = coordinates;
     }
 
     public float getStepLength() {
@@ -49,11 +56,11 @@ public class CalibrationData {
         this.airPressure = airPressure;
     }
 
-    public float getAzimuth() {
-        return azimuth;
+    public float[] getCoordinates() {
+        return coordinates;
     }
 
-    public void setAzimuth(float azimuth) {
-        this.azimuth = azimuth;
+    public void setCoordinates(float[] coordinates) {
+        this.coordinates = coordinates;
     }
 }

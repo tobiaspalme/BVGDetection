@@ -1,11 +1,8 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.CalibrationData;
+import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b.AltitudeModuleB;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b.DistanceModuleB;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b.OrientationModuleB;
 
 /**
  * Orientation: CompassSimple
@@ -22,6 +19,6 @@ public class PositionModuleC extends PositionModuleA{
 
         altitudeModule = new AltitudeModuleC(sensorFactory, calibrationData.getAirPressure());
         distanceModule = new DistanceModuleC(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleC(sensorFactory, calibrationData.getAzimuth());
+        orientationModule = new OrientationModuleC(sensorFactory);
     }
 }

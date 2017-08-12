@@ -384,7 +384,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
             do {
 
                 boolean accessibly;
-                if (cursor.getString(3).equals("true")) {
+                if (cursor.getInt(3) == 1) {
                     accessibly = true;
                 } else {
                     accessibly = false;
@@ -435,7 +435,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         //String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
-        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'";
+        String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'"
+                + " OR " + EDGE_NODE_A + " ='" + edge.getNodeB().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeA().getId() + "' ";
 
 
 //        Log.d("DB: delete_EDGE", "" + edge.getId());
