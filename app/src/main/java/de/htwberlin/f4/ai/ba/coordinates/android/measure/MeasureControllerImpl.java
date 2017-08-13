@@ -295,6 +295,11 @@ public class MeasureControllerImpl implements MeasureController {
     }
 
     @Override
+    public void onResume() {
+        handleNodeSelection(startNode, targetNode);
+    }
+
+    @Override
     public void onStartNodeSelected(Node node) {
         startNode = node;
         handleNodeSelection(startNode, targetNode);

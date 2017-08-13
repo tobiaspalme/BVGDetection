@@ -391,6 +391,13 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         return this;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (controller != null) {
+            controller.onResume();
+        }
+    }
 
     private SensorDataModel createTestData() {
         SensorDataModel dataModel = new SensorDataModelImpl();
