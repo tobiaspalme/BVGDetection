@@ -245,21 +245,33 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-        // create a temporary edge object to check if edge already exists
-        Edge checkEdge = new EdgeImplementation(startNode, targetNode, true, null, 0, "");
-        boolean foundEdge = databaseHandler.checkIfEdgeExists(checkEdge);
 
-        // delete the old edge
-        if (foundEdge) {
-            databaseHandler.deleteEdge(checkEdge);
+        Edge edge = databaseHandler.getEdge(startNode, targetNode);
+        boolean edgeFound;
+
+        // if there is no edge between start and targetnode yet, we create a new one
+        if (edge == null) {
+            edge = new EdgeImplementation(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
+            edgeFound = false;
+        } else {
+            edge.setAccessibly(handycapFriendly);
+            edge.getStepCoordsList().clear();
+            edge.getStepCoordsList().addAll(stepCoords);
+            edgeFound = true;
         }
-        // create new edge
-        Edge edge= new EdgeImplementation(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
+
         // since the distance is calculated in meters we need to convert it into cm for edge weight
         int weightCm = Math.round(edgeDistance*100);
         edge.setWeight(weightCm);
-        // insert edge into db and update our targetnode
-        databaseHandler.insertEdge(edge);
+        // insert edge when there is no existing edge yet
+        if (!edgeFound) {
+            databaseHandler.insertEdge(edge);
+        }
+        // update edge if there was an existing edge
+        else {
+            databaseHandler.updateEdge(edge);
+        }
+        // update our targetnode
         databaseHandler.updateNode(targetNode, targetNode.getId());
         // update view with new edge data
         view.updateEdge(edge);
@@ -365,22 +377,11 @@ public class MeasureControllerImpl implements MeasureController {
                 DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
 
                 // check if edge already exists
-                Edge tmpEdge = new EdgeImplementation(start, target, true, 0);
-                if (databaseHandler.checkIfEdgeExists(tmpEdge)) {
-                    // edge exists, now we have to find the right one
-                    Edge existingEdge = null;
-                    List<Edge> edgeList = databaseHandler.getAllEdges();
-                    for (Edge edge : edgeList) {
-                        if ( (edge.getNodeA().getId().equals(start.getId()) && edge.getNodeB().getId().equals(target.getId())) ||
-                                (edge.getNodeA().getId().equals(target.getId()) && edge.getNodeB().getId().equals(start.getId())) ) {
-                            existingEdge = edge;
-                            break;
-                        }
-                    }
+                Edge existingEdge = databaseHandler.getEdge(startNode, targetNode);
+                if (existingEdge != null) {
                     // if we found the correct edge update view with correct data
-                    if (existingEdge != null) {
-                        view.updateEdge(existingEdge);
-                    }
+                    view.updateEdge(existingEdge);
+
                 }
                 // if there isn't an edge, update view with placeholder data
                 else {

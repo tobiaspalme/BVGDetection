@@ -64,9 +64,6 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
-
-
-
         }
     }
 
@@ -81,12 +78,8 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
     public void onSaveClicked() {
         // since there is no update method yet, delete old edge and create new
         if (edge != null) {
-            Edge updatedEdge = new EdgeImplementation(edge.getNodeA(), edge.getNodeB(), edge.getAccessibly(), edge.getStepCoordsList(), edge.getWeight(), edge.getAdditionalInfo());
             DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-            databaseHandler.deleteEdge(edge);
-            databaseHandler.insertEdge(updatedEdge);
-            // save our updated edge object
-            edge = updatedEdge;
+            databaseHandler.updateEdge(edge);
             view.finish();
         }
     }
@@ -120,26 +113,10 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
             view.updateStartNodeInfo(startNode);
             view.updateTargetNodeInfo(targetNode);
 
-            Edge existingEdge = findEdge(startNode, targetNode);
-            // save edge for later usage
-            edge = existingEdge;
+            DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+            edge = databaseHandler.getEdge(startNode, targetNode);
+
             view.updateEdgeInfo(edge);
         }
-    }
-
-    private Edge findEdge(Node start, Node target) {
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-        List<Edge> edgeList = databaseHandler.getAllEdges();
-        Edge existingEdge = null;
-
-        for (Edge edge : edgeList) {
-            if ( (edge.getNodeA().getId().equals(start.getId()) && edge.getNodeB().getId().equals(target.getId())) ||
-                    (edge.getNodeA().getId().equals(target.getId()) && edge.getNodeB().getId().equals(start.getId())) ) {
-                existingEdge = edge;
-                break;
-            }
-        }
-
-        return existingEdge;
     }
 }
