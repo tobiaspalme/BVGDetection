@@ -312,7 +312,7 @@ public class NodeRecordActivity extends BaseActivity {
             Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
                     Toast.LENGTH_LONG).show();
         } else {
-            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(signalInformationList), "", picPath , "");
+            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPath , "");
 
             if (!fingerprintTaken) {
                 new AlertDialog.Builder(this)
@@ -330,6 +330,8 @@ public class NodeRecordActivity extends BaseActivity {
                                 progressStatus = 0;
                                 progressText.setText(String.valueOf(progressStatus));
                                 progressBar.setProgress(progressStatus);
+                                recordButton.setEnabled(true);
+                                captureButton.setEnabled(true);
 
                             }
                         })

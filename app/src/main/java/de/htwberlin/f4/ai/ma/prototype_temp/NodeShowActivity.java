@@ -28,6 +28,7 @@ public class NodeShowActivity extends BaseActivity {
 
     TextView idTextview;
     TextView descriptionTextview;
+    TextView wifiNameTextview;
     TextView coordinatesTextView;
     ImageView cameraImageView;
 
@@ -44,6 +45,7 @@ public class NodeShowActivity extends BaseActivity {
 
         idTextview = (TextView) findViewById(R.id.id_textview_show);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_show);
+        wifiNameTextview = (TextView) findViewById(R.id.wifi_name_textview_show);
         coordinatesTextView = (TextView) findViewById(R.id.coordinates_textview_show);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview_show);
 
@@ -55,6 +57,7 @@ public class NodeShowActivity extends BaseActivity {
 
         idTextview.setText(node.getId());
         descriptionTextview.setText(node.getDescription());
+        wifiNameTextview.setText(node.getFingerprint().getWifiName());
         coordinatesTextView.setText(node.getCoordinates());
 
 

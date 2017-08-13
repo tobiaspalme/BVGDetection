@@ -330,7 +330,7 @@ public class LocationActivity extends BaseActivity {
 
         }
 
-        Node node = nodeFactory.createInstance(null, "", new Fingerprint(signalInformationList), "", "", "");
+        Node node = nodeFactory.createInstance(null, "", new Fingerprint("", signalInformationList), "", "", "");
 
         foundNodeName = databaseHandler.calculateNodeId(node);
 

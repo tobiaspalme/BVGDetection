@@ -17,7 +17,7 @@ import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 public class JSONConverter {
 
     // Convert List<SignalInformation> to JSON-String
-    public String convertSignalInfoToJSON(List<SignalInformation> signalInformationList) {
+    public String convertSignalInfoListToJSON(List<SignalInformation> signalInformationList) {
 
         JSONObject jsonObject = new JSONObject();
         JSONArray signalJsonArray = new JSONArray();
@@ -50,7 +50,7 @@ public class JSONConverter {
 
 
     // Convert JSON-String to List<SignalInformation>
-    public List<SignalInformation> convertJsonToSignalInfo(String jsonString) {
+    public List<SignalInformation> convertJsonToSignalInfoList(String jsonString) {
 
         List<SignalInformation> signalInformationList = new ArrayList<>();
 

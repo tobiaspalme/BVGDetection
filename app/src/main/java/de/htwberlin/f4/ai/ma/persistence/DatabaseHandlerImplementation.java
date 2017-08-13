@@ -56,6 +56,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     private static final String NODE_ID = "id";
     private static final String NODE_DESCRIPTION = "description";
+    private static final String NODE_WIFI_NAME = "wifi_name";
     private static final String NODE_SIGNALINFORMATIONLIST = "signalinformationlist";
     private static final String NODE_COORDINATES = "coordinates";
     private static final String NODE_PICTURE_PATH = "picture_path";
@@ -104,6 +105,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         String createNodeTableQuery = "CREATE TABLE " + NODES_TABLE + " (" +
                 NODE_ID + " TEXT PRIMARY KEY," +
                 NODE_DESCRIPTION + " TEXT," +
+                NODE_WIFI_NAME + " TEXT, " +
                 NODE_SIGNALINFORMATIONLIST + " TEXT," +
                 NODE_COORDINATES + " TEXT," +
                 NODE_PICTURE_PATH + " TEXT," +
@@ -146,7 +148,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         values.put(NODE_ID, node.getId());
         values.put(NODE_DESCRIPTION, node.getDescription());
-        values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoToJSON(node.getFingerprint().getSignalInformationList()));
+        values.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+        values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         values.put(NODE_COORDINATES, node.getCoordinates());
         values.put(NODE_PICTURE_PATH, node.getPicturePath());
         values.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
@@ -161,7 +164,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Update Nodes
     public void updateNode(Node node, String oldNodeId) {
 
-        // Update Edges which contain the updated Node
+        // At first, update Edges which contain the updated Node
         for (Edge e : getAllEdges()) {
             if (e.getNodeA().getId().equals(oldNodeId)) {
                 updateEdge(e, EDGE_NODE_A, node.getId());
@@ -175,6 +178,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         contentValues.put(NODE_ID, node.getId());
         contentValues.put(NODE_DESCRIPTION, node.getDescription());
+        contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
         contentValues.put(NODE_COORDINATES, node.getCoordinates());
         contentValues.put(NODE_PICTURE_PATH, node.getPicturePath());
         contentValues.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
@@ -197,7 +201,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         if (cursor.moveToFirst()) {
             do {
                 Node node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
-                        new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                        new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -217,7 +221,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         if (cursor.moveToFirst()) {
             node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
-                    new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                    new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
             Log.d("DB: select_node", nodeID);
         }
         database.close();

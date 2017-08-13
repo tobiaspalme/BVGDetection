@@ -8,13 +8,24 @@ import java.util.List;
 
 public class Fingerprint {
 
+    private String wifiName;
     private List<SignalInformation> signalInformationList;
 
 
-    public Fingerprint(List<SignalInformation> signalInformationList) {
+    public Fingerprint(String wifiName, List<SignalInformation> signalInformationList) {
+        this.wifiName = wifiName;
         this.signalInformationList = signalInformationList;
     }
 
+
+
+    public String getWifiName() {
+        return this.wifiName;
+    }
+
+    public void setWifiName(String wifiName) {
+        this.wifiName = wifiName;
+    }
 
     public List<SignalInformation> getSignalInformationList() {
         return this.signalInformationList;

@@ -69,7 +69,7 @@
     <string name="capture_button">Bild aufnehmen</string>
     <string name="description_text">Beschreibung:</string>
     <string name="measure_time_text">Messzeit:</string>
-    <string name="wlan_name_text">WLAN:</string>
+    <string name="wifi_name_text">WLAN:</string>
     <string name="node_name_text">Name des Ortes:</string>
     <string name="minutes_text">Minuten</string>
     <string name="save_node_button_text">Ort speichern</string>

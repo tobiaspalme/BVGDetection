@@ -37,7 +37,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
 public class NodeEditActivity extends BaseActivity {
 
     private EditText idEditText;
-    EditText wlanEditText;
+    //EditText wlanEditText;
+    private TextView wlanTextview;
     private EditText descriptionEditText;
     private EditText coordinatesEditText;
     //private TextView coordinatesTextview;
@@ -68,7 +69,8 @@ public class NodeEditActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_node_edit, contentFrameLayout);
 
         idEditText = (EditText) findViewById(R.id.edit_id_edittext);
-        wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
+        //wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
+        wlanTextview = (TextView) findViewById(R.id.wifi_name_textview);
         descriptionEditText = (EditText) findViewById(R.id.description_edittext);
         //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview);
         coordinatesEditText = (EditText) findViewById(R.id.coordinates_edittext);
@@ -96,8 +98,7 @@ public class NodeEditActivity extends BaseActivity {
         oldNodeId = node.getId();
 
         idEditText.setText(node.getId());
-        //TODO wlan-name ermitteln
-        //wlanEditText.setText(node.getSignalInformation().hashCode());
+        wlanTextview.setText(node.getFingerprint().getWifiName());
         descriptionEditText.setText(node.getDescription());
         //coordinatesTextview.setText(node.getCoordinates());
         coordinatesEditText.setText(node.getCoordinates());
