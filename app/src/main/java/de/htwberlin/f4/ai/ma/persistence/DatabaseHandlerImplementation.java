@@ -196,7 +196,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         if (cursor.moveToFirst()) {
             do {
-                Node node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1), new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Node node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
+                        new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -215,7 +216,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1), new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
+                    new Fingerprint(jsonConverter.convertJsonToSignalInfo(cursor.getString(2))), cursor.getString(3), cursor.getString(4), cursor.getString(5));
             Log.d("DB: select_node", nodeID);
         }
         database.close();
