@@ -47,6 +47,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     private PositionModule positionModule;
     private StepDirectionDetect directionDetect;
+    private StepDirectionDetectListener stepDirectionListener;
 
 
     // for direction detection
@@ -73,14 +74,18 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         directionDetect = new StepDirectionDetectImpl(sensorFactory);
         stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
         // TODO: inform controller about direction and handle it, if direction != forward
+        if (stepDirectionListener != null) {
+            stepDirectionRunnable.setListener(stepDirectionListener);
+        }
+        /*
         stepDirectionRunnable.setListener(new StepDirectionDetectListener() {
             @Override
             public void onDirectionDetect(StepDirection stepDirection) {
-                /*Context context = CoordinatesActivity.getInstance().getApplicationContext();
+                Context context = CoordinatesActivity.getInstance().getApplicationContext();
                 Toast toast = Toast.makeText(context, "Direction: " + stepDirection, Toast.LENGTH_SHORT);
-                toast.show();*/
+                toast.show();
             }
-        });
+        });*/
 
         // add the sensor from direction detect to our sensorlist, so we can stop it later
         sensorList.add(directionDetect.getSensor());
@@ -163,6 +168,11 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     @Override
     public void setSensorListener(SensorListener listener) {
         sensorListener = listener;
+    }
+
+    @Override
+    public void setStepDirectionListener(StepDirectionDetectListener listener) {
+        stepDirectionListener = listener;
     }
 
     @Override

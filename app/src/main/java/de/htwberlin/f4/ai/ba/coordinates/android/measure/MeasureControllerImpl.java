@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.example.carol.bvg.R;
 
@@ -28,6 +29,8 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirection;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -161,6 +164,13 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
 
                 }
+            }
+        });
+
+        indoorMeasurement.setStepDirectionListener(new StepDirectionDetectListener() {
+            @Override
+            public void onDirectionDetect(StepDirection stepDirection) {
+                Log.d("tmp", "Direction: " + stepDirection);
             }
         });
 
