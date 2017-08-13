@@ -1,14 +1,9 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.content.Context;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,8 +16,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -352,7 +345,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         } else {
             // load handycap image
             Glide.with(getContext())
-                    .load(R.drawable.nicht_barrierefrei)
+                    .load(R.drawable.nicht_barrierefrei1)
                     .into(handycapImage);
         }
         // edge weight is in cm, but we use meters, so convert it
