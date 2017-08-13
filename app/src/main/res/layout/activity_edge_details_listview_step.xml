@@ -6,30 +6,24 @@
     android:weightSum="1">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
 
         <TextView
-            android:id="@+id/listview_group_poiname"
+            android:id="@+id/listview_group_stepname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="POI Name"
             android:layout_alignParentLeft="true"
             android:textSize="20sp"/>
 
-        <Spinner
-            android:id="@+id/listview_group_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-             />
 
         <TextView
-            android:id="@+id/listview_group_poi_coords"
+            android:id="@+id/listview_group_step_coords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/listview_group_poiname"
+            android:layout_below="@id/listview_group_stepname"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:text="x / y / u"
