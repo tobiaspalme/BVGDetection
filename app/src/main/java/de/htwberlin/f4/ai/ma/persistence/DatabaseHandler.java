@@ -14,6 +14,7 @@ import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
  * This interface offers all necessary database-functions to
  * create, edit and delete Nodes, Edges and LocationResults
  * and the export of the SQLite DB.
+ *
  * It also can calculate the matching node for a given node (current location).
  */
 
@@ -31,7 +32,9 @@ public interface DatabaseHandler {
     void deleteLocationResult(LocationResult locationResult);
 
     void insertEdge(Edge edge);
+    Edge getEdge(Node nodeA, Node nodeB);
     ArrayList<Edge> getAllEdges();
+    void updateEdge(Edge edge, String keyToBeUpdated, String value);
     boolean checkIfEdgeExists(Edge edge);
     void deleteEdge(Edge edge);
 

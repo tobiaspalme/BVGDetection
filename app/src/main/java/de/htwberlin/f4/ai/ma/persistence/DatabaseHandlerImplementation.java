@@ -341,20 +341,20 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
 
     // Update Edges
-    public void updateEdge(Edge edge, String key, String value) {
+    public void updateEdge(Edge edge, String keyToBeUpdated, String value) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        if (key.equals(EDGE_NODE_A)) {
+        if (keyToBeUpdated.equals(EDGE_NODE_A)) {
             contentValues.put(EDGE_NODE_A, value);
             contentValues.put(EDGE_NODE_B, edge.getNodeB().getId());
 
-        } else if (key.equals(EDGE_NODE_B)) {
+        } else if (keyToBeUpdated.equals(EDGE_NODE_B)) {
             contentValues.put(EDGE_NODE_B, value);
             contentValues.put(EDGE_NODE_A, edge.getNodeA().getId());
         }
 
-        contentValues.put("accessibly", edge.getAccessibly());
+        contentValues.put(EDGE_ACCESSIBLY, edge.getAccessibly());
 
         StringBuilder stepListSb = new StringBuilder();
         for (String string : edge.getStepCoordsList())
@@ -371,6 +371,37 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
         database.close();
     }
+
+
+    // Get single Edge
+    public Edge getEdge(Node nodeA, Node nodeB) {
+        String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + "='" + nodeA.getId() + "' AND " + EDGE_NODE_B + "='" + nodeB.getId() + "' OR" +
+                EDGE_NODE_A + "='" + nodeB.getId() + "' AND " + EDGE_NODE_B + "='" + nodeA.getId() + "'";
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        Edge edge;
+
+        if (cursor.moveToFirst()) {
+            boolean accessibly = false;
+            if (cursor.getInt(3) == 1) {
+                accessibly = true;
+            }
+            Node node1 = getNode(cursor.getString(1));
+            Node node2 = getNode(cursor.getString(2));
+
+            String stepListString = cursor.getString(4);
+            List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
+
+            edge = new EdgeImplementation(node1, node2, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
+
+            database.close();
+            return edge;
+        }
+        return null;
+    }
+
+
+
 
 
     // Get all Edges
