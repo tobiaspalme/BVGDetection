@@ -339,20 +339,43 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         database.close();
     }
 
-
-    // Update Edges
-    public void updateEdge(Edge edge, String keyToBeUpdated, String value) {
+    // Update Edges (only for changing nodeA and nodeB)
+    public void updateEdge(Edge edge, String nodeToBeUpdated, String value) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        if (keyToBeUpdated.equals(EDGE_NODE_A)) {
+        if (nodeToBeUpdated.equals(EDGE_NODE_A)) {
             contentValues.put(EDGE_NODE_A, value);
             contentValues.put(EDGE_NODE_B, edge.getNodeB().getId());
 
-        } else if (keyToBeUpdated.equals(EDGE_NODE_B)) {
+        } else if (nodeToBeUpdated.equals(EDGE_NODE_B)) {
             contentValues.put(EDGE_NODE_B, value);
             contentValues.put(EDGE_NODE_A, edge.getNodeA().getId());
         }
+
+        contentValues.put(EDGE_ACCESSIBLY, edge.getAccessibly());
+
+        StringBuilder stepListSb = new StringBuilder();
+        for (String string : edge.getStepCoordsList())
+        {
+            stepListSb.append(string);
+            stepListSb.append("\t");
+        }
+
+        contentValues.put(EDGE_STEPLIST, stepListSb.toString());
+        contentValues.put(EDGE_WEIGHT, edge.getWeight());
+        contentValues.put(EDGE_ADDITIONAL_INFO, edge.getAdditionalInfo());
+
+        database.update(EDGES_TABLE, contentValues, EDGE_NODE_A + "='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + "='" + edge.getNodeB().getId() + "'", null);
+
+        database.close();
+    }
+
+
+    // Update Edges (everything but Edge's nodeA and nodeB attribute)
+    public void updateEdge(Edge edge) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
         contentValues.put(EDGE_ACCESSIBLY, edge.getAccessibly());
 
@@ -465,14 +488,10 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     // Delete Edge
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
-        //String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_ID + " ='" + edge.getId() + "'";
         String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'"
                 + " OR " + EDGE_NODE_A + " ='" + edge.getNodeB().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeA().getId() + "' ";
 
-
-//        Log.d("DB: delete_EDGE", "" + edge.getId());
         Log.d("DB: delete_EDGE", "" + edge.getNodeA().getId() + " " + edge.getNodeB().getId());
-
 
         database.execSQL(deleteQuery);
         database.close();

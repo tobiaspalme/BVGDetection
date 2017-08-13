@@ -39,7 +39,8 @@ public class NodeEditActivity extends BaseActivity {
     private EditText idEditText;
     EditText wlanEditText;
     private EditText descriptionEditText;
-    private TextView coordinatesTextview;
+    private EditText coordinatesEditText;
+    //private TextView coordinatesTextview;
     private ImageView cameraImageView;
     Button saveButton;
     Button deleteButton;
@@ -69,7 +70,8 @@ public class NodeEditActivity extends BaseActivity {
         idEditText = (EditText) findViewById(R.id.edit_id_edittext);
         wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
         descriptionEditText = (EditText) findViewById(R.id.description_edittext);
-        coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview);
+        //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview);
+        coordinatesEditText = (EditText) findViewById(R.id.coordinates_edittext);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
         saveButton = (Button) findViewById(R.id.save_button);
         deleteButton = (Button) findViewById(R.id.delete_button);
@@ -97,7 +99,8 @@ public class NodeEditActivity extends BaseActivity {
         //TODO wlan-name ermitteln
         //wlanEditText.setText(node.getSignalInformation().hashCode());
         descriptionEditText.setText(node.getDescription());
-        coordinatesTextview.setText(node.getCoordinates());
+        //coordinatesTextview.setText(node.getCoordinates());
+        coordinatesEditText.setText(node.getCoordinates());
 
 
         picturePath = node.getPicturePath();
@@ -141,24 +144,23 @@ public class NodeEditActivity extends BaseActivity {
             public void onClick(View view) {
                 node.setId(idEditText.getText().toString());
                 node.setDescription(descriptionEditText.getText().toString());
-                //node.setCoordinates(coordinatesTextview.getText().toString());
+                node.setCoordinates(coordinatesEditText.getText().toString());
                 node.setPicturePath(picturePath);
-
-                // TODO Übergangslösung
-                int rnd = (int) (Math.random()*100);
-                System.out.println("+++++++++++ RAND. " + rnd);
 
                 if (tempFile != null) {
                     try {
+                        // TODO Übergangslösung
+                        int rnd = (int) (Math.random()*100);
+                        System.out.println("+++++++++++ RAND. " + rnd);
+
+
                         copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + "_" + rnd + ".jpg"));
                         node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + "_" + rnd +  ".jpg");
                     } catch (IOException ioException) {
                         System.out.println("IOException while copying image from temp folder to picture folder");
                     }
                 }
-                //databaseHandlerImplementation.updateNode(node, oldNodeId);
                 databaseHandler.updateNode(node, oldNodeId);
-
                 finish();
             }
         });

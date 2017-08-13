@@ -34,7 +34,8 @@ public interface DatabaseHandler {
     void insertEdge(Edge edge);
     Edge getEdge(Node nodeA, Node nodeB);
     ArrayList<Edge> getAllEdges();
-    void updateEdge(Edge edge, String keyToBeUpdated, String value);
+    void updateEdge(Edge edge);
+    void updateEdge(Edge edge, String nodeToBeUpdated, String value);
     boolean checkIfEdgeExists(Edge edge);
     void deleteEdge(Edge edge);
 

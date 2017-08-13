@@ -70,10 +70,16 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/coordinates_text" />
 
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/coordinates_textview" />
+            android:id="@+id/coordinates_edittext"/>
+
+        <!--<TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/coordinates_textview" />-->
+
     </LinearLayout>
 
     <RelativeLayout
