@@ -6,8 +6,18 @@ package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection;
 
 public enum StepDirection {
 
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
+    FORWARD ("Vorwärts"),
+    BACKWARD ("Rückwärts"),
+    LEFT ("Links"),
+    RIGHT ("Rechts");
+
+    private final String name;
+
+    private StepDirection(String s) {
+        name = s;
+    }
+
+    public String toString() {
+        return this.name;
+    }
 }

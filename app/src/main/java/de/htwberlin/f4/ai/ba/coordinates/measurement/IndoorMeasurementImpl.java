@@ -1,5 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
@@ -48,7 +50,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private PositionModule positionModule;
     private StepDirectionDetect directionDetect;
     private StepDirectionDetectListener stepDirectionListener;
-
+    private Context context;
 
     // for direction detection
     private Handler timerHandler;
@@ -57,8 +59,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private static final int DIRECTION_DETECT_DELAY = 100;
 
 
-    public IndoorMeasurementImpl(SensorFactory sensorFactory) {
-        this.sensorFactory = sensorFactory;
+    public IndoorMeasurementImpl(Context context) {
+        this.context = context;
+        sensorFactory = new SensorFactoryImpl(context);
         sensorList = new ArrayList<>();
     }
 
@@ -71,7 +74,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     @Override
     public void start(IndoorMeasurementType indoorMeasurementType) {
         timerHandler = new Handler(Looper.getMainLooper());
-        directionDetect = new StepDirectionDetectImpl(sensorFactory);
+        directionDetect = new StepDirectionDetectImpl(context);
         stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
         // TODO: inform controller about direction and handle it, if direction != forward
         if (stepDirectionListener != null) {

@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
@@ -104,7 +105,7 @@ public class MeasureControllerImpl implements MeasureController {
         sensorDataModel = new SensorDataModelImpl();
 
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
-        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
+        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
 
         indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
@@ -170,7 +171,56 @@ public class MeasureControllerImpl implements MeasureController {
         indoorMeasurement.setStepDirectionListener(new StepDirectionDetectListener() {
             @Override
             public void onDirectionDetect(StepDirection stepDirection) {
-                Log.d("tmp", "Direction: " + stepDirection);
+                /*Toast toast = Toast.makeText(view.getContext(), "Direction: " + stepDirection, Toast.LENGTH_SHORT);
+                toast.show();*/
+
+                if (stepDirection != StepDirection.FORWARD) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+                    alertDialogBuilder.setTitle("Falsche Schrittrichtung");
+                    alertDialogBuilder.setMessage("Es wurde ein " + stepDirection + "schritt festgestellt. Falls dies so ist, starten Sie die Messung bitte neu");
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setIcon(R.drawable.error);
+
+                    alertDialogBuilder.setPositiveButton("Ja, das ist korrekt", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // reset
+                            indoorMeasurement.stop();
+                            stepList = new ArrayList<>();
+                            stepCount = 0;
+                            edgeDistance = 0f;
+
+                            view.updateStepCount(stepCount);
+                            view.updateDistance(edgeDistance);
+                            view.disableStop();
+                            view.enableStart();
+
+                            // check if the startnode already got coordinates
+                            if (startNode.getCoordinates().length() > 0) {
+                                String[] splitted = startNode.getCoordinates().split(";");
+                                // save the existing coordinates for distance calculation
+                                coords[0] = Float.valueOf(splitted[0]);
+                                coords[1] = Float.valueOf(splitted[1]);
+                                coords[2] = Float.valueOf(splitted[2]);
+                                // update coordinates in view
+                                view.updateCoordinates(coords[0], coords[1], coords[2]);
+                            } else {
+                                coords[0] = 0.0f;
+                                coords[1] = 0.0f;
+                                coords[2] = 0.0f;
+                                view.updateCoordinates(0.0f, 0.0f, 0.0f);
+                            }
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton("Nein, weiter", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
             }
         });
 
@@ -424,7 +474,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     private void calibrate() {
         timerHandler = new Handler(Looper.getMainLooper());
-        pressureCalibration = new MeasureCalibration(sensorDataModel, measurementType);
+        pressureCalibration = new MeasureCalibration(sensorDataModel);
 
         pressureCalibration.setListener(new MeasureCalibrationListener() {
             @Override

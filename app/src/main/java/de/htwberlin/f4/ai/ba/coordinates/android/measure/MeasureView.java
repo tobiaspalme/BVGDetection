@@ -23,6 +23,8 @@ public interface MeasureView {
     void updateEdge(Edge edge);
     void enableStart();
     void disableStart();
+    void enableStop();
+    void disableStop();
     void showAlert(String msg);
     void loadEdgeDetailsView(Node startNode, Node targetNode);
     Context getContext();

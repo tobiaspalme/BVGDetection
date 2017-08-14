@@ -37,7 +37,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         stepCount = 0;
         stepTimes = new ArrayList<>();
         SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
-        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(sensorFactory);
+        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
         indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {

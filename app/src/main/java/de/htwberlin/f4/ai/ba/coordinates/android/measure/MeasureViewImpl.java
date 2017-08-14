@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorChecker;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorCheckerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
@@ -118,10 +120,21 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
         modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
-        spinnerValues.add(IndoorMeasurementType.VARIANT_A);
-        spinnerValues.add(IndoorMeasurementType.VARIANT_B);
-        spinnerValues.add(IndoorMeasurementType.VARIANT_C);
-        spinnerValues.add(IndoorMeasurementType.VARIANT_D);
+        // check available measurement types / sensors
+        SensorChecker sensorChecker = new SensorCheckerImpl(this);
+        if (sensorChecker.checkSensor(IndoorMeasurementType.VARIANT_A)) {
+            spinnerValues.add(IndoorMeasurementType.VARIANT_A);
+        }
+        if (sensorChecker.checkSensor(IndoorMeasurementType.VARIANT_B)) {
+            spinnerValues.add(IndoorMeasurementType.VARIANT_B);
+        }
+        if (sensorChecker.checkSensor(IndoorMeasurementType.VARIANT_C)) {
+            spinnerValues.add(IndoorMeasurementType.VARIANT_C);
+        }
+        if (sensorChecker.checkSensor(IndoorMeasurementType.VARIANT_D)) {
+            spinnerValues.add(IndoorMeasurementType.VARIANT_D);
+        }
+
         final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerValues);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -254,15 +267,6 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
         });
 
-        btnTest = (Button) findViewById(R.id.coordinates_measure_test);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (controller != null) {
-                    controller.onTestClicked();
-                }
-            }
-        });
 
 
 
@@ -365,6 +369,20 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     public void disableStart() {
         if (btnStart != null) {
             btnStart.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void enableStop() {
+        if (btnStop != null) {
+            btnStop.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void disableStop() {
+        if (btnStop != null) {
+            btnStop.setEnabled(false);
         }
     }
 

@@ -16,11 +16,9 @@ public class MeasureCalibration implements Runnable {
 
     private SensorDataModel sensorDataModel;
     private MeasureCalibrationListener listener;
-    private IndoorMeasurementType indoorMeasurementType;
 
-    public MeasureCalibration(SensorDataModel sensorDataModel, IndoorMeasurementType measurementType) {
+    public MeasureCalibration(SensorDataModel sensorDataModel) {
         this.sensorDataModel = sensorDataModel;
-        indoorMeasurementType = measurementType;
     }
 
     public void setListener(MeasureCalibrationListener listener) {
@@ -33,21 +31,21 @@ public class MeasureCalibration implements Runnable {
         float pressureAvg = 0.0f;
 
         // calibrate without lowpass filter
-        if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A || indoorMeasurementType == IndoorMeasurementType.VARIANT_C) {
-            // calc avg barometer
-            List<SensorData> barometerData = sensorDataModel.getData().get(SensorType.BAROMETER);
-            if (barometerData != null) {
-                float pressureSum = 0.0f;
 
-                // sum up all airpressure values
-                for (SensorData data : barometerData) {
-                    pressureSum += data.getValues()[0];
-                }
-                // calculate avg
-                pressureAvg = pressureSum / barometerData.size();
+        // calc avg barometer
+        List<SensorData> barometerData = sensorDataModel.getData().get(SensorType.BAROMETER);
+        if (barometerData != null) {
+            float pressureSum = 0.0f;
+
+            // sum up all airpressure values
+            for (SensorData data : barometerData) {
+                pressureSum += data.getValues()[0];
             }
-
+            // calculate avg
+            pressureAvg = pressureSum / barometerData.size();
         }
+
+        /*
         // calibrate with lowpass filter
         else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_B || indoorMeasurementType == IndoorMeasurementType.VARIANT_D) {
 
@@ -72,7 +70,7 @@ public class MeasureCalibration implements Runnable {
                 // calculate avg
                 pressureAvg = pressureSum / barometerData.size();
             }
-        }
+        }*/
 
 
         if (listener != null) {

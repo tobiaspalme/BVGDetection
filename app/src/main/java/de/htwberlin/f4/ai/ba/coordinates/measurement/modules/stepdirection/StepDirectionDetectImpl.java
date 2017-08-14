@@ -1,6 +1,9 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
+import android.view.Surface;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -11,6 +14,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 
@@ -35,6 +39,7 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
     private SensorFactory sensorFactory;
     private Sensor sensor;
     private SensorDataModel dataModel;
+    private Context context;
 
     // there seems to be a general lower acceleration for a step left / right
     // so we chose a quite lower threshold value for those directions
@@ -44,10 +49,11 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
     private static final float THRESHOLD_NEGATIVE_Y = -2.75f;
 
 
-    public StepDirectionDetectImpl(SensorFactory sensorFactory) {
+    public StepDirectionDetectImpl(Context context) {
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
-        this.sensorFactory = sensorFactory;
+        sensorFactory = new SensorFactoryImpl(context);
         dataModel = new SensorDataModelImpl();
+        this.context = context;
         initSensor();
     }
 
@@ -100,66 +106,248 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
             Log.d("tmp", "Timestamp lowpeakY: " + lowPeakY.getTimestamp() + " lowpeakY value: " + lowPeakY.getValues()[1]);
             Log.d("tmp", "Timestamp highpeakY: " + highPeakY.getTimestamp() + " highpeakY value: " + highPeakY.getValues()[1]);
 
-            // check which axis movement happened last
+            int screenRotation = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
 
-            // movement along y axis happend last -> forward / backward
-            if (highPeakX.getTimestamp() < highPeakY.getTimestamp()) {
-                // make sure the highest peak is really on y axis
-                if (peakDiffY > peakDiffX) {
-                    // if we have a highpeak, followed by a lowpeak -> forward
-                    if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
-                        direction = StepDirection.FORWARD;
+            // handle screen orientation
+            if (screenRotation == Surface.ROTATION_0) {
+                // check which axis movement happened last
+
+                // movement along y axis happend last -> forward / backward
+                if (highPeakX.getTimestamp() < highPeakY.getTimestamp()) {
+                    // make sure the highest peak is really on y axis
+                    if (peakDiffY > peakDiffX) {
+                        // if we have a highpeak, followed by a lowpeak -> forward
+                        if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> backward
+                        else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
                     }
-                    // if we have a lowpeak, followed by a highpeak -> backward
-                    else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
-                        direction = StepDirection.BACKWARD;
+                    // the last movement was along y axis but with a lower peak than x,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffY < peakDiffX) {
+                        // if we have a highpeak, followed by a lowpeak -> right
+                        if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> left
+                        else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
                     }
                 }
-                // the last movement was along y axis but with a lower peak than x,
-                // so we assume its because of noise or user movement and ignore the peak
-                else if (peakDiffY < peakDiffX) {
-                    // if we have a highpeak, followed by a lowpeak -> right
-                    if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
-                        direction = StepDirection.RIGHT;
+
+                // movement along x axis happened last -> left / right
+                else if (highPeakX.getTimestamp() > highPeakY.getTimestamp()) {
+                    // make sure highest peak is really on x axis
+                    if (peakDiffX > peakDiffY) {
+                        // if we have a highpeak, followed by a lowpeak -> right
+                        if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> left
+                        else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
                     }
-                    // if we have a lowpeak, followed by a highpeak -> left
-                    else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
-                        direction = StepDirection.LEFT;
+
+                    // the last movement was along x axis but with a lower peak than y,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffX < peakDiffY) {
+                        // if we have a highpeak, followed by a lowpeak -> forward
+                        if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> backward
+                        else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
                     }
                 }
-
             }
 
-            // movement along x axis happened last -> left / right
-            else if (highPeakX.getTimestamp() > highPeakY.getTimestamp()) {
-                // make sure highest peak is really on x axis
-                if (peakDiffX > peakDiffY) {
-                    // if we have a highpeak, followed by a lowpeak -> right
-                    if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
-                        direction = StepDirection.RIGHT;
+            else if (screenRotation == Surface.ROTATION_90) {
+
+                // check which axis movement happened last
+
+                // movement along x axis happend last -> forward / backward
+                if (highPeakY.getTimestamp() < highPeakX.getTimestamp()) {
+                    // make sure the highest peak is really on x axis
+                    if (peakDiffX > peakDiffY) {
+                        // if we have a highpeak, followed by a lowpeak -> forward
+                        if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> backward
+                        else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
                     }
-                    // if we have a lowpeak, followed by a highpeak -> left
-                    else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
-                        direction = StepDirection.LEFT;
+                    // the last movement was along x axis but with a lower peak than y,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffX < peakDiffY) {
+                        // if we have a highpeak, followed by a lowpeak -> left
+                        if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> right
+                        else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
                     }
                 }
 
-                // the last movement was along x axis but with a lower peak than y,
-                // so we assume its because of noise or user movement and ignore the peak
-                else if (peakDiffX < peakDiffY) {
-                    // if we have a highpeak, followed by a lowpeak -> forward
-                    if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
-                        direction = StepDirection.FORWARD;
+                // movement along y axis happened last -> left / right
+                else if (highPeakY.getTimestamp() > highPeakX.getTimestamp()) {
+                    // make sure highest peak is really on y axis
+                    if (peakDiffY > peakDiffX) {
+                        // if we have a highpeak, followed by a lowpeak -> left
+                        if (highPeakY.getTimestamp() < lowPeakY.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> right
+                        else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
                     }
-                    // if we have a lowpeak, followed by a highpeak -> backward
-                    else if (lowPeakY.getTimestamp() < highPeakY.getTimestamp()) {
-                        direction = StepDirection.BACKWARD;
+
+                    // the last movement was along y axis but with a lower peak than x,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffY < peakDiffX) {
+                        // if we have a highpeak, followed by a lowpeak -> forward
+                        if (highPeakX.getTimestamp() < lowPeakX.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a lowpeak, followed by a highpeak -> backward
+                        else if (lowPeakX.getTimestamp() < highPeakX.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
                     }
                 }
-
-
-
             }
+
+            else if (screenRotation == Surface.ROTATION_180) {
+                // check which axis movement happened last
+
+                // movement along y axis happend last -> forward / backward
+                if (highPeakX.getTimestamp() < highPeakY.getTimestamp()) {
+                    // make sure the highest peak is really on y axis
+                    if (peakDiffY > peakDiffX) {
+                        // if we have a lowpeak, followed by a highpeak -> forward
+                        if (highPeakY.getTimestamp() > lowPeakY.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> backward
+                        else if (lowPeakY.getTimestamp() > highPeakY.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
+                    }
+                    // the last movement was along y axis but with a lower peak than x,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffY < peakDiffX) {
+                        // if we have a lowpeak, followed by a highpeak -> right
+                        if (highPeakX.getTimestamp() > lowPeakX.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> left
+                        else if (lowPeakX.getTimestamp() > highPeakX.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                    }
+                }
+
+                // movement along x axis happened last -> left / right
+                else if (highPeakX.getTimestamp() > highPeakY.getTimestamp()) {
+                    // make sure highest peak is really on x axis
+                    if (peakDiffX > peakDiffY) {
+                        // if we have a lowpeak, followed by a highpeak -> right
+                        if (highPeakX.getTimestamp() > lowPeakX.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> left
+                        else if (lowPeakX.getTimestamp() > highPeakX.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                    }
+
+                    // the last movement was along x axis but with a lower peak than y,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffX < peakDiffY) {
+                        // if we have a lowpeak, followed by a highpeak -> forward
+                        if (highPeakY.getTimestamp() > lowPeakY.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> backward
+                        else if (lowPeakY.getTimestamp() > highPeakY.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
+                    }
+                }
+            }
+
+
+            else if (screenRotation == Surface.ROTATION_270) {
+                // check which axis movement happened last
+
+                // movement along x axis happend last -> forward / backward
+                if (highPeakY.getTimestamp() < highPeakX.getTimestamp()) {
+                    // make sure the highest peak is really on x axis
+                    if (peakDiffX > peakDiffY) {
+                        // if we have a lowpeak, followed by a highpeak -> forward
+                        if (highPeakX.getTimestamp() > lowPeakX.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> backward
+                        else if (lowPeakX.getTimestamp() > highPeakX.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
+                    }
+                    // the last movement was along x axis but with a lower peak than y,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffX < peakDiffY) {
+                        // if we have a lowpeak, followed by a highpeak -> left
+                        if (highPeakY.getTimestamp() > lowPeakY.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> right
+                        else if (lowPeakY.getTimestamp() > highPeakY.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                    }
+                }
+
+                // movement along y axis happened last -> left / right
+                else if (highPeakY.getTimestamp() > highPeakX.getTimestamp()) {
+                    // make sure highest peak is really on y axis
+                    if (peakDiffY > peakDiffX) {
+                        // if we have a lowpeak, followed by a highpeak -> left
+                        if (highPeakY.getTimestamp() > lowPeakY.getTimestamp()) {
+                            direction = StepDirection.LEFT;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> right
+                        else if (lowPeakY.getTimestamp() > highPeakY.getTimestamp()) {
+                            direction = StepDirection.RIGHT;
+                        }
+                    }
+
+                    // the last movement was along y axis but with a lower peak than x,
+                    // so we assume its because of noise or user movement and ignore the peak
+                    else if (peakDiffY < peakDiffX) {
+                        // if we have a lowpeak, followed by a highpeak -> forward
+                        if (highPeakX.getTimestamp() > lowPeakX.getTimestamp()) {
+                            direction = StepDirection.FORWARD;
+                        }
+                        // if we have a highpeak, followed by a lowpeak -> backward
+                        else if (lowPeakX.getTimestamp() > highPeakX.getTimestamp()) {
+                            direction = StepDirection.BACKWARD;
+                        }
+                    }
+                }
+            }
+
+
         }
 
         lastStepTimestamp = currentStepTimestamp;

@@ -143,12 +143,6 @@
     </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/coordinates_measure_test"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="test" />
-
     <!-- buttons -->
 
 
@@ -163,7 +157,7 @@
         <Spinner
             android:id="@+id/coordinates_measure_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.4"/>
 
         <Button
