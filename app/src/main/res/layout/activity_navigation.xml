@@ -9,60 +9,70 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_dest_spinners">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_node_spinner"
+                android:spinnerMode="dropdown">
+            </Spinner>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/destination_node_spinner"
+                android:spinnerMode="dropdown"
+                android:layout_toEndOf="@+id/start_node_spinner">
+            </Spinner>
+
+        </RelativeLayout>
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/start_dest_spinners">
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/start_node_spinner"
-                    android:spinnerMode="dropdown">
-                </Spinner>
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/destination_node_spinner"
-                    android:spinnerMode="dropdown"
-                    android:layout_toRightOf="@+id/start_node_spinner">
-                </Spinner>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/start_navigation_button"
-                    android:text="@string/start_navigation_button_text"
-                    android:layout_below="@+id/start_node_spinner"/>
-
-            </RelativeLayout>
-
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/accessibly_checkbox_area"
                 android:layout_below="@+id/start_dest_spinners">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accessibility_checkbox_text"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/navigation_result_header"
-                    android:id="@+id/navigation_result_header_textview"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessibility_checkbox_navi"/>
 
-                <ListView
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_navigation_button"
+                android:text="@string/start_navigation_button_text"/>
 
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/navigation_result_listview"
-                    android:layout_below="@+id/navigation_result_header_textview"/>
+        </LinearLayout>
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accessibly_checkbox_area">
+
+             <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:text="@string/navigation_result_header"
+                 android:id="@+id/navigation_result_header_textview"/>
+
+             <ListView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/navigation_result_listview"
+                 android:layout_below="@+id/navigation_result_header_textview"/>
             </RelativeLayout>
 
     </RelativeLayout>
-
-
 
 </LinearLayout>

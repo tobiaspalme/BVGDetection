@@ -47,8 +47,8 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/accessibly_checkbox"
-                android:text="@string/accessibly_checkbox_text"/>
+                android:id="@+id/accessibility_checkbox"
+                android:text="@string/accessibility_checkbox_text"/>
 
         </LinearLayout>
 

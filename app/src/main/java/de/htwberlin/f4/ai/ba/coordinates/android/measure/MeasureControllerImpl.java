@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
@@ -304,7 +302,7 @@ public class MeasureControllerImpl implements MeasureController {
             edge = new EdgeImplementation(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
             edgeFound = false;
         } else {
-            edge.setAccessibly(handycapFriendly);
+            edge.setAccessibility(handycapFriendly);
             edge.getStepCoordsList().clear();
             edge.getStepCoordsList().addAll(stepCoords);
             edgeFound = true;

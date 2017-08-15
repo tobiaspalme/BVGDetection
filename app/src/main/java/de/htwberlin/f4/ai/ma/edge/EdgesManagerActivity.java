@@ -1,6 +1,5 @@
 package de.htwberlin.f4.ai.ma.edge;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -43,9 +40,8 @@ public class EdgesManagerActivity extends BaseActivity {
     private ArrayList<String> itemsEdgesList;
     private ArrayList<Edge> allEdges;
     DatabaseHandler databaseHandler;
-    private CheckBox accessiblyCheckbox;
+    private CheckBox accessibilityCheckbox;
     private String lastSelectedItemA;
-    private final String accessiblyString = "barrierefrei";
 
 
     @Override
@@ -60,7 +56,7 @@ public class EdgesManagerActivity extends BaseActivity {
         spinnerB = (Spinner) findViewById(R.id.nodeB_spinner);
         connectButton = (Button) findViewById(R.id.connect_nodes_button);
         edgesListView = (ListView) findViewById(R.id.edges_listview);
-        accessiblyCheckbox = (CheckBox) findViewById(R.id.accessibly_checkbox);
+        accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox);
 
         databaseHandler = new DatabaseHandlerImplementation(this);
 
@@ -118,8 +114,8 @@ public class EdgesManagerActivity extends BaseActivity {
         // Load edges list
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
-            if (e.getAccessibly()) {
-                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId() + ",        " + accessiblyString);
+            if (e.getAccessibility()) {
+                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId() + ",        " + getString(R.string.accessibility_checkbox_text));
             } else {
                 itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId());
             }
@@ -130,15 +126,15 @@ public class EdgesManagerActivity extends BaseActivity {
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean accessibly = false;
-                if (accessiblyCheckbox.isChecked()) { accessibly = true; }
+                boolean accessible = false;
+                if (accessibilityCheckbox.isChecked()) { accessible = true; }
 
                 // TODO set expenditure...
 
                 Node nodeA = databaseHandler.getNode(spinnerA.getSelectedItem().toString());
                 Node nodeB = databaseHandler.getNode(spinnerB.getSelectedItem().toString());
 
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, 0);
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, 0);
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
                     Toast.makeText(getApplicationContext(), "Dieser Weg existiert bereits.",
@@ -147,8 +143,8 @@ public class EdgesManagerActivity extends BaseActivity {
                     databaseHandler.insertEdge(edge);
                     allEdges.add(edge);
 
-                    if (accessibly) {
-                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId() + ",        " + accessiblyString);
+                    if (accessible) {
+                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId() + ",        " + getString(R.string.accessibility_checkbox_text));
                     } else {
                         itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId());
                     }

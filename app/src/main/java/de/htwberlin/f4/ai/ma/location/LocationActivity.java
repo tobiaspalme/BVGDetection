@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -69,9 +68,9 @@ public class LocationActivity extends BaseActivity {
     boolean euclideanDistance;
     boolean knnAlgorithm;
 
-    private int knnValue;
-    private int movingAverageOrder;
-    private int kalmanValue;
+    int knnValue;
+    int movingAverageOrder;
+    int kalmanValue;
 
 
     @Override
@@ -88,9 +87,9 @@ public class LocationActivity extends BaseActivity {
 */
         mainWifiObj= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        measurementButton = (Button) findViewById(R.id.b_measurement);
-        measurementButtonMoreTomes = (Button) findViewById(R.id.b_measurementMoreTimes);
-        listView = (ListView) findViewById(R.id.LV_results);
+        measurementButton = (Button) findViewById(R.id.start_measuring_1s_button);
+        measurementButtonMoreTomes = (Button) findViewById(R.id.start_measurement_10s_button);
+        listView = (ListView) findViewById(R.id.results_listview);
 
         //check Preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -228,74 +227,77 @@ public class LocationActivity extends BaseActivity {
      */
     private void getMeasuredNode(final int times) {
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        //registerReceiver(mWifiScanReceiver, intentFilter);
+        if (nodesDropdown.getAdapter().getCount() > 0 && wifiDropdown.getAdapter().getCount() > 0) {
 
-        final TextView textView = (TextView) findViewById(R.id.tx_Location);
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.proBar_location);
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+            //registerReceiver(mWifiScanReceiver, intentFilter);
 
-        textView.setText("POI wird gesucht");
+            final TextView textView = (TextView) findViewById(R.id.location_textview);
+            final ProgressBar progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
-        new Thread(new Runnable() {
-            public void run() {
-                multiMap = ArrayListMultimap.create();
-                for (int i = 0; i < times; i++) {
-                    progressBar.setMax(times);
-                    progressBar.setProgress(i + 1);
+            textView.setText(getString(R.string.searching_node_text));
+
+            new Thread(new Runnable() {
+                public void run() {
+                    multiMap = ArrayListMultimap.create();
+                    for (int i = 0; i < times; i++) {
+                        progressBar.setMax(times);
+                        progressBar.setProgress(i + 1);
 
 
-                    mainWifiObj.startScan();
+                        mainWifiObj.startScan();
 
-                    final TextView testTimestampTextview = (TextView) findViewById(R.id.tx_test);
-                    //EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
-                    //String wlanName = editText.getText().toString();
-                    String wlanName = wifiDropdown.getSelectedItem().toString();
+                        final TextView testTimestampTextview = (TextView) findViewById(R.id.timestamp_textview);
+                        //EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
+                        //String wlanName = editText.getText().toString();
+                        String wlanName = wifiDropdown.getSelectedItem().toString();
 
-                    List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+                        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
-                    //check if there is a new measurement
-                     if(wifiScanList.get(0).timestamp == timestampWifiManager && times == 1)
-                        {
+                        //check if there is a new measurement
+                         if(wifiScanList.get(0).timestamp == timestampWifiManager && times == 1)
+                            {
+                                LocationActivity.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        textView.setText("Bitte neu versuchen");
+                                    }
+                                });
+
+                                return;
+                            }
+
+                            timestampWifiManager = wifiScanList.get(0).timestamp;
+                            Log.d("timestamp", String.valueOf(timestampWifiManager));
+
+                        for (final ScanResult sr : wifiScanList) {
                             LocationActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
-                                    textView.setText("Bitte neu versuchen");
+                                    testTimestampTextview.setText(String.valueOf(sr.timestamp));
                                 }
                             });
 
-                            return;
-                        }
-
-                        timestampWifiManager = wifiScanList.get(0).timestamp;
-                        Log.d("timestamp", String.valueOf(timestampWifiManager));
-
-                    for (final ScanResult sr : wifiScanList) {
-                        LocationActivity.this.runOnUiThread(new Runnable() {
-                            public void run() {
-                                testTimestampTextview.setText(String.valueOf(sr.timestamp));
+                            if (sr.SSID.equals(wlanName)) {
+                                multiMap.put(sr.BSSID, sr.level);
+                                long timestamp = sr.timestamp;
+                                Log.d("timestamp Sunshine", String.valueOf(timestamp));
                             }
-                        });
+                        }
 
-                        if (sr.SSID.equals(wlanName)) {
-                            multiMap.put(sr.BSSID, sr.level);
-                            long timestamp = sr.timestamp;
-                            Log.d("timestamp Sunshine", String.valueOf(timestamp));
+                        wifiScanList.clear();
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
 
-                    wifiScanList.clear();
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    makeFingerprint(times);
                 }
-
-                makeFingerprint(times);
-            }
-        }).start();
-        //return actuallyNode;
+            }).start();
+            //return actuallyNode;
+        }
     }
 
     /**
@@ -303,7 +305,7 @@ public class LocationActivity extends BaseActivity {
      * @param measuredTime the measured time
      */
     private void makeFingerprint(final int measuredTime) {
-        final TextView textView = (TextView) findViewById(R.id.tx_Location);
+        final TextView textView = (TextView) findViewById(R.id.location_textview);
 
         Set<String> bssid = multiMap.keySet();
 
@@ -356,8 +358,8 @@ public class LocationActivity extends BaseActivity {
                     //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
                     locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
                 } else {
-                    textView.setText("kein Node gefunden");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), "kein Node gefunden");
+                    textView.setText(getString(R.string.no_node_found_text));
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), getString(R.string.no_node_found_text));
                 }
                 //makeJson(locationResult);
 

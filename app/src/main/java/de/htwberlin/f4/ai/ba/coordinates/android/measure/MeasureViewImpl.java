@@ -341,7 +341,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     @Override
     public void updateEdge(Edge edge) {
         // handycap friendly
-        if (edge.getAccessibly()) {
+        if (edge.getAccessibility()) {
             // load handycap image
             Glide.with(getContext())
                     .load(R.drawable.barrierefrei)

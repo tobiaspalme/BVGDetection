@@ -37,6 +37,8 @@ public class NodeListActivity extends BaseActivity {
     NodeListAdapter nodeListAdapter;
     DatabaseHandler databaseHandler;
 
+    boolean nodeListIsEmpty = false;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -62,9 +64,11 @@ public class NodeListActivity extends BaseActivity {
         nodeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
-                intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
-                startActivity(intent);
+                if (!nodeListIsEmpty) {
+                    Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
+                    intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -74,26 +78,26 @@ public class NodeListActivity extends BaseActivity {
         nodeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(view.getContext())
-                        .setTitle("Eintrag löschen?")
-                        .setMessage("Soll der Node \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                if (!nodeListIsEmpty) {
+                    new AlertDialog.Builder(view.getContext())
+                            .setTitle("Eintrag löschen?")
+                            .setMessage("Soll der Node \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-//                                databaseHandlerImplementation.deleteNode(allNodes.get(position));
-
-                                databaseHandler.deleteNode(allNodes.get(position));
-                                loadDbData();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                return true;
+                                    databaseHandler.deleteNode(allNodes.get(position));
+                                    loadDbData();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return true;
+                } return false;
             }
         });
     }
@@ -115,13 +119,20 @@ public class NodeListActivity extends BaseActivity {
 
         allNodes.addAll(databaseHandler.getAllNodes());
 
-        for (Node n : allNodes) {
-            nodeNames.add(n.getId());
-            nodeDescriptions.add(n.getDescription());
-            nodePicturePaths.add(n.getPicturePath());
+        // If no node is available
+        if (allNodes.size() == 0) {
+            nodeListIsEmpty = true;
+            nodeNames.add(0, "Keine gespeicherten Orte.");
+            nodeDescriptions.add("");
+            nodePicturePaths.add("");
+        } else {
+            for (Node n : allNodes) {
+                nodeNames.add(n.getId());
+                nodeDescriptions.add(n.getDescription());
+                nodePicturePaths.add(n.getPicturePath());
+            }
+            //Collections.sort(nodeNames);
         }
-        //Collections.sort(nodeNames);
-
         nodeListAdapter.notifyDataSetChanged();
     }
 }

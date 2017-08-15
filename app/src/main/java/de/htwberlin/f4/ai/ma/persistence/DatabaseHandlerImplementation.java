@@ -71,7 +71,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String EDGE_ID = "id";
     private static final String EDGE_NODE_A = "nodeA";
     private static final String EDGE_NODE_B = "nodeB";
-    private static final String EDGE_ACCESSIBLY = "accessibly";
+    private static final String EDGE_ACCESSIBILITY = "accessibility";
     private static final String EDGE_STEPLIST = "steplist";
     private static final String EDGE_WEIGHT = "weight";
     private static final String EDGE_ADDITIONAL_INFO = "additional_info";
@@ -122,7 +122,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 EDGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 EDGE_NODE_A + " TEXT," +
                 EDGE_NODE_B + " TEXT," +
-                EDGE_ACCESSIBLY + " TEXT," +
+                EDGE_ACCESSIBILITY + " TEXT," +
                 EDGE_STEPLIST + " TEXT," +
                 EDGE_WEIGHT + " INTEGER," +
                 EDGE_ADDITIONAL_INFO + " TEXT);";
@@ -324,7 +324,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         //values.put("id", edge.getId());
         values.put(EDGE_NODE_A, edge.getNodeA().getId());
         values.put(EDGE_NODE_B, edge.getNodeB().getId());
-        values.put(EDGE_ACCESSIBLY, edge.getAccessibly());
+        values.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
 
         StringBuilder stepListSb = new StringBuilder();
@@ -359,7 +359,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
             contentValues.put(EDGE_NODE_A, edge.getNodeA().getId());
         }
 
-        contentValues.put(EDGE_ACCESSIBLY, edge.getAccessibly());
+        contentValues.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
         StringBuilder stepListSb = new StringBuilder();
         for (String string : edge.getStepCoordsList())
@@ -383,7 +383,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(EDGE_ACCESSIBLY, edge.getAccessibly());
+        contentValues.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
         StringBuilder stepListSb = new StringBuilder();
         for (String string : edge.getStepCoordsList())
@@ -411,9 +411,9 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         Edge edge;
 
         if (cursor.moveToFirst()) {
-            boolean accessibly = false;
+            boolean accessible = false;
             if (cursor.getInt(3) == 1) {
-                accessibly = true;
+                accessible = true;
             }
             Node node1 = getNode(cursor.getString(1));
             Node node2 = getNode(cursor.getString(2));
@@ -421,7 +421,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
             String stepListString = cursor.getString(4);
             List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
-            edge = new EdgeImplementation(node1, node2, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
+            edge = new EdgeImplementation(node1, node2, accessible, stepList, cursor.getInt(5), cursor.getString(6));
 
             database.close();
             return edge;
@@ -443,10 +443,10 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         if (cursor.moveToFirst()) {
             do {
 
-                boolean accessibly = false;
+                boolean accessible = false;
 
                 if (cursor.getInt(3) == 1) {
-                    accessibly = true;
+                    accessible = true;
                 }
 
                 Node nodeA = getNode(cursor.getString(1));
@@ -456,14 +456,7 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
                 //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessibly, stepList, cursor.getInt(5), cursor.getString(6));
-
-                /*
-                // TODO Cast entfernen
-                edge.setID(Integer.valueOf(cursor.getString(0)));
-                edge.setNodeA(cursor.getString(1));
-                edge.setNodeB(cursor.getString(2));
-                edge.setWeight(cursor.getInt(4));*/
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, stepList, cursor.getInt(5), cursor.getString(6));
 
                 allEdges.add(edge);
 

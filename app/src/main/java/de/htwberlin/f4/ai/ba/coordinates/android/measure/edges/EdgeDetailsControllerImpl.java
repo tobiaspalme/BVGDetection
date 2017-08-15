@@ -2,14 +2,10 @@ package de.htwberlin.f4.ai.ba.coordinates.android.measure.edges;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.provider.ContactsContract;
 
 import com.example.carol.bvg.R;
 
-import java.util.List;
-
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
@@ -87,7 +83,7 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
     @Override
     public void onHandycapChanged(boolean handycapFriendly) {
         if (edge != null) {
-            edge.setAccessibly(handycapFriendly);
+            edge.setAccessibility(handycapFriendly);
         }
     }
 

@@ -10,17 +10,14 @@ import de.htwberlin.f4.ai.ma.node.Node;
 
 public interface Edge {
 
-    //int getId();
-    //void setID(int id);
-
     Node getNodeA();
     void setNodeA(Node nodeA);
 
     Node getNodeB();
     void setNodeB(Node nodeB);
 
-    boolean getAccessibly();
-    void setAccessibly(boolean accessibly);
+    boolean getAccessibility();
+    void setAccessibility(boolean accessable);
 
     int getWeight();
     void setWeight(int expenditure);

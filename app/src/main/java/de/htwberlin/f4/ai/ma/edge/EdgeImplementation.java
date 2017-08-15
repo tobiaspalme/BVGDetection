@@ -11,43 +11,32 @@ import de.htwberlin.f4.ai.ma.node.Node;
 
 public class EdgeImplementation implements Edge{
 
-    //private int id;
     private Node nodeA;
     private Node nodeB;
-    private boolean accessibly;
+    private boolean accessible;
     private int weight;
     private List<String> stepCoordList;
     private String additionalInfo;
 
 
     // Edge without given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, int weight) {
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, int weight) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
-        this.accessibly = accessibly;
+        this.accessible = accessible;
         this.weight = weight;
         this.stepCoordList = new ArrayList<>();
     }
 
     // Edge with given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessibly, List<String> stepCoordList, int weight, String additionalInfo) {
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, int weight, String additionalInfo) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
-        this.accessibly = accessibly;
+        this.accessible = accessible;
         this.weight = weight;
         this.stepCoordList = stepCoordList;
         this.additionalInfo = additionalInfo;
     }
-
-    /*
-    // TODO temporary, until expenditure is implemented
-    public EdgeImplementation(int id, String nodeA, String nodeB, boolean accessibly) {
-        this.id = id;
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-        this.accessibly = accessibly;
-        this.expenditure = expenditure;
-    }*/
 
 
     @Override
@@ -71,13 +60,13 @@ public class EdgeImplementation implements Edge{
     }
 
     @Override
-    public boolean getAccessibly() {
-        return this.accessibly;
+    public boolean getAccessibility() {
+        return this.accessible;
     }
 
     @Override
-    public void setAccessibly(boolean accessibly) {
-        this.accessibly = accessibly;
+    public void setAccessibility(boolean accessibly) {
+        this.accessible = accessibly;
     }
 
     @Override

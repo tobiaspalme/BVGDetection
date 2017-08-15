@@ -76,7 +76,6 @@
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
 
-
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild nicht vorhanden</string>
 
@@ -86,13 +85,22 @@
     <string name="delete_button_text">Löschen</string>
     <string name="change_picture_button_text">Bild neu aufnehmen</string>
 
+    <!-- activity_location -->
+    <string name="measured_node_text">Gemessener Ort:</string>
+    <string name="measured_node_textview_text">Bitte Messung durchführen</string>
+    <string name="measure_one_second_text">Messen (1 Sekunde)</string>
+    <string name="measure_ten_seconds_text">Messen (10 Sekunden)</string>
+    <string name="no_node_found_text">Kein Ort gefunden</string>
+    <string name="searching_node_text">Ort wird gesucht</string>
+
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>
     <string name="export_button_text">Daten exportieren</string>
 
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>
-    <string name="accessibly_checkbox_text">Barrierefrei</string>
+    <string name="accessibility_checkbox_text">Barrierefrei</string>
+
 
     <!-- acitvity_navigation -->
     <string name="start_navigation_button_text">Route anzeigen</string>

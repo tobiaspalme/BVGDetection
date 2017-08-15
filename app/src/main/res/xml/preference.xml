@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent">
+
     <PreferenceCategory
         android:title="Aufnahme"
         android:key="pref_offline">
+
         <CheckBoxPreference
             android:key="pref_movingAverage"
             android:title="Gleitender Mittelwertfilter"
@@ -33,11 +35,13 @@
             android:dependency="pref_kalman"
             android:inputType="number"
             />
+
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Ortnung"
         android:key="pref_online">
+
         <CheckBoxPreference
             android:key="pref_euclideanDistance"
             android:title="Euklidische Distanz"
@@ -54,5 +58,6 @@
             android:dependency="pref_knnAlgorithm"
             android:inputType="number"
             />
+
     </PreferenceCategory>
 </PreferenceScreen>

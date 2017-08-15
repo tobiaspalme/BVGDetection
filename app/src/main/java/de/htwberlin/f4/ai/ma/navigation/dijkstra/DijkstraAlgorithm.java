@@ -36,8 +36,6 @@ public class DijkstraAlgorithm {
         // dijkstraNodes and dijkstraEdges
         private final List<DijkstraVertex> dijkstraNodes;
         private final List<DijkstraEdge> dijkstraEdges;
-        // graph reference
-       // private final Graph graph;
 
         // settled and unsettled dijkstraNodes (seen / not seen)
         private Set<DijkstraVertex> settledNodes;
@@ -49,24 +47,17 @@ public class DijkstraAlgorithm {
         // smallest distance (weight) for the node
         private Map<DijkstraVertex, Double> distance;
 
+    private DatabaseHandler databaseHandler;
+    private boolean accessible;
 
-        private DatabaseHandler databaseHandler;
 
-        /*
-        public DijkstraAlgorithm(Graph graph) {
-            this.graph = graph;
+    public DijkstraAlgorithm(Context context, boolean accessible) {
+        databaseHandler = new DatabaseHandlerImplementation(context);
 
-            // create a copy of the array so that we can operate on this array
-            this.dijkstraNodes = mapNodes(graph.getNodes());
-            this.dijkstraEdges = mapEdges(graph.getEdges());
-        }*/
-
-        public DijkstraAlgorithm(Context context) {
-            databaseHandler = new DatabaseHandlerImplementation(context);
-
-            this.dijkstraNodes = mapNodes(databaseHandler.getAllNodes());
-            this.dijkstraEdges = mapEdges(databaseHandler.getAllEdges());
-        }
+        this.accessible = accessible;
+        this.dijkstraNodes = mapNodes(databaseHandler.getAllNodes());
+        this.dijkstraEdges = mapEdges(databaseHandler.getAllEdges());
+    }
 
 
 
@@ -95,16 +86,29 @@ public class DijkstraAlgorithm {
          */
         private List<DijkstraEdge> mapEdges(ArrayList<Edge> edges) {
             ArrayList<DijkstraEdge> dijkstraEdges = new ArrayList<>();
+
             for (Edge edge : edges) {
+
+
                 // since it is an undirected graph, add both directions
                 DijkstraVertex source = new DijkstraVertex(edge.getNodeA());
                 DijkstraVertex destination = new DijkstraVertex(edge.getNodeB());
 
-                DijkstraEdge sourceToDestination = new DijkstraEdge(source, destination, edge.getWeight());
-                DijkstraEdge destinationToSource = new DijkstraEdge(destination, source, edge.getWeight());
-
-                dijkstraEdges.add(sourceToDestination);
-                dijkstraEdges.add(destinationToSource);
+                // If accessible search wanted
+                if (accessible) {
+                    if (edge.getAccessibility()) {
+                        DijkstraEdge sourceToDestination = new DijkstraEdge(source, destination, edge.getWeight());
+                        DijkstraEdge destinationToSource = new DijkstraEdge(destination, source, edge.getWeight());
+                        dijkstraEdges.add(sourceToDestination);
+                        dijkstraEdges.add(destinationToSource);
+                    }
+                // If accessibility doesn't play a role
+                } else {
+                    DijkstraEdge sourceToDestination = new DijkstraEdge(source, destination, edge.getWeight());
+                    DijkstraEdge destinationToSource = new DijkstraEdge(destination, source, edge.getWeight());
+                    dijkstraEdges.add(sourceToDestination);
+                    dijkstraEdges.add(destinationToSource);
+                }
             }
             return dijkstraEdges;
         }
@@ -121,7 +125,6 @@ public class DijkstraAlgorithm {
             if(sourceNode == null){
                 throw new IllegalArgumentException("Source Node Id is invalid! Given was:" + sourceNodeId);
             }
-//            final DijkstraVertex sourceVertex = new DijkstraVertex(graph.getNode(sourceNodeId));
             final DijkstraVertex sourceVertex = new DijkstraVertex(databaseHandler.getNode(sourceNodeId));
 
             settledNodes = new HashSet<>();

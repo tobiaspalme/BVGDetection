@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -27,7 +26,6 @@ import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.StepData;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference;
 
 /**
  * Created by benni on 12.08.2017.
@@ -245,7 +243,7 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         float edgeDistance = edge.getWeight() / 100.0f;
         distanceView.setText(String.valueOf(edgeDistance));
 
-        if (edge.getAccessibly()) {
+        if (edge.getAccessibility()) {
             handycapSwitch.setChecked(true);
         } else {
             handycapSwitch.setChecked(false);

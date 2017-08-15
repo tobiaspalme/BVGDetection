@@ -1,12 +1,13 @@
 package de.htwberlin.f4.ai.ma.navigation;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -37,6 +38,7 @@ public class NavigationActivity extends BaseActivity {
     ListView navigationResultListview;
     ArrayList<String> itemsStartNodeSpinner;
     private ArrayList<String> itemsDestNodeSpinner;
+    CheckBox accessibilityCheckbox;
     ArrayList<String> navigationResultsList;
     ArrayList<Node> allNodes;
     DatabaseHandler databaseHandler;
@@ -60,6 +62,7 @@ public class NavigationActivity extends BaseActivity {
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);
         startNavigationButton = (Button) findViewById(R.id.start_navigation_button);
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
+        accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
 
         itemsStartNodeSpinner = new ArrayList<>();
         itemsDestNodeSpinner = new ArrayList<>();
@@ -73,7 +76,6 @@ public class NavigationActivity extends BaseActivity {
 
         databaseHandler = new DatabaseHandlerImplementation(this);
         allNodes = databaseHandler.getAllNodes();
-
 
 
         for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
@@ -127,7 +129,9 @@ public class NavigationActivity extends BaseActivity {
                 nodeDescriptions.clear();
                 nodePicturePaths.clear();
 
-                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext());
+                boolean accessible = accessibilityCheckbox.isChecked();
+
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext(), accessible);
                 dijkstraAlgorithm.execute(selectedStartNode);
                 LinkedList<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 

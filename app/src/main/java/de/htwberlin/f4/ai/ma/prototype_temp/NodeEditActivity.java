@@ -90,9 +90,6 @@ public class NodeEditActivity extends BaseActivity {
             tempFolder.mkdirs();
         }
 
-
-        //databaseHandlerImplementation = new DatabaseHandlerImplementation(this);
-       // node = databaseHandlerImplementation.getNode(nodeName);
         databaseHandler = new DatabaseHandlerImplementation(this);
         node = databaseHandler.getNode(nodeName);
         oldNodeId = node.getId();
@@ -153,7 +150,6 @@ public class NodeEditActivity extends BaseActivity {
                         // TODO Übergangslösung
                         int rnd = (int) (Math.random()*100);
                         System.out.println("+++++++++++ RAND. " + rnd);
-
 
                         copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + "_" + rnd + ".jpg"));
                         node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + "_" + rnd +  ".jpg");
