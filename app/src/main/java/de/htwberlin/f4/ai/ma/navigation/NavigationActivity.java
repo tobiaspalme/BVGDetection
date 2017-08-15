@@ -22,7 +22,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity;
 
 /**
@@ -74,7 +74,7 @@ public class NavigationActivity extends BaseActivity {
 
         lastSelectedStartNode = "";
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
         allNodes = databaseHandler.getAllNodes();
 
 

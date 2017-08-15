@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
@@ -58,7 +58,7 @@ public class EdgesManagerActivity extends BaseActivity {
         edgesListView = (ListView) findViewById(R.id.edges_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox);
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         itemsSpinnerA = new ArrayList<>();
         itemsSpinnerB = new ArrayList<>();

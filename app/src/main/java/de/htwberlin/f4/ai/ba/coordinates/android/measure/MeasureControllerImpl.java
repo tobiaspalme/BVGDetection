@@ -34,7 +34,7 @@ import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by benni on 18.07.2017.
@@ -292,7 +292,7 @@ public class MeasureControllerImpl implements MeasureController {
             stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
         }
 
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
 
         Edge edge = databaseHandler.getEdge(startNode, targetNode);
         boolean edgeFound;
@@ -383,7 +383,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onEdgeDetailsClicked() {
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
         Edge edge = new EdgeImplementation(startNode, targetNode, false, 0);
         if (databaseHandler.checkIfEdgeExists(edge)) {
             view.loadEdgeDetailsView(startNode, targetNode );
@@ -422,7 +422,7 @@ public class MeasureControllerImpl implements MeasureController {
             if (different) {
                 view.enableStart();
 
-                DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+                DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
 
                 // check if edge already exists
                 Edge existingEdge = databaseHandler.getEdge(startNode, targetNode);
@@ -455,7 +455,7 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler.updateNode(startNode, startNode.getId());
         databaseHandler.updateNode(targetNode, targetNode.getId());
         */
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
         List<Edge> edgeList = databaseHandler.getAllEdges();
         for (Edge edge : edgeList) {
             databaseHandler.deleteEdge(edge);

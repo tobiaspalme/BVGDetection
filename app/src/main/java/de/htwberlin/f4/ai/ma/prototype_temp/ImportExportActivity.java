@@ -12,7 +12,7 @@ import com.example.carol.bvg.R;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
@@ -37,7 +37,7 @@ public class ImportExportActivity extends BaseActivity {
         importButton = (Button) findViewById(R.id.import_button);
         exportButton = (Button) findViewById(R.id.export_button);
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -32,7 +32,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 
 public class MeasureViewImpl extends BaseActivity implements MeasureView{
@@ -79,7 +79,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.fragment_coordinates_measure, contentFrameLayout);
 
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(getContext());
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(getContext());
         final List<Node> nodeList = databaseHandler.getAllNodes();
         List<String> nodeNames = new ArrayList<>();
 

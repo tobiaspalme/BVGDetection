@@ -27,7 +27,7 @@ import java.nio.channels.FileChannel;
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 
 /**
@@ -90,7 +90,7 @@ public class NodeEditActivity extends BaseActivity {
             tempFolder.mkdirs();
         }
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
         node = databaseHandler.getNode(nodeName);
         oldNodeId = node.getId();
 

@@ -15,7 +15,7 @@ import java.util.Set;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
@@ -52,7 +52,7 @@ public class DijkstraAlgorithm {
 
 
     public DijkstraAlgorithm(Context context, boolean accessible) {
-        databaseHandler = new DatabaseHandlerImplementation(context);
+        databaseHandler = DatabaseHandlerFactory.getInstance(context);
 
         this.accessible = accessible;
         this.dijkstraNodes = mapNodes(databaseHandler.getAllNodes());

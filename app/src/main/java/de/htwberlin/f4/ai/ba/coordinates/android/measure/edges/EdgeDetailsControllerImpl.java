@@ -8,7 +8,7 @@ import com.example.carol.bvg.R;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by benni on 13.08.2017.
@@ -29,7 +29,7 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
 
     @Override
     public void setNodes(String startNodeId, String targetNodeId) {
-        DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
         startNode = databaseHandler.getNode(startNodeId);
         targetNode = databaseHandler.getNode(targetNodeId);
     }
@@ -65,7 +65,7 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
 
     private void deleteEdge() {
         if (edge != null) {
-            DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+            DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
             databaseHandler.deleteEdge(edge);
         }
     }
@@ -74,7 +74,7 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
     public void onSaveClicked() {
         // since there is no update method yet, delete old edge and create new
         if (edge != null) {
-            DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+            DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
             databaseHandler.updateEdge(edge);
             view.finish();
         }
@@ -109,7 +109,7 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
             view.updateStartNodeInfo(startNode);
             view.updateTargetNodeInfo(targetNode);
 
-            DatabaseHandler databaseHandler = new DatabaseHandlerImplementation(view.getContext());
+            DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
             edge = databaseHandler.getEdge(startNode, targetNode);
 
             view.updateEdgeInfo(edge);

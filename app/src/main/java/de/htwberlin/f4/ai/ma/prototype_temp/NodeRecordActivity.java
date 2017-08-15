@@ -43,7 +43,7 @@ import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
@@ -112,7 +112,7 @@ public class NodeRecordActivity extends BaseActivity {
         }
 
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         jsonWriter = new JsonWriter(this);
 

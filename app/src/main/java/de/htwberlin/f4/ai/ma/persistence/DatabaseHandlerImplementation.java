@@ -44,7 +44,7 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
  * Created by Johann Winter
  */
 
-public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler {
+class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler {
 
     private static final String DATABASE_NAME = "indoor_data.db";
     private static final int DATABASE_VERSION = 1;
@@ -52,7 +52,6 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String NODES_TABLE = "nodes";
     private static final String EDGES_TABLE = "edges";
     private static final String RESULTS_TABLE = "results";
-
 
     private static final String NODE_ID = "id";
     private static final String NODE_DESCRIPTION = "description";
@@ -62,15 +61,13 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String NODE_PICTURE_PATH = "picture_path";
     private static final String NODE_ADDITIONAL_INFO = "additional_info";
 
-
     private static final String EDGE_ID = "id";
-    private static final String EDGE_NODE_A = "node_a";
-    private static final String EDGE_NODE_B = "node_b";
+    private static final String EDGE_NODE_A = "nodeA";
+    private static final String EDGE_NODE_B = "nodeB";
     private static final String EDGE_ACCESSIBILITY = "accessibility";
     private static final String EDGE_STEPLIST = "steplist";
     private static final String EDGE_WEIGHT = "weight";
     private static final String EDGE_ADDITIONAL_INFO = "additional_info";
-
 
     private static final String RESULT_ID = "id";
     private static final String RESULT_SETTINGS = "settings";

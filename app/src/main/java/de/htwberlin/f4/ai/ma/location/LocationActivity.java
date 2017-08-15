@@ -36,7 +36,7 @@ import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 
 public class LocationActivity extends BaseActivity {
@@ -120,7 +120,7 @@ public class LocationActivity extends BaseActivity {
         //JsonReader jsonReader = new JsonReader();
         //final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
 

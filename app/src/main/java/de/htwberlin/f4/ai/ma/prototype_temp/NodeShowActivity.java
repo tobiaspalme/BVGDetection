@@ -16,7 +16,7 @@ import com.example.carol.bvg.R;
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerImplementation;
+import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 import static java.security.AccessController.getContext;
 
@@ -52,7 +52,7 @@ public class NodeShowActivity extends BaseActivity {
         final Intent intent = getIntent();
         final String nodeName = (String) intent.getExtras().get("nodeName");
 
-        databaseHandler = new DatabaseHandlerImplementation(this);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
         node = databaseHandler.getNode(nodeName);
 
         idTextview.setText(node.getId());
