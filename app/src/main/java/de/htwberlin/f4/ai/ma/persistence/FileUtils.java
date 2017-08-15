@@ -9,6 +9,8 @@ import java.nio.channels.FileChannel;
  * Created by Johann Winter
  */
 
+
+// TODO necessary?
 class FileUtils {
     /**
      * @param fromFile   FileInputStream for the file to copy from.

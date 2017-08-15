@@ -50,8 +50,8 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final int DATABASE_VERSION = 1;
 
     private static final String NODES_TABLE = "nodes";
-    private static final String RESULTS_TABLE = "results";
     private static final String EDGES_TABLE = "edges";
+    private static final String RESULTS_TABLE = "results";
 
 
     private static final String NODE_ID = "id";
@@ -62,19 +62,23 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private static final String NODE_PICTURE_PATH = "picture_path";
     private static final String NODE_ADDITIONAL_INFO = "additional_info";
 
+
+    private static final String EDGE_ID = "id";
+    private static final String EDGE_NODE_A = "node_a";
+    private static final String EDGE_NODE_B = "node_b";
+    private static final String EDGE_ACCESSIBILITY = "accessibility";
+    private static final String EDGE_STEPLIST = "steplist";
+    private static final String EDGE_WEIGHT = "weight";
+    private static final String EDGE_ADDITIONAL_INFO = "additional_info";
+
+
     private static final String RESULT_ID = "id";
     private static final String RESULT_SETTINGS = "settings";
     private static final String RESULT_MEASURED_TIME = "measuredtime";
     private static final String RESULT_SELECTED_NODE = "selectednode";
     private static final String RESULT_MEASURED_NODE = "measurednode";
 
-    private static final String EDGE_ID = "id";
-    private static final String EDGE_NODE_A = "nodeA";
-    private static final String EDGE_NODE_B = "nodeB";
-    private static final String EDGE_ACCESSIBILITY = "accessibility";
-    private static final String EDGE_STEPLIST = "steplist";
-    private static final String EDGE_WEIGHT = "weight";
-    private static final String EDGE_ADDITIONAL_INFO = "additional_info";
+
 
 
     private NodeFactory nodeFactory;
@@ -82,16 +86,10 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     private Context context;
 
 
-
     private int averageOrder;
     private int knnValue;
     private int kalmanValue;
     private double percentage;
-
-    private SharedPreferences sharedPreferences;
-
-    //TODO temp:
-    private List<Node> measuredNode;
 
 
     public DatabaseHandlerImplementation(Context context) {
@@ -111,13 +109,6 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 NODE_PICTURE_PATH + " TEXT," +
                 NODE_ADDITIONAL_INFO + " TEXT)";
 
-        String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
-                RESULT_ID + " INTEGER PRIMARY KEY," +
-                RESULT_SETTINGS + " TEXT," +
-                RESULT_MEASURED_TIME + " TEXT," +
-                RESULT_SELECTED_NODE + " TEXT," +
-                RESULT_MEASURED_NODE + " TEXT)";
-
         String createEdgeTableQuery = "CREATE TABLE " + EDGES_TABLE + " (" +
                 EDGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 EDGE_NODE_A + " TEXT," +
@@ -127,17 +118,32 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
                 EDGE_WEIGHT + " INTEGER," +
                 EDGE_ADDITIONAL_INFO + " TEXT);";
 
+        String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
+                RESULT_ID + " INTEGER PRIMARY KEY," +
+                RESULT_SETTINGS + " TEXT," +
+                RESULT_MEASURED_TIME + " TEXT," +
+                RESULT_SELECTED_NODE + " TEXT," +
+                RESULT_MEASURED_NODE + " TEXT)";
+
 
         db.execSQL(createNodeTableQuery);
-        db.execSQL(createResultTableQuery);
         db.execSQL(createEdgeTableQuery);
-
+        db.execSQL(createResultTableQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
     }
 
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        return super.getWritableDatabase();
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        return super.getReadableDatabase();
+    }
 
     //----------------- N O D E S ------------------------------------------------------------------------------------------
 
@@ -253,65 +259,6 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
     }
 
 
-    //----------------- R E S U L T S ------------------------------------------------------------------------------------------
-
-    // Insert LocationResult
-    public void insertLocationResult(LocationResult locationResult) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(RESULT_ID, locationResult.getId());
-        values.put(RESULT_SETTINGS, locationResult.getSettings());
-        values.put(RESULT_MEASURED_TIME, locationResult.getMeasuredTime());
-        values.put(RESULT_SELECTED_NODE, locationResult.getSelectedNode());
-        values.put(RESULT_MEASURED_NODE, locationResult.getMeasuredNode());
-
-        database.insert(RESULTS_TABLE, null, values);
-
-        Log.d("DB: insert_result", "###########");
-
-        database.close();
-    }
-
-
-    // Get all LocationResults
-    public ArrayList<LocationResultImplementation> getAllLocationResults() {
-        ArrayList<LocationResultImplementation> allResults = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
-        SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                LocationResultImplementation locationResultImplementation = new LocationResultImplementation();
-
-                Log.d("DB: get_all_locations", "###########");
-
-                locationResultImplementation.setId(Integer.valueOf(cursor.getString(0)));
-                locationResultImplementation.setSettings(cursor.getString(1));
-                locationResultImplementation.setMeasuredTime(cursor.getString(2));
-                locationResultImplementation.setSelectedNode(cursor.getString(3));
-                locationResultImplementation.setMeasuredNode(cursor.getString(4));
-
-                allResults.add(locationResultImplementation);
-            } while (cursor.moveToNext());
-        }
-
-        database.close();
-        return allResults;
-    }
-
-
-    // Delete LocatonResult
-    public void deleteLocationResult(LocationResult locationResult) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
-
-        Log.d("DB: delete_LOCRESULT", "" + locationResult.getSelectedNode() + " id: " + locationResult.getId());
-
-        database.execSQL(deleteQuery);
-        database.close();
-    }
 
 
     //----------- E D G E S -------------------------------------------------------------------------------------
@@ -431,8 +378,6 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
 
 
-
-
     // Get all Edges
     public ArrayList<Edge> getAllEdges() {
         ArrayList<Edge> allEdges = new ArrayList<>();
@@ -495,6 +440,69 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
         database.execSQL(deleteQuery);
         database.close();
     }
+
+
+    //----------------- R E S U L T S ------------------------------------------------------------------------------------------
+
+    // Insert LocationResult
+    public void insertLocationResult(LocationResult locationResult) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(RESULT_ID, locationResult.getId());
+        values.put(RESULT_SETTINGS, locationResult.getSettings());
+        values.put(RESULT_MEASURED_TIME, locationResult.getMeasuredTime());
+        values.put(RESULT_SELECTED_NODE, locationResult.getSelectedNode());
+        values.put(RESULT_MEASURED_NODE, locationResult.getMeasuredNode());
+
+        database.insert(RESULTS_TABLE, null, values);
+
+        Log.d("DB: insert_result", "###########");
+
+        database.close();
+    }
+
+
+    // Get all LocationResults
+    public ArrayList<LocationResultImplementation> getAllLocationResults() {
+        ArrayList<LocationResultImplementation> allResults = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                LocationResultImplementation locationResultImplementation = new LocationResultImplementation();
+
+                Log.d("DB: get_all_locations", "###########");
+
+                locationResultImplementation.setId(Integer.valueOf(cursor.getString(0)));
+                locationResultImplementation.setSettings(cursor.getString(1));
+                locationResultImplementation.setMeasuredTime(cursor.getString(2));
+                locationResultImplementation.setSelectedNode(cursor.getString(3));
+                locationResultImplementation.setMeasuredNode(cursor.getString(4));
+
+                allResults.add(locationResultImplementation);
+            } while (cursor.moveToNext());
+        }
+
+        database.close();
+        return allResults;
+    }
+
+
+    // Delete LocatonResult
+    public void deleteLocationResult(LocationResult locationResult) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
+
+        Log.d("DB: delete_LOCRESULT", "" + locationResult.getSelectedNode() + " id: " + locationResult.getId());
+
+        database.execSQL(deleteQuery);
+        database.close();
+    }
+
+
 
 
     /*TODO
@@ -560,10 +568,10 @@ public class DatabaseHandlerImplementation extends SQLiteOpenHelper implements D
 
     public String calculateNodeId(Node node) {
 
-        measuredNode = new ArrayList<>();
+        List<Node> measuredNode = new ArrayList<>();
         measuredNode.add(node);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
         boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);

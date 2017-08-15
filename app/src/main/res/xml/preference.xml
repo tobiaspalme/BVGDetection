@@ -10,6 +10,7 @@
             android:title="Gleitender Mittelwertfilter"
             android:defaultValue="true" >
         </CheckBoxPreference>
+
         <!--<com.example.carol.bvg.EditTextPreference-->
             <!--android:defaultValue="3"-->
             <!--android:key="pref_movivngAverageOrder"-->
@@ -17,18 +18,21 @@
             <!--android:dependency="pref_movingAverage"-->
             <!--android:inputType="number"-->
             <!--/>-->
-        <ListPreference
+
+        <de.htwberlin.f4.ai.ma.prototype_temp.ListPreference
             android:dependency="pref_movingAverage"
             android:key="pref_movivngAverageOrder"
             android:title="Ordnung"
             android:entries="@array/pref_movingAverage_entries"
             android:entryValues="@array/pref_movingAverage_values"
             android:defaultValue="@string/pref_movingAverage_default" />
+
         <CheckBoxPreference
             android:key="pref_kalman"
             android:title="Kalman Filter"
             android:defaultValue="true" />
-        <ListPreference
+
+        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
             android:defaultValue="2"
             android:key="pref_kalmanValue"
             android:title="Kalman Wert"
@@ -46,12 +50,14 @@
             android:key="pref_euclideanDistance"
             android:title="Euklidische Distanz"
             android:defaultValue="true" />
+
         <CheckBoxPreference
             android:key="pref_knnAlgorithm"
             android:title="k-nächster-Nachbar Algorithmus"
             android:dependency="pref_euclideanDistance"
             android:defaultValue="true" />
-        <EditTextPreference
+
+        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
             android:defaultValue="3"
             android:key="pref_knnNeighbours"
             android:title="k Nachbarn"
@@ -60,4 +66,5 @@
             />
 
     </PreferenceCategory>
+
 </PreferenceScreen>

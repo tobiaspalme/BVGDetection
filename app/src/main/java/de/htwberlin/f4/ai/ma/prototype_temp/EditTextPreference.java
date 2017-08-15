@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 /**
- * Override the standart Edit Text Element. It is now possible to see the value of the child element as summary.
+ * Override the standard Edit Text Element. It is now possible to see the value of the child element as summary.
  */
 public class EditTextPreference extends android.preference.EditTextPreference {
     public EditTextPreference(Context context, AttributeSet attrs) {

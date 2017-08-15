@@ -243,7 +243,6 @@ public class NodeRecordActivity extends BaseActivity {
 
                     mHandler.post(new Runnable() {
                         public void run() {
-
                             progressBar.setProgress(progressStatus);
                             progressText.setText(progressBar.getMax() - progressBar.getProgress() + "s");
                         }
@@ -254,10 +253,8 @@ public class NodeRecordActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-
                 fingerprintTaken = true;
                 progressStatus = 0;
-                //TODO recordButton.setEnabled(true);
             }
 
         }).start();
@@ -269,14 +266,21 @@ public class NodeRecordActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        pictureTaken = true;
 
-        // TODO necessary?
-        picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
-        //node.setPicturePath(filePath);
+        System.out.println("requestCode " + requestCode);
+        System.out.println("resultCode " + resultCode);
 
-        captureButton.setEnabled(false);
-        Glide.with(this).load(picturePath).into(cameraImageView);
+
+        if (resultCode == -1) {
+            pictureTaken = true;
+
+            // TODO necessary?
+            picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
+            //node.setPicturePath(filePath);
+
+            captureButton.setEnabled(false);
+            Glide.with(this).load(picturePath).into(cameraImageView);
+        }
     }
 
 

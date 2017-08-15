@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ma.persistence;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -20,6 +22,7 @@ import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 
 public interface DatabaseHandler {
 
+    // Node management
     void insertNode(Node node);
     void updateNode(Node node, String oldNodeId);
     ArrayList<Node> getAllNodes();
@@ -27,10 +30,7 @@ public interface DatabaseHandler {
     boolean checkIfNodeExists(String nodeID);
     void deleteNode(Node node);
 
-    void insertLocationResult(LocationResult locationResult);
-    ArrayList<LocationResultImplementation> getAllLocationResults();
-    void deleteLocationResult(LocationResult locationResult);
-
+    // Edges management
     void insertEdge(Edge edge);
     Edge getEdge(Node nodeA, Node nodeB);
     ArrayList<Edge> getAllEdges();
@@ -39,8 +39,18 @@ public interface DatabaseHandler {
     boolean checkIfEdgeExists(Edge edge);
     void deleteEdge(Edge edge);
 
+    // Import / Export
+    SQLiteDatabase getReadableDatabase();
+    SQLiteDatabase getWritableDatabase();
     //boolean importDatabase(String dbPath) throws IOException;
     void exportDatabase();
 
+    // Calculate my location
     String calculateNodeId(Node node);
+
+    // LocationResult management
+    void insertLocationResult(LocationResult locationResult);
+    ArrayList<LocationResultImplementation> getAllLocationResults();
+    void deleteLocationResult(LocationResult locationResult);
+
 }
