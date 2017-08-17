@@ -27,11 +27,11 @@ public class KalmanFilter {
     public List<RestructedNode> calculationKalman(List<RestructedNode> restructedNodeList) {
 
         List<RestructedNode> calculatedNodes = new ArrayList<>();
-        Multimap<String, Double> calculadetMultiMap = null;
+        Multimap<String, Double> calculatedMultiMap = null;
 
         for (int i = 0; i < restructedNodeList.size(); i++) {
             RestructedNode restructedNode = restructedNodeList.get(i);
-            calculadetMultiMap = ArrayListMultimap.create();
+            calculatedMultiMap = ArrayListMultimap.create();
 
             double average;
             double Xk, Pk, Kk, Pkt, Xkt, value, deviation;
@@ -69,10 +69,10 @@ public class KalmanFilter {
                     Xkt = Xk + Kk * (value - Xk);
                     Xk = Xkt;
 
-                    calculadetMultiMap.put(Key, Xkt);
+                    calculatedMultiMap.put(Key, Xkt);
                 }
             }
-            calculatedNodes.add(new RestructedNode(restructedNode.getId(), calculadetMultiMap));
+            calculatedNodes.add(new RestructedNode(restructedNode.getId(), calculatedMultiMap));
         }
 
         return calculatedNodes;

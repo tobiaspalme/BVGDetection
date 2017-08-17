@@ -19,18 +19,18 @@ public class MovingAverage {
     // TODO: evtl. private setzen? STATIC??
     public List<RestructedNode> calculation(List<RestructedNode> restructedNodeList, int order) {
         List<RestructedNode> calculatedNodes = new ArrayList<>();
-        Multimap<String, Double> calculadetMultiMap = null;
+        Multimap<String, Double> calculatedMultiMap = null;
 
         for (int i = 0; i < restructedNodeList.size(); i++) {
-            RestructedNode Node = restructedNodeList.get(i);
-            calculadetMultiMap = ArrayListMultimap.create();
+            RestructedNode restructedNode = restructedNodeList.get(i);
+            calculatedMultiMap = ArrayListMultimap.create();
 
             double average;
 
-            for (String Key : Node.restructedSignals.keySet()) {
+            for (String Key : restructedNode.restructedSignals.keySet()) {
                 int counter = 0;
                 int tempAverage = 0;
-                Double[] Values = Node.restructedSignals.get(Key).toArray(new Double[0]);
+                Double[] Values = restructedNode.restructedSignals.get(Key).toArray(new Double[0]);
 
                 for (Double Signal : Values) {
                     if (Signal != null) {
@@ -62,7 +62,7 @@ public class MovingAverage {
                             }
 
                             double movingAverageValue = ((double) 1 / (double) 3) * (t1 + t2 + t3);
-                            calculadetMultiMap.put(Key, movingAverageValue);
+                            calculatedMultiMap.put(Key, movingAverageValue);
                         }
 
                     } else if (order == 5) {
@@ -95,7 +95,7 @@ public class MovingAverage {
                             }
 
                             double movingAverageValue = ((double) 1 / (double) 5) * (t1 + t2 + t3 + t4 + t5);
-                            calculadetMultiMap.put(Key, movingAverageValue);
+                            calculatedMultiMap.put(Key, movingAverageValue);
                         }
 
                     }
@@ -103,7 +103,7 @@ public class MovingAverage {
                 }
 
             }
-            calculatedNodes.add(new RestructedNode(Node.id, calculadetMultiMap));
+            calculatedNodes.add(new RestructedNode(restructedNode.id, calculatedMultiMap));
         }
         return calculatedNodes;
     }

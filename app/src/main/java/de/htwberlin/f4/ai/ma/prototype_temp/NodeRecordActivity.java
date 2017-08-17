@@ -147,7 +147,9 @@ public class NodeRecordActivity extends BaseActivity {
 
             ArrayList<String> wifiNamesList = new ArrayList<>();
             for (ScanResult sr : wifiScanList) {
-                wifiNamesList.add(sr.SSID);
+                if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                    wifiNamesList.add(sr.SSID);
+                }
             }
             final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
             wifiNamesDropdown.setAdapter(dropdownAdapter);

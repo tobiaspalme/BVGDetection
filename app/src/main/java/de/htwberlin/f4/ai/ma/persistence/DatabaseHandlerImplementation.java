@@ -84,10 +84,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     private Context context;
 
 
-    private int averageOrder;
-    private int knnValue;
-    private int kalmanValue;
-    private double percentage;
+    //private int averageOrder;
+    //private int knnValue;
+    //private int kalmanValue;
+    //private double percentage;
 
 
     public DatabaseHandlerImplementation(Context context) {
@@ -144,7 +144,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    
+
     //----------------- N O D E S ------------------------------------------------------------------------------------------
 
     // Insert
@@ -589,13 +589,28 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         String poi = null;
 
-        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(getAllNodes());
+
+
+        // Load all nodes which have a valid fingerprint
+        List<Node> nodesWithSignalInformation = new ArrayList<>();
+        for (Node n : getAllNodes()) {
+            if (!n.getFingerprint().getSignalInformationList().isEmpty()) {
+                nodesWithSignalInformation.add(n);
+            }
+        }
+
+        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithSignalInformation);
+
+
+        //List<RestructedNode> restructedNodeList = calculateNewNodeDateset(getAllNodes());
         List<RestructedNode> calculatedNodeList = new ArrayList<>();
 
         if (!restructedNodeList.isEmpty()) {
             if (movingAverage) {
                 MovingAverage movingAverageClass = new MovingAverage();
-                calculatedNodeList = movingAverageClass.calculation(restructedNodeList, averageOrder);
+                //calculatedNodeList = movingAverageClass.calculation(restructedNodeList, averageOrder);
+                calculatedNodeList = movingAverageClass.calculation(restructedNodeList, movingAverageOrder);
+
             } else if (kalmanFilter) {
                 KalmanFilter kalmanFilterClass = new KalmanFilter(kalmanValue);
                 calculatedNodeList = kalmanFilterClass.calculationKalman(restructedNodeList);
@@ -611,7 +626,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 if (knnAlgorithm) {
                     KNearestNeighbor KnnClass = new KNearestNeighbor(knnValue);
                     poi = KnnClass.calculateKnn(distanceNames);
-                } else {
+
+                } else if (!distanceNames.isEmpty()) {
                     poi = distanceNames.get(0);
                 }
             }

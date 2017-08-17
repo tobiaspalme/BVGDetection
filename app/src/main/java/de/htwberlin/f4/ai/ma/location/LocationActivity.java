@@ -129,9 +129,12 @@ public class LocationActivity extends BaseActivity {
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
         mainWifiObj.startScan();
         List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+
         ArrayList<String> wifiNamesList = new ArrayList<>();
         for (ScanResult sr : wifiScanList) {
-            wifiNamesList.add(sr.SSID);
+            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                wifiNamesList.add(sr.SSID);
+            }
         }
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
         wifiDropdown.setAdapter(dropdownAdapter);

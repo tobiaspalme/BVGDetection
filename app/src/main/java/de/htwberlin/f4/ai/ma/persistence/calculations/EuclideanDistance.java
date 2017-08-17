@@ -61,7 +61,7 @@ public class EuclideanDistance {
         //List<DistanceClass> distanceList2 = doSelectionSort(distanceClassList);
         //List<String> distanceList2 = doSelectionSort(distanceClassList);
 
-        return selectionsort(distanceClassList);
+        return sortSelection(distanceClassList);
     }
 
     /**
@@ -69,7 +69,7 @@ public class EuclideanDistance {
      * @param distanceList
      * @return sorted list
      */
-    private List<String> selectionsort(List<DistanceClass> distanceList) {
+    private List<String> sortSelection(List<DistanceClass> distanceList) {
         for (int i = 0; i < distanceList.size() - 1; i++) {
             for (int j = i + 1; j < distanceList.size(); j++) {
                 if (distanceList.get(i).distance > distanceList.get(j).distance) {
