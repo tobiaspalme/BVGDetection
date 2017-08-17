@@ -1,6 +1,5 @@
 package de.htwberlin.f4.ai.ma.nodelist;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -125,6 +124,7 @@ public class NodeListActivity extends BaseActivity {
             nodeNames.add(0, "Keine gespeicherten Orte.");
             nodeDescriptions.add("");
             nodePicturePaths.add("");
+
         } else {
             for (Node n : allNodes) {
                 nodeNames.add(n.getId());

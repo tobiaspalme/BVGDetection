@@ -75,6 +75,7 @@
     <string name="save_node_button_text">Ort speichern</string>
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
+    <string name="nodeid_input_text">Bitte eingeben</string>
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild nicht vorhanden</string>
@@ -96,6 +97,8 @@
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>
     <string name="export_button_text">Daten exportieren</string>
+    <string name="import_database_warining">Soll die gewählte Datei wirklich importiert werden? Es werden alle Daten in der Datenbank überschrieben!</string>
+    <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
 
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>

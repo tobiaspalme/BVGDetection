@@ -94,7 +94,7 @@ public class JsonWriter {
 
                     for (int j = 0; j < node.getFingerprint().getSignalInformationList().get(i).getSignalStrengthInfoList().size(); j++) {
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAdress", node.getFingerprint().getSignalInformationList().get(i).getSignalStrengthInfoList().get(j).macAdress);
+                        signalStrenghtObject.put("macAddress", node.getFingerprint().getSignalInformationList().get(i).getSignalStrengthInfoList().get(j).macAddress);
                         signalStrenghtObject.put("strength", node.getFingerprint().getSignalInformationList().get(i).getSignalStrengthInfoList().get(j).signalStrength);
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }

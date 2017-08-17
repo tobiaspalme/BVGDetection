@@ -63,7 +63,6 @@ public class NodeRecordActivity extends BaseActivity {
     private ImageView cameraImageView;
     private EditText nodeIdEdittext;
     private EditText recordTimeText;
-    //private EditText wlanNameText;
 
     private Spinner wifiNamesDropdown;
     private EditText descriptionEdittext;
@@ -124,7 +123,6 @@ public class NodeRecordActivity extends BaseActivity {
 
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
         recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
-        //wlanNameText = (EditText) findViewById(R.id.edTx_WLan);
         wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
 
         progressText = (TextView) findViewById(R.id.tx_progress);
@@ -132,7 +130,7 @@ public class NodeRecordActivity extends BaseActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mHandler = new Handler();
 
-        nodeIdEdittext.setText("bitte eingeben");
+        nodeIdEdittext.setText(getString(R.string.nodeid_input_text));
         recordTimeText.setText("3");
         picturePath = null;
 
@@ -231,9 +229,12 @@ public class NodeRecordActivity extends BaseActivity {
 
                         if (sr.SSID.equals(wlanName)) {
                             SignalStrengthInformation signal = new SignalStrengthInformation(sr.BSSID, sr.level);
+                            Log.d("NodeRecordActivity", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
                             signalStrenghtList.add(signal);
                         }
                     }
+                    Log.d("------------------", "--------------------------------------------");
+
                     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss");
                     String format = s.format(new Date());
                     SignalInformation signalInformation = new SignalInformation(format, signalStrenghtList);
@@ -347,6 +348,9 @@ public class NodeRecordActivity extends BaseActivity {
             } else {
                 jsonWriter.writeJSON(node);
                 databaseHandler.insertNode(node);
+                progressStatus = 0;
+                progressText.setText(String.valueOf(progressStatus));
+                progressBar.setProgress(progressStatus);
                 Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
             }
         }
@@ -363,4 +367,11 @@ public class NodeRecordActivity extends BaseActivity {
         return true;
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        abortRecording = true;
+
+    }
 }

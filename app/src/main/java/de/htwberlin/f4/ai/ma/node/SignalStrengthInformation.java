@@ -7,11 +7,11 @@ package de.htwberlin.f4.ai.ma.node;
 // TODO: Public in package private ändern wenn Package vollständig
 public class SignalStrengthInformation {
 
-    public String macAdress;
+    public String macAddress;
     public int signalStrength;
 
-    public SignalStrengthInformation(String macAdress, int signalStrength) {
-        this.macAdress = macAdress;
+    public SignalStrengthInformation(String macAddress, int signalStrength) {
+        this.macAddress = macAddress;
         this.signalStrength = signalStrength;
     }
 }

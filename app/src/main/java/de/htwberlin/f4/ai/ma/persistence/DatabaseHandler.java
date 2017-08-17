@@ -2,6 +2,7 @@ package de.htwberlin.f4.ai.ma.persistence;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -42,8 +43,8 @@ public interface DatabaseHandler {
     // Import / Export
     SQLiteDatabase getReadableDatabase();
     SQLiteDatabase getWritableDatabase();
-    //boolean importDatabase(String dbPath) throws IOException;
-    void exportDatabase();
+    boolean importDatabase(String dbPath) throws IOException;
+    boolean exportDatabase();
 
     // Calculate my location
     String calculateNodeId(Node node);

@@ -39,9 +39,9 @@ public class ContentProviderDB extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        String table =getTableName(uri);
+        String table = getTableName(uri);
         SQLiteDatabase database = databaseHandler.getReadableDatabase();
-        Cursor cursor =database.query(table,  projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = database.query(table,  projection, selection, selectionArgs, null, null, sortOrder);
         return cursor;
     }
 

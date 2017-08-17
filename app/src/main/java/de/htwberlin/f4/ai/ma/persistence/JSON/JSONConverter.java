@@ -32,7 +32,7 @@ public class JSONConverter {
                     for (int j = 0; j < signalInformationList.get(i).getSignalStrengthInfoList().size(); j++) {
 
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAdress", signalInformationList.get(i).getSignalStrengthInfoList().get(j).macAdress);
+                        signalStrenghtObject.put("macAddress", signalInformationList.get(i).getSignalStrengthInfoList().get(j).macAddress);
                         signalStrenghtObject.put("strength", signalInformationList.get(i).getSignalStrengthInfoList().get(j).signalStrength);
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
@@ -70,7 +70,7 @@ public class JSONConverter {
 
                     for (int k = 0; k < signalStrengthJsonArray.length(); k++) {
                         JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
-                        String macAdress = signalStrenghtObject.getString("macAdress");
+                        String macAdress = signalStrenghtObject.getString("macAddress");
                         int signalStrenght = signalStrenghtObject.getInt("strength");
                         SignalStrengthInformation signal = new SignalStrengthInformation(macAdress, signalStrenght);
                         signalStrenghtList.add(signal);

@@ -279,6 +279,7 @@ public class LocationActivity extends BaseActivity {
 
                             if (sr.SSID.equals(wlanName)) {
                                 multiMap.put(sr.BSSID, sr.level);
+                                Log.d("LocationActivity", "Messung, SSID stimmt:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
                                 long timestamp = sr.timestamp;
                                 Log.d("timestamp Sunshine", String.valueOf(timestamp));
                             }
@@ -324,10 +325,10 @@ public class LocationActivity extends BaseActivity {
             value = value / counter;
 
             //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
-            List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
+            List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
             SignalStrengthInformation signal = new SignalStrengthInformation(blub, value);
-            signalStrenghtList.add(signal);
-            SignalInformation signalInformation = new SignalInformation("", signalStrenghtList);
+            signalStrengthList.add(signal);
+            SignalInformation signalInformation = new SignalInformation("", signalStrengthList);
             signalInformationList.add(signalInformation);
 
         }

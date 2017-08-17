@@ -31,9 +31,9 @@ public class Fingerprint {
         return this.signalInformationList;
     }
 
-    public void setSignalInformationList(List<SignalInformation> signalInformationList) {
-        this.signalInformationList = signalInformationList;
-    }
+    //public void setSignalInformationList(List<SignalInformation> signalInformationList) {
+    //    this.signalInformationList = signalInformationList;
+    //}
 
 
     /*

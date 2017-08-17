@@ -16,6 +16,7 @@ import com.google.common.collect.Multimap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -142,6 +143,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         return super.getReadableDatabase();
     }
 
+
+    
     //----------------- N O D E S ------------------------------------------------------------------------------------------
 
     // Insert
@@ -501,18 +504,20 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
 
-
-    /*TODO
-    //-------------I M P O R T ------------------------------------------------------------------
-
-    private String DB_FILEPATH = context.getFilesDir().getPath() + "/databases/indoor_data.db";
+    //------------- I M P O R T ------------------------------------------------------------------
 
     /**
      * Copies the database file at the specified location over the current
      * internal application database.
+     *
+     * @param dbPath path to the (new) database file
+     * @return return-code: true means successful, false unsuccessful
      */
-    /*
+
     public boolean importDatabase(String dbPath) throws IOException {
+
+        //String DB_FILEPATH = context.getFilesDir().getPath() + "/databases/indoor_data.db";
+        String DB_FILEPATH = context.getApplicationInfo().dataDir + "/databases/indoor_data.db";
 
         // Close the SQLiteOpenHelper so it will commit the created empty database to internal storage
         close();
@@ -527,12 +532,13 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             return true;
         }
         return false;
-    }*/
+    }
+
 
 
     //------------------- E X P O R T ------------------------------------------------------------
 
-    public void exportDatabase() {
+    public boolean exportDatabase() {
         try {
 
             File exportFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorPositioning/Exported");
@@ -553,9 +559,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
+                    return true;
                 }
             }
         } catch(Exception e) {e.printStackTrace();}
+        return false;
     }
 
 
@@ -581,7 +589,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         String poi = null;
 
-        List<RestructedNode> restructedNodeList = calculateNewNodeDateSet(getAllNodes());
+        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(getAllNodes());
         List<RestructedNode> calculatedNodeList = new ArrayList<>();
 
         if (!restructedNodeList.isEmpty()) {
@@ -627,9 +635,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             List<SignalInformation> signalInformation = nodeList.get(i).getFingerprint().getSignalInformationList();
             for (SignalInformation sigInfo : signalInformation)
                 for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
-                    String macAdress = ssi.macAdress;
-                    int signalStrenght = ssi.signalStrength;
-                    MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrenght);
+                    Log.d("DatabaseHanderlImpl", "--- getActuallyNode ---  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
+                    String macAdress = ssi.macAddress;
+                    int signalStrength = ssi.signalStrength;
+                    MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
                     measuredNodeList.add(measuredNode);
                 }
         }
@@ -640,33 +649,34 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     /**
      * rewrite nodelist to restrucetd nodes and delete weak mac addresses
-     * @param allExistingNodes list of all nodes
+     * @param allNodes list of all nodes
      * @return restructed node list
      */
-    private List<RestructedNode> calculateNewNodeDateSet(List<Node> allExistingNodes) {
+    private List<RestructedNode> calculateNewNodeDateset(List<Node> allNodes) {
         List<String> macAddresses;
         int count = 0;
 
         List<RestructedNode> restructedNodes = new ArrayList<>();
         Multimap<String, Double> multiMap = null;
 
-        for (Node node : allExistingNodes) {
+        for (Node node : allNodes) {
             count = node.getFingerprint().getSignalInformationList().size();
             double minValue = (((double) 1 / (double) 3) * (double) count);
             macAddresses = getMacAddresses(node);
             multiMap = getMultiMap(node, macAddresses);
 
             //delete weak addresses
-            for (String checkMacAdress : macAddresses) {
+            for (String macAddress : macAddresses) {
                 int countValue = 0;
 
-                for (Double signalValue : multiMap.get(checkMacAdress)) {
+                for (Double signalValue : multiMap.get(macAddress)) {
                     if (signalValue != null) {
                         countValue++;
                     }
                 }
                 if (countValue <= minValue) {
-                    multiMap.removeAll(checkMacAdress);
+                    multiMap.removeAll(macAddress);
+                    Log.d("DatabaseHandlerImpl", "calculateNewNodeDataset  ---  remove MAC: " + macAddress);
                 }
             }
             //fill restructed Nodes
@@ -678,7 +688,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     /**
-     * create a multimap with mac address and values
+     * create a multimap with mac address and signal strength values
      * @param node
      * @param macAdresses
      * @return multimap with mac address and vales
@@ -688,8 +698,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
             for (SignalStrengthInformation ssi : signalInfo.getSignalStrengthInfoList()) {
-                multiMap.put(ssi.macAdress, (double) ssi.signalStrength);
-                actuallyMacAdresses.add(ssi.macAdress);
+                multiMap.put(ssi.macAddress, (double) ssi.signalStrength);
+                actuallyMacAdresses.add(ssi.macAddress);
             }
             for (String checkMacAdress : macAdresses) {
                 if (!actuallyMacAdresses.contains(checkMacAdress)) {
@@ -710,7 +720,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         HashSet<String> macAdresses = new HashSet<String>();
         for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
             for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
-                macAdresses.add(ssi.macAdress);
+                macAdresses.add(ssi.macAddress);
             }
         }
         List<String> uniqueList = new ArrayList<String>(macAdresses);
