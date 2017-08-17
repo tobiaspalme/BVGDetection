@@ -17,9 +17,9 @@ public class PositionModuleB extends PositionModuleA {
     public PositionModuleB(SensorFactory sensorFactory, CalibrationData calibrationData) {
         super(sensorFactory, calibrationData);
 
-        altitudeModule = new AltitudeModuleB(sensorFactory, calibrationData.getAirPressure());
+        altitudeModule = new AltitudeModuleB(sensorFactory, calibrationData.getAirPressure(), calibrationData.getLowpassFilterValue());
         distanceModule = new DistanceModuleB(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleB(sensorFactory);
+        orientationModule = new OrientationModuleB(sensorFactory, calibrationData.getLowpassFilterValue());
     }
 
 }

@@ -20,7 +20,7 @@ public interface IndoorMeasurement {
     void calibrate(CalibrationData calibrationData);
 
     // start recording for postion calculcation
-    void start(IndoorMeasurementType indoorMeasurementType);
+    void start();
 
     // stop sensors
     void stop();

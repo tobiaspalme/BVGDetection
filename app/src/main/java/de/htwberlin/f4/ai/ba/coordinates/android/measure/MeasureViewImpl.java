@@ -118,7 +118,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         startNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_start_coords);
         targetNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_target_coords);
 
-        modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
+        /*modeSpinner = (Spinner) findViewById(R.id.coordinates_measure_spinner);
         final List<IndoorMeasurementType> spinnerValues = new ArrayList<>();
         // check available measurement types / sensors
         SensorChecker sensorChecker = new SensorCheckerImpl(this);
@@ -133,8 +133,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         }
         if (sensorChecker.checkSensor(IndoorMeasurementType.VARIANT_D)) {
             spinnerValues.add(IndoorMeasurementType.VARIANT_D);
-        }
+        }*/
 
+        /*
         final ArrayAdapter<IndoorMeasurementType> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, spinnerValues);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -149,7 +150,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
 
         startNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_startnode);
         final ArrayAdapter<String> startAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);

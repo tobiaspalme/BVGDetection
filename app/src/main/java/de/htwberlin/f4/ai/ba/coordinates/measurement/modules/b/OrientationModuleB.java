@@ -21,8 +21,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModule
 
 public class OrientationModuleB extends OrientationModuleA {
 
-    public OrientationModuleB(SensorFactory sensorFactory) {
+    float lowpassFilterValue;
+
+    public OrientationModuleB(SensorFactory sensorFactory, float lowpassFilterValue) {
         super(sensorFactory);
+        this.lowpassFilterValue = lowpassFilterValue;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class OrientationModuleB extends OrientationModuleA {
                 List<SensorData> oldValues = sensorData.get(SensorType.COMPASS_FUSION);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
                     newValue.setValues(new float[]{filteredValue});
                 }
 

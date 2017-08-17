@@ -2,9 +2,12 @@ package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.carol.bvg.R;
 
@@ -55,6 +58,7 @@ public class MeasureControllerImpl implements MeasureController {
     private float edgeDistance; // edgedistance in m
 
     private IndoorMeasurementType measurementType;
+    private float lowpassFilterValue;
 
     private Node startNode;
     private Node targetNode;
@@ -351,10 +355,11 @@ public class MeasureControllerImpl implements MeasureController {
         view.updateStepCount(stepCount);
     }
 
+    /*
     @Override
     public void onMeasurementTypeSelected(IndoorMeasurementType type) {
         measurementType = type;
-    }
+    }*/
 
 
     @Override
@@ -367,6 +372,12 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onResume() {
         handleNodeSelection(startNode, targetNode);
+        // get settings from sharedpreferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
+        String type = sharedPreferences.getString("pref_measurement_type", "Variante D");
+        measurementType = IndoorMeasurementType.fromString(type);
+
     }
 
     @Override
@@ -496,6 +507,8 @@ public class MeasureControllerImpl implements MeasureController {
                     calibrationData.setCoordinates(startCoordinates);
                 }
 
+                calibrationData.setIndoorMeasurementType(measurementType);
+                calibrationData.setLowpassFilterValue(lowpassFilterValue);
 
                 if (calibrationData != null) {
                     // save new calibrated airpressure and azimuth
@@ -504,7 +517,7 @@ public class MeasureControllerImpl implements MeasureController {
                     indoorMeasurement.calibrate(calibrationData);
                     // start measurement
                     //indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
-                    indoorMeasurement.start(measurementType);
+                    indoorMeasurement.start();
                 }
             }
         });

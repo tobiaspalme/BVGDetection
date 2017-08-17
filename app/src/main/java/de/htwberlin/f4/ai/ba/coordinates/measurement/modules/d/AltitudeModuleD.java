@@ -17,8 +17,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.AltitudeModuleA;
 
 public class AltitudeModuleD extends AltitudeModuleA {
 
-    public AltitudeModuleD(SensorFactory sensorFactory, float airPressure) {
+    private float lowpassFilterValue;
+
+    public AltitudeModuleD(SensorFactory sensorFactory, float airPressure, float lowpassFilterValue) {
         super(sensorFactory, airPressure);
+        this.lowpassFilterValue = lowpassFilterValue;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class AltitudeModuleD extends AltitudeModuleA {
                 List<SensorData> oldValues = sensorData.get(SensorType.BAROMETER);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
                     //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
                     newValue.setValues(new float[]{filteredValue});
                 }
