@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">BVG</string>
     <string name="pref_movingAverage_default">3</string>
-    <string name="title_activity_record">RecordActivity</string>
+<!--<string name="title_activity_record">RecordActivity</string>
     <string name="title_activity_choose_app">ChooseAppActivity</string>
     <string name="title_activity_coordinates">CoordinatesActivity</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_test">test</string>
+-->
+    <string name="action_settings">Settings</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -57,13 +58,13 @@
     <string name="period_hint">Bitte wählen Sie in welchem Zeitabstand (ms) die Werte gespeichert werden sollen</string>
 
     <!-- activity_main -->
-    <string name="record_button">Node aufnehmen</string>
+    <!--<string name="record_button">Node aufnehmen</string>
     <string name="nodelist_button">Nodes verwalten</string>
     <string name="edges_manager_button">Kanten verwalten</string>
     <string name="calculate_button">Standort ermitteln</string>
     <string name="navigation_button_text">Navigation</string>
     <string name="import_export_button_text">Importieren / Exportieren</string>
-    <string name="settings_button">Einstellungen</string>
+    <string name="settings_button">Einstellungen</string>-->
 
     <!-- activity_node_record -->
     <string name="capture_button">Bild aufnehmen</string>
@@ -102,12 +103,19 @@
     <string name="measure_ten_seconds_text">Messen (10 Sekunden)</string>
     <string name="no_node_found_text">Kein Ort gefunden</string>
     <string name="searching_node_text">Ort wird gesucht</string>
+    <string name="percent_label_textview"> %</string>
 
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>
     <string name="export_button_text">Daten exportieren</string>
+    <string name="import_title_question">Importieren?</string>
     <string name="import_database_warining">Soll die gewählte Datei wirklich importiert werden? Es werden alle Daten in der Datenbank überschrieben!</string>
     <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
+    <string name="database_imported_toast">Datenbank importiert.</string>
+    <string name="database_exported_toast">Datenbank exportiert.</string>
+    <string name="wrong_file_extension">Falsche Dateiendung</string>
+    <string name="try_again">Erneut versuchen</string>
+    <string name="filechooser_title">Bitte .db Datei wählen</string>
 
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>
@@ -118,6 +126,6 @@
     <string name="navigation_result_header">Ihre Route:</string>
 
 
-    <string name="refreshed_toast">Aktualisiert</string>
+    <string name="refreshed_toast">WLANs Aktualisiert</string>
 
 </resources>

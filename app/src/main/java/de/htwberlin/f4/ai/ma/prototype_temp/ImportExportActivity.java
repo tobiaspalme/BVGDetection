@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.carol.bvg.R;
@@ -25,8 +26,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 public class ImportExportActivity extends BaseActivity {
 
-    Button importButton;
-    Button exportButton;
+    ImageButton importButton;
+    ImageButton exportButton;
     private DatabaseHandler databaseHandler;
     private Context context;
 
@@ -42,17 +43,20 @@ public class ImportExportActivity extends BaseActivity {
 
         context = getApplicationContext();
 
-        importButton = (Button) findViewById(R.id.import_button);
-        exportButton = (Button) findViewById(R.id.export_button);
+        importButton = (ImageButton) findViewById(R.id.import_button);
+        exportButton = (ImageButton) findViewById(R.id.export_button);
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
+
+        importButton.setImageResource(R.drawable.import_icon);
+        exportButton.setImageResource(R.drawable.export_icon);
 
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("file/*");
-                startActivityForResult(Intent.createChooser(intent, "Bitte .db Datei wählen"), PICKFILE_REQUEST_CODE);
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_title)), PICKFILE_REQUEST_CODE);
             }
         });
 
@@ -61,7 +65,7 @@ public class ImportExportActivity extends BaseActivity {
             public void onClick(View view) {
                 boolean exportSuccessful = databaseHandler.exportDatabase();
                 if (exportSuccessful) {
-                    Toast.makeText(context, "Datenbank exportiert!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -77,21 +81,21 @@ public class ImportExportActivity extends BaseActivity {
             // Check if selected file has extension .db
             if (!selectedFile.getPath().endsWith(".db")) {
                 new AlertDialog.Builder(this)
-                        .setTitle("Falsche Dateiendung")
+                        .setTitle(getString(R.string.wrong_file_extension))
                         .setMessage(getString(R.string.import_database_wrong_file_extension_error))
                         .setCancelable(true)
-                        .setPositiveButton("Erneut versuchen", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                                 intent.setType("file/*");
-                                startActivityForResult(Intent.createChooser(intent, "Bitte .db Datei wählen"), PICKFILE_REQUEST_CODE);
+                                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_title)), PICKFILE_REQUEST_CODE);
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             } else {
                 new AlertDialog.Builder(this)
-                        .setTitle("Importieren?")
+                        .setTitle(getString(R.string.import_title_question))
                         .setMessage(getString(R.string.import_database_warining))
                         .setCancelable(true)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -99,7 +103,7 @@ public class ImportExportActivity extends BaseActivity {
                                 try {
                                     boolean importSuccessful = DatabaseHandlerFactory.getInstance(context).importDatabase(selectedFile.getPath());
                                     if (importSuccessful) {
-                                        Toast.makeText(context, "Datenbank importiert.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, getString(R.string.database_imported_toast), Toast.LENGTH_LONG).show();
                                     }
                                 } catch (IOException e) {e.printStackTrace();}
                             }

@@ -3,17 +3,30 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/import_button_text"/>
+
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/import_button"
+        android:contentDescription="@string/import_button_text"
         android:text="@string/import_button_text" />
 
-    <Button
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/export_button_text"/>
+
+
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/export_button"
+        android:contentDescription="@string/export_button_text"
         android:text="@string/export_button_text" />
-
 
 </LinearLayout>

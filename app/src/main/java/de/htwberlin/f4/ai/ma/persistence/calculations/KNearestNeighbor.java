@@ -1,8 +1,10 @@
 package de.htwberlin.f4.ai.ma.persistence.calculations;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Johann Winter
@@ -11,19 +13,13 @@ import java.util.Map;
 
 public class KNearestNeighbor {
 
-    private int knnValue;
-
-    public KNearestNeighbor(int knnValue){
-        this.knnValue = knnValue;
-    }
-
-
     /**
-     * start knn
+     * Start k-Nearest-Neighbor
+     * @param knnValue the knn value
      * @param distanceNames names of sorted list
-     * @return actually poi
+     * @return nodeName
      */
-    public String calculateKnn(List<String> distanceNames) {
+    public static FoundNode calculateKnn(int knnValue, List<String> distanceNames) {
         Map<String, Integer> stringsCount = new HashMap<String, Integer>();
 
         if (distanceNames.size() >= knnValue && knnValue != 0) {
@@ -47,7 +43,16 @@ public class KNearestNeighbor {
 
             // TODO!! rausreichen der percent
             //setPercentage(percent);
-            return mostRepeated.getKey();
+            //return mostRepeated.getKey();
+
+            System.out.println("FOUNDNODE: " + mostRepeated + "  " + percent);
+
+            if (mostRepeated.getKey() != null) {
+                return new FoundNode(mostRepeated.getKey(), percent);
+            } else {
+                return null;
+            }
+
         } else {
             return null;
         }

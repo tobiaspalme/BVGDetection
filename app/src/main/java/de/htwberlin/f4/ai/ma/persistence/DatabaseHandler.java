@@ -9,6 +9,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
@@ -47,7 +48,7 @@ public interface DatabaseHandler {
     boolean exportDatabase();
 
     // Calculate my location
-    String calculateNodeId(Node node);
+    FoundNode calculateNodeId(Node node);
 
     // LocationResult management
     void insertLocationResult(LocationResult locationResult);

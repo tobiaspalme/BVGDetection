@@ -37,6 +37,7 @@ import de.htwberlin.f4.ai.ma.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
+import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
 
 
@@ -48,8 +49,12 @@ public class LocationActivity extends BaseActivity {
     Button measure10sButton;
     ImageView locationImageview;
     ImageView refreshImageview;
+    TextView descriptionLabelTextview;
     TextView descriptionTextview;
+    TextView coordinatesLabelTextview;
     TextView coordinatesTextview;
+    TextView percentLabelTextview;
+    TextView percentTextview;
 
     Context context = this;
 
@@ -62,7 +67,8 @@ public class LocationActivity extends BaseActivity {
     //private Spinner nodesDropdown;
     private Spinner wifiDropdown;
     //private LocationResultAdapter resultAdapterdapter;
-    private String foundNodeName;
+    //private String foundNodeName;
+    private FoundNode foundNode;
     private WifiManager mainWifiObj;
     private Multimap<String, Integer> multiMap;
     private long timestampWifiManager = 0;
@@ -98,8 +104,12 @@ public class LocationActivity extends BaseActivity {
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
+        descriptionLabelTextview = (TextView) findViewById(R.id.description_label_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
+        coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_textview);
         coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
+        percentLabelTextview = (TextView) findViewById(R.id.percent_label_textview);
+        percentTextview = (TextView) findViewById(R.id.percent_textview);
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
 
         //listView = (ListView) findViewById(R.id.results_listview);
@@ -134,13 +144,19 @@ public class LocationActivity extends BaseActivity {
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
-        locationImageview.setImageResource(R.drawable.refresh);
-        locationImageview.setOnClickListener(new View.OnClickListener() {
+        refreshImageview.setImageResource(R.drawable.refresh);
+        refreshImageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 refreshWifiDropdown();
             }
         });
+
+
+        descriptionLabelTextview.setVisibility(View.INVISIBLE);
+        coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+        percentLabelTextview.setVisibility(View.INVISIBLE);
+
 
         refreshWifiDropdown();
 
@@ -254,8 +270,14 @@ public class LocationActivity extends BaseActivity {
      */
     private void getMeasuredNode(final int times) {
 
+        locationImageview.setVisibility(View.INVISIBLE);
+        descriptionLabelTextview.setVisibility(View.INVISIBLE);
+        coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+        percentLabelTextview.setVisibility(View.INVISIBLE);
+
         descriptionTextview.setText("");
         coordinatesTextview.setText("");
+        percentTextview.setText("");
         locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
@@ -367,8 +389,8 @@ public class LocationActivity extends BaseActivity {
 
         Node node = nodeFactory.createInstance(null, "", new Fingerprint("", signalInformationList), "", "", "");
 
-        foundNodeName = databaseHandler.calculateNodeId(node);
-
+        //foundNodeName = databaseHandler.calculateNodeId(node);
+        foundNode = databaseHandler.calculateNodeId(node);
 
 /*
         fingerprint.setMovingAverage(movingAverage);
@@ -384,19 +406,27 @@ public class LocationActivity extends BaseActivity {
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 LocationResultImplementation locationResult;
-                if (foundNodeName != null) {
-                    locationTextview.setText(foundNodeName);
+                if (foundNode != null) {
+
+                    //if (foundNodeName != null) {
+                    locationTextview.setText(foundNode.getId());
                     locationImageview.setEnabled(true);
-                    descriptionTextview.setText(databaseHandler.getNode(foundNodeName).getDescription());
-                    coordinatesTextview.setText(databaseHandler.getNode(foundNodeName).getCoordinates());
+
+                    locationImageview.setVisibility(View.VISIBLE);
+                    descriptionLabelTextview.setVisibility(View.VISIBLE);
+                    coordinatesLabelTextview.setVisibility(View.VISIBLE);
+                    percentLabelTextview.setVisibility(View.VISIBLE);
+
+                    descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
+                    coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
+                    percentTextview.setText(String.valueOf(foundNode.getPercent()));
 
                     // TODO percentage einfügen
                     //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
                     //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", foundNodeName);
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", foundNode.getId());
 
-
-                    final String picturePath = databaseHandler.getNode(foundNodeName).getPicturePath();
+                    final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
                     if (picturePath != null) {
                         Glide.with(context).load(picturePath).into(locationImageview);
@@ -416,6 +446,7 @@ public class LocationActivity extends BaseActivity {
 
                 } else {
                     locationTextview.setText(getString(R.string.no_node_found_text));
+                    //locationImageview.setEnabled(false);
                 //    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), getString(R.string.no_node_found_text));
                     locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", getString(R.string.no_node_found_text));
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class MovingAverage {
 
     // TODO: evtl. private setzen? STATIC??
-    public List<RestructedNode> calculation(List<RestructedNode> restructedNodeList, int order) {
+    public static List<RestructedNode> calculate(List<RestructedNode> restructedNodeList, int order) {
         List<RestructedNode> calculatedNodes = new ArrayList<>();
         Multimap<String, Double> calculatedMultiMap = null;
 

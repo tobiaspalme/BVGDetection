@@ -18,13 +18,13 @@ import java.util.List;
  */
 public class KalmanFilter {
 
-    private int kalmanValue;
+    //private static int kalmanValue;
 
-    public KalmanFilter(int kalmanValue){
-        this.kalmanValue = kalmanValue;
-    };
+   // public KalmanFilter(int kalmanValue){
+    //    this.kalmanValue = kalmanValue;
+   // };
 
-    public List<RestructedNode> calculationKalman(List<RestructedNode> restructedNodeList) {
+    public static List<RestructedNode> calculateCalman(int kalmanValue, List<RestructedNode> restructedNodeList) {
 
         List<RestructedNode> calculatedNodes = new ArrayList<>();
         Multimap<String, Double> calculatedMultiMap = null;
@@ -78,7 +78,7 @@ public class KalmanFilter {
         return calculatedNodes;
     }
 
-    private double calculateDeviation(Double[] values, double average, double count) {
+    private static double calculateDeviation(Double[] values, double average, double count) {
         int x = 0;
         for (int i = 0; i < values.length; i++) {
             if (values[i] != null) {

@@ -4,7 +4,6 @@ package de.htwberlin.f4.ai.ma.node;
  * Created by Johann Winter
  */
 
-// TODO: Public in package private ändern wenn Package vollständig
 public class SignalStrengthInformation {
 
     public String macAddress;

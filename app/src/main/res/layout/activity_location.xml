@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,10 +9,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:keepScreenOn="true"
     >
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -110,7 +106,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/description_text" />
+                android:text="@string/description_text"
+                android:id="@+id/description_label_textview"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -130,7 +127,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/coordinates_text" />
+                android:text="@string/coordinates_text"
+                android:id="@+id/coordinates_label_textview"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -139,6 +137,26 @@
         </LinearLayout>
 
 
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/coordinates_linearlayout">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/percent_textview"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/percent_label_textview"
+               android:text="@string/percent_label_textview"/>
+
+
+
+       </LinearLayout>
+
 
         <ImageView
             android:layout_width="100dp"
@@ -146,9 +164,6 @@
             android:layout_below="@+id/coordinates_linearlayout"
             android:id="@+id/location_imageview" />
 
-
-
-    </RelativeLayout>
 
     <!--<View
         android:layout_width="fill_parent"
@@ -212,4 +227,4 @@
 
     </RelativeLayout>-->
 
-</LinearLayout>
+</RelativeLayout>

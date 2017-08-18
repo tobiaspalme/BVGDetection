@@ -9,14 +9,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+
 
 /**
  * calculate all euclidean distances
  */
 public class EuclideanDistance {
 
-    //TODO evtl. private?
-    public List<String> calculateDistance(List<RestructedNode> restructedNodes, List<MeasuredNode> measuredNodeList) {
+    //public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<MeasuredNode> measuredNodeList) {
+    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrengthInformation> measuredSSIs) {
         List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
@@ -24,11 +26,11 @@ public class EuclideanDistance {
 
             List<Collection<Double>> matchingSignalStrengths = new ArrayList<>();
             List<Integer> measuredSignalStrength = new ArrayList<>();
-            for (int j = 0; j < measuredNodeList.size(); j++) {
-                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(measuredNodeList.get(j).macAdress);
+            for (int j = 0; j < measuredSSIs.size(); j++) {
+                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(measuredSSIs.get(j).macAddress);
                 if (contains) {
-                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(measuredNodeList.get(j).macAdress));
-                    measuredSignalStrength.add(measuredNodeList.get(j).signalStrength);
+                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(measuredSSIs.get(j).macAddress));
+                    measuredSignalStrength.add(measuredSSIs.get(j).signalStrength);
                 }
             }
 
@@ -69,7 +71,7 @@ public class EuclideanDistance {
      * @param distanceList
      * @return sorted list
      */
-    private List<String> sortSelection(List<DistanceClass> distanceList) {
+    private static List<String> sortSelection(List<DistanceClass> distanceList) {
         for (int i = 0; i < distanceList.size() - 1; i++) {
             for (int j = i + 1; j < distanceList.size(); j++) {
                 if (distanceList.get(i).distance > distanceList.get(j).distance) {
@@ -84,10 +86,7 @@ public class EuclideanDistance {
         for (DistanceClass poi : distanceList) {
             distanceNameList.add(poi.name);
         }
-
         return distanceNameList;
     }
-
-
 
 }

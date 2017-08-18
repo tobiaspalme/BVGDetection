@@ -34,9 +34,10 @@ import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 import de.htwberlin.f4.ai.ma.persistence.calculations.EuclideanDistance;
+import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.persistence.calculations.KNearestNeighbor;
 import de.htwberlin.f4.ai.ma.persistence.calculations.KalmanFilter;
-import de.htwberlin.f4.ai.ma.persistence.calculations.MeasuredNode;
+//import de.htwberlin.f4.ai.ma.persistence.calculations.MeasuredNode;
 import de.htwberlin.f4.ai.ma.persistence.calculations.MovingAverage;
 import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
 
@@ -571,10 +572,12 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
 
-    public String calculateNodeId(Node node) {
+    public FoundNode calculateNodeId(Node node) {
 
+        // TODO
         List<Node> measuredNode = new ArrayList<>();
         measuredNode.add(node);
+
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -587,8 +590,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         int knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
-        String poi = null;
-
+        //String foundNodeName = null;
+        FoundNode foundNode = null;
 
 
         // Load all nodes which have a valid fingerprint
@@ -600,66 +603,68 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         }
 
         List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithSignalInformation);
-
-
-        //List<RestructedNode> restructedNodeList = calculateNewNodeDateset(getAllNodes());
         List<RestructedNode> calculatedNodeList = new ArrayList<>();
 
         if (!restructedNodeList.isEmpty()) {
             if (movingAverage) {
-                MovingAverage movingAverageClass = new MovingAverage();
-                //calculatedNodeList = movingAverageClass.calculation(restructedNodeList, averageOrder);
-                calculatedNodeList = movingAverageClass.calculation(restructedNodeList, movingAverageOrder);
+                calculatedNodeList = MovingAverage.calculate(restructedNodeList, movingAverageOrder);
 
             } else if (kalmanFilter) {
-                KalmanFilter kalmanFilterClass = new KalmanFilter(kalmanValue);
-                calculatedNodeList = kalmanFilterClass.calculationKalman(restructedNodeList);
+                calculatedNodeList = KalmanFilter.calculateCalman(kalmanValue, restructedNodeList);
             }
 
             if (euclideanDistance) {
-                List<MeasuredNode> actuallyNode = getActuallyNode(measuredNode);
-                if (actuallyNode.size() == 0) {
+                //List<MeasuredNode> actuallyNode = getActuallyNode(measuredNode);
+                List<SignalStrengthInformation> signalStrengthInformations = getActuallyNode(measuredNode);
+                if (signalStrengthInformations.size() == 0) {
                     return null;
                 }
-                EuclideanDistance euclideanDistanceClass = new EuclideanDistance();
-                List<String> distanceNames = euclideanDistanceClass.calculateDistance(calculatedNodeList, actuallyNode);
+                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, signalStrengthInformations);
                 if (knnAlgorithm) {
-                    KNearestNeighbor KnnClass = new KNearestNeighbor(knnValue);
-                    poi = KnnClass.calculateKnn(distanceNames);
+                    foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
                 } else if (!distanceNames.isEmpty()) {
-                    poi = distanceNames.get(0);
+                    //TODO hier 100%?
+                    foundNode = new FoundNode(distanceNames.get(0), 100.0);
+                    //foundNodeName = distanceNames.get(0);
                 }
             }
 
-            return poi;
+            return foundNode;
+            //return foundNodeName;
         } else {
             return null;
         }
     }
 
-
+// TODO doku
     /**
      * rewrite actually node to type measured node
      * @param nodeList list of nodes
      * @return list of measured node
      */
-    private List<MeasuredNode> getActuallyNode(List<Node> nodeList) {
-        List<MeasuredNode> measuredNodeList = new ArrayList<>();
+    //private List<MeasuredNode> getActuallyNode(List<Node> nodeList) {
+    private List<SignalStrengthInformation> getActuallyNode(List<Node> nodeList) {
+
+        //List<MeasuredNode> measuredNodeList = new ArrayList<>();
+        List<SignalStrengthInformation> signalStrengthInformations = new ArrayList<>();
 
         for (int i = 0; i < nodeList.size(); i++) {
             List<SignalInformation> signalInformation = nodeList.get(i).getFingerprint().getSignalInformationList();
             for (SignalInformation sigInfo : signalInformation)
                 for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
+
                     Log.d("DatabaseHanderlImpl", "--- getActuallyNode ---  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
+
                     String macAdress = ssi.macAddress;
                     int signalStrength = ssi.signalStrength;
-                    MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
-                    measuredNodeList.add(measuredNode);
+                    SignalStrengthInformation SSI = new SignalStrengthInformation(macAdress, signalStrength);
+
+                    //MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
+                    signalStrengthInformations.add(SSI);
                 }
         }
-
-        return measuredNodeList;
+        return signalStrengthInformations;
     }
 
 
