@@ -21,7 +21,7 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
  * create, edit and delete Nodes, Edges and LocationResults
  * and the export of the SQLite DB.
  *
- * It also can calculate the matching node for a given node (current location).
+ * It also can calculate the matching node for a given measurement (current location).
  */
 
 public interface DatabaseHandler {

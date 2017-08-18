@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Fingerprint;
@@ -62,7 +63,7 @@ public class NodeRecordActivity extends BaseActivity {
     Button captureButton;
     Button saveNodeButton;
     private ImageView cameraImageview;
-    private ImageView refreshImageview;
+    ImageView refreshImageview;
     private EditText nodeIdEdittext;
     private EditText recordTimeText;
     private Spinner wifiNamesDropdown;
@@ -71,6 +72,8 @@ public class NodeRecordActivity extends BaseActivity {
 
     private boolean pictureTaken;
     private boolean fingerprintTaken;
+    private boolean takingPictureAtTheMoment;
+
     private List<SignalInformation> signalInformationList;
 
     private String picturePath;
@@ -112,7 +115,7 @@ public class NodeRecordActivity extends BaseActivity {
 
         jsonWriter = new JsonWriter(this);
 
-        recordButton = (Button) findViewById(R.id.b_record);
+        recordButton = (Button) findViewById(R.id.record_button);
         captureButton  = (Button) findViewById(R.id.capture_button);
         saveNodeButton = (Button) findViewById(R.id.save_node_button);
         cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
@@ -120,21 +123,21 @@ public class NodeRecordActivity extends BaseActivity {
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
 
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
-        recordTimeText = (EditText) findViewById(R.id.edTx_measureTime);
+        recordTimeText = (EditText) findViewById(R.id.measure_time_edittext);
         wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
 
-        progressText = (TextView) findViewById(R.id.tx_progress);
+        progressText = (TextView) findViewById(R.id.progress_textview);
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mHandler = new Handler();
 
-        nodeIdEdittext.setText(getString(R.string.nodeid_input_text));
         recordTimeText.setText("3");
         picturePath = null;
 
         pictureTaken = false;
         fingerprintTaken = false;
         abortRecording = false;
+        takingPictureAtTheMoment = false;
 
 
         if (hasPermissions(this, permissions)) {
@@ -149,42 +152,48 @@ public class NodeRecordActivity extends BaseActivity {
             }
         });
 
-        // TODO: if Klausel notwendig?
-        if (recordButton != null) {
-            recordButton.setOnClickListener(new View.OnClickListener() {
+        recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
-                    if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
-                    } else {
-                        recordButton.setEnabled(false);
-                        wlanName = wifiNamesDropdown.getSelectedItem().toString();
-                        recordTime = Integer.parseInt(recordTimeText.getText().toString());
-                        measureNode();
-                    }
-                    abortRecording = false;
+                if (nodeIdEdittext.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_enter_node_name), Toast.LENGTH_SHORT).show();
+                } else if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_SHORT).show();
+                } else {
+                    recordButton.setEnabled(false);
+                    wlanName = wifiNamesDropdown.getSelectedItem().toString();
+                    recordTime = Integer.parseInt(recordTimeText.getText().toString());
+                    measureNode();
                 }
-            });
-        }
+                abortRecording = false;
+                }
+        });
 
-        if (captureButton != null) {
-            captureButton.setOnClickListener(new View.OnClickListener() {
+
+        captureButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                if (nodeIdEdittext.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_enter_node_name), Toast.LENGTH_SHORT).show();
+                } else {
+                    takingPictureAtTheMoment = true;
+
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                     startActivityForResult(cameraIntent, CAM_REQUEST);
                 }
-            });
-        }
+                }
+        });
+
 
         cameraImageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                intent.putExtra("picturePath", picturePath);
-                startActivity(intent);
+                if (fingerprintTaken) {
+                    Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                    intent.putExtra("picturePath", picturePath);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -197,7 +206,9 @@ public class NodeRecordActivity extends BaseActivity {
     }
 
 
-    // Scan for WiFi names (SSIDs) and add them to the dropdown
+    /**
+     * Scan for WiFi names (SSIDs) and add them to the dropdown
+     */
     private void refreshWifiDropdown() {
         mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         mainWifiObj.startScan();
@@ -219,10 +230,8 @@ public class NodeRecordActivity extends BaseActivity {
      * make measurement with given record time
      */
     private void measureNode() {
-
         progressBar.setMax(60 * recordTime);
         progressBar.setProgress(0);
-
 
         new Thread(new Runnable() {
             public void run() {
@@ -244,7 +253,7 @@ public class NodeRecordActivity extends BaseActivity {
                     }
                     Log.d("------------------", "--------------------------------------------");
 
-                    SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss");
+                    SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
                     String format = s.format(new Date());
                     SignalInformation signalInformation = new SignalInformation(format, signalStrenghtList);
                     signalInformationList.add(signalInformation);
@@ -254,7 +263,8 @@ public class NodeRecordActivity extends BaseActivity {
                     mHandler.post(new Runnable() {
                         public void run() {
                             progressBar.setProgress(progressStatus);
-                            progressText.setText(progressBar.getMax() - progressBar.getProgress() + "s");
+                            String progressString = progressBar.getMax() - progressBar.getProgress() + "s";
+                            progressText.setText(progressString);
                         }
                     });
                     try {
@@ -278,6 +288,7 @@ public class NodeRecordActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == -1) {
             pictureTaken = true;
+            takingPictureAtTheMoment = false;
 
             // TODO necessary?
             picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
@@ -289,83 +300,94 @@ public class NodeRecordActivity extends BaseActivity {
     }
 
 
+    /**
+     * Creates the folder /IndoorPositioning/Pictures in SDCARD path,
+     * then creates a new Imagefile named by the nodeIdEdittext
+     * @return File Object of the Imagefile
+     */
     private File getFile() {
         File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
 
         if (!folder.exists()) {
-            boolean test = folder.mkdirs();
+            boolean success = folder.mkdirs();
 
-            if (!test) {
-                Log.d("NodeRecordActivity", "DATEI KONNTE NICHT ANGELEGT WERDEN");
+            if (!success) {
+                Log.d("NodeRecordActivity", "Die Datei konnte nicht angelegt werden");
             }
         }
-        File imageFile = new File(folder, "Node_" + nodeIdEdittext.getText() + ".jpg");
-        return imageFile;
+        return new File(folder, "Node_" + nodeIdEdittext.getText() + ".jpg");
     }
 
 
-    // Create and persist the new Node
+    /**
+     * Create and persist the new Node.
+     */
     private void saveNewNode() {
-        // Determine if picture reference has to be added to Node
-        String picPath;
-        if (pictureTaken) {
-            picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
+        if (nodeIdEdittext.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(), getString(R.string.please_enter_node_name), Toast.LENGTH_SHORT).show();
         } else {
-            picPath = null;
-        }
 
-        String nodeID = nodeIdEdittext.getText().toString();
-        String nodeDescription = descriptionEdittext.getText().toString();
-
-        if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
-            Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
-        } else {
-            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPath, "");
-
-            // If no fingerprint has been captured...
-            if (!fingerprintTaken) {
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.no_fingerprint_title_text))
-                        .setMessage("Soll der Ort \"" + node.getId() + "\" wirklich ohne Fingerprint erstellt werden?")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                jsonWriter.writeJSON(node);
-                                databaseHandler.insertNode(node);
-                                Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                                // Reset progressBar and progress
-                                abortRecording = true;
-                                progressStatus = 0;
-                                progressText.setText(String.valueOf(progressStatus));
-                                progressBar.setProgress(progressStatus);
-                                recordButton.setEnabled(true);
-                                captureButton.setEnabled(true);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                // If a fingerprint has been captured...
+            // Determine if picture reference has to be added to Node
+            String picPath;
+            if (pictureTaken) {
+                picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
             } else {
-                jsonWriter.writeJSON(node);
-                databaseHandler.insertNode(node);
-                progressStatus = 0;
-                progressText.setText(String.valueOf(progressStatus));
-                progressBar.setProgress(progressStatus);
-                Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-                askForNewNode();
+                picPath = null;
             }
 
+            String nodeID = nodeIdEdittext.getText().toString();
+            String nodeDescription = descriptionEdittext.getText().toString();
 
+            if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
+                Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
+            } else {
+                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPath, "");
+
+                // If no fingerprint has been captured...
+                if (!fingerprintTaken) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.no_fingerprint_title_text))
+                            .setMessage("Soll der Ort \"" + node.getId() + "\" wirklich ohne Fingerprint erstellt werden?")
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    jsonWriter.writeJSON(node);
+                                    databaseHandler.insertNode(node);
+                                    Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
+
+                                    // Reset progressBar and progress
+                                    abortRecording = true;
+                                    progressStatus = 0;
+                                    progressText.setText(String.valueOf(progressStatus));
+                                    progressBar.setProgress(progressStatus);
+                                    recordButton.setEnabled(true);
+                                    captureButton.setEnabled(true);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    // If a fingerprint has been captured...
+                } else {
+                    jsonWriter.writeJSON(node);
+                    databaseHandler.insertNode(node);
+                    progressStatus = 0;
+                    progressText.setText(String.valueOf(progressStatus));
+                    progressBar.setProgress(progressStatus);
+                    Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
+                    askForNewNode();
+                }
+            }
         }
     }
 
 
-    // Ask, if new node should be created? If not, go to NodeListActivity to show all nodes
+    /**
+     * Ask, if new node should be created. If not, finish() and go to NodeListActivity to show all nodes
+     */
     private void askForNewNode() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.record_another_node_title_text))
@@ -388,6 +410,12 @@ public class NodeRecordActivity extends BaseActivity {
     }
 
 
+    /**
+     * Check for permissions (in a loop)
+     *
+     * @param context the context
+     * @return boolean, if all permissions are given
+     */
     private boolean hasPermissions(Context context, String[] permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -401,9 +429,15 @@ public class NodeRecordActivity extends BaseActivity {
 
 
     @Override
+    /**
+     * Stop recording thread if the Activity is stopped,
+     * except the user left the activity for taking a picture.
+     */
     protected void onStop() {
         super.onStop();
-        abortRecording = true;
-
+        if (!takingPictureAtTheMoment) {
+            abortRecording = true;
+        }
     }
+
 }

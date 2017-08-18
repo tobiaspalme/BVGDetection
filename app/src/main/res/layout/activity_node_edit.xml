@@ -13,11 +13,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:labelFor="@+id/edit_id_edittext"
             android:text="@string/node_name_text" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:id="@+id/edit_id_edittext" />
 
     </LinearLayout>
@@ -32,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:labelFor="@+id/wifi_name_textview"
             android:text="@string/wifi_name_text" />
 
         <TextView
@@ -39,10 +42,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/wifi_name_textview"/>
 
-        <!--<EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/wlan_edittext" />-->
     </LinearLayout>
 
 
@@ -55,11 +54,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:labelFor="@+id/description_edittext"
             android:text="@string/description_text" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:id="@+id/description_edittext" />
     </LinearLayout>
 
@@ -73,11 +74,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:labelFor="@+id/coordinates_edittext"
             android:text="@string/coordinates_text" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:id="@+id/coordinates_edittext"/>
 
         <!--<TextView
@@ -94,6 +97,7 @@
         <ImageView
             android:layout_width="300dp"
             android:layout_height="300dp"
+            android:contentDescription="@string/image_placeholder"
             android:id="@+id/camera_imageview" />
 
         <Button
@@ -107,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/camera_imageview"
-            android:layout_toRightOf="@+id/save_button"
+            android:layout_toEndOf="@+id/save_button"
             android:id="@+id/delete_button"
             android:text="@string/delete_button_text"/>
 
@@ -115,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/camera_imageview"
-            android:layout_toRightOf="@+id/delete_button"
+            android:layout_toEndOf="@+id/delete_button"
             android:id="@+id/change_picture_button"
             android:text="@string/change_picture_button_text"/>
     </RelativeLayout>

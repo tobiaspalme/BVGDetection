@@ -37,7 +37,6 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.EuclideanDistance;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.persistence.calculations.KNearestNeighbor;
 import de.htwberlin.f4.ai.ma.persistence.calculations.KalmanFilter;
-//import de.htwberlin.f4.ai.ma.persistence.calculations.MeasuredNode;
 import de.htwberlin.f4.ai.ma.persistence.calculations.MovingAverage;
 import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
 
@@ -573,12 +572,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
 
     public FoundNode calculateNodeId(List<SignalInformation> signalInformationList) {
-        //public FoundNode calculateNodeId(Node node) {
-
-        // TODO
-        //List<Node> measuredNode = new ArrayList<>();
-        //measuredNode.add(node);
-
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -591,7 +584,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         int knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
-        //String foundNodeName = null;
         FoundNode foundNode = null;
 
 
@@ -615,8 +607,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             }
 
             if (euclideanDistance) {
-                //List<MeasuredNode> actuallyNode = getActuallyNode(measuredNode);
-                //List<SignalStrengthInformation> signalStrengthInformations = getActuallyNode(measuredNode);
                 List<SignalStrengthInformation> signalStrengthInformations = getSignalStrengths(signalInformationList);
 
                 if (signalStrengthInformations.size() == 0) {
@@ -629,49 +619,21 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 } else if (!distanceNames.isEmpty()) {
                     //TODO hier 100%?
                     foundNode = new FoundNode(distanceNames.get(0), 100.0);
-                    //foundNodeName = distanceNames.get(0);
                 }
             }
 
             return foundNode;
-            //return foundNodeName;
         } else {
             return null;
         }
     }
 
-// TODO doku
+
     /**
-     * rewrite actually node to type measured node
-     //* @param nodeList list of nodes
-     * @return list of measured node
-     */ /*
-    //private List<MeasuredNode> getActuallyNode(List<Node> nodeList) {
-    private List<SignalStrengthInformation> getActuallyNode(List<Node> nodeList) {
-
-        //List<MeasuredNode> measuredNodeList = new ArrayList<>();
-        List<SignalStrengthInformation> signalStrengthInformations = new ArrayList<>();
-
-        for (int i = 0; i < nodeList.size(); i++) {
-            List<SignalInformation> signalInformation = nodeList.get(i).getFingerprint().getSignalInformationList();
-            for (SignalInformation sigInfo : signalInformation)
-                for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
-
-                    Log.d("DatabaseHanderlImpl", "--- getActuallyNode ---  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
-
-                    String macAdress = ssi.macAddress;
-                    int signalStrength = ssi.signalStrength;
-                    SignalStrengthInformation SSI = new SignalStrengthInformation(macAdress, signalStrength);
-
-                    //MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
-                    signalStrengthInformations.add(SSI);
-                }
-        }
-        return signalStrengthInformations;
-    }*/
-
-
-
+     * Get a list of SignalStrengthInformations by passing a list of SignalInformation (unwrap).
+     * @param signalInformationList a list of SignalInformations
+     * @return a list of SignalStrengthInformations
+     */
     private List<SignalStrengthInformation> getSignalStrengths(List<SignalInformation> signalInformationList) {
         List<SignalStrengthInformation> signalStrengthInformations = new ArrayList<>();
 
@@ -684,7 +646,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 int signalStrength = ssi.signalStrength;
                 SignalStrengthInformation SSI = new SignalStrengthInformation(macAdress, signalStrength);
 
-                //MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
                 signalStrengthInformations.add(SSI);
             }
         }

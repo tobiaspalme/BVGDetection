@@ -76,8 +76,8 @@
     <string name="save_node_button_text">Ort speichern</string>
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
-    <string name="nodeid_input_text">Bitte eingeben</string>
     <string name="record_another_node_title_text">Neuen Ort aufnehmen?</string>
+    <string name="please_enter_node_name">Bitte erst einen Namen eingeben.</string>
     <string name="record_another_node_question">Möchtest du noch einen Ort aufnehmen?</string>
     <string name="no_fingerprint_title_text">Kein Fingerprint</string>
     <string name="node_saved_toast">Ort gespeichert</string>
@@ -87,7 +87,7 @@
     <string name="nodelist_delete_entry_title_question">Eintrag löschen?</string>
 
     <!-- activity_node_show -->
-    <string name="image_placeholder">Bild nicht vorhanden</string>
+    <string name="image_placeholder">Bild</string>
 
     <!-- acitvity_node_edit -->
     <string name="coordinates_text">Coordinates:</string>
@@ -127,5 +127,6 @@
 
 
     <string name="refreshed_toast">WLANs Aktualisiert</string>
+    <string name="refresh">refresh_button</string>
 
 </resources>

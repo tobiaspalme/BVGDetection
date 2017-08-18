@@ -9,7 +9,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/tx_resultsSetting"
-        android:layout_marginRight="20px" />
+        android:layout_marginEnd="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/tx_measuredTime"
-        android:layout_marginRight="20px" />
+        android:layout_marginEnd="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/tx_resultPOI"
-        android:layout_marginRight="20px" />
+        android:layout_marginEnd="20dp" />
 
     <TextView
         android:layout_width="wrap_content"

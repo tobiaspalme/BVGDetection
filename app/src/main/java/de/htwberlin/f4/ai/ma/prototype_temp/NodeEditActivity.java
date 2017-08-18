@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,16 +37,14 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 public class NodeEditActivity extends BaseActivity {
 
     private EditText idEditText;
-    //EditText wlanEditText;
-    private TextView wlanTextview;
+    TextView wlanTextview;
     private EditText descriptionEditText;
     private EditText coordinatesEditText;
-    //private TextView coordinatesTextview;
     private ImageView cameraImageView;
     Button saveButton;
     Button deleteButton;
     Button changePictureButton;
-    private Context ctx = this;
+    private Context context = this;
     private String oldNodeId;
     private String picturePath;
 
@@ -70,10 +67,8 @@ public class NodeEditActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_node_edit, contentFrameLayout);
 
         idEditText = (EditText) findViewById(R.id.edit_id_edittext);
-        //wlanEditText = (EditText) findViewById(R.id.wlan_edittext);
         wlanTextview = (TextView) findViewById(R.id.wifi_name_textview);
         descriptionEditText = (EditText) findViewById(R.id.description_edittext);
-        //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview);
         coordinatesEditText = (EditText) findViewById(R.id.coordinates_edittext);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
         saveButton = (Button) findViewById(R.id.save_button);
@@ -98,7 +93,6 @@ public class NodeEditActivity extends BaseActivity {
         idEditText.setText(node.getId());
         wlanTextview.setText(node.getFingerprint().getWifiName());
         descriptionEditText.setText(node.getDescription());
-        //coordinatesTextview.setText(node.getCoordinates());
         coordinatesEditText.setText(node.getCoordinates());
 
 
@@ -115,11 +109,9 @@ public class NodeEditActivity extends BaseActivity {
         cameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if (node.getPicturePath() != null) {
-                    Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                    intent.putExtra("picturePath", node.getPicturePath());
-                    startActivity(intent);
-                //}
+                Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                intent.putExtra("picturePath", node.getPicturePath());
+                startActivity(intent);
             }
         });
 
@@ -167,13 +159,12 @@ public class NodeEditActivity extends BaseActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx)
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
                         .setTitle(getString(R.string.delete_title_question))
                         .setMessage("Soll der Ort \"" + nodeName + "\" wirklich gelöscht werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //databaseHandlerImplementation.deleteNode(node);
                                 databaseHandler.deleteNode(node);
 
                                 File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
@@ -199,6 +190,7 @@ public class NodeEditActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Glide.with(this).load(tempFile).into(cameraImageView);
+        cameraImageView.setClickable(false);
     }
 
     // Copy temporary image file to image folder

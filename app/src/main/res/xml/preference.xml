@@ -11,14 +11,6 @@
             android:defaultValue="true" >
         </CheckBoxPreference>
 
-        <!--<com.example.carol.bvg.EditTextPreference-->
-            <!--android:defaultValue="3"-->
-            <!--android:key="pref_movivngAverageOrder"-->
-            <!--android:title="Ortnung"-->
-            <!--android:dependency="pref_movingAverage"-->
-            <!--android:inputType="number"-->
-            <!--/>-->
-
         <de.htwberlin.f4.ai.ma.prototype_temp.ListPreference
             android:dependency="pref_movingAverage"
             android:key="pref_movivngAverageOrder"
