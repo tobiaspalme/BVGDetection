@@ -572,11 +572,12 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
 
-    public FoundNode calculateNodeId(Node node) {
+    public FoundNode calculateNodeId(List<SignalInformation> signalInformationList) {
+        //public FoundNode calculateNodeId(Node node) {
 
         // TODO
-        List<Node> measuredNode = new ArrayList<>();
-        measuredNode.add(node);
+        //List<Node> measuredNode = new ArrayList<>();
+        //measuredNode.add(node);
 
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -615,7 +616,9 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
             if (euclideanDistance) {
                 //List<MeasuredNode> actuallyNode = getActuallyNode(measuredNode);
-                List<SignalStrengthInformation> signalStrengthInformations = getActuallyNode(measuredNode);
+                //List<SignalStrengthInformation> signalStrengthInformations = getActuallyNode(measuredNode);
+                List<SignalStrengthInformation> signalStrengthInformations = getSignalStrengths(signalInformationList);
+
                 if (signalStrengthInformations.size() == 0) {
                     return null;
                 }
@@ -640,9 +643,9 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 // TODO doku
     /**
      * rewrite actually node to type measured node
-     * @param nodeList list of nodes
+     //* @param nodeList list of nodes
      * @return list of measured node
-     */
+     */ /*
     //private List<MeasuredNode> getActuallyNode(List<Node> nodeList) {
     private List<SignalStrengthInformation> getActuallyNode(List<Node> nodeList) {
 
@@ -665,7 +668,30 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 }
         }
         return signalStrengthInformations;
+    }*/
+
+
+
+    private List<SignalStrengthInformation> getSignalStrengths(List<SignalInformation> signalInformationList) {
+        List<SignalStrengthInformation> signalStrengthInformations = new ArrayList<>();
+
+        for (SignalInformation sigInfo : signalInformationList) {
+            for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
+
+                Log.d("DatabaseHanderlImpl", "--- getActuallyNode ---  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
+
+                String macAdress = ssi.macAddress;
+                int signalStrength = ssi.signalStrength;
+                SignalStrengthInformation SSI = new SignalStrengthInformation(macAdress, signalStrength);
+
+                //MeasuredNode measuredNode = new MeasuredNode(macAdress, signalStrength);
+                signalStrengthInformations.add(SSI);
+            }
+        }
+        return signalStrengthInformations;
     }
+
+
 
 
     /**

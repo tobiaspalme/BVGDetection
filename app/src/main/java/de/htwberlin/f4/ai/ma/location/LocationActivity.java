@@ -43,8 +43,6 @@ import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
 
 public class LocationActivity extends BaseActivity {
 
-    //private List<String> macAdresses = new ArrayList<>();
-    //private int count = 0;
     Button measure1sButton;
     Button measure10sButton;
     ImageView locationImageview;
@@ -89,7 +87,6 @@ public class LocationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_location);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
@@ -137,9 +134,6 @@ public class LocationActivity extends BaseActivity {
                 + "\r\nEuclidische Distanz: " + euclideanDistance
                 + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
 
-        //read Json file
-        //JsonReader jsonReader = new JsonReader();
-        //final List<Node> allNodes = jsonReader.initializeNodeFromJson(this);
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
@@ -156,7 +150,6 @@ public class LocationActivity extends BaseActivity {
         descriptionLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         percentLabelTextview.setVisibility(View.INVISIBLE);
-
 
         refreshWifiDropdown();
 
@@ -228,21 +221,18 @@ public class LocationActivity extends BaseActivity {
         fingerprint.setAllNodes(allNodes);
 */
 
-        if (measure1sButton != null) {
-            measure1sButton.setOnClickListener(new View.OnClickListener() {
+        measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     getMeasuredNode(1);
                 }
             });
-        }
 
-        if (measure10sButton != null) {
-            measure10sButton.setOnClickListener(new View.OnClickListener() {
+        measure10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     getMeasuredNode(10);
                 }
             });
-        }
+
     }
 
 
@@ -379,29 +369,20 @@ public class LocationActivity extends BaseActivity {
             value = value / counter;
 
             //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
-            List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
+            List<SignalStrengthInformation> SsiList = new ArrayList<>();
             SignalStrengthInformation signal = new SignalStrengthInformation(blub, value);
-            signalStrengthList.add(signal);
-            SignalInformation signalInformation = new SignalInformation("", signalStrengthList);
+            SsiList.add(signal);
+            SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
 
         }
 
-        Node node = nodeFactory.createInstance(null, "", new Fingerprint("", signalInformationList), "", "", "");
+        //Node node = nodeFactory.createInstance(null, "", new Fingerprint("", signalInformationList), "", "", "");
 
         //foundNodeName = databaseHandler.calculateNodeId(node);
-        foundNode = databaseHandler.calculateNodeId(node);
+        //foundNode = databaseHandler.calculateNodeId(node);
+        foundNode = databaseHandler.calculateNodeId(signalInformationList);
 
-/*
-        fingerprint.setMovingAverage(movingAverage);
-        fingerprint.setKalman(kalmanFilter);
-        fingerprint.setEuclideanDistance(euclideanDistance);
-        fingerprint.setKNN(knnAlgorithm);
-
-        //actuallyNode.add(node);
-        //fingerprint.setActuallyNode(actuallyNode);
-        //foundNodeName = fingerprint.getCalculatedNode();
-        */
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
