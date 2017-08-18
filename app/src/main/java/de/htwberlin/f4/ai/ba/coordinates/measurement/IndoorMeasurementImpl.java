@@ -72,7 +72,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public void start(IndoorMeasurementType indoorMeasurementType) {
+    public void start() {
         timerHandler = new Handler(Looper.getMainLooper());
         directionDetect = new StepDirectionDetectImpl(context);
         stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
@@ -94,16 +94,16 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         sensorList.add(directionDetect.getSensor());
 
         // create different position module, depending on chosen viarant
-        if (indoorMeasurementType == IndoorMeasurementType.VARIANT_A) {
+        if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_A) {
             positionModule = new PositionModuleA(sensorFactory, calibrationData);
             positionModule.start();
-        } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_B) {
+        } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_B) {
             positionModule = new PositionModuleB(sensorFactory, calibrationData);
             positionModule.start();
-        } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_C) {
+        } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_C) {
             positionModule = new PositionModuleC(sensorFactory, calibrationData);
             positionModule.start();
-        } else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_D) {
+        } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_D) {
             positionModule = new PositionModuleD(sensorFactory, calibrationData);
             positionModule.start();
         }

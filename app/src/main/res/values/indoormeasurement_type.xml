@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listDisplayWord">
+        <item>Variante A</item>
+        <item>Variante B (A + Filter)</item>
+        <item>Variante C</item>
+        <item>Variante D (C + Filter)</item>
+    </string-array>
+
+    <string-array name="listReturnValue">
+        <item>Variante A</item>
+        <item>Variante B</item>
+        <item>Variante C</item>
+        <item>Variante D</item>
+    </string-array>
+</resources>

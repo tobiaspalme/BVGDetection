@@ -29,13 +29,15 @@ public class AltitudeModuleB implements AltitudeModule {
     private Sensor airPressureSensor;
     private long lastStepTimestamp;
     private float lastAltitude;
+    private float lowpassFilterValue;
 
-    public AltitudeModuleB(SensorFactory sensorFactory, float airPressure) {
+    public AltitudeModuleB(SensorFactory sensorFactory, float airPressure, float lowpassFilterValue) {
         dataModel = new SensorDataModelImpl();
         this.sensorFactory = sensorFactory;
         this.airPressure = airPressure;
         lastAltitude = calcAltitude(airPressure);
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+        this.lowpassFilterValue = lowpassFilterValue;
     }
 
     // simple altitude calculation, using the same formula as SensorManager.getAltitude() does,
@@ -86,7 +88,7 @@ public class AltitudeModuleB implements AltitudeModule {
                 List<SensorData> oldValues = sensorData.get(SensorType.BAROMETER);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
+                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
                     //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
                     newValue.setValues(new float[]{filteredValue});
                 }

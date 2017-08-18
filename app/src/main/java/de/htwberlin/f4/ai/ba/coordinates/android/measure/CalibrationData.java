@@ -1,7 +1,10 @@
 package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
+import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
+
 /**
  * SImple class for saving calibration stuff
+ * TODO: maybe rename properly
  */
 
 public class CalibrationData {
@@ -9,7 +12,10 @@ public class CalibrationData {
     private float stepLength;
     private int stepPeriod;
     private float airPressure;
+    // non calibration related stuff
     private float[] coordinates;
+    private IndoorMeasurementType indoorMeasurementType;
+    private float lowpassFilterValue;
 
     public CalibrationData() {
         stepLength = 0.0f;
@@ -62,5 +68,21 @@ public class CalibrationData {
 
     public void setCoordinates(float[] coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public IndoorMeasurementType getIndoorMeasurementType() {
+        return indoorMeasurementType;
+    }
+
+    public void setIndoorMeasurementType(IndoorMeasurementType indoorMeasurementType) {
+        this.indoorMeasurementType = indoorMeasurementType;
+    }
+
+    public float getLowpassFilterValue() {
+        return lowpassFilterValue;
+    }
+
+    public void setLowpassFilterValue(float lowpassFilterValue) {
+        this.lowpassFilterValue = lowpassFilterValue;
     }
 }

@@ -43,7 +43,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Ortnung"
+        android:title="Ortung"
         android:key="pref_online">
 
         <CheckBoxPreference
@@ -63,6 +63,28 @@
             android:title="k Nachbarn"
             android:dependency="pref_knnAlgorithm"
             android:inputType="number"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Messung">
+
+        <ListPreference
+            android:key="pref_measurement_type"
+            android:title="Messvariante"
+            android:entries="@array/listDisplayWord"
+            android:summary="%s"
+            android:entryValues="@array/listReturnValue"
+            android:dialogTitle="Bitte Messvariante auswählen"
+            android:defaultValue="Variante B"/>
+
+        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
+            android:key="pref_lowpass_value"
+            android:title="Lowpass Filter Wert"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:defaultValue="0.1"
             />
 
     </PreferenceCategory>

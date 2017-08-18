@@ -154,11 +154,13 @@
         android:layout_marginTop="20dp"
         android:weightSum="1">
 
+        <!--
         <Spinner
             android:id="@+id/coordinates_measure_spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.4"/>
+        -->
 
         <Button
             android:id="@+id/coordinates_measure_start"
