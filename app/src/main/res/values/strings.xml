@@ -76,6 +76,14 @@
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
     <string name="nodeid_input_text">Bitte eingeben</string>
+    <string name="record_another_node_title_text">Neuen Ort aufnehmen?</string>
+    <string name="record_another_node_question">Möchtest du noch einen Ort aufnehmen?</string>
+    <string name="no_fingerprint_title_text">Kein Fingerprint</string>
+    <string name="node_saved_toast">Ort gespeichert</string>
+    <string name="node_already_exists_toast">Ort existiert bereits: Bitte neuen Namen wählen.</string>
+
+    <!-- activity_nodelist -->
+    <string name="nodelist_delete_entry_title_question">Eintrag löschen?</string>
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild nicht vorhanden</string>
@@ -84,6 +92,7 @@
     <string name="coordinates_text">Coordinates:</string>
     <string name="save_button_text">Speichern</string>
     <string name="delete_button_text">Löschen</string>
+    <string name="delete_title_question">Löschen?</string>
     <string name="change_picture_button_text">Bild neu aufnehmen</string>
 
     <!-- activity_location -->
@@ -104,11 +113,11 @@
     <string name="connect_nodes_button_text">Verbinden</string>
     <string name="accessibility_checkbox_text">Barrierefrei</string>
 
-
     <!-- acitvity_navigation -->
     <string name="start_navigation_button_text">Route anzeigen</string>
     <string name="navigation_result_header">Ihre Route:</string>
 
 
+    <string name="refreshed_toast">Aktualisiert</string>
 
 </resources>

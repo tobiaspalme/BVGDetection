@@ -1,8 +1,7 @@
 package de.htwberlin.f4.ai.ma.location;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
@@ -11,19 +10,20 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -37,24 +37,31 @@ import de.htwberlin.f4.ai.ma.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
+import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
 
 
 public class LocationActivity extends BaseActivity {
 
     //private List<String> macAdresses = new ArrayList<>();
     //private int count = 0;
-    Button measurementButton;
-    Button measurementButtonMoreTomes;
+    Button measure1sButton;
+    Button measure10sButton;
+    ImageView locationImageview;
+    ImageView refreshImageview;
+    TextView descriptionTextview;
+    TextView coordinatesTextview;
+
+    Context context = this;
 
     //String[] permissions;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private NodeFactory nodeFactory;
-    ListView listView;
+    //ListView listView;
     private String settings;
-    private Spinner nodesDropdown;
+    //private Spinner nodesDropdown;
     private Spinner wifiDropdown;
-    private LocationResultAdapter resultAdapterdapter;
+    //private LocationResultAdapter resultAdapterdapter;
     private String foundNodeName;
     private WifiManager mainWifiObj;
     private Multimap<String, Integer> multiMap;
@@ -87,11 +94,17 @@ public class LocationActivity extends BaseActivity {
 */
         mainWifiObj= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        measurementButton = (Button) findViewById(R.id.start_measuring_1s_button);
-        measurementButtonMoreTomes = (Button) findViewById(R.id.start_measurement_10s_button);
-        listView = (ListView) findViewById(R.id.results_listview);
+        measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
+        measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
+        locationImageview = (ImageView) findViewById(R.id.location_imageview);
+        refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
+        descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
+        coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
+        wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
 
-        //check Preferences
+        //listView = (ListView) findViewById(R.id.results_listview);
+
+        // Get preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
@@ -109,8 +122,6 @@ public class LocationActivity extends BaseActivity {
         knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
-
-
         settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPreferences.getString("pref_movivngAverageOrder", "3")
                 + "\r\nKalman Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPreferences.getString("pref_kalmanValue","2")
                 + "\r\nEuclidische Distanz: " + euclideanDistance
@@ -123,25 +134,21 @@ public class LocationActivity extends BaseActivity {
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
-
-
-
-        wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
-        mainWifiObj.startScan();
-        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-
-        ArrayList<String> wifiNamesList = new ArrayList<>();
-        for (ScanResult sr : wifiScanList) {
-            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                wifiNamesList.add(sr.SSID);
+        locationImageview.setImageResource(R.drawable.refresh);
+        locationImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshWifiDropdown();
             }
-        }
-        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
-        wifiDropdown.setAdapter(dropdownAdapter);
+        });
+
+        refreshWifiDropdown();
 
 
 
 
+
+/*
         //a nodesDropdown list with name of all existing nodes
         nodesDropdown = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> nodeItems = new ArrayList<>();
@@ -188,7 +195,7 @@ public class LocationActivity extends BaseActivity {
                 return false;
             }
         });
-
+*/
 
         /*
         //set all preferences
@@ -205,24 +212,41 @@ public class LocationActivity extends BaseActivity {
         fingerprint.setAllNodes(allNodes);
 */
 
-        if (measurementButton != null) {
-            measurementButton.setOnClickListener(new View.OnClickListener() {
+        if (measure1sButton != null) {
+            measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     getMeasuredNode(1);
                 }
             });
         }
 
-        if (measurementButtonMoreTomes != null) {
-            measurementButtonMoreTomes.setOnClickListener(new View.OnClickListener() {
+        if (measure10sButton != null) {
+            measure10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     getMeasuredNode(10);
                 }
             });
         }
-
     }
 
+
+
+    // Scan for WiFi names (SSIDs) and add them to the dropdown
+    private void refreshWifiDropdown() {
+        mainWifiObj.startScan();
+        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+
+        ArrayList<String> wifiNamesList = new ArrayList<>();
+        for (ScanResult sr : wifiScanList) {
+            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                wifiNamesList.add(sr.SSID);
+            }
+        }
+        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
+        wifiDropdown.setAdapter(dropdownAdapter);
+        Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
+
+    }
 
     /**
      * check wlan signal strength and and save to multimap
@@ -230,16 +254,21 @@ public class LocationActivity extends BaseActivity {
      */
     private void getMeasuredNode(final int times) {
 
-        if (nodesDropdown.getAdapter().getCount() > 0 && wifiDropdown.getAdapter().getCount() > 0) {
+        descriptionTextview.setText("");
+        coordinatesTextview.setText("");
+        locationImageview.setEnabled(false);
 
-            IntentFilter intentFilter = new IntentFilter();
+        if (wifiDropdown.getAdapter().getCount() > 0) {
+        // if (nodesDropdown.getAdapter().getCount() > 0 && wifiDropdown.getAdapter().getCount() > 0) {
+
+                IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             //registerReceiver(mWifiScanReceiver, intentFilter);
 
-            final TextView textView = (TextView) findViewById(R.id.location_textview);
+            final TextView locationTextview = (TextView) findViewById(R.id.location_textview);
             final ProgressBar progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
-            textView.setText(getString(R.string.searching_node_text));
+            locationTextview.setText(getString(R.string.searching_node_text));
 
             new Thread(new Runnable() {
                 public void run() {
@@ -251,7 +280,7 @@ public class LocationActivity extends BaseActivity {
 
                         mainWifiObj.startScan();
 
-                        final TextView testTimestampTextview = (TextView) findViewById(R.id.timestamp_textview);
+                        //final TextView testTimestampTextview = (TextView) findViewById(R.id.timestamp_textview);
                         //EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
                         //String wlanName = editText.getText().toString();
                         String wlanName = wifiDropdown.getSelectedItem().toString();
@@ -263,7 +292,7 @@ public class LocationActivity extends BaseActivity {
                             {
                                 LocationActivity.this.runOnUiThread(new Runnable() {
                                     public void run() {
-                                        textView.setText("Bitte neu versuchen");
+                                        locationTextview.setText("Bitte neu versuchen");
                                     }
                                 });
 
@@ -276,7 +305,7 @@ public class LocationActivity extends BaseActivity {
                         for (final ScanResult sr : wifiScanList) {
                             LocationActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
-                                    testTimestampTextview.setText(String.valueOf(sr.timestamp));
+                           //         testTimestampTextview.setText(String.valueOf(sr.timestamp));
                                 }
                             });
 
@@ -309,7 +338,7 @@ public class LocationActivity extends BaseActivity {
      * @param measuredTime the measured time
      */
     private void makeFingerprint(final int measuredTime) {
-        final TextView textView = (TextView) findViewById(R.id.location_textview);
+        final TextView locationTextview = (TextView) findViewById(R.id.location_textview);
 
         Set<String> bssid = multiMap.keySet();
 
@@ -356,14 +385,40 @@ public class LocationActivity extends BaseActivity {
             public void run() {
                 LocationResultImplementation locationResult;
                 if (foundNodeName != null) {
-                    textView.setText(foundNodeName);
+                    locationTextview.setText(foundNodeName);
+                    locationImageview.setEnabled(true);
+                    descriptionTextview.setText(databaseHandler.getNode(foundNodeName).getDescription());
+                    coordinatesTextview.setText(databaseHandler.getNode(foundNodeName).getCoordinates());
 
                     // TODO percentage einfügen
                     //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
+                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", foundNodeName);
+
+
+                    final String picturePath = databaseHandler.getNode(foundNodeName).getPicturePath();
+
+                    if (picturePath != null) {
+                        Glide.with(context).load(picturePath).into(locationImageview);
+                    } else {
+                        Glide.with(context).load(R.drawable.unknown).into(locationImageview);
+                    }
+
+                    locationImageview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                            intent.putExtra("picturePath", picturePath);
+                            startActivity(intent);
+                        }
+                    });
+
+
                 } else {
-                    textView.setText(getString(R.string.no_node_found_text));
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), getString(R.string.no_node_found_text));
+                    locationTextview.setText(getString(R.string.no_node_found_text));
+                //    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), getString(R.string.no_node_found_text));
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", getString(R.string.no_node_found_text));
+
                 }
                 //makeJson(locationResult);
 
@@ -372,11 +427,10 @@ public class LocationActivity extends BaseActivity {
                 sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
                 databaseHandler.insertLocationResult(locationResult);
 
-                resultAdapterdapter.add(locationResult);
-                resultAdapterdapter.notifyDataSetChanged();
+                //resultAdapterdapter.add(locationResult);
+                //resultAdapterdapter.notifyDataSetChanged();
             }
         });
-
     }
 
 }

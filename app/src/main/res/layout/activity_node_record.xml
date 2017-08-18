@@ -76,6 +76,12 @@
             android:id="@+id/wifi_names_dropdown"
             android:spinnerMode="dropdown">
         </Spinner>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/refresh_imageview_recordactivity"/>
+
     </LinearLayout>
 
     <LinearLayout

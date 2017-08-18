@@ -42,6 +42,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
@@ -60,10 +61,10 @@ public class NodeRecordActivity extends BaseActivity {
     private Button recordButton;
     Button captureButton;
     Button saveNodeButton;
-    private ImageView cameraImageView;
+    private ImageView cameraImageview;
+    private ImageView refreshImageview;
     private EditText nodeIdEdittext;
     private EditText recordTimeText;
-
     private Spinner wifiNamesDropdown;
     private EditText descriptionEdittext;
     private DatabaseHandler databaseHandler;
@@ -73,7 +74,6 @@ public class NodeRecordActivity extends BaseActivity {
     private List<SignalInformation> signalInformationList;
 
     private String picturePath;
-
     private boolean abortRecording;
 
     private static final int CAM_REQUEST = 1;
@@ -83,9 +83,7 @@ public class NodeRecordActivity extends BaseActivity {
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
 
     private File sdCard = Environment.getExternalStorageDirectory();
-
     private Context context = this;
-
     private WifiManager mainWifiObj;
 
 
@@ -110,7 +108,6 @@ public class NodeRecordActivity extends BaseActivity {
             //TODO: Warnmeldung
         }
 
-
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         jsonWriter = new JsonWriter(this);
@@ -118,7 +115,8 @@ public class NodeRecordActivity extends BaseActivity {
         recordButton = (Button) findViewById(R.id.b_record);
         captureButton  = (Button) findViewById(R.id.capture_button);
         saveNodeButton = (Button) findViewById(R.id.save_node_button);
-        cameraImageView = (ImageView) findViewById(R.id.camera_imageview);
+        cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
+        refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_recordactivity);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
 
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
@@ -140,22 +138,16 @@ public class NodeRecordActivity extends BaseActivity {
 
 
         if (hasPermissions(this, permissions)) {
-            // Scan for WiFi names (SSIDs) and add them to the dropdown
-            mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            mainWifiObj.startScan();
-            List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-
-            ArrayList<String> wifiNamesList = new ArrayList<>();
-            for (ScanResult sr : wifiScanList) {
-                if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                    wifiNamesList.add(sr.SSID);
-                }
-            }
-            final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
-            wifiNamesDropdown.setAdapter(dropdownAdapter);
-
+            refreshWifiDropdown();
         }
 
+        refreshImageview.setImageResource(R.drawable.refresh);
+        refreshImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshWifiDropdown();
+            }
+        });
 
         // TODO: if Klausel notwendig?
         if (recordButton != null) {
@@ -163,13 +155,10 @@ public class NodeRecordActivity extends BaseActivity {
                 public void onClick(View v) {
 
                     if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
                     } else {
                         recordButton.setEnabled(false);
-                        //wlanName = wlanNameText.getText().toString();
                         wlanName = wifiNamesDropdown.getSelectedItem().toString();
-
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
                         measureNode();
                     }
@@ -190,7 +179,7 @@ public class NodeRecordActivity extends BaseActivity {
             });
         }
 
-        cameraImageView.setOnClickListener(new View.OnClickListener() {
+        cameraImageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
@@ -205,6 +194,24 @@ public class NodeRecordActivity extends BaseActivity {
                 saveNewNode();
             }
         });
+    }
+
+
+    // Scan for WiFi names (SSIDs) and add them to the dropdown
+    private void refreshWifiDropdown() {
+        mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        mainWifiObj.startScan();
+        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+
+        ArrayList<String> wifiNamesList = new ArrayList<>();
+        for (ScanResult sr : wifiScanList) {
+            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                wifiNamesList.add(sr.SSID);
+            }
+        }
+        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
+        wifiNamesDropdown.setAdapter(dropdownAdapter);
+        Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -269,11 +276,6 @@ public class NodeRecordActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        System.out.println("requestCode " + requestCode);
-        System.out.println("resultCode " + resultCode);
-
-
         if (resultCode == -1) {
             pictureTaken = true;
 
@@ -282,7 +284,7 @@ public class NodeRecordActivity extends BaseActivity {
             //node.setPicturePath(filePath);
 
             captureButton.setEnabled(false);
-            Glide.with(this).load(picturePath).into(cameraImageView);
+            Glide.with(this).load(picturePath).into(cameraImageview);
         }
     }
 
@@ -316,21 +318,21 @@ public class NodeRecordActivity extends BaseActivity {
         String nodeDescription = descriptionEdittext.getText().toString();
 
         if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
-            Toast.makeText(getApplicationContext(), "Ort existiert bereits: Bitte neuen Namen wählen.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
         } else {
-            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPath , "");
+            final Node node = new NodeFactory().createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPath, "");
 
+            // If no fingerprint has been captured...
             if (!fingerprintTaken) {
                 new AlertDialog.Builder(this)
-                        .setTitle("Kein Fingerprint")
+                        .setTitle(getString(R.string.no_fingerprint_title_text))
                         .setMessage("Soll der Ort \"" + node.getId() + "\" wirklich ohne Fingerprint erstellt werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 jsonWriter.writeJSON(node);
                                 databaseHandler.insertNode(node);
-                                Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
 
                                 // Reset progressBar and progress
                                 abortRecording = true;
@@ -339,24 +341,52 @@ public class NodeRecordActivity extends BaseActivity {
                                 progressBar.setProgress(progressStatus);
                                 recordButton.setEnabled(true);
                                 captureButton.setEnabled(true);
-
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {}
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                // If a fingerprint has been captured...
             } else {
                 jsonWriter.writeJSON(node);
                 databaseHandler.insertNode(node);
                 progressStatus = 0;
                 progressText.setText(String.valueOf(progressStatus));
                 progressBar.setProgress(progressStatus);
-                Toast.makeText(context, "Ort gespeichert.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
+                askForNewNode();
             }
+
+
         }
     }
+
+
+    // Ask, if new node should be created? If not, go to NodeListActivity to show all nodes
+    private void askForNewNode() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.record_another_node_title_text))
+                .setMessage(getString(R.string.record_another_node_question))
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }})
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        Intent intent = new Intent(context, NodeListActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 
     private boolean hasPermissions(Context context, String[] permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {

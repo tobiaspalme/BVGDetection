@@ -3,7 +3,7 @@ package de.htwberlin.f4.ai.ma.persistence;
 import android.content.Context;
 
 /**
- * Factory for creating and retrieving a DatabaseHandler singleton
+ * Factory for creating and retrieving a DatabaseHandler singleton object
  *
  * Created by Johann Winter
  */

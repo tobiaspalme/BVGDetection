@@ -79,7 +79,7 @@ public class NodeListActivity extends BaseActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (!nodeListIsEmpty) {
                     new AlertDialog.Builder(view.getContext())
-                            .setTitle("Eintrag löschen?")
+                            .setTitle(getString(R.string.nodelist_delete_entry_title_question))
                             .setMessage("Soll der Node \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
                             .setCancelable(false)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

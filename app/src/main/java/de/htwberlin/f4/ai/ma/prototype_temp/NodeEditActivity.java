@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -153,8 +154,8 @@ public class NodeEditActivity extends BaseActivity {
 
                         copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + "_" + rnd + ".jpg"));
                         node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + "_" + rnd +  ".jpg");
-                    } catch (IOException ioException) {
-                        System.out.println("IOException while copying image from temp folder to picture folder");
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 databaseHandler.updateNode(node, oldNodeId);
@@ -167,7 +168,7 @@ public class NodeEditActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx)
-                        .setTitle("Löschen?")
+                        .setTitle(getString(R.string.delete_title_question))
                         .setMessage("Soll der Ort \"" + nodeName + "\" wirklich gelöscht werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

@@ -10,66 +10,8 @@
     android:keepScreenOn="true"
     >
 
-
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/measured_node_text"
-            android:id="@+id/measured_node_label_textview"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/location_textview"
-            android:layout_toEndOf="@+id/measured_node_label_textview"
-            android:text="@string/measured_node_textview_text"
-            android:textColor="@android:color/holo_red_dark"/>
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/measured_node_label_textview"
-            android:text="@string/measure_one_second_text"
-            android:id="@+id/start_measuring_1s_button" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/start_measuring_1s_button"
-            android:text="@string/measure_ten_seconds_text"
-            android:id="@+id/start_measurement_10s_button" />
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/start_measurement_10s_button"
-            android:id="@+id/location_progressbar"
-            android:indeterminate="false"
-            android:progress="0" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="#000000"
-        android:id="@+id/splitting_view"/>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -83,13 +25,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/wifi_name_text"
-                android:id="@+id/textView4" />
-
-            <!-- <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edTx_WlanNameLocation"
-                android:text="BVG Wi-Fi" /> -->
+                android:id="@+id/wifi_name_label_textview" />
 
             <Spinner
                 android:layout_width="wrap_content"
@@ -97,7 +33,137 @@
                 android:id="@+id/wifi_names_dropdown_location"
                 android:spinnerMode="dropdown">
             </Spinner>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/refresh_imageview_locationactivity"/>
+
         </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttons_and_progress_linearlayout"
+            android:layout_below="@+id/wifi_span_linearlayout">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/measure_one_second_text"
+                android:id="@+id/start_measuring_1s_button" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/measure_ten_seconds_text"
+                android:id="@+id/start_measurement_10s_button"
+                />
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/location_progressbar"
+                android:indeterminate="false"
+                android:progress="0" />
+
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttons_and_progress_linearlayout"
+            android:layout_marginTop="50dp"
+            android:id="@+id/measured_node_name_linearlayout">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:text="@string/measured_node_text"
+                 android:id="@+id/measured_node_label_textview"
+                 />
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:id="@+id/location_textview"
+                 android:text="@string/measured_node_textview_text"
+                 android:textColor="@android:color/holo_red_dark"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description_linearlayout"
+            android:layout_below="@+id/measured_node_name_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/description_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/description_textview_location" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/coordinates_linearlayout"
+            android:layout_below="@id/description_linearlayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/coordinates_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/coordinates_textview_location" />
+        </LinearLayout>
+
+
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="250dp"
+            android:layout_below="@+id/coordinates_linearlayout"
+            android:id="@+id/location_imageview" />
+
+
+
+    </RelativeLayout>
+
+    <!--<View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#000000"
+        android:id="@+id/splitting_view"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
 
 
         <LinearLayout
@@ -144,6 +210,6 @@
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </LinearLayout>
