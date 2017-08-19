@@ -143,7 +143,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     }
 
     @Override
-    public float[] getCoordinates() {
+    public String getCoordinates() {
 
         //saveRecordData(dataModel);
         //StepDirection direction = directionDetect.getLastStepDirection(dataModel);
@@ -165,7 +165,9 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         if (positionModule != null) {
             result = positionModule.calculatePosition();
         }
-        return result;
+
+        // transform into wkt string
+        return WKT.coordToStr(result);
     }
 
     @Override

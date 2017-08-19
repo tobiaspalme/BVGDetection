@@ -31,6 +31,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 
+import de.htwberlin.f4.ai.ba.coordinates.measurement.WKT;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -92,11 +93,12 @@ public class MeasureControllerImpl implements MeasureController {
 
         // check if the startnode already got coordinates
         if (startNode.getCoordinates().length() > 0) {
-            String[] splitted = startNode.getCoordinates().split(";");
+            //String[] splitted = startNode.getCoordinates().split(";");
             // save the existing coordinates for distance calculation
-            coords[0] = Float.valueOf(splitted[0]);
-            coords[1] = Float.valueOf(splitted[1]);
-            coords[2] = Float.valueOf(splitted[2]);
+            //coords[0] = Float.valueOf(splitted[0]);
+            //coords[1] = Float.valueOf(splitted[1]);
+            //coords[2] = Float.valueOf(splitted[2]);
+            coords = WKT.strToCoord(startNode.getCoordinates());
             // update coordinates in view
             view.updateCoordinates(coords[0], coords[1], coords[2]);
         } else {
@@ -144,7 +146,8 @@ public class MeasureControllerImpl implements MeasureController {
                     case STEPCOUNTER:
                         // with each step we get the new position
                         stepCount++;
-                        float[] newStepCoords = indoorMeasurement.getCoordinates();
+                        // convert WKT String back to float[]
+                        float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
                         if (newStepCoords != null) {
                             // calculate distance from previous step to new step
                             float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
@@ -172,7 +175,7 @@ public class MeasureControllerImpl implements MeasureController {
 
         indoorMeasurement.setStepDirectionListener(new StepDirectionDetectListener() {
             @Override
-            public void onDirectionDetect(StepDirection stepDirection) {
+            public void onDirectionDetect(final StepDirection stepDirection) {
                 /*Toast toast = Toast.makeText(view.getContext(), "Direction: " + stepDirection, Toast.LENGTH_SHORT);
                 toast.show();*/
 
@@ -198,11 +201,12 @@ public class MeasureControllerImpl implements MeasureController {
 
                             // check if the startnode already got coordinates
                             if (startNode.getCoordinates().length() > 0) {
-                                String[] splitted = startNode.getCoordinates().split(";");
+                                //String[] splitted = startNode.getCoordinates().split(";");
                                 // save the existing coordinates for distance calculation
-                                coords[0] = Float.valueOf(splitted[0]);
-                                coords[1] = Float.valueOf(splitted[1]);
-                                coords[2] = Float.valueOf(splitted[2]);
+                                //coords[0] = Float.valueOf(splitted[0]);
+                                //coords[1] = Float.valueOf(splitted[1]);
+                                //coords[2] = Float.valueOf(splitted[2]);
+                                coords = WKT.strToCoord(startNode.getCoordinates());
                                 // update coordinates in view
                                 view.updateCoordinates(coords[0], coords[1], coords[2]);
                             } else {
@@ -289,11 +293,13 @@ public class MeasureControllerImpl implements MeasureController {
 
     private void saveMeasurementData() {
         view.updateTargetNodeCoordinates(coords[0], coords[1], coords[2]);
-        targetNode.setCoordinates(coords[0] + ";" + coords[1] + ";" + coords[2]);
+        //targetNode.setCoordinates(coords[0] + ";" + coords[1] + ";" + coords[2]);
+        targetNode.setCoordinates(WKT.coordToStr(coords));
         List<String> stepCoords = new ArrayList<>();
         // convert coordinates to string and save into list for edge
         for (StepData stepData : stepList) {
-            stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
+            //stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
+            stepCoords.add(WKT.coordToStr(stepData.getCoords()));
         }
 
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
@@ -335,7 +341,8 @@ public class MeasureControllerImpl implements MeasureController {
     public void onAddClicked() {
         // with each step we get the new position
         stepCount++;
-        float[] newStepCoords = indoorMeasurement.getCoordinates();
+        // convert wkt string back to float[]
+        float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
         if (newStepCoords != null) {
             // calculate distance from previous step to new step
             float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
@@ -406,23 +413,28 @@ public class MeasureControllerImpl implements MeasureController {
         if (start != null && target != null) {
             // update coordinates of startnode
             if (start.getCoordinates().length() > 0) {
-                String[] coordSplitted = start.getCoordinates().split(";");
+                /*String[] coordSplitted = start.getCoordinates().split(";");
                 float x = Float.valueOf(coordSplitted[0]);
                 float y = Float.valueOf(coordSplitted[1]);
                 float z = Float.valueOf(coordSplitted[2]);
+                */
+                float[] coordinates = WKT.strToCoord(start.getCoordinates());
 
-                view.updateStartNodeCoordinates(x, y, z);
+                view.updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
             } else {
                 view.updateStartNodeCoordinates(0f, 0f, 0f);
             }
             // update coordinates of targetnode
             if (target.getCoordinates().length() > 0) {
-                String[] coordSplitted = target.getCoordinates().split(";");
+                /*String[] coordSplitted = target.getCoordinates().split(";");
                 float x = Float.valueOf(coordSplitted[0]);
                 float y = Float.valueOf(coordSplitted[1]);
-                float z = Float.valueOf(coordSplitted[2]);
+                float z = Float.valueOf(coordSplitted[2]);*/
 
-                view.updateTargetNodeCoordinates(x, y, z);
+
+                float[] coordinates = WKT.strToCoord(target.getCoordinates());
+
+                view.updateTargetNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
             } else {
                 view.updateTargetNodeCoordinates(0f, 0f, 0f);
             }
@@ -499,11 +511,11 @@ public class MeasureControllerImpl implements MeasureController {
                 // if the node doesn't have any coordinates we initialize with 0,0,0
                 String startCoordinatesStr = startNode.getCoordinates();
                 if (startCoordinatesStr.length() > 0) {
-                    float[] startCoordinates = new float[3];
-                    String[] splitted = startCoordinatesStr.split(";");
+                    float[] startCoordinates = WKT.strToCoord(startCoordinatesStr);
+                    /*String[] splitted = startCoordinatesStr.split(";");
                     startCoordinates[0] = Float.valueOf(splitted[0]);
                     startCoordinates[1] = Float.valueOf(splitted[1]);
-                    startCoordinates[2] = Float.valueOf(splitted[2]);
+                    startCoordinates[2] = Float.valueOf(splitted[2]);*/
                     calibrationData.setCoordinates(startCoordinates);
                 }
 

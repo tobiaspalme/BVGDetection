@@ -24,6 +24,7 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.StepData;
+import de.htwberlin.f4.ai.ba.coordinates.measurement.WKT;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 
@@ -180,21 +181,24 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     public void updateStartNodeInfo(Node node) {
         startNodeIdView.setText(node.getId());
 
-        Uri imageUri = Uri.parse(node.getPicturePath());
-        File image = new File(imageUri.getPath());
+        if (node.getPicturePath() != null) {
+            Uri imageUri = Uri.parse(node.getPicturePath());
+            File image = new File(imageUri.getPath());
 
-        if (image.exists()) {
-            //using glide to reduce ui lag
-            Glide.with(this)
-                    .load(node.getPicturePath())
-                    .into(startNodeImage);
+            if (image.exists()) {
+                //using glide to reduce ui lag
+                Glide.with(this)
+                        .load(node.getPicturePath())
+                        .into(startNodeImage);
+            }
         }
+
         // check if the node has coordinates
         if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
-            String[] splitted = node.getCoordinates().split(";");
-            float x = Float.valueOf(splitted[0]);
-            float y = Float.valueOf(splitted[1]);
-            float z = Float.valueOf(splitted[2]);
+            float[] nodeCoordinates = WKT.strToCoord(node.getCoordinates());
+            float x = Float.valueOf(nodeCoordinates[0]);
+            float y = Float.valueOf(nodeCoordinates[1]);
+            float z = Float.valueOf(nodeCoordinates[2]);
 
             float roundX = Math.round(x * 100.0) / 100.0f;
             float roundY = Math.round(y * 100.0) / 100.0f;
@@ -211,21 +215,25 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     public void updateTargetNodeInfo(Node node) {
         targetNodeIdView.setText(node.getId());
 
-        Uri imageUri = Uri.parse(node.getPicturePath());
-        File image = new File(imageUri.getPath());
+        if (node.getPicturePath() != null) {
+            Uri imageUri = Uri.parse(node.getPicturePath());
+            File image = new File(imageUri.getPath());
 
-        if (image.exists()) {
-            //using glide to reduce ui lag
-            Glide.with(this)
-                    .load(node.getPicturePath())
-                    .into(targetNodeImage);
+            if (image.exists()) {
+                //using glide to reduce ui lag
+                Glide.with(this)
+                        .load(node.getPicturePath())
+                        .into(targetNodeImage);
+            }
         }
+
+
         // check if the node has coordinates
         if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
-            String[] splitted = node.getCoordinates().split(";");
-            float x = Float.valueOf(splitted[0]);
-            float y = Float.valueOf(splitted[1]);
-            float z = Float.valueOf(splitted[2]);
+            float[] nodeCoordinates = WKT.strToCoord(node.getCoordinates());
+            float x = Float.valueOf(nodeCoordinates[0]);
+            float y = Float.valueOf(nodeCoordinates[1]);
+            float z = Float.valueOf(nodeCoordinates[2]);
 
             float roundX = Math.round(x * 100.0) / 100.0f;
             float roundY = Math.round(y * 100.0) / 100.0f;
@@ -255,12 +263,13 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         List<StepData> stepDataList = new ArrayList<>();
         List<String> stepCoords = edge.getStepCoordsList();
         for (String coordStr : stepCoords) {
-            String[] splitted = coordStr.split(";");
-            float x = Float.valueOf(splitted[0]);
-            float y = Float.valueOf(splitted[1]);
-            float z = Float.valueOf(splitted[2]);
+            float[] coordinates = WKT.strToCoord(coordStr);
+            //float x = Float.valueOf(coordinates[0]);
+            //float y = Float.valueOf(coordinates[1]);
+            //float z = Float.valueOf(coordinates[2]);
             StepData stepData = new StepData();
-            stepData.setCoords(new float[]{x, y, z});
+            //stepData.setCoords(new float[]{x, y, z});
+            stepData.setCoords(coordinates);
             stepDataList.add(stepData);
         }
 

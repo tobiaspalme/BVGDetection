@@ -29,7 +29,7 @@ public interface IndoorMeasurement {
     void startSensors(int sensorRate, SensorType... sensorType);
 
     // get the relative coordinates
-    float[] getCoordinates();
+    String getCoordinates();
 
     // set the listener which receives updates from sensors
     void setSensorListener(SensorListener listener);

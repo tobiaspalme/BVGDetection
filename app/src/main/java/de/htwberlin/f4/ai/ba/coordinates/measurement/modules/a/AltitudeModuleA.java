@@ -45,7 +45,7 @@ public class AltitudeModuleA implements AltitudeModule {
     // since we are not interested in an precise absolute altitude, we use this method to calculate
     // the relative altitude between two points
     // sea-level-standard temperature / temperature lapse rate = 44330
-    // 1.2mbar ~= 10m
+    //
     private float calcAltitude(float pressure) {
         float a = pressure / PRESSURE_STANDARD;
         double aHigh = Math.pow(a, (1/5.255));
