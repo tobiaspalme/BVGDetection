@@ -130,16 +130,19 @@ public class BaseActivity extends AppCompatActivity {
 
     public void loadMeasurement() {
         Intent intent = new Intent(getApplicationContext(), MeasureViewImpl.class);
+        finish();
         startActivity(intent);
     }
 
     public void loadCalibrate() {
         Intent intent = new Intent(getApplicationContext(), CalibrateViewImpl.class);
+        finish();
         startActivity(intent);
     }
 
     public void loadRecord() {
         Intent intent = new Intent(getApplicationContext(), RecordViewImpl.class);
+        finish();
         startActivity(intent);
     }
 

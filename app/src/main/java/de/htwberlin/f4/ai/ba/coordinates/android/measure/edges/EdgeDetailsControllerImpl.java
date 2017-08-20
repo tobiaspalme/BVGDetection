@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 
 import com.example.carol.bvg.R;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -75,6 +76,8 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
         if (edge != null) {
             DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
             databaseHandler.updateEdge(edge);
+            //BaseActivity activity = (BaseActivity) view;
+            //activity.loadMeasurement();
             view.finish();
         }
     }
