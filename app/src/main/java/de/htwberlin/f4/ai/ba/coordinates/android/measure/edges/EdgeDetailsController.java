@@ -16,7 +16,6 @@ public interface EdgeDetailsController {
 
     void onHandycapChanged(boolean handycapFriendly);
     void onEdgeInfoChanged(String info);
-    void onEdgeDistanceChanged(float distance);
 
     void onResume();
 }

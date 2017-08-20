@@ -41,8 +41,8 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     private TextView targetNodeCoordsView;
     private TextView startNodeIdView;
     private TextView targetNodeIdView;
+    private TextView distanceValueView;
 
-    private EditText distanceView;
     private EditText infoView;
 
     private Switch handycapSwitch;
@@ -86,8 +86,8 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         targetNodeCoordsView = (TextView) findViewById(R.id.edgedetails_target_coords);
         startNodeIdView = (TextView) findViewById(R.id.edgedetails_start_id);
         targetNodeIdView = (TextView) findViewById(R.id.edgedetails_target_id);
+        distanceValueView = (TextView) findViewById(R.id.edgedetails_distance_value);
 
-        distanceView = (EditText) findViewById(R.id.edgedetails_distance_edit);
         infoView = (EditText) findViewById(R.id.edgedetails_info_edit);
 
         handycapSwitch = (Switch) findViewById(R.id.edgedetails_handycap_switch);
@@ -140,28 +140,6 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
             public void afterTextChanged(Editable editable) {
                 if (controller != null) {
                     controller.onEdgeInfoChanged(editable.toString());
-                }
-            }
-        });
-
-        distanceView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (controller != null) {
-                    if (editable.toString().length() > 0) {
-                        float value = Float.valueOf(editable.toString());
-                        controller.onEdgeDistanceChanged(value);
-                    }
                 }
             }
         });
@@ -249,7 +227,7 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     public void updateEdgeInfo(Edge edge) {
         // edge weight is in cm, but we use meters, so convert it
         float edgeDistance = edge.getWeight() / 100.0f;
-        distanceView.setText(String.valueOf(edgeDistance));
+        distanceValueView.setText(String.valueOf(edgeDistance));
 
         if (edge.getAccessibility()) {
             handycapSwitch.setChecked(true);
@@ -264,17 +242,12 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         List<String> stepCoords = edge.getStepCoordsList();
         for (String coordStr : stepCoords) {
             float[] coordinates = WKT.strToCoord(coordStr);
-            //float x = Float.valueOf(coordinates[0]);
-            //float y = Float.valueOf(coordinates[1]);
-            //float z = Float.valueOf(coordinates[2]);
             StepData stepData = new StepData();
-            //stepData.setCoords(new float[]{x, y, z});
             stepData.setCoords(coordinates);
             stepDataList.add(stepData);
         }
 
         stepListAdapter.addAll(stepDataList);
-
     }
 
 

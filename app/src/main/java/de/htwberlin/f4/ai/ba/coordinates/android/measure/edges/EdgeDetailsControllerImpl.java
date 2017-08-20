@@ -72,7 +72,6 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
 
     @Override
     public void onSaveClicked() {
-        // since there is no update method yet, delete old edge and create new
         if (edge != null) {
             DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
             databaseHandler.updateEdge(edge);
@@ -94,14 +93,6 @@ public class EdgeDetailsControllerImpl implements EdgeDetailsController {
         }
     }
 
-    @Override
-    public void onEdgeDistanceChanged(float distance) {
-        if (edge != null) {
-            // since the distance is calculated in meters we need to convert it into cm for edge weight
-            int weightCm = Math.round(distance*100);
-            edge.setWeight(weightCm);
-        }
-    }
 
     @Override
     public void onResume() {

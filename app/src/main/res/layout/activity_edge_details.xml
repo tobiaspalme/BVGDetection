@@ -158,14 +158,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5">
 
-                <EditText
-                    android:id="@+id/edgedetails_distance_edit"
+                <TextView
+                    android:id="@+id/edgedetails_distance_value"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
                     android:text="0.00"
                     android:textAlignment="center"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
+                    />
+
 
             </LinearLayout>
 
