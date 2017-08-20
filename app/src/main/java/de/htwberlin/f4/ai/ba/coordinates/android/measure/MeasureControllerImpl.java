@@ -2,6 +2,7 @@ package de.htwberlin.f4.ai.ba.coordinates.android.measure;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
+import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
 
 /**
  * Created by benni on 18.07.2017.
@@ -410,6 +412,28 @@ public class MeasureControllerImpl implements MeasureController {
         if (databaseHandler.checkIfEdgeExists(edge)) {
             BaseActivity activity = (BaseActivity) view;
             activity.loadEdgeDetails(startNode.getId(), targetNode.getId());
+        }
+    }
+
+    @Override
+    public void onStartNodeImageClicked() {
+        if (startNode != null && startNode.getPicturePath() != null) {
+            // using activity from johann
+            Intent intent = new Intent(view.getContext(), MaxPictureActivity.class);
+            intent.putExtra("picturePath", startNode.getPicturePath());
+            BaseActivity activity = (BaseActivity) view;
+            activity.startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onTargetNodeImageClicked() {
+        if (targetNode != null && targetNode.getPicturePath() != null) {
+            // using activity from johann
+            Intent intent = new Intent(view.getContext(), MaxPictureActivity.class);
+            intent.putExtra("picturePath", targetNode.getPicturePath());
+            BaseActivity activity = (BaseActivity) view;
+            activity.startActivity(intent);
         }
     }
 

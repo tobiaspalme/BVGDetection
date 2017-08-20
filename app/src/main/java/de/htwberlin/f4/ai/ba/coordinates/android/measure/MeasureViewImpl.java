@@ -76,7 +76,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         super.onCreate(savedInstanceState);
 
 
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.fragment_coordinates_measure, contentFrameLayout);
 
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(getContext());
@@ -99,6 +99,24 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
         targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);
         edgeArrow = (ImageView) findViewById(R.id.coordinates_measure_arrow);
+
+        startNodeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onStartNodeImageClicked();
+                }
+            }
+        });
+
+        targetNodeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onTargetNodeImageClicked();
+                }
+            }
+        });
 
         edgeArrow.setOnClickListener(new View.OnClickListener() {
             @Override
