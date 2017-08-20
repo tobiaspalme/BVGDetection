@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
@@ -79,25 +80,23 @@ public class MeasureControllerImpl implements MeasureController {
 
         // check for calibration
         if (!alreadyCalibrated()) {
-            view.showAlert("Bitte zuerst die Schrittkalibrierung durchführen!");
+            showStepCalibrationRequiredDialog();
             return;
         }
-
 
         stepList = new ArrayList<>();
         stepCount = 0;
         edgeDistance = 0f;
+        coords = new float[3];
+        calibrated = false;
+        sensorDataModel = new SensorDataModelImpl();
+        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
 
         view.updateStepCount(stepCount);
         view.updateDistance(edgeDistance);
 
         // check if the startnode already got coordinates
         if (startNode.getCoordinates().length() > 0) {
-            //String[] splitted = startNode.getCoordinates().split(";");
-            // save the existing coordinates for distance calculation
-            //coords[0] = Float.valueOf(splitted[0]);
-            //coords[1] = Float.valueOf(splitted[1]);
-            //coords[2] = Float.valueOf(splitted[2]);
             coords = WKT.strToCoord(startNode.getCoordinates());
             // update coordinates in view
             view.updateCoordinates(coords[0], coords[1], coords[2]);
@@ -105,11 +104,7 @@ public class MeasureControllerImpl implements MeasureController {
             view.updateCoordinates(0.0f, 0.0f, 0.0f);
         }
 
-        calibrated = false;
-        sensorDataModel = new SensorDataModelImpl();
 
-        SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
-        indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
 
         indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
@@ -144,27 +139,7 @@ public class MeasureControllerImpl implements MeasureController {
                         }
                         break;
                     case STEPCOUNTER:
-                        // with each step we get the new position
-                        stepCount++;
-                        // convert WKT String back to float[]
-                        float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
-                        if (newStepCoords != null) {
-                            // calculate distance from previous step to new step
-                            float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
-                            edgeDistance += stepDistance;
-
-                            view.updateDistance(edgeDistance);
-                            view.updateCoordinates(newStepCoords[0], newStepCoords[1], newStepCoords[2]);
-                            StepData stepData = new StepData();
-                            stepData.setStepName("Step " + stepCount);
-                            coords = new float[newStepCoords.length];
-                            System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
-                            stepData.setCoords(coords);
-                            stepList.add(stepData);
-
-                        }
-
-                        view.updateStepCount(stepCount);
+                        handleNewStep();
                         break;
                     default:
                         break;
@@ -176,57 +151,7 @@ public class MeasureControllerImpl implements MeasureController {
         indoorMeasurement.setStepDirectionListener(new StepDirectionDetectListener() {
             @Override
             public void onDirectionDetect(final StepDirection stepDirection) {
-                /*Toast toast = Toast.makeText(view.getContext(), "Direction: " + stepDirection, Toast.LENGTH_SHORT);
-                toast.show();*/
-
-                if (stepDirection != StepDirection.FORWARD) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-                    alertDialogBuilder.setTitle("Falsche Schrittrichtung");
-                    alertDialogBuilder.setMessage("Es wurde ein " + stepDirection + "schritt festgestellt. Falls dies so ist, starten Sie die Messung bitte neu");
-                    alertDialogBuilder.setCancelable(false);
-                    alertDialogBuilder.setIcon(R.drawable.error);
-
-                    alertDialogBuilder.setPositiveButton("Ja, das ist korrekt", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // reset
-                            indoorMeasurement.stop();
-                            stepList = new ArrayList<>();
-                            stepCount = 0;
-                            edgeDistance = 0f;
-
-                            view.updateStepCount(stepCount);
-                            view.updateDistance(edgeDistance);
-                            view.disableStop();
-                            view.enableStart();
-
-                            // check if the startnode already got coordinates
-                            if (startNode.getCoordinates().length() > 0) {
-                                //String[] splitted = startNode.getCoordinates().split(";");
-                                // save the existing coordinates for distance calculation
-                                //coords[0] = Float.valueOf(splitted[0]);
-                                //coords[1] = Float.valueOf(splitted[1]);
-                                //coords[2] = Float.valueOf(splitted[2]);
-                                coords = WKT.strToCoord(startNode.getCoordinates());
-                                // update coordinates in view
-                                view.updateCoordinates(coords[0], coords[1], coords[2]);
-                            } else {
-                                coords[0] = 0.0f;
-                                coords[1] = 0.0f;
-                                coords[2] = 0.0f;
-                                view.updateCoordinates(0.0f, 0.0f, 0.0f);
-                            }
-                        }
-                    });
-
-                    alertDialogBuilder.setNegativeButton("Nein, weiter", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
+                showStepDirectionDialog(stepDirection);
             }
         });
 
@@ -247,13 +172,111 @@ public class MeasureControllerImpl implements MeasureController {
                                        SensorType.STEPCOUNTER);
 
         calibrate();
+        showWaitForCalibrationDialoag();
+
+    }
+
+    private void showStepCalibrationRequiredDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Kalibrierung notwendig");
+        alertDialogBuilder.setMessage("Bitte führen Sie zuerst eine Schrittkalibrierung durch!");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setIcon(R.drawable.error);
+
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                BaseActivity activity = (BaseActivity) view;
+                activity.loadCalibrate();
+                dialog.dismiss();
+            }
+        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void showWaitForCalibrationDialoag() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setMessage("Bitte warten");
         alertDialogBuilder.setTitle("Kalibrierung im gange");
         calibrationDialog = alertDialogBuilder.create();
         calibrationDialog.setCancelable(false);
         calibrationDialog.show();
+    }
 
+    private void showMeasureFinishDialog() {
+        // ask the user if the way was handycap friendly and save measurement data afterwards
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Barrierefreiheit");
+        alertDialogBuilder.setMessage("War der zurückgelegte Weg barrierefrei?");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setIcon(R.drawable.barrierefrei);
+
+        alertDialogBuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                handycapFriendly = true;
+                saveMeasurementData();
+                dialog.dismiss();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                handycapFriendly = false;
+                saveMeasurementData();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void showStepDirectionDialog(StepDirection stepDirection) {
+        if (stepDirection != StepDirection.FORWARD) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+            alertDialogBuilder.setTitle("Falsche Schrittrichtung");
+            alertDialogBuilder.setMessage("Es wurde ein " + stepDirection + "schritt festgestellt. Falls dies so ist, starten Sie die Messung bitte neu");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setIcon(R.drawable.error);
+
+            alertDialogBuilder.setPositiveButton("Ja, das ist korrekt", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // reset
+                    indoorMeasurement.stop();
+                    stepList = new ArrayList<>();
+                    stepCount = 0;
+                    edgeDistance = 0f;
+
+                    view.updateStepCount(stepCount);
+                    view.updateDistance(edgeDistance);
+                    view.disableStop();
+                    view.enableStart();
+
+                    // check if the startnode already got coordinates
+                    if (startNode.getCoordinates().length() > 0) {
+                        coords = WKT.strToCoord(startNode.getCoordinates());
+                        // update coordinates in view
+                        view.updateCoordinates(coords[0], coords[1], coords[2]);
+                    } else {
+                        coords[0] = 0.0f;
+                        coords[1] = 0.0f;
+                        coords[2] = 0.0f;
+                        view.updateCoordinates(0.0f, 0.0f, 0.0f);
+                    }
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("Nein, weiter", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -263,42 +286,16 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         if (coords != null) {
-            // ask the user if the way was handycap friendly and save measurement data afterwards
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-            alertDialogBuilder.setTitle("Barrierefreiheit");
-            alertDialogBuilder.setMessage("War der zurückgelegte Weg barrierefrei?");
-            alertDialogBuilder.setCancelable(false);
-            alertDialogBuilder.setIcon(R.drawable.barrierefrei);
-
-            alertDialogBuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            handycapFriendly = true;
-                            saveMeasurementData();
-                            dialog.dismiss();
-                        }
-                    });
-
-            alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            handycapFriendly = false;
-                            saveMeasurementData();
-                            dialog.dismiss();
-                        }
-                    });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+            showMeasureFinishDialog();
         }
     }
 
     private void saveMeasurementData() {
         view.updateTargetNodeCoordinates(coords[0], coords[1], coords[2]);
-        //targetNode.setCoordinates(coords[0] + ";" + coords[1] + ";" + coords[2]);
         targetNode.setCoordinates(WKT.coordToStr(coords));
         List<String> stepCoords = new ArrayList<>();
         // convert coordinates to string and save into list for edge
         for (StepData stepData : stepList) {
-            //stepCoords.add(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
             stepCoords.add(WKT.coordToStr(stepData.getCoords()));
         }
 
@@ -339,34 +336,8 @@ public class MeasureControllerImpl implements MeasureController {
     // just a temporary solution if we want to get coords without doing a step
     @Override
     public void onAddClicked() {
-        // with each step we get the new position
-        stepCount++;
-        // convert wkt string back to float[]
-        float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
-        if (newStepCoords != null) {
-            // calculate distance from previous step to new step
-            float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
-            edgeDistance += stepDistance;
-
-            view.updateDistance(edgeDistance);
-            view.updateCoordinates(newStepCoords[0], newStepCoords[1], newStepCoords[2]);
-            StepData stepData = new StepData();
-            stepData.setStepName("Step " + stepCount);
-            coords = new float[newStepCoords.length];
-            System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
-            stepData.setCoords(coords);
-            stepList.add(stepData);
-
-        }
-
-        view.updateStepCount(stepCount);
+        handleNewStep();
     }
-
-    /*
-    @Override
-    public void onMeasurementTypeSelected(IndoorMeasurementType type) {
-        measurementType = type;
-    }*/
 
 
     @Override
@@ -382,7 +353,7 @@ public class MeasureControllerImpl implements MeasureController {
         // get settings from sharedpreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
         lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
-        String type = sharedPreferences.getString("pref_measurement_type", "Variante D");
+        String type = sharedPreferences.getString("pref_measurement_type", "Variante B");
         measurementType = IndoorMeasurementType.fromString(type);
 
     }
@@ -404,8 +375,33 @@ public class MeasureControllerImpl implements MeasureController {
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
         Edge edge = new EdgeImplementation(startNode, targetNode, false, 0);
         if (databaseHandler.checkIfEdgeExists(edge)) {
-            view.loadEdgeDetailsView(startNode, targetNode );
+            BaseActivity activity = (BaseActivity) view;
+            activity.loadEdgeDetails(startNode.getId(), targetNode.getId());
         }
+    }
+
+    private void handleNewStep() {
+        // with each step we get the new position
+        stepCount++;
+        // convert WKT String back to float[]
+        float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
+        if (newStepCoords != null) {
+            // calculate distance from previous step to new step
+            float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
+            edgeDistance += stepDistance;
+
+            view.updateDistance(edgeDistance);
+            view.updateCoordinates(newStepCoords[0], newStepCoords[1], newStepCoords[2]);
+            StepData stepData = new StepData();
+            stepData.setStepName("Step " + stepCount);
+            coords = new float[newStepCoords.length];
+            System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
+            stepData.setCoords(newStepCoords);
+            stepList.add(stepData);
+
+        }
+
+        view.updateStepCount(stepCount);
     }
 
     private void handleNodeSelection(Node start, Node target) {
@@ -413,11 +409,6 @@ public class MeasureControllerImpl implements MeasureController {
         if (start != null && target != null) {
             // update coordinates of startnode
             if (start.getCoordinates().length() > 0) {
-                /*String[] coordSplitted = start.getCoordinates().split(";");
-                float x = Float.valueOf(coordSplitted[0]);
-                float y = Float.valueOf(coordSplitted[1]);
-                float z = Float.valueOf(coordSplitted[2]);
-                */
                 float[] coordinates = WKT.strToCoord(start.getCoordinates());
 
                 view.updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
@@ -426,12 +417,6 @@ public class MeasureControllerImpl implements MeasureController {
             }
             // update coordinates of targetnode
             if (target.getCoordinates().length() > 0) {
-                /*String[] coordSplitted = target.getCoordinates().split(";");
-                float x = Float.valueOf(coordSplitted[0]);
-                float y = Float.valueOf(coordSplitted[1]);
-                float z = Float.valueOf(coordSplitted[2]);*/
-
-
                 float[] coordinates = WKT.strToCoord(target.getCoordinates());
 
                 view.updateTargetNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
@@ -470,20 +455,7 @@ public class MeasureControllerImpl implements MeasureController {
         }
     }
 
-    @Override
-    public void onTestClicked() {
-        /*startNode.setCoordinates("");
-        targetNode.setCoordinates("");
-        databaseHandler = new DatabaseHandlerImplementation(view.getContext());
-        databaseHandler.updateNode(startNode, startNode.getId());
-        databaseHandler.updateNode(targetNode, targetNode.getId());
-        */
-        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
-        List<Edge> edgeList = databaseHandler.getAllEdges();
-        for (Edge edge : edgeList) {
-            databaseHandler.deleteEdge(edge);
-        }
-    }
+
 
     private boolean checkNodesDifferent(Node node1, Node node2) {
         // since id is unique, we just check for id
@@ -512,10 +484,7 @@ public class MeasureControllerImpl implements MeasureController {
                 String startCoordinatesStr = startNode.getCoordinates();
                 if (startCoordinatesStr.length() > 0) {
                     float[] startCoordinates = WKT.strToCoord(startCoordinatesStr);
-                    /*String[] splitted = startCoordinatesStr.split(";");
-                    startCoordinates[0] = Float.valueOf(splitted[0]);
-                    startCoordinates[1] = Float.valueOf(splitted[1]);
-                    startCoordinates[2] = Float.valueOf(splitted[2]);*/
+
                     calibrationData.setCoordinates(startCoordinates);
                 }
 

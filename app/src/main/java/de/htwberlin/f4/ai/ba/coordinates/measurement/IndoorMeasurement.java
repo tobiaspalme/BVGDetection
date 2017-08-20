@@ -28,7 +28,7 @@ public interface IndoorMeasurement {
     // start specific sensors
     void startSensors(int sensorRate, SensorType... sensorType);
 
-    // get the relative coordinates
+    // get the relative coordinates in WKT FORMAT
     String getCoordinates();
 
     // set the listener which receives updates from sensors

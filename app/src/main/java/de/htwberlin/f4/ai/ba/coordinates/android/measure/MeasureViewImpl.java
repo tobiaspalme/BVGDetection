@@ -388,17 +388,6 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     }
 
     @Override
-    public void showAlert(String msg) {
-        Toast toast = Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    @Override
-    public void loadEdgeDetailsView(Node startNode, Node targetNode) {
-        loadEdgeDetails(startNode.getId(), targetNode.getId());
-    }
-
-    @Override
     public Context getContext() {
         return this;
     }

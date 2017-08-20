@@ -128,22 +128,22 @@ public class BaseActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-    protected void loadMeasurement() {
+    public void loadMeasurement() {
         Intent intent = new Intent(getApplicationContext(), MeasureViewImpl.class);
         startActivity(intent);
     }
 
-    protected void loadCalibrate() {
+    public void loadCalibrate() {
         Intent intent = new Intent(getApplicationContext(), CalibrateViewImpl.class);
         startActivity(intent);
     }
 
-    protected void loadRecord() {
+    public void loadRecord() {
         Intent intent = new Intent(getApplicationContext(), RecordViewImpl.class);
         startActivity(intent);
     }
 
-    protected void loadEdgeDetails(String startNodeID, String targetNodeID) {
+    public void loadEdgeDetails(String startNodeID, String targetNodeID) {
         Bundle bundle = new Bundle();
         bundle.putString(STARTNODE_KEY, startNodeID);
         bundle.putString(TARGETNODE_KEY, targetNodeID);

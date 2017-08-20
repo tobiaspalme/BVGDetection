@@ -25,8 +25,7 @@ public interface MeasureView {
     void disableStart();
     void enableStop();
     void disableStop();
-    void showAlert(String msg);
-    void loadEdgeDetailsView(Node startNode, Node targetNode);
+
     Context getContext();
 
 }
