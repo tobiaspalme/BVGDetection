@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c;
 
+import android.content.Context;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,8 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.OrientationModule
 
 public class OrientationModuleC extends OrientationModuleA{
 
-    public OrientationModuleC(SensorFactory sensorFactory) {
-        super(sensorFactory);
+    public OrientationModuleC(Context context) {
+        super(context);
     }
 
     @Override

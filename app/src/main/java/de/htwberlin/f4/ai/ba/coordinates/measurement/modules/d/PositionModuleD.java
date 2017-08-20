@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.d;
 
+import android.content.Context;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
@@ -14,11 +16,11 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.PositionModuleA;
 
 public class PositionModuleD extends PositionModuleA{
 
-    public PositionModuleD(SensorFactory sensorFactory, CalibrationData calibrationData) {
-        super(sensorFactory, calibrationData);
+    public PositionModuleD(Context context, CalibrationData calibrationData) {
+        super(context, calibrationData);
 
-        altitudeModule = new AltitudeModuleD(sensorFactory, calibrationData.getAirPressure(), calibrationData.getLowpassFilterValue());
-        distanceModule = new DistanceModuleD(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleD(sensorFactory, calibrationData.getLowpassFilterValue());
+        altitudeModule = new AltitudeModuleD(context, calibrationData.getAirPressure(), calibrationData.getLowpassFilterValue());
+        distanceModule = new DistanceModuleD(context, calibrationData.getStepLength());
+        orientationModule = new OrientationModuleD(context, calibrationData.getLowpassFilterValue());
     }
 }

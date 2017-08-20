@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.d;
 
+import android.content.Context;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c.DistanceModuleC;
 
@@ -9,7 +11,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c.DistanceModuleC;
 
 public class DistanceModuleD extends DistanceModuleC {
 
-    public DistanceModuleD(SensorFactory sensorFactory, float stepLength) {
-        super(sensorFactory, stepLength);
+    public DistanceModuleD(Context context, float stepLength) {
+        super(context, stepLength);
     }
 }

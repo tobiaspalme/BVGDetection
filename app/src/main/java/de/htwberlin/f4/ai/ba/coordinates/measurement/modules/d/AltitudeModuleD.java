@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.d;
 
+import android.content.Context;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +21,8 @@ public class AltitudeModuleD extends AltitudeModuleA {
 
     private float lowpassFilterValue;
 
-    public AltitudeModuleD(SensorFactory sensorFactory, float airPressure, float lowpassFilterValue) {
-        super(sensorFactory, airPressure);
+    public AltitudeModuleD(Context context, float airPressure, float lowpassFilterValue) {
+        super(context, airPressure);
         this.lowpassFilterValue = lowpassFilterValue;
     }
 

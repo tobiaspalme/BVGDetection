@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.c;
 
+import android.content.Context;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.AltitudeModuleA;
 
@@ -9,7 +11,7 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a.AltitudeModuleA;
 
 public class AltitudeModuleC extends AltitudeModuleA {
 
-    public AltitudeModuleC(SensorFactory sensorFactory, float airPressure) {
-        super(sensorFactory, airPressure);
+    public AltitudeModuleC(Context context, float airPressure) {
+        super(context, airPressure);
     }
 }

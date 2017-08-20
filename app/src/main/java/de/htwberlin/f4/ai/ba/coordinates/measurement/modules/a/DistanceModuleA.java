@@ -1,8 +1,11 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 
+import android.content.Context;
+
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
 
 /**
@@ -15,10 +18,12 @@ public class DistanceModuleA implements DistanceModule {
     protected SensorDataModel dataModel;
     protected SensorFactory sensorFactory;
     protected float stepLength;
+    protected Context context;
 
-    public DistanceModuleA(SensorFactory sensorFactory, float stepLength) {
+    public DistanceModuleA(Context context, float stepLength) {
+        this.context = context;
         dataModel = new SensorDataModelImpl();
-        this.sensorFactory = sensorFactory;
+        sensorFactory = new SensorFactoryImpl(context);
         this.stepLength = stepLength;
     }
 

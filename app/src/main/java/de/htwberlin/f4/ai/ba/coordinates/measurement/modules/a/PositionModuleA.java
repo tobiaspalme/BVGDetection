@@ -1,9 +1,11 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 
+import android.content.Context;
 import android.util.Log;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.measure.CalibrationData;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.DistanceModule;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
@@ -22,16 +24,17 @@ public class PositionModuleA implements PositionModule {
     protected AltitudeModule altitudeModule;
     protected DistanceModule distanceModule;
     protected OrientationModule orientationModule;
+    protected Context context;
 
     // coordinates[0] = x = movement left / right
     // coordinates[1] = y = movement backward / forward
     // coordinates[2] = z = movement downward / upward
     private float[] coordinates;
 
-    public PositionModuleA(SensorFactory sensorFactory, CalibrationData calibrationData) {
-        altitudeModule = new AltitudeModuleA(sensorFactory, calibrationData.getAirPressure());
-        distanceModule = new DistanceModuleA(sensorFactory, calibrationData.getStepLength());
-        orientationModule = new OrientationModuleA(sensorFactory);
+    public PositionModuleA(Context context, CalibrationData calibrationData) {
+        altitudeModule = new AltitudeModuleA(context, calibrationData.getAirPressure());
+        distanceModule = new DistanceModuleA(context, calibrationData.getStepLength());
+        orientationModule = new OrientationModuleA(context);
         // set start point to 0,0,0
         coordinates = calibrationData.getCoordinates();
     }

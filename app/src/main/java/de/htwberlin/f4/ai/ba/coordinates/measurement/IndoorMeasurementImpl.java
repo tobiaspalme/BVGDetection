@@ -95,16 +95,16 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
         // create different position module, depending on chosen viarant
         if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_A) {
-            positionModule = new PositionModuleA(sensorFactory, calibrationData);
+            positionModule = new PositionModuleA(context, calibrationData);
             positionModule.start();
         } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_B) {
-            positionModule = new PositionModuleB(sensorFactory, calibrationData);
+            positionModule = new PositionModuleB(context, calibrationData);
             positionModule.start();
         } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_C) {
-            positionModule = new PositionModuleC(sensorFactory, calibrationData);
+            positionModule = new PositionModuleC(context, calibrationData);
             positionModule.start();
         } else if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_D) {
-            positionModule = new PositionModuleD(sensorFactory, calibrationData);
+            positionModule = new PositionModuleD(context, calibrationData);
             positionModule.start();
         }
     }

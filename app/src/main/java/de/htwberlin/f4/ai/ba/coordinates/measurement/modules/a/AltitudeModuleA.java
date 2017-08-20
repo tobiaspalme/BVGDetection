@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 import java.sql.Timestamp;
@@ -11,6 +13,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
@@ -21,8 +24,6 @@ import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.AltitudeModule;
 
 public class AltitudeModuleA implements AltitudeModule {
 
-    // copied from sensormanager
-    private static final float PRESSURE_STANDARD = 1013.25f;
 
     protected SensorDataModel dataModel;
     protected SensorFactory sensorFactory;
@@ -30,27 +31,24 @@ public class AltitudeModuleA implements AltitudeModule {
     protected Sensor airPressureSensor;
     protected long lastStepTimestamp;
     protected float lastAltitude;
+    protected Context context;
 
-    public AltitudeModuleA(SensorFactory sensorFactory, float airPressure) {
+    public AltitudeModuleA(Context context, float airPressure) {
+        this.context = context;
         dataModel = new SensorDataModelImpl();
-        this.sensorFactory = sensorFactory;
+        sensorFactory = new SensorFactoryImpl(context);
         this.airPressure = airPressure;
         lastAltitude = calcAltitude(airPressure);
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
     }
 
-    // simple altitude calculation, using the same formula as SensorManager.getAltitude() does,
-    // so we don't need to pass a context to this class in order to create a SensorManager Object.
-    // Source: Professional Android Sensor Programming p. 87
+
     // since we are not interested in an precise absolute altitude, we use this method to calculate
     // the relative altitude between two points
-    // sea-level-standard temperature / temperature lapse rate = 44330
-    //
+
     private float calcAltitude(float pressure) {
-        float a = pressure / PRESSURE_STANDARD;
-        double aHigh = Math.pow(a, (1/5.255));
-        double result = 44330 * (1 - aHigh);
-        return (float) result;
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        return sensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure);
     }
 
     // because pressure drifts over time, we calculate the relative altitude change

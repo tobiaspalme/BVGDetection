@@ -1,5 +1,6 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.a;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.sql.Timestamp;
@@ -11,6 +12,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.modules.OrientationModule;
@@ -27,10 +29,12 @@ public class OrientationModuleA implements OrientationModule {
     //private float orientation;
     protected float lastOrientation;
     protected long lastStepTimestamp;
+    protected Context context;
 
-    public OrientationModuleA(SensorFactory sensorFactory) {
+    public OrientationModuleA(Context context) {
+        this.context = context;
         dataModel = new SensorDataModelImpl();
-        this.sensorFactory = sensorFactory;
+        sensorFactory = new SensorFactoryImpl(context);
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
     }
 

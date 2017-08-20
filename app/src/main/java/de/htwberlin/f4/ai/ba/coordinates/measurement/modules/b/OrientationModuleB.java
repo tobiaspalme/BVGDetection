@@ -1,5 +1,7 @@
 package de.htwberlin.f4.ai.ba.coordinates.measurement.modules.b;
 
+import android.content.Context;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +25,8 @@ public class OrientationModuleB extends OrientationModuleA {
 
     float lowpassFilterValue;
 
-    public OrientationModuleB(SensorFactory sensorFactory, float lowpassFilterValue) {
-        super(sensorFactory);
+    public OrientationModuleB(Context context, float lowpassFilterValue) {
+        super(context);
         this.lowpassFilterValue = lowpassFilterValue;
     }
 
