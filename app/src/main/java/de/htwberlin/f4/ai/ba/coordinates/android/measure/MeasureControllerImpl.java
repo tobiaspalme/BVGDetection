@@ -21,6 +21,8 @@ import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.Sensor;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorChecker;
+import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorCheckerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
@@ -81,6 +83,12 @@ public class MeasureControllerImpl implements MeasureController {
         // check for calibration
         if (!alreadyCalibrated()) {
             showStepCalibrationRequiredDialog();
+            return;
+        }
+
+        // check if every sensors required is available
+        if (!sensorsAvailable(measurementType)) {
+            showSensorsNotAvailableDialog();
             return;
         }
 
@@ -174,6 +182,31 @@ public class MeasureControllerImpl implements MeasureController {
         calibrate();
         showWaitForCalibrationDialoag();
 
+    }
+
+    private boolean sensorsAvailable(IndoorMeasurementType indoorMeasurementType) {
+        SensorChecker sensorChecker = new SensorCheckerImpl(view.getContext());
+        boolean result = sensorChecker.checkSensor(indoorMeasurementType);
+
+        return result;
+    }
+
+    private void showSensorsNotAvailableDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Ungültige Messvariante");
+        alertDialogBuilder.setMessage("Ein oder mehrere Sensor(en) werden von ihrem Gerät nicht unterstützt. Bitte wählen Sie eine andere Messvariante!");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setIcon(R.drawable.error);
+
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void showStepCalibrationRequiredDialog() {
