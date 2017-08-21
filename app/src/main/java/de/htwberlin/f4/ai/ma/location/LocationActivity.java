@@ -45,6 +45,7 @@ public class LocationActivity extends BaseActivity {
 
     Button measure1sButton;
     Button measure10sButton;
+    Button detailedResultsButton;
     ImageView locationImageview;
     ImageView refreshImageview;
     TextView descriptionLabelTextview;
@@ -99,6 +100,7 @@ public class LocationActivity extends BaseActivity {
 
         measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
+        detailedResultsButton = (Button) findViewById(R.id.location_detailed_results_button);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
         descriptionLabelTextview = (TextView) findViewById(R.id.description_label_textview);
@@ -233,6 +235,14 @@ public class LocationActivity extends BaseActivity {
                 }
             });
 
+        detailedResultsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LocationDetailedInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -255,8 +265,8 @@ public class LocationActivity extends BaseActivity {
     }
 
     /**
-     * check wlan signal strength and and save to multimap
-     * @param times the measured time one or ten seconds
+     * Check WiFi signal strengths and and save to multimap
+     * @param times the measured time: one or ten seconds
      */
     private void getMeasuredNode(final int times) {
 
@@ -268,12 +278,12 @@ public class LocationActivity extends BaseActivity {
         descriptionTextview.setText("");
         coordinatesTextview.setText("");
         percentTextview.setText("");
-        locationImageview.setEnabled(false);
+        //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
         // if (nodesDropdown.getAdapter().getCount() > 0 && wifiDropdown.getAdapter().getCount() > 0) {
 
-                IntentFilter intentFilter = new IntentFilter();
+            IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             //registerReceiver(mWifiScanReceiver, intentFilter);
 
@@ -288,7 +298,6 @@ public class LocationActivity extends BaseActivity {
                     for (int i = 0; i < times; i++) {
                         progressBar.setMax(times);
                         progressBar.setProgress(i + 1);
-
 
                         mainWifiObj.startScan();
 
@@ -391,7 +400,7 @@ public class LocationActivity extends BaseActivity {
 
                     //if (foundNodeName != null) {
                     locationTextview.setText(foundNode.getId());
-                    locationImageview.setEnabled(true);
+                    //locationImageview.setEnabled(true);
 
                     locationImageview.setVisibility(View.VISIBLE);
                     descriptionLabelTextview.setVisibility(View.VISIBLE);

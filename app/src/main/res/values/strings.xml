@@ -104,6 +104,7 @@
     <string name="no_node_found_text">Kein Ort gefunden</string>
     <string name="searching_node_text">Ort wird gesucht</string>
     <string name="percent_label_textview"> %</string>
+    <string name="go_to_detailed_location_results">Details</string>
 
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>

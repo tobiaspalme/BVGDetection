@@ -7,10 +7,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:keepScreenOn="true"
-    >
+    android:keepScreenOn="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,16 +27,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/wifi_names_dropdown_location"
+                android:layout_toEndOf="@+id/wifi_name_label_textview"
                 android:spinnerMode="dropdown">
             </Spinner>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/wifi_names_dropdown_location"
                 android:contentDescription="@string/image_placeholder"
                 android:id="@+id/refresh_imageview_locationactivity"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <RelativeLayout
@@ -58,12 +59,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/measure_ten_seconds_text"
                 android:id="@+id/start_measurement_10s_button"
+                android:layout_below="@+id/start_measuring_1s_button"
                 />
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/start_measurement_10s_button"
                 android:id="@+id/location_progressbar"
                 android:indeterminate="false"
                 android:progress="0" />
@@ -142,9 +145,10 @@
         </LinearLayout>
 
 
-       <LinearLayout
+       <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:id="@+id/result_node_linearlayout"
            android:layout_below="@+id/coordinates_linearlayout">
 
            <TextView
@@ -155,36 +159,59 @@
            <TextView
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               android:layout_toEndOf="@+id/percent_textview"
                android:id="@+id/percent_label_textview"
-               android:text="@string/percent_label_textview"/>
+               android:text="@string/percent_label_textview" />
+
+           <ImageView
+               android:layout_width="50dp"
+               android:layout_height="100dp"
+               android:contentDescription="@string/image_placeholder"
+               android:id="@+id/location_imageview"
+               android:layout_below="@+id/percent_textview"/>
+
+
+       </RelativeLayout>
 
 
 
-       </LinearLayout>
-
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="250dp"
-            android:layout_below="@+id/coordinates_linearlayout"
-            android:contentDescription="@string/image_placeholder"
-            android:id="@+id/location_imageview" />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location_detailed_results_button"
+        android:text="@string/go_to_detailed_location_results"
+        android:layout_below="@+id/result_node_linearlayout"
+        />
 
     <!--<View
         android:layout_width="fill_parent"
-        android:layout_height="2dip"
+        android:layout_height="4dip"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="#000000"
         android:id="@+id/splitting_view"/>
 
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@+id/results_listview"
+        android:text="@string/"/>
+
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/results_listview"/>
+
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-
 
 
         <LinearLayout
