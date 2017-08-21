@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.example.carol.bvg.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
@@ -84,6 +85,9 @@ public class NodeListActivity extends BaseActivity {
                             .setCancelable(false)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+
+                                    File imageFile = new File(allNodes.get(position).getPicturePath());
+                                    imageFile.delete();
 
                                     databaseHandler.deleteNode(allNodes.get(position));
                                     loadDbData();

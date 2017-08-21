@@ -173,8 +173,7 @@ public class NodeEditActivity extends BaseActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
-                                File imageFile = new File(folder, node.getPicturePath());
+                                File imageFile = new File(node.getPicturePath());
                                 imageFile.delete();
 
                                 databaseHandler.deleteNode(node);
