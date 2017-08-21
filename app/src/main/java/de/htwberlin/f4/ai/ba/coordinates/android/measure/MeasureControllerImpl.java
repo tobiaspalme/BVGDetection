@@ -287,7 +287,9 @@ public class MeasureControllerImpl implements MeasureController {
                     view.updateStepCount(stepCount);
                     view.updateDistance(edgeDistance);
                     view.disableStop();
+                    view.disableAdd();
                     view.enableStart();
+
 
                     // check if the startnode already got coordinates
                     if (startNode.getCoordinates().length() > 0) {
