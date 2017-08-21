@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.sql.Timestamp;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -56,6 +57,7 @@ public class NodeEditActivity extends BaseActivity {
     private final File pictureFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
     private final File tempFolder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/.temp");
 
+    private Timestamp timestamp;
     private static final int CAM_REQUEST = 1;
 
 
@@ -121,8 +123,14 @@ public class NodeEditActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 tempFile = null;
+
+                //timestamp = new Timestamp(System.currentTimeMillis());
+                //long realTimestamp = timestamp.getTime();
+
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                tempFile = new File(tempFolder, "Node_" + node.getId() + ".jpg");
+                //tempFile = new File(tempFolder, node.getId() + "_" + realTimestamp + ".jpg");
+                tempFile = new File(tempFolder, node.getId() + ".jpg");
+
 
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
                 startActivityForResult(cameraIntent, CAM_REQUEST);
@@ -138,14 +146,13 @@ public class NodeEditActivity extends BaseActivity {
                 node.setCoordinates(coordinatesEditText.getText().toString());
                 node.setPicturePath(picturePath);
 
+                timestamp = new Timestamp(System.currentTimeMillis());
+                long realTimestamp = timestamp.getTime();
+
                 if (tempFile != null) {
                     try {
-                        // TODO Übergangslösung
-                        int rnd = (int) (Math.random()*100);
-                        System.out.println("+++++++++++ RAND. " + rnd);
-
-                        copyFile(tempFile, new File(pictureFolder, "Node_" + idEditText.getText().toString() + "_" + rnd + ".jpg"));
-                        node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + idEditText.getText().toString() + "_" + rnd +  ".jpg");
+                        copyFile(tempFile, new File(pictureFolder, idEditText.getText().toString() + "_" + realTimestamp + ".jpg"));
+                        node.setPicturePath(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + idEditText.getText().toString() + "_" + realTimestamp +  ".jpg");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -165,11 +172,12 @@ public class NodeEditActivity extends BaseActivity {
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                databaseHandler.deleteNode(node);
 
                                 File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
-                                File imageFile = new File(folder, "Node_" + node.getId() + ".jpg");
+                                File imageFile = new File(folder, node.getPicturePath());
                                 imageFile.delete();
+
+                                databaseHandler.deleteNode(node);
                                 finish();
                             }
                         })

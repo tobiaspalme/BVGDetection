@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,6 +89,8 @@ public class NodeRecordActivity extends BaseActivity {
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
     private WifiManager mainWifiObj;
+
+    private Timestamp timestamp;
 
 
 
@@ -290,8 +293,11 @@ public class NodeRecordActivity extends BaseActivity {
             pictureTaken = true;
             takingPictureAtTheMoment = false;
 
+            //timestamp = new Timestamp(System.currentTimeMillis());
+            long realTimestamp = timestamp.getTime();
+
             // TODO necessary?
-            picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
+            picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp +".jpg";
             //node.setPicturePath(filePath);
 
             captureButton.setEnabled(false);
@@ -308,6 +314,10 @@ public class NodeRecordActivity extends BaseActivity {
     private File getFile() {
         File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
 
+        timestamp = new Timestamp(System.currentTimeMillis());
+        long realTimestamp = timestamp.getTime();
+
+
         if (!folder.exists()) {
             boolean success = folder.mkdirs();
 
@@ -315,7 +325,7 @@ public class NodeRecordActivity extends BaseActivity {
                 Log.d("NodeRecordActivity", "Die Datei konnte nicht angelegt werden");
             }
         }
-        return new File(folder, "Node_" + nodeIdEdittext.getText() + ".jpg");
+        return new File(folder, nodeIdEdittext.getText() + "_" + realTimestamp + ".jpg");
     }
 
 
@@ -329,8 +339,10 @@ public class NodeRecordActivity extends BaseActivity {
 
             // Determine if picture reference has to be added to Node
             String picPath;
+            long realTimestamp = timestamp.getTime();
+
             if (pictureTaken) {
-                picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/Node_" + nodeIdEdittext.getText() + ".jpg";
+                picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp + ".jpg";
             } else {
                 picPath = null;
             }
