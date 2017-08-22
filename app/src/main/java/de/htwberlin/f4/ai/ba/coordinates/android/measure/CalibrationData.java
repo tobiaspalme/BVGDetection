@@ -16,6 +16,15 @@ public class CalibrationData {
     private float[] coordinates;
     private IndoorMeasurementType indoorMeasurementType;
     private float lowpassFilterValue;
+    private boolean useStepDirection;
+
+    public boolean getUseStepDirection() {
+        return useStepDirection;
+    }
+
+    public void setUseStepDirection(boolean useStepDirection) {
+        this.useStepDirection = useStepDirection;
+    }
 
     public CalibrationData() {
         stepLength = 0.0f;

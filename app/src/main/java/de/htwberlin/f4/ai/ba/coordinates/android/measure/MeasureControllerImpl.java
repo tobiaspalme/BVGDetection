@@ -62,6 +62,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     private IndoorMeasurementType measurementType;
     private float lowpassFilterValue;
+    private boolean useStepDirectionDetect;
 
     private Node startNode;
     private Node targetNode;
@@ -69,6 +70,7 @@ public class MeasureControllerImpl implements MeasureController {
     private List<StepData> stepList;
     private float[] coords = new float[3];
     private boolean handycapFriendly;
+
 
     @Override
     public void setView(MeasureView view) {
@@ -389,6 +391,7 @@ public class MeasureControllerImpl implements MeasureController {
         lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
         String type = sharedPreferences.getString("pref_measurement_type", "Variante B");
         measurementType = IndoorMeasurementType.fromString(type);
+        useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", true);
 
     }
 
@@ -546,6 +549,7 @@ public class MeasureControllerImpl implements MeasureController {
 
                 calibrationData.setIndoorMeasurementType(measurementType);
                 calibrationData.setLowpassFilterValue(lowpassFilterValue);
+                calibrationData.setUseStepDirection(useStepDirectionDetect);
 
                 if (calibrationData != null) {
                     // save new calibrated airpressure and azimuth
