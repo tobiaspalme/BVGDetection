@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 
 /**
  * Created by Johann Winter

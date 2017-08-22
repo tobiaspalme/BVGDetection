@@ -1,8 +1,6 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
 import com.example.carol.bvg.R;
 

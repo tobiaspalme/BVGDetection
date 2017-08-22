@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 
 
 /**

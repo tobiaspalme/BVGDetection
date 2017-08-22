@@ -19,7 +19,7 @@ import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity;
+import de.htwberlin.f4.ai.ma.NodeEditActivity;
 
 
 /**

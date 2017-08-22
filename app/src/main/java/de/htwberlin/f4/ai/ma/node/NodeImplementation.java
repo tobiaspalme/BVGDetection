@@ -1,6 +1,6 @@
 package de.htwberlin.f4.ai.ma.node;
 
-import java.util.List;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 
 /**
  * Created by Johann Winter

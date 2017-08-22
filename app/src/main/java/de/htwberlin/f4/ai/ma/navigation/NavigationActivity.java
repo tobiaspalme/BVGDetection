@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,7 +22,7 @@ import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity;
+import de.htwberlin.f4.ai.ma.NodeShowActivity;
 
 /**
  * Created by Johann Winter

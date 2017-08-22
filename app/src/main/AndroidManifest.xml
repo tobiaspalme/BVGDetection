@@ -19,16 +19,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity" />
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity" />
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeEditActivity" />
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeShowActivity" />
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.MaxPictureActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.NodeEditActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.NodeShowActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.ImportExportActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity" />
        <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivityvity" />-->
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationDetailedInfoActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.SettingsActivity" />
 
         <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl" />
         <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl" />
@@ -47,7 +47,7 @@
         </activity>
         -->
         <activity
-            android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivity"
+            android:name="de.htwberlin.f4.ai.ma.NodeRecordActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,6 +4,8 @@ package de.htwberlin.f4.ai.ma.node;
 // TODO: Interface beschreiben
 
 
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+
 /**
  * Created by Johann Winter
  *

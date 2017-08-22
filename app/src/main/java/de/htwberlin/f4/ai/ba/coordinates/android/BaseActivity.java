@@ -18,11 +18,10 @@ import de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl;
 import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.location.LocationActivity;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
-import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
-import de.htwberlin.f4.ai.ma.prototype_temp.ImportExportActivity;
-import de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivity;
-import de.htwberlin.f4.ai.ma.prototype_temp.SettingsActivity;
+import de.htwberlin.f4.ai.ma.ImportExportActivity;
+import de.htwberlin.f4.ai.ma.NodeRecordActivity;
+import de.htwberlin.f4.ai.ma.SettingsActivity;
 
 public class BaseActivity extends AppCompatActivity {
 

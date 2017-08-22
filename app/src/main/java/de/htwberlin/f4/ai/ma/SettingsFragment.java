@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

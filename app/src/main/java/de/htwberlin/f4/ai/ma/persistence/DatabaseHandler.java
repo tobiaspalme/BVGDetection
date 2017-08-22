@@ -10,7 +10,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
-import de.htwberlin.f4.ai.ma.node.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**

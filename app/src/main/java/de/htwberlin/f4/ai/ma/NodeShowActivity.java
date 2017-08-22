@@ -1,11 +1,8 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,8 +14,6 @@ import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Johann Winter

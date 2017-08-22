@@ -45,23 +45,27 @@ public class NodeListAdapter extends ArrayAdapter {
         ViewHolder viewHolder = null;
 
         if (row == null) {
-
             LayoutInflater layoutInflater = context.getLayoutInflater();
             row = layoutInflater.inflate(R.layout.item_nodes_listview, null, true);
             viewHolder = new ViewHolder(row);
             row.setTag(viewHolder);
-
         } else {
             viewHolder = (ViewHolder) row.getTag();
         }
 
+
         viewHolder.nodeIdTextView.setText(nodeNames.get(position));
         viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
 
+        // Load images
         if (nodePicturePaths.get(position) == null) {
+            viewHolder.nodeImageView.setVisibility(View.VISIBLE);
             Glide.with(getContext()).load(R.drawable.unknown).into(viewHolder.nodeImageView);
-        } else {
+        } else if (!nodePicturePaths.get(position).equals("")){
+            viewHolder.nodeImageView.setVisibility(View.VISIBLE);
             Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+        } else {
+            viewHolder.nodeImageView.setVisibility(View.INVISIBLE);
         }
 
         return row;

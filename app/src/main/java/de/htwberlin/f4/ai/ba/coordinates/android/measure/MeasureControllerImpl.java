@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.example.carol.bvg.R;
 
@@ -27,8 +26,6 @@ import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorCheckerImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurement;
@@ -43,7 +40,7 @@ import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 
 /**
  * Created by benni on 18.07.2017.

@@ -26,7 +26,7 @@ public class DijkstraAlgorithm {
     /**
      * Created by tognitos on 22.01.17.
      *
-     * Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraVertex and
+     * Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
      * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
      * It is important that methods from the Node and Edge classes (of the Model) are avoided.
      * This allows us to change just how the mapping to the Dijkstra's Vertices and Edges work.
@@ -34,18 +34,18 @@ public class DijkstraAlgorithm {
      */
 
         // dijkstraNodes and dijkstraEdges
-        private final List<DijkstraVertex> dijkstraNodes;
+        private final List<DijkstraNode> dijkstraNodes;
         private final List<DijkstraEdge> dijkstraEdges;
 
         // settled and unsettled dijkstraNodes (seen / not seen)
-        private Set<DijkstraVertex> settledNodes;
-        private Set<DijkstraVertex> unSettledNodes;
+        private Set<DijkstraNode> settledNodes;
+        private Set<DijkstraNode> unSettledNodes;
 
         // (smallest) predecessors
-        private Map<DijkstraVertex, DijkstraVertex> predecessors;
+        private Map<DijkstraNode, DijkstraNode> predecessors;
 
         // smallest distance (weight) for the node
-        private Map<DijkstraVertex, Double> distance;
+        private Map<DijkstraNode, Double> distance;
 
     private DatabaseHandler databaseHandler;
     private boolean accessible;
@@ -68,10 +68,10 @@ public class DijkstraAlgorithm {
          * @param nodes
          * @return
          */
-        private List<DijkstraVertex> mapNodes(ArrayList<Node> nodes) {
-            ArrayList<DijkstraVertex> vertices = new ArrayList<>(nodes.size());
+        private List<DijkstraNode> mapNodes(ArrayList<Node> nodes) {
+            ArrayList<DijkstraNode> vertices = new ArrayList<>(nodes.size());
             for(Node node : nodes){
-                vertices.add(new DijkstraVertex(node));
+                vertices.add(new DijkstraNode(node));
             }
             return vertices;
         }
@@ -91,8 +91,8 @@ public class DijkstraAlgorithm {
 
 
                 // since it is an undirected graph, add both directions
-                DijkstraVertex source = new DijkstraVertex(edge.getNodeA());
-                DijkstraVertex destination = new DijkstraVertex(edge.getNodeB());
+                DijkstraNode source = new DijkstraNode(edge.getNodeA());
+                DijkstraNode destination = new DijkstraNode(edge.getNodeB());
 
                 // If accessible search wanted
                 if (accessible) {
@@ -125,7 +125,7 @@ public class DijkstraAlgorithm {
             if(sourceNode == null){
                 throw new IllegalArgumentException("Source Node Id is invalid! Given was:" + sourceNodeId);
             }
-            final DijkstraVertex sourceVertex = new DijkstraVertex(databaseHandler.getNode(sourceNodeId));
+            final DijkstraNode sourceVertex = new DijkstraNode(databaseHandler.getNode(sourceNodeId));
 
             settledNodes = new HashSet<>();
             unSettledNodes = new HashSet<>();
@@ -134,7 +134,7 @@ public class DijkstraAlgorithm {
             distance.put(sourceVertex, 0.0);
             unSettledNodes.add(sourceVertex);
             while (unSettledNodes.size() > 0) {
-                DijkstraVertex node = getMinimum(unSettledNodes);
+                DijkstraNode node = getMinimum(unSettledNodes);
                 settledNodes.add(node);
                 unSettledNodes.remove(node);
 
@@ -148,9 +148,9 @@ public class DijkstraAlgorithm {
          * Find the minimal distance from a node
          * @param node
          */
-        private void findMinimalDistances(DijkstraVertex node) {
-            List<DijkstraVertex> adjacentNodes = getNeighbors(node);
-            for (DijkstraVertex target : adjacentNodes) {
+        private void findMinimalDistances(DijkstraNode node) {
+            List<DijkstraNode> adjacentNodes = getNeighbors(node);
+            for (DijkstraNode target : adjacentNodes) {
 
                 if (getShortestDistance(target) > getShortestDistance(node) + getDistance(node, target)) {
                     System.out.println("findMinimalDistances. getshortestDistance(target) > getShortestDistance(node) + getDistance(node, target)");
@@ -169,7 +169,7 @@ public class DijkstraAlgorithm {
          * @param target
          * @return
          */
-        private double getDistance(DijkstraVertex node, DijkstraVertex target) {
+        private double getDistance(DijkstraNode node, DijkstraNode target) {
             Log.d("getDistance", "------- GET DISTANCE ---------");
             Log.d("getDistance", "node=" + node.getId());
             Log.d("getDistance", "target=" + target.getId());
@@ -202,8 +202,8 @@ public class DijkstraAlgorithm {
          * @param node
          * @return
          */
-        private List<DijkstraVertex> getNeighbors(DijkstraVertex node) {
-            List<DijkstraVertex> neighbors = new ArrayList<>();
+        private List<DijkstraNode> getNeighbors(DijkstraNode node) {
+            List<DijkstraNode> neighbors = new ArrayList<>();
             for (DijkstraEdge dijkstraEdge : dijkstraEdges) {
                 if (dijkstraEdge.getSource().equals(node)
                         && !isSettled(dijkstraEdge.getDestination())) {
@@ -219,14 +219,14 @@ public class DijkstraAlgorithm {
          * @param dijkstraVertices
          * @return
          */
-        private DijkstraVertex getMinimum(Set<DijkstraVertex> dijkstraVertices) {
-            DijkstraVertex minimum = null;
-            for (DijkstraVertex dijkstraVertex : dijkstraVertices) {
+        private DijkstraNode getMinimum(Set<DijkstraNode> dijkstraVertices) {
+            DijkstraNode minimum = null;
+            for (DijkstraNode dijkstraNode : dijkstraVertices) {
                 if (minimum == null) {
-                    minimum = dijkstraVertex;
+                    minimum = dijkstraNode;
                 } else {
-                    if (getShortestDistance(dijkstraVertex) < getShortestDistance(minimum)) {
-                        minimum = dijkstraVertex;
+                    if (getShortestDistance(dijkstraNode) < getShortestDistance(minimum)) {
+                        minimum = dijkstraNode;
                     }
                 }
             }
@@ -235,11 +235,11 @@ public class DijkstraAlgorithm {
 
         /**
          *
-         * @param dijkstraVertex
+         * @param dijkstraNode
          * @return true if the vertex was already settled
          */
-        private boolean isSettled(DijkstraVertex dijkstraVertex) {
-            return settledNodes.contains(dijkstraVertex);
+        private boolean isSettled(DijkstraNode dijkstraNode) {
+            return settledNodes.contains(dijkstraNode);
         }
 
         /**
@@ -248,7 +248,7 @@ public class DijkstraAlgorithm {
          * @param destinationVertex
          * @return
          */
-        private double getShortestDistance(DijkstraVertex destinationVertex) {
+        private double getShortestDistance(DijkstraNode destinationVertex) {
             Double d = distance.get(destinationVertex);
             if (d == null) {
                 return Double.MAX_VALUE;
@@ -265,7 +265,7 @@ public class DijkstraAlgorithm {
 
             LinkedList<Node> path = new LinkedList<>();
 
-            DijkstraVertex step = new DijkstraVertex(databaseHandler.getNode(targetSourceId));
+            DijkstraNode step = new DijkstraNode(databaseHandler.getNode(targetSourceId));
 
             // check if a path exists
             if (predecessors.get(step) == null) {

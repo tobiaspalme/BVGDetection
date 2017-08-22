@@ -30,15 +30,14 @@ import java.util.Set;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
-import de.htwberlin.f4.ai.ma.prototype_temp.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 
 
 public class LocationActivity extends BaseActivity {

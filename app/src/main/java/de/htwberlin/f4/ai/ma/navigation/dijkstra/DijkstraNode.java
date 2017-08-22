@@ -6,12 +6,12 @@ import de.htwberlin.f4.ai.ma.node.Node;
  * Created by Johann Winter
  */
 
-class DijkstraVertex {
+class DijkstraNode {
 
     private final Node node;
     private final String id;
 
-    public DijkstraVertex(Node node) {
+    DijkstraNode(Node node) {
         this.node = node;
         this.id = node.getId();
     }
@@ -36,7 +36,7 @@ class DijkstraVertex {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        DijkstraVertex other = (DijkstraVertex) obj;
+        DijkstraNode other = (DijkstraNode) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

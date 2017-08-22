@@ -11,7 +11,7 @@
             android:defaultValue="true" >
         </CheckBoxPreference>
 
-        <de.htwberlin.f4.ai.ma.prototype_temp.ListPreference
+        <de.htwberlin.f4.ai.ma.ListPreference
             android:dependency="pref_movingAverage"
             android:key="pref_movivngAverageOrder"
             android:title="Ordnung"
@@ -24,7 +24,7 @@
             android:title="Kalman Filter"
             android:defaultValue="true" />
 
-        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
+        <de.htwberlin.f4.ai.ma.EditTextPreference
             android:defaultValue="2"
             android:key="pref_kalmanValue"
             android:title="Kalman Wert"
@@ -49,7 +49,7 @@
             android:dependency="pref_euclideanDistance"
             android:defaultValue="true" />
 
-        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
+        <de.htwberlin.f4.ai.ma.EditTextPreference
             android:defaultValue="3"
             android:key="pref_knnNeighbours"
             android:title="k Nachbarn"
@@ -71,7 +71,7 @@
             android:dialogTitle="Bitte Messvariante auswählen"
             android:defaultValue="Variante B"/>
 
-        <de.htwberlin.f4.ai.ma.prototype_temp.EditTextPreference
+        <de.htwberlin.f4.ai.ma.EditTextPreference
             android:key="pref_lowpass_value"
             android:title="Lowpass Filter Wert"
             android:inputType="numberDecimal"

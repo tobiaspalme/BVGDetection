@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.prototype_temp;
+package de.htwberlin.f4.ai.ma;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -39,11 +39,11 @@ import java.util.List;
 import java.util.Locale;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;

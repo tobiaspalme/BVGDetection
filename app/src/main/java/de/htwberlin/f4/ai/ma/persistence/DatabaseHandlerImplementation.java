@@ -24,12 +24,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
-import de.htwberlin.f4.ai.ma.node.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.node.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
