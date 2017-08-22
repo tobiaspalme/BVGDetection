@@ -146,9 +146,6 @@ public class NodeRecordActivity extends BaseActivity {
             refreshWifiDropdown();
         }
 
-        //timestamp = new Timestamp(System.currentTimeMillis());
-
-
         refreshImageview.setImageResource(R.drawable.refresh);
         refreshImageview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,11 +295,9 @@ public class NodeRecordActivity extends BaseActivity {
             //timestamp = new Timestamp(System.currentTimeMillis());
             long realTimestamp = timestamp.getTime();
 
-            // TODO necessary?
             picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp +".jpg";
-            //node.setPicturePath(filePath);
 
-            captureButton.setEnabled(false);
+            //captureButton.setEnabled(false);
             Glide.with(this).load(picturePath).into(cameraImageview);
         }
     }
@@ -375,7 +370,7 @@ public class NodeRecordActivity extends BaseActivity {
                                     progressText.setText(String.valueOf(progressStatus));
                                     progressBar.setProgress(progressStatus);
                                     recordButton.setEnabled(true);
-                                    captureButton.setEnabled(true);
+                                    //captureButton.setEnabled(true);
                                 }
                             })
                             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -442,11 +437,11 @@ public class NodeRecordActivity extends BaseActivity {
     }
 
 
-    @Override
     /**
      * Stop recording thread if the Activity is stopped,
      * except the user left the activity for taking a picture.
      */
+    @Override
     protected void onStop() {
         super.onStop();
         if (!takingPictureAtTheMoment) {
