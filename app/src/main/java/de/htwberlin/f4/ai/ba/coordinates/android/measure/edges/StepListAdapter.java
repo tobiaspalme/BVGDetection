@@ -43,7 +43,7 @@ public class StepListAdapter extends ArrayAdapter<StepData> {
         float roundY = Math.round(stepData.getCoords()[1] * 100.0f) / 100.0f;
         float roundZ = Math.round(stepData.getCoords()[2] * 100.0f) / 100.0f;
 
-        stepCoordsView.setText(roundX + " / " + roundY + " / " + roundZ);
+        stepCoordsView.setText(roundX + " | " + roundY + " | " + roundZ);
 
         return convertView;
     }

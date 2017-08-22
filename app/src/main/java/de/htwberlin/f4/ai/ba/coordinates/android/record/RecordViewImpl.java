@@ -2,10 +2,7 @@ package de.htwberlin.f4.ai.ba.coordinates.android.record;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
@@ -70,7 +67,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         super.onCreate(savedInstanceState);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.fragment_coordinates_record, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_sensor_record, contentFrameLayout);
 
         accelerationX = (TextView) findViewById(R.id.fragment_record_acc_x);
         accelerationY = (TextView) findViewById(R.id.fragment_record_acc_y);
@@ -152,7 +149,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_coordinates_record, container, false);
+        View root = inflater.inflate(R.layout.activity_sensor_record, container, false);
 
         accelerationX = (TextView) root.findViewById(R.id.fragment_record_acc_x);
         accelerationY = (TextView) root.findViewById(R.id.fragment_record_acc_y);

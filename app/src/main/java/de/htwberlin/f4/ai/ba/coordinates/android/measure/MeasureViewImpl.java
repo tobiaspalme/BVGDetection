@@ -9,10 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -22,13 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorChecker;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorCheckerImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorData;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModel;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorDataModelImpl;
-import de.htwberlin.f4.ai.ba.coordinates.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ba.coordinates.measurement.IndoorMeasurementType;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -71,7 +62,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
 
         final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.fragment_coordinates_measure, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_measure, contentFrameLayout);
 
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(getContext());
         final List<Node> nodeList = databaseHandler.getAllNodes();
@@ -266,7 +257,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         double roundY = Math.round(y * 100.0) / 100.0;
         double roundZ = Math.round(z * 100.0) / 100.0;
 
-        coordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
+        coordinatesView.setText(roundX + " | " + roundY + " | " + roundZ);
     }
 
     @Override
@@ -275,7 +266,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         double roundY = Math.round(y * 100.0) / 100.0;
         double roundZ = Math.round(z * 100.0) / 100.0;
 
-        startNodeCoordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
+        startNodeCoordinatesView.setText(roundX + " | " + roundY + " | " + roundZ);
     }
 
     @Override
@@ -284,7 +275,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         double roundY = Math.round(y * 100.0) / 100.0;
         double roundZ = Math.round(z * 100.0) / 100.0;
 
-        targetNodeCoordinatesView.setText(roundX + " / " + roundY + " / " + roundZ);
+        targetNodeCoordinatesView.setText(roundX + " | " + roundY + " | " + roundZ);
     }
 
     @Override
@@ -302,8 +293,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                     .into(handycapImage);
         }
         // edge weight is in cm, but we use meters, so convert it
-        float edgeDistance = edge.getWeight() / 100.0f;
-        edgeDistanceView.setText(String.valueOf(edgeDistance));
+        //float edgeDistance = edge.getWeight() / 100.0f;
+        float edgeDistance = edge.getWeight();
+        edgeDistanceView.setText(String.valueOf(Math.round(edgeDistance * 100.0f) / 100.0f));
     }
 
 
