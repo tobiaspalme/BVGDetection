@@ -25,6 +25,8 @@ public interface MeasureView {
     void disableStart();
     void enableStop();
     void disableStop();
+    void enableAdd();
+    void disableAdd();
 
     Context getContext();
 
