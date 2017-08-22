@@ -14,13 +14,13 @@ public class EdgeImplementation implements Edge{
     private Node nodeA;
     private Node nodeB;
     private boolean accessible;
-    private int weight;
+    private float weight;
     private List<String> stepCoordList;
     private String additionalInfo;
 
 
     // Edge without given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, int weight) {
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, float weight) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessible = accessible;
@@ -29,7 +29,7 @@ public class EdgeImplementation implements Edge{
     }
 
     // Edge with given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, int weight, String additionalInfo) {
+    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, float weight, String additionalInfo) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessible = accessible;
@@ -70,12 +70,12 @@ public class EdgeImplementation implements Edge{
     }
 
     @Override
-    public int getWeight() {
+    public float getWeight() {
         return this.weight;
     }
 
     @Override
-    public void setWeight(int weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 

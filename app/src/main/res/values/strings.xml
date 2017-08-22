@@ -94,7 +94,9 @@
     <string name="save_button_text">Speichern</string>
     <string name="delete_button_text">Löschen</string>
     <string name="delete_title_question">Löschen?</string>
-    <string name="change_picture_button_text">Bild neu aufnehmen</string>
+    <string name="change_picture_button_text">Bild aufnehmen/ändern</string>
+    <string name="change_fingerprint_button_text">Fingerprint aufnehmen/ändern</string>
+    <string name="input_measure_time">Bitte Messzeit eingeben:</string>
 
     <!-- activity_location -->
     <string name="measured_node_text">Gemessener Ort:</string>

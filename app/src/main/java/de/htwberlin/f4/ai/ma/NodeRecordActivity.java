@@ -246,7 +246,6 @@ public class NodeRecordActivity extends BaseActivity {
                     List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
                     for (ScanResult sr : wifiScanList) {
-
                         if (sr.SSID.equals(wlanName)) {
                             SignalStrengthInformation signal = new SignalStrengthInformation(sr.BSSID, sr.level);
                             Log.d("NodeRecordActivity", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
@@ -278,10 +277,7 @@ public class NodeRecordActivity extends BaseActivity {
                 fingerprintTaken = true;
                 progressStatus = 0;
             }
-
         }).start();
-
-
     }
 
 

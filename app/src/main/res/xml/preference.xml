@@ -62,7 +62,7 @@
     <PreferenceCategory
         android:title="Messung">
 
-        <ListPreference
+        <de.htwberlin.f4.ai.ma.ListPreference
             android:key="pref_measurement_type"
             android:title="Messvariante"
             android:entries="@array/listDisplayWord"

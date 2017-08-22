@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -45,6 +48,7 @@ public class NodeEditActivity extends BaseActivity {
     Button saveButton;
     Button deleteButton;
     Button changePictureButton;
+    Button changeFingerprintButton;
     private Context context = this;
     private String oldNodeId;
     private String picturePath;
@@ -76,6 +80,7 @@ public class NodeEditActivity extends BaseActivity {
         saveButton = (Button) findViewById(R.id.save_button);
         deleteButton = (Button) findViewById(R.id.delete_button);
         changePictureButton = (Button) findViewById(R.id.change_picture_button);
+        changeFingerprintButton = (Button) findViewById(R.id.change_fingerprint_button);
 
         final Intent intent = getIntent();
         final String nodeName = intent.getExtras().get("nodeName").toString();
@@ -118,22 +123,24 @@ public class NodeEditActivity extends BaseActivity {
         });
 
 
-
         changePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tempFile = null;
 
-                //timestamp = new Timestamp(System.currentTimeMillis());
-                //long realTimestamp = timestamp.getTime();
-
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //tempFile = new File(tempFolder, node.getId() + "_" + realTimestamp + ".jpg");
                 tempFile = new File(tempFolder, node.getId() + ".jpg");
-
 
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
                 startActivityForResult(cameraIntent, CAM_REQUEST);
+            }
+        });
+
+
+        changeFingerprintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO
             }
         });
 

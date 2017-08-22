@@ -113,7 +113,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 EDGE_NODE_B + " TEXT," +
                 EDGE_ACCESSIBILITY + " TEXT," +
                 EDGE_STEPLIST + " TEXT," +
-                EDGE_WEIGHT + " INTEGER," +
+                EDGE_WEIGHT + " REAL," +
                 EDGE_ADDITIONAL_INFO + " TEXT);";
 
         String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
@@ -268,15 +268,13 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        //values.put("id", edge.getId());
         values.put(EDGE_NODE_A, edge.getNodeA().getId());
         values.put(EDGE_NODE_B, edge.getNodeB().getId());
         values.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
 
         StringBuilder stepListSb = new StringBuilder();
-        for (String string : edge.getStepCoordsList())
-        {
+        for (String string : edge.getStepCoordsList()) {
             stepListSb.append(string);
             stepListSb.append("\t");
         }
@@ -292,7 +290,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         database.close();
     }
 
-    // Update Edges (only for changing nodeA and nodeB)
+    // Update Edges (only for changing nodeA and nodeB attribute)
     public void updateEdge(Edge edge, String nodeToBeUpdated, String value) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -309,8 +307,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         contentValues.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
         StringBuilder stepListSb = new StringBuilder();
-        for (String string : edge.getStepCoordsList())
-        {
+        for (String string : edge.getStepCoordsList()) {
             stepListSb.append(string);
             stepListSb.append("\t");
         }
@@ -333,8 +330,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         contentValues.put(EDGE_ACCESSIBILITY, edge.getAccessibility());
 
         StringBuilder stepListSb = new StringBuilder();
-        for (String string : edge.getStepCoordsList())
-        {
+        for (String string : edge.getStepCoordsList()) {
             stepListSb.append(string);
             stepListSb.append("\t");
         }
@@ -355,7 +351,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 EDGE_NODE_A + "='" + nodeB.getId() + "' AND " + EDGE_NODE_B + "='" + nodeA.getId() + "'";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
-        Edge edge;
+        //Edge edge;
 
         if (cursor.moveToFirst()) {
             boolean accessible = false;
@@ -368,7 +364,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             String stepListString = cursor.getString(4);
             List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
-            edge = new EdgeImplementation(node1, node2, accessible, stepList, cursor.getInt(5), cursor.getString(6));
+            Edge edge = new EdgeImplementation(node1, node2, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
             database.close();
             return edge;
@@ -401,7 +397,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
                 //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, stepList, cursor.getInt(5), cursor.getString(6));
+                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
                 allEdges.add(edge);
 
@@ -442,7 +438,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    //----------------- R E S U L T S ------------------------------------------------------------------------------------------
+
+    //----------------- L O C A T I O N     R E S U L T S ------------------------------------------------------------------------------------------
 
     // Insert LocationResult
     public void insertLocationResult(LocationResult locationResult) {

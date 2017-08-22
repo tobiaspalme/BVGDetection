@@ -19,8 +19,8 @@ public interface Edge {
     boolean getAccessibility();
     void setAccessibility(boolean accessable);
 
-    int getWeight();
-    void setWeight(int expenditure);
+    float getWeight();
+    void setWeight(float weight);
 
     void insertStepCoords(String coords);
     List<String> getStepCoordsList();
