@@ -159,16 +159,19 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     public void updateStartNodeInfo(Node node) {
         startNodeIdView.setText(node.getId());
 
-        if (node.getPicturePath() != null) {
+        if (node.getPicturePath() == null) {
+            startNodeImage.setImageResource(R.drawable.unknown);
+        } else {
             Uri imageUri = Uri.parse(node.getPicturePath());
             File image = new File(imageUri.getPath());
 
             if (image.exists()) {
                 //using glide to reduce ui lag
-                Glide.with(this)
+                Glide.with(getContext())
                         .load(node.getPicturePath())
                         .into(startNodeImage);
             }
+
         }
 
         // check if the node has coordinates
@@ -190,16 +193,19 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     public void updateTargetNodeInfo(Node node) {
         targetNodeIdView.setText(node.getId());
 
-        if (node.getPicturePath() != null) {
+        if (node.getPicturePath() == null) {
+            targetNodeImage.setImageResource(R.drawable.unknown);
+        } else {
             Uri imageUri = Uri.parse(node.getPicturePath());
             File image = new File(imageUri.getPath());
 
             if (image.exists()) {
                 //using glide to reduce ui lag
-                Glide.with(this)
+                Glide.with(getContext())
                         .load(node.getPicturePath())
                         .into(targetNodeImage);
             }
+
         }
 
 

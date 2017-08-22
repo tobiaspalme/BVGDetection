@@ -73,25 +73,20 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
     @Override
     public void start() {
-        timerHandler = new Handler(Looper.getMainLooper());
-        directionDetect = new StepDirectionDetectImpl(context);
-        stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
-        // TODO: inform controller about direction and handle it, if direction != forward
-        if (stepDirectionListener != null) {
-            stepDirectionRunnable.setListener(stepDirectionListener);
-        }
-        /*
-        stepDirectionRunnable.setListener(new StepDirectionDetectListener() {
-            @Override
-            public void onDirectionDetect(StepDirection stepDirection) {
-                Context context = CoordinatesActivity.getInstance().getApplicationContext();
-                Toast toast = Toast.makeText(context, "Direction: " + stepDirection, Toast.LENGTH_SHORT);
-                toast.show();
+        if (calibrationData.getUseStepDirection()) {
+            timerHandler = new Handler(Looper.getMainLooper());
+            directionDetect = new StepDirectionDetectImpl(context);
+            stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
+            // TODO: inform controller about direction and handle it, if direction != forward
+            if (stepDirectionListener != null) {
+                stepDirectionRunnable.setListener(stepDirectionListener);
             }
-        });*/
 
-        // add the sensor from direction detect to our sensorlist, so we can stop it later
-        sensorList.add(directionDetect.getSensor());
+
+            // add the sensor from direction detect to our sensorlist, so we can stop it later
+            sensorList.add(directionDetect.getSensor());
+        }
+
 
         // create different position module, depending on chosen viarant
         if (calibrationData.getIndoorMeasurementType() == IndoorMeasurementType.VARIANT_A) {
