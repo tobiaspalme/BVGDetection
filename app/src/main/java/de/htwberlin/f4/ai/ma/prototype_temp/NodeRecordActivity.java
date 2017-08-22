@@ -115,7 +115,6 @@ public class NodeRecordActivity extends BaseActivity {
         }
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-
         jsonWriter = new JsonWriter(this);
 
         recordButton = (Button) findViewById(R.id.record_button);
@@ -146,6 +145,9 @@ public class NodeRecordActivity extends BaseActivity {
         if (hasPermissions(this, permissions)) {
             refreshWifiDropdown();
         }
+
+        //timestamp = new Timestamp(System.currentTimeMillis());
+
 
         refreshImageview.setImageResource(R.drawable.refresh);
         refreshImageview.setOnClickListener(new View.OnClickListener() {
@@ -339,9 +341,9 @@ public class NodeRecordActivity extends BaseActivity {
 
             // Determine if picture reference has to be added to Node
             String picPath;
-            long realTimestamp = timestamp.getTime();
 
             if (pictureTaken) {
+                long realTimestamp = timestamp.getTime();
                 picPath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp + ".jpg";
             } else {
                 picPath = null;

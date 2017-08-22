@@ -110,16 +110,16 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/measure_wifi_button_text"
-        android:id="@+id/record_button" />
-
-    <Button
         android:id="@+id/capture_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/capture_button" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/measure_wifi_button_text"
+        android:id="@+id/record_button" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
