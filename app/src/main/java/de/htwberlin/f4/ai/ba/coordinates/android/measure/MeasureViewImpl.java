@@ -171,7 +171,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
                     if (image.exists()) {
                         //using glide to reduce ui lag
-                        Glide.with(view.getContext())
+                        Glide.with(getContext())
                                 .load(startNode.getPicturePath())
                                 .into(startNodeImage);
                     }
@@ -205,7 +205,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
 
                     if (image.exists()) {
                         //using glide to reduce ui lag
-                        Glide.with(getApplicationContext())
+                        Glide.with(getContext())
                                 .load(targetNode.getPicturePath())
                                 .into(targetNodeImage);
                         //targetNodeImage.setImageURI(Uri.parse(targetNode.getPicturePath()));
