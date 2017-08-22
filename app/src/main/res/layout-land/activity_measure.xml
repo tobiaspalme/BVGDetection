@@ -1,0 +1,348 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="1"
+                android:layout_weight="0.5">
+
+                <ImageView
+                    android:id="@+id/coordinates_measure_compass_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/compass" />
+
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:weightSum="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:weightSum="1">
+
+                    <!-- schritte -->
+                    <TextView
+                        android:id="@+id/coordinates_measure_stephint"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/measure_steps"
+                        android:layout_weight="0.7"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_stepvalue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_weight="0.3"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:weightSum="1">
+
+                    <!-- meter -->
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_distancehint"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/measure_distance"
+                        android:layout_weight="0.7"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_distancevalue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:text="0"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:id="@+id/coordinates_measure_compass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:text="0°"
+                        android:textSize="24sp" />
+
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.11"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/coordinates_measure_coordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="x | y | z"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="30sp"/>
+    </RelativeLayout>
+
+
+    <!-- buttons -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.125"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/coordinates_measure_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="@string/measure_start" />
+
+        <Button
+            android:id="@+id/coordinates_measure_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="@string/measure_stop" />
+
+        <Button
+            android:id="@+id/coordinates_measure_add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="@string/measure_add" />
+
+    </LinearLayout>
+
+
+    <!--
+    <ListView
+        android:id="@+id/coordinates_measure_steplist"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="false"/>
+    -->
+
+    <!-- Layout for Start and Target Node -->
+    <!-- divide into 3 parts horizontal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.475"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="1">
+
+        <!-- start node -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:text="Start Ort"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <Spinner
+                android:id="@+id/coordinates_measure_startnode"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.2" />
+
+            <ImageView
+                android:id="@+id/coordinates_measure_start_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.4" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.175">
+
+                <TextView
+                    android:id="@+id/coordinates_measure_start_coords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:text="x | y | z"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <!-- edge -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/coordinates_measure_edge_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="35dp"
+                    android:text="0.0"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/coordinates_measure_arrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/arrow_right" />
+
+                <ImageView
+                    android:id="@+id/coordinates_measure_handycapped"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/coordinates_measure_arrow" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <!-- target node -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:text="Ziel Ort"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+
+            <Spinner
+                android:id="@+id/coordinates_measure_targetnode"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.2" />
+
+            <ImageView
+                android:id="@+id/coordinates_measure_target_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.4" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.175">
+
+                <TextView
+                    android:id="@+id/coordinates_measure_target_coords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:text="x | y | z"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
