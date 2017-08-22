@@ -350,8 +350,8 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         // since the distance is calculated in meters we need to convert it into cm for edge weight
-        int weightCm = Math.round(edgeDistance*100);
-        edge.setWeight(weightCm);
+        //int weightCm = Math.round(edgeDistance*100);
+        edge.setWeight(edgeDistance);
         // insert edge when there is no existing edge yet
         if (!edgeFound) {
             databaseHandler.insertEdge(edge);

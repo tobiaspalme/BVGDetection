@@ -27,7 +27,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.175">
+                android:layout_weight="0.25">
 
                 <TextView
                     android:id="@+id/edgedetails_start_id"
@@ -80,7 +80,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.175">
+                android:layout_weight="0.25">
 
                 <TextView
                     android:id="@+id/edgedetails_target_id"
@@ -126,7 +126,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.075"
+        android:layout_weight="0.1"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -193,6 +193,7 @@
                 android:id="@+id/edgedetails_handycap_switch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:text="Barrierefrei"
 
                 android:textColor="?android:attr/textColorTertiary"
@@ -237,7 +238,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.125"
         android:orientation="horizontal">
 
 

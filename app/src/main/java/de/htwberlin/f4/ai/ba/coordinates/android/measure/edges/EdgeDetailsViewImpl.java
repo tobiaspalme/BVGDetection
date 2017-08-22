@@ -174,17 +174,14 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         // check if the node has coordinates
         if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
             float[] nodeCoordinates = WKT.strToCoord(node.getCoordinates());
-            float x = Float.valueOf(nodeCoordinates[0]);
-            float y = Float.valueOf(nodeCoordinates[1]);
-            float z = Float.valueOf(nodeCoordinates[2]);
 
-            float roundX = Math.round(x * 100.0) / 100.0f;
-            float roundY = Math.round(y * 100.0) / 100.0f;
-            float roundZ = Math.round(z * 100.0) / 100.0f;
+            float roundX = Math.round(nodeCoordinates[0] * 100.0) / 100.0f;
+            float roundY = Math.round(nodeCoordinates[1] * 100.0) / 100.0f;
+            float roundZ = Math.round(nodeCoordinates[2] * 100.0) / 100.0f;
 
-            startNodeCoordsView.setText(roundX + " / " + roundY + " / " + roundZ);
+            startNodeCoordsView.setText(roundX + " | " + roundY + " | " + roundZ);
         } else {
-            startNodeCoordsView.setText("0.0 / 0.0 / 0.0");
+            startNodeCoordsView.setText("0.0 | 0.0 | 0.0");
         }
 
     }
@@ -209,25 +206,23 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         // check if the node has coordinates
         if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
             float[] nodeCoordinates = WKT.strToCoord(node.getCoordinates());
-            float x = Float.valueOf(nodeCoordinates[0]);
-            float y = Float.valueOf(nodeCoordinates[1]);
-            float z = Float.valueOf(nodeCoordinates[2]);
 
-            float roundX = Math.round(x * 100.0) / 100.0f;
-            float roundY = Math.round(y * 100.0) / 100.0f;
-            float roundZ = Math.round(z * 100.0) / 100.0f;
+            float roundX = Math.round(nodeCoordinates[0] * 100.0) / 100.0f;
+            float roundY = Math.round(nodeCoordinates[1] * 100.0) / 100.0f;
+            float roundZ = Math.round(nodeCoordinates[2] * 100.0) / 100.0f;
 
-            targetNodeCoordsView.setText(roundX + " / " + roundY + " / " + roundZ);
+            targetNodeCoordsView.setText(roundX + " | " + roundY + " | " + roundZ);
         } else {
-            targetNodeCoordsView.setText("0.0 / 0.0 / 0.0");
+            targetNodeCoordsView.setText("0.0 | 0.0 | 0.0");
         }
     }
 
     @Override
     public void updateEdgeInfo(Edge edge) {
         // edge weight is in cm, but we use meters, so convert it
-        float edgeDistance = edge.getWeight() / 100.0f;
-        distanceValueView.setText(String.valueOf(edgeDistance));
+        //float edgeDistance = edge.getWeight() / 100.0f;
+        float edgeDistance = edge.getWeight();
+        distanceValueView.setText(String.valueOf(Math.round(edgeDistance * 100.0) / 100.0f));
 
         if (edge.getAccessibility()) {
             handycapSwitch.setChecked(true);

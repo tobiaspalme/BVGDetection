@@ -38,16 +38,16 @@
     <string name="step_setup_average_stepperiod">Schrittdauer:</string>
     <string name="step_setup_compass_hint">Bitte Kompass überprüfen und bei Bedarf kalibrieren!</string>
 
-    <!-- fragment_coordinates_measure -->
+    <!-- activity_measure -->
     <string name="measure_start">Start</string>
     <string name="measure_stop">Stop</string>
-    <string name="measure_add">Add</string>
+    <string name="measure_add">Schritt</string>
     <string name="measure_pressure">Luftdruck:</string>
     <string name="measure_steps">Schritte:</string>
     <string name="measure_distance">Distanz:</string>
     <string name="measure_height">Höhe:</string>
 
-    <!-- fragment_coordinates_record -->
+    <!-- activity_sensor_record -->
     <string name="x_caption">X:</string>
     <string name="y_caption">Y:</string>
     <string name="z_caption">Z:</string>

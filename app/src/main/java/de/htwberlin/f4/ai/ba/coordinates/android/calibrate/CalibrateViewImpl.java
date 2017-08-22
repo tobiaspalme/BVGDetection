@@ -2,23 +2,16 @@ package de.htwberlin.f4.ai.ba.coordinates.android.calibrate;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
-
-import org.w3c.dom.Text;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
 
@@ -61,7 +54,7 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, container, false);
+        View root = inflater.inflate(R.layout.activity_calibrate_step1, container, false);
 
         return root;
     }
@@ -130,12 +123,12 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
     private void loadStepOneView() {
         //LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        //View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step1, null);
+        //View view = inflater.inflate(R.layout.activity_calibrate_step1, null);
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         contentFrameLayout.removeAllViews();
 
-        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step1, contentFrameLayout);
+        View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step1, contentFrameLayout);
 
 
         //ViewGroup rootView = (ViewGroup) getView();
@@ -209,7 +202,7 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
     private void loadStepTwoView() {
         /*
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step2, null);
+        View view = inflater.inflate(R.layout.activity_calibrate_step2, null);
 
 
         ViewGroup rootView = (ViewGroup) getView();
@@ -219,7 +212,7 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         contentFrameLayout.removeAllViews();
-        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step2, contentFrameLayout);
+        View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step2, contentFrameLayout);
 
 
 
@@ -276,14 +269,14 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
     private void loadStepThreeView() {
         /*
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_coordinates_calibrate_step3, null);
+        View view = inflater.inflate(R.layout.activity_calibrate_step3, null);
         ViewGroup rootView = (ViewGroup) getView();
         rootView.removeAllViews();
         rootView.addView(view);*/
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         contentFrameLayout.removeAllViews();
-        View view = getLayoutInflater().inflate(R.layout.fragment_coordinates_calibrate_step3, contentFrameLayout);
+        View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step3, contentFrameLayout);
 
         Button btnNext = (Button) view.findViewById(R.id.coordinates_calibrate_next_3);
         btnNext.setOnClickListener(new View.OnClickListener() {
