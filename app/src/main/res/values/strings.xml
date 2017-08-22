@@ -127,6 +127,7 @@
     <!-- acitvity_navigation -->
     <string name="start_navigation_button_text">Route anzeigen</string>
     <string name="navigation_result_header">Ihre Route:</string>
+    <string name="no_route_found">Keine Route gefunden.</string>
 
 
     <string name="refreshed_toast">WLANs Aktualisiert</string>

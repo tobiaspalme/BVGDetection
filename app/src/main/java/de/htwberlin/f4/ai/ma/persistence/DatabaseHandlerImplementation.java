@@ -76,18 +76,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     private static final String RESULT_SELECTED_NODE = "selectednode";
     private static final String RESULT_MEASURED_NODE = "measurednode";
 
-
-
-
-    private NodeFactory nodeFactory;
     private JSONConverter jsonConverter = new JSONConverter();
     private Context context;
-
-
-    //private int averageOrder;
-    //private int knnValue;
-    //private int kalmanValue;
-    //private double percentage;
 
 
     public DatabaseHandlerImplementation(Context context) {
@@ -206,7 +196,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         if (cursor.moveToFirst()) {
             do {
-                Node node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
+                Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
                         new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
@@ -226,7 +216,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            node = nodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
+            node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
                     new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
             Log.d("DB: select_node", nodeID);
         }

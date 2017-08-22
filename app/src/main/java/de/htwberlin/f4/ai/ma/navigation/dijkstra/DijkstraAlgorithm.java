@@ -21,6 +21,9 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
  * Created by Johann Winter
  */
 
+
+// TODO: RETURNS
+
 public class DijkstraAlgorithm {
 
     /**
@@ -29,8 +32,8 @@ public class DijkstraAlgorithm {
      * Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
      * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
      * It is important that methods from the Node and Edge classes (of the Model) are avoided.
-     * This allows us to change just how the mapping to the Dijkstra's Vertices and Edges work.
-     * "Prinzip der lose Kopplung"
+     * This allows us to change just how the mapping to the DijkstraNodes and Edges work.
+     * "Prinzip der losen Kopplung"
      */
 
         // dijkstraNodes and dijkstraEdges
@@ -63,17 +66,17 @@ public class DijkstraAlgorithm {
 
 
         /**
-         * Map the normal Node objects from the Model to the custom Vertex of the Dijkstra Algorithm.
+         * Map the normal Node objects from the Model to the custom DijkstraNode of the Dijkstra Algorithm.
          * This is done to avoid filling the model objects with logic elements.
          * @param nodes
          * @return
          */
         private List<DijkstraNode> mapNodes(ArrayList<Node> nodes) {
-            ArrayList<DijkstraNode> vertices = new ArrayList<>(nodes.size());
+            ArrayList<DijkstraNode> dijkstraNodes = new ArrayList<>(nodes.size());
             for(Node node : nodes){
-                vertices.add(new DijkstraNode(node));
+                dijkstraNodes.add(new DijkstraNode(node));
             }
-            return vertices;
+            return dijkstraNodes;
         }
 
         // TODO Beschreibung
@@ -120,19 +123,19 @@ public class DijkstraAlgorithm {
          */
         public void execute(String sourceNodeId) throws IllegalArgumentException {
             //final Node sourceNode = graph.getNode(sourceNodeId);
-            final Node sourceNode = databaseHandler.getNode(sourceNodeId);
+            final Node source = databaseHandler.getNode(sourceNodeId);
 
-            if(sourceNode == null){
+            if(source == null){
                 throw new IllegalArgumentException("Source Node Id is invalid! Given was:" + sourceNodeId);
             }
-            final DijkstraNode sourceVertex = new DijkstraNode(databaseHandler.getNode(sourceNodeId));
+            final DijkstraNode sourceNode = new DijkstraNode(databaseHandler.getNode(sourceNodeId));
 
             settledNodes = new HashSet<>();
             unSettledNodes = new HashSet<>();
             distance = new HashMap<>();
             predecessors = new HashMap<>();
-            distance.put(sourceVertex, 0.0);
-            unSettledNodes.add(sourceVertex);
+            distance.put(sourceNode, 0.0);
+            unSettledNodes.add(sourceNode);
             while (unSettledNodes.size() > 0) {
                 DijkstraNode node = getMinimum(unSettledNodes);
                 settledNodes.add(node);
@@ -164,7 +167,7 @@ public class DijkstraAlgorithm {
 
 
         /**
-         * Get the distance between the two vertices
+         * Get the distance between the two DijkstraNodes
          * @param node
          * @param target
          * @return
@@ -215,13 +218,13 @@ public class DijkstraAlgorithm {
         }
 
         /**
-         * Get the minimum shortest distance of all the vertices.
-         * @param dijkstraVertices
+         * Get the minimum shortest distance of all the DijkstraNodes.
+         * @param dijkstraNodes
          * @return
          */
-        private DijkstraNode getMinimum(Set<DijkstraNode> dijkstraVertices) {
+        private DijkstraNode getMinimum(Set<DijkstraNode> dijkstraNodes) {
             DijkstraNode minimum = null;
-            for (DijkstraNode dijkstraNode : dijkstraVertices) {
+            for (DijkstraNode dijkstraNode : dijkstraNodes) {
                 if (minimum == null) {
                     minimum = dijkstraNode;
                 } else {
@@ -236,7 +239,7 @@ public class DijkstraAlgorithm {
         /**
          *
          * @param dijkstraNode
-         * @return true if the vertex was already settled
+         * @return true if the DijkstraNode was already settled
          */
         private boolean isSettled(DijkstraNode dijkstraNode) {
             return settledNodes.contains(dijkstraNode);
@@ -245,11 +248,11 @@ public class DijkstraAlgorithm {
         /**
          * Gets the shortest distance to the destination, from the calculated start node (called through
          * the method execute)
-         * @param destinationVertex
+         * @param destinationNode
          * @return
          */
-        private double getShortestDistance(DijkstraNode destinationVertex) {
-            Double d = distance.get(destinationVertex);
+        private double getShortestDistance(DijkstraNode destinationNode) {
+            Double d = distance.get(destinationNode);
             if (d == null) {
                 return Double.MAX_VALUE;
             } else {
