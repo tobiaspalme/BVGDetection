@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -180,9 +181,11 @@ public class NodeEditActivity extends BaseActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                File imageFile = new File(node.getPicturePath());
-                                imageFile.delete();
-
+                                Log.d("NodeEditActivity", "Imagefilepath to delete: " + node.getPicturePath());
+                                if (node.getPicturePath() != null) {
+                                    File imageFile = new File(node.getPicturePath());
+                                    imageFile.delete();
+                                }
                                 databaseHandler.deleteNode(node);
                                 finish();
                             }

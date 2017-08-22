@@ -86,9 +86,10 @@ public class NodeListActivity extends BaseActivity {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    File imageFile = new File(allNodes.get(position).getPicturePath());
-                                    imageFile.delete();
-
+                                    if (allNodes.get(position).getPicturePath() != null) {
+                                        File imageFile = new File(allNodes.get(position).getPicturePath());
+                                        imageFile.delete();
+                                    }
                                     databaseHandler.deleteNode(allNodes.get(position));
                                     loadDbData();
                                 }
