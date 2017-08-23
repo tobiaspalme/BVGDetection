@@ -4,27 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_location_record"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/record_place"
             android:title="Ort aufnehmen" />
         <item
             android:id="@+id/nav_location_manager"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/manage_places"
             android:title="Orte verwalten" />
         <item
             android:id="@+id/nav_edges_manager"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ways"
             android:title="Wege verwalten" />
         <item
             android:id="@+id/nav_location_detect"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/location"
             android:title="Standort ermitteln" />
         <item
             android:id="@+id/nav_navigation"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/navigation"
             android:title="Navigation" />
         <item
             android:id="@+id/nav_import"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/import_export"
             android:title="Import / Export" />
         <item
             android:id="@+id/nav_settings"
