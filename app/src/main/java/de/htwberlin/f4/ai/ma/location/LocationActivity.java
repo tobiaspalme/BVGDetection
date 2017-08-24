@@ -29,7 +29,7 @@ import java.util.Set;
 
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
 //import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
-import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;

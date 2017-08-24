@@ -30,10 +30,10 @@
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationDetailedInfoActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.SettingsActivity" />
 
-        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.MeasureViewImpl" />
-        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.record.RecordViewImpl" />
-        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.calibrate.CalibrateViewImpl" />
-        <activity android:name="de.htwberlin.f4.ai.ba.coordinates.android.measure.edges.EdgeDetailsViewImpl"
+        <activity android:name="de.htwberlin.f4.ai.ma.android.measure.MeasureViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ma.android.record.RecordViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ma.android.calibrate.CalibrateViewImpl" />
+        <activity android:name="de.htwberlin.f4.ai.ma.android.measure.edges.EdgeDetailsViewImpl"
             android:windowSoftInputMode="stateHidden"/>
        <!--
         <activity
@@ -57,7 +57,7 @@
         </activity>
 
         <activity
-            android:name="de.htwberlin.f4.ai.ba.coordinates.android.CoordinatesActivity"
+            android:name="de.htwberlin.f4.ai.ma.android.CoordinatesActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
