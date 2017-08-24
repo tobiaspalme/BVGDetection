@@ -10,11 +10,12 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -42,12 +43,13 @@ public class NavigationActivity extends BaseActivity {
     ArrayList<String> itemsStartNodeSpinner;
     private ArrayList<String> itemsDestNodeSpinner;
     CheckBox accessibilityCheckbox;
+    private TextView totalDistanceTextview;
+
     ArrayList<String> navigationResultsList;
     ArrayList<Node> allNodes;
     DatabaseHandler databaseHandler;
     private String selectedStartNode;
     private String lastSelectedStartNode;
-
     NodeListAdapter resultListAdapter;
     ArrayList<String> nodeNames;
     ArrayList<String> nodeDescriptions;
@@ -67,6 +69,7 @@ public class NavigationActivity extends BaseActivity {
         startNavigationButton = (Button) findViewById(R.id.start_navigation_button);
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
+        totalDistanceTextview = (TextView) findViewById(R.id.total_distance_textview);
 
         itemsStartNodeSpinner = new ArrayList<>();
         itemsDestNodeSpinner = new ArrayList<>();
@@ -182,7 +185,7 @@ public class NavigationActivity extends BaseActivity {
 
                 DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext(), accessible);
                 dijkstraAlgorithm.execute(selectedStartNode);
-                LinkedList<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
+                List<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 
                 if (route == null) {
                     nodeNames.add(getString(R.string.no_route_found));
@@ -199,23 +202,25 @@ public class NavigationActivity extends BaseActivity {
                     }
                     */
 
+                    float totalDistance = 0;
 
                     for (int i = 0; i < route.size(); i++) {
                         nodeNames.add(route.get(i).getId());
                         nodeDescriptions.add(databaseHandler.getNode(route.get(i).getId()).getDescription());
                         nodePicturePaths.add(databaseHandler.getNode(route.get(i).getId()).getPicturePath());
 
-                        // Add length (weight) to the results list
+                        // Add distance (weight) to the results list
                         if (i+1 < route.size()) {
                             Edge e = databaseHandler.getEdge(route.get(i), route.get(i + 1));
-                            nodeNames.add("             " + String.valueOf(e.getWeight()) + "m");
+                            nodeNames.add("             " + String.valueOf(e.getWeight()) + " m");
                             nodeDescriptions.add("");
                             nodePicturePaths.add("");
+                            totalDistance += e.getWeight();
                         }
                     }
 
-
                     resultListAdapter.notifyDataSetChanged();
+                    totalDistanceTextview.setText("Strecke: " + String.valueOf(totalDistance) + " m");
 
                     // Click on Item -> show Node in NodeEditActivity
                     navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
