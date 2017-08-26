@@ -78,7 +78,7 @@
     <string name="measure_wifi_button_text">Fingerprint erstellen</string>
     <string name="record_another_node_title_text">Neuen Ort aufnehmen?</string>
     <string name="please_enter_node_name">Bitte erst einen Namen eingeben.</string>
-    <string name="record_another_node_question">Möchtest du noch einen Ort aufnehmen?</string>
+    <string name="record_another_node_question">Möchten Sie noch einen Ort aufnehmen?</string>
     <string name="no_fingerprint_title_text">Kein Fingerprint</string>
     <string name="node_saved_toast">Ort gespeichert</string>
     <string name="node_already_exists_toast">Ort existiert bereits: bitte neuen Namen wählen.</string>
@@ -89,6 +89,7 @@
 
     <!-- activity_nodelist -->
     <string name="nodelist_delete_entry_title_question">Eintrag löschen?</string>
+    <string name="nodelist_infobox_text"><b>Tip:</b> Antippen zum editieren, tippen + halten zum löschen</string>
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild</string>
@@ -118,6 +119,7 @@
     <string name="wrong_file_extension">Falsche Dateiendung</string>
     <string name="try_again">Erneut versuchen</string>
     <string name="filechooser_title">Bitte .db Datei wählen</string>
+    <string name="import_export_infobox_text"><b>Hinweis:</b> Wenn Sie neue Daten importieren, gehen alle bisherigen Daten verloren!</string>
 
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>
@@ -127,6 +129,7 @@
     <string name="start_navigation_button_text">Route anzeigen</string>
     <string name="navigation_result_header">Ihre Route:</string>
     <string name="no_route_found">Keine Route gefunden.</string>
+    <string name="navigation_infobox_text"><b>Hinweis:</b> Durch tippen auf die einzelnen Orte der Route können Details angezeigt werden.</string>
 
 
 

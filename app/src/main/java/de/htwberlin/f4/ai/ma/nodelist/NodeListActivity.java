@@ -66,11 +66,6 @@ public class NodeListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!nodeListIsEmpty) {
-                    /*Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
-                    intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
-                    startActivity(intent);*/
-
-
                     Intent intent = new Intent(getApplicationContext(), NodeRecordAndEditActivity.class);
                     intent.putExtra("nodeId",nodeListView.getAdapter().getItem(position).toString());
                     startActivity(intent);

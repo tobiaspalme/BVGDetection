@@ -27,6 +27,10 @@ public class NodeListAdapter extends ArrayAdapter {
     private ArrayList<String> nodeDescriptions;
     private ArrayList<String> nodePicturePaths;
 
+    private final int REGULAR_ITEM = 0;   // For "normal" Nodes
+    private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of NavigationActivity
+
+
 
     public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
         super(context, R.layout.item_nodes_listview);
@@ -45,31 +49,64 @@ public class NodeListAdapter extends ArrayAdapter {
         ViewHolder viewHolder = null;
 
         if (row == null) {
+
             LayoutInflater layoutInflater = context.getLayoutInflater();
-            row = layoutInflater.inflate(R.layout.item_nodes_listview, null, true);
+
+            if (getItemViewType(position) == REGULAR_ITEM) {
+                row = layoutInflater.inflate(R.layout.item_nodes_listview, null, true);
+            } else {
+                row = layoutInflater.inflate(R.layout.item_navigation_distance_separator, null, true);
+            }
+
             viewHolder = new ViewHolder(row);
             row.setTag(viewHolder);
-        } else {
+        }
+
+        else {
             viewHolder = (ViewHolder) row.getTag();
         }
 
 
-        viewHolder.nodeIdTextView.setText(nodeNames.get(position));
-        viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
+        if (getItemViewType(position) == REGULAR_ITEM) {
+            viewHolder.nodeIdTextView.setText(nodeNames.get(position));
+            viewHolder.nodeDescriptionTextView.setText(nodeDescriptions.get(position));
 
-        // Load images
-        if (nodePicturePaths.get(position) == null) {
-            viewHolder.nodeImageView.setVisibility(View.VISIBLE);
-            Glide.with(getContext()).load(R.drawable.unknown).into(viewHolder.nodeImageView);
-        } else if (!nodePicturePaths.get(position).equals("")){
-            viewHolder.nodeImageView.setVisibility(View.VISIBLE);
-            Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+            // Load images
+            if (nodePicturePaths.get(position) == null) {
+                viewHolder.nodeImageView.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(R.drawable.unknown).into(viewHolder.nodeImageView);
+            } else if (!nodePicturePaths.get(position).equals("")) {
+                viewHolder.nodeImageView.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(nodePicturePaths.get(position)).into(viewHolder.nodeImageView);
+            } else {
+                viewHolder.nodeImageView.setVisibility(View.INVISIBLE);
+            }
+            return row;
+
         } else {
-            viewHolder.nodeImageView.setVisibility(View.INVISIBLE);
+            viewHolder.distanceTextview.setText(nodeNames.get(position));
+            Glide.with(getContext()).load(R.drawable.arrow_down).into(viewHolder.arrowImageview);
+            return row;
         }
-
-        return row;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (nodeNames.get(position).startsWith("\t")) {
+            return DISTANCE_ITEM;
+        } else {
+            return REGULAR_ITEM;
+        }
+        //return super.getItemViewType(position);
+    }
+
+
+    @Override
+    public int getViewTypeCount() {
+        // Two different row types in NavigationActivity
+        return 2;
+    }
+
 
     @Nullable
     @Override

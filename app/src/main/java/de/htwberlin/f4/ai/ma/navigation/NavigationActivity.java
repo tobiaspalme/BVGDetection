@@ -125,8 +125,7 @@ public class NavigationActivity extends BaseActivity {
         databaseHandler.insertEdge(e5);
         databaseHandler.insertEdge(e6);
 //-----------------------------------
-
-
+        //navigationResultListview.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
         allNodes = databaseHandler.getAllNodes();
 
@@ -212,7 +211,7 @@ public class NavigationActivity extends BaseActivity {
                         // Add distance (weight) to the results list
                         if (i+1 < route.size()) {
                             Edge e = databaseHandler.getEdge(route.get(i), route.get(i + 1));
-                            nodeNames.add("             " + String.valueOf(e.getWeight()) + " m");
+                            nodeNames.add("\t" + String.valueOf(e.getWeight()) + " m");
                             nodeDescriptions.add("");
                             nodePicturePaths.add("");
                             totalDistance += e.getWeight();
@@ -226,9 +225,12 @@ public class NavigationActivity extends BaseActivity {
                     navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
-                            intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());
-                            startActivity(intent);
+
+                            if (position % 2 == 0) {
+                                Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
+                                intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());
+                                startActivity(intent);
+                            }
                         }
                     });
                 }

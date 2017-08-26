@@ -241,16 +241,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-
             Fingerprint fingerprint;
 
             // Check if fingerprint exists, else create null object for fingerprint
             if (cursor.getString(3) == null) {
-
-
-                Log.d("DBHANDLERIMPL", "GETNODE. cursor.getString(3) == null --> fingerprint = null");
-
-
                 fingerprint = null;
             } else {
                 fingerprint = new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
@@ -667,7 +661,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         for (SignalInformation sigInfo : signalInformationList) {
             for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
 
-                Log.d("DatabaseHanderlImpl", "--- getActuallyNode ---  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
+                Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
 
                 String macAdress = ssi.macAddress;
                 int signalStrength = ssi.signalStrength;
@@ -711,7 +705,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 }
                 if (countValue <= minValue) {
                     multiMap.removeAll(macAddress);
-                    Log.d("DatabaseHandlerImpl", "calculateNewNodeDataset  ---  remove MAC: " + macAddress);
+                    Log.d("DatabaseHandlerImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
                 }
             }
             //fill restructed Nodes
