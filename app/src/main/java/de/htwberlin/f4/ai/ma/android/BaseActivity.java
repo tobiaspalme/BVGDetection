@@ -20,7 +20,8 @@ import de.htwberlin.f4.ai.ma.location.LocationActivity;
 import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.ImportExportActivity;
-import de.htwberlin.f4.ai.ma.NodeRecordActivity;
+//import de.htwberlin.f4.ai.ma.NodeRecordActivity;
+import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
 import de.htwberlin.f4.ai.ma.SettingsActivity;
 
 public class BaseActivity extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.nav_location_record:
-                        intent = new Intent(getApplicationContext(), NodeRecordActivity.class);
+                        intent = new Intent(getApplicationContext(), NodeRecordAndEditActivity.class);
                         startActivity(intent);
                         drawerLayout.closeDrawers();
                         break;
