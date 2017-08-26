@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -16,7 +15,7 @@ import com.example.carol.bvg.R;
 
 import java.io.IOException;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 

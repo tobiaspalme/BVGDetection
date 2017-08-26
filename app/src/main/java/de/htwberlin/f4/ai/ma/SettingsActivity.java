@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.example.carol.bvg.R;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.BaseActivity;
 
 //import com.example.carol.bvg.SettingsFragment;
 

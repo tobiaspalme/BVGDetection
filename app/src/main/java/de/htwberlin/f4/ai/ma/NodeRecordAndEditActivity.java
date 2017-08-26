@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
