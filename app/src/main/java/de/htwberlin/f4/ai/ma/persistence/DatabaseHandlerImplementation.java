@@ -47,6 +47,9 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
 
 class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler {
 
+
+    // Static variables
+
     private static final String DATABASE_NAME = "indoor_data.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -80,10 +83,14 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     private Context context;
 
 
+    // Constructor
+
     public DatabaseHandlerImplementation(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -144,8 +151,13 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         values.put(NODE_ID, node.getId());
         values.put(NODE_DESCRIPTION, node.getDescription());
-        values.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
-        values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
+
+        // If the Node has a fingerprint
+        if (node.getFingerprint() != null) {
+            values.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
+        }
+
         values.put(NODE_COORDINATES, node.getCoordinates());
         values.put(NODE_PICTURE_PATH, node.getPicturePath());
         values.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
@@ -174,10 +186,15 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         contentValues.put(NODE_ID, node.getId());
         contentValues.put(NODE_DESCRIPTION, node.getDescription());
-        contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
         contentValues.put(NODE_COORDINATES, node.getCoordinates());
         contentValues.put(NODE_PICTURE_PATH, node.getPicturePath());
         contentValues.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
+
+        // If the Node has a fingerprint
+        if (node.getFingerprint() != null) {
+            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
+        }
 
         Log.d("DB: update_node: id:", node.getId());
 
@@ -196,8 +213,16 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
         if (cursor.moveToFirst()) {
             do {
-                Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
-                        new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
+                Fingerprint fingerprint;
+
+                // Check if fingerprint exists, else create null object for fingerprint
+                if (cursor.getString(3) == null) {
+                    fingerprint = null;
+                } else {
+                    fingerprint = new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
+                }
+
+                Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -216,8 +241,22 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1),
-                    new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3))), cursor.getString(4), cursor.getString(5), cursor.getString(6));
+
+            Fingerprint fingerprint;
+
+            // Check if fingerprint exists, else create null object for fingerprint
+            if (cursor.getString(3) == null) {
+
+
+                Log.d("DBHANDLERIMPL", "GETNODE. cursor.getString(3) == null --> fingerprint = null");
+
+
+                fingerprint = null;
+            } else {
+                fingerprint = new Fingerprint(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
+            }
+
+            node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
             Log.d("DB: select_node", nodeID);
         }
         database.close();
@@ -563,8 +602,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
-        boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);
-        boolean euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
+        boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", true);
+        boolean euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", true);
         boolean knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
 
         int movingAverageOrder = Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3"));
@@ -575,14 +614,15 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
         // Load all nodes which have a valid fingerprint
-        List<Node> nodesWithSignalInformation = new ArrayList<>();
+        List<Node> nodesWithFingerprint = new ArrayList<>();
         for (Node n : getAllNodes()) {
-            if (!n.getFingerprint().getSignalInformationList().isEmpty()) {
-                nodesWithSignalInformation.add(n);
+            if (n.getFingerprint() != null) {
+            //if (!n.getFingerprint().getSignalInformationList().isEmpty()) {
+                nodesWithFingerprint.add(n);
             }
         }
 
-        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithSignalInformation);
+        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithFingerprint);
         List<RestructedNode> calculatedNodeList = new ArrayList<>();
 
         if (!restructedNodeList.isEmpty()) {

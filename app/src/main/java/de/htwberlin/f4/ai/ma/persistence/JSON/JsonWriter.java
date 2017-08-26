@@ -85,7 +85,8 @@ public class JsonWriter {
             jsonObjectNode.put("picturePath", node.getPicturePath());
             jsonObjectNode.put("additionalInfo", node.getAdditionalInfo());
 
-            if (node.getFingerprint().getSignalInformationList() != null) {
+            //if (node.getFingerprint().getSignalInformationList() != null) {
+            if (node.getFingerprint() != null) {
                 JSONArray signalJsonArray = new JSONArray();
                 for (int i = 0; i < node.getFingerprint().getSignalInformationList().size(); i++) {
 

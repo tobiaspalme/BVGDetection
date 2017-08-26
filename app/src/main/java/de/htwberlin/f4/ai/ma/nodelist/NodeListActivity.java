@@ -16,10 +16,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.htwberlin.f4.ai.ba.coordinates.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.NodeEditActivity;
+//import de.htwberlin.f4.ai.ma.NodeEditActivity;
 
 
 /**
@@ -65,8 +66,13 @@ public class NodeListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!nodeListIsEmpty) {
-                    Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
+                    /*Intent intent = new Intent(getApplicationContext(), NodeEditActivity.class);
                     intent.putExtra("nodeName", nodeListView.getAdapter().getItem(position).toString());
+                    startActivity(intent);*/
+
+
+                    Intent intent = new Intent(getApplicationContext(), NodeRecordAndEditActivity.class);
+                    intent.putExtra("nodeId",nodeListView.getAdapter().getItem(position).toString());
                     startActivity(intent);
                 }
             }

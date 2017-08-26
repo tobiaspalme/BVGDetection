@@ -66,7 +66,7 @@
     <string name="import_export_button_text">Importieren / Exportieren</string>
     <string name="settings_button">Einstellungen</string>-->
 
-    <!-- activity_node_record -->
+    <!-- activity_node_record_and_edit -->
     <string name="capture_button">Bild aufnehmen</string>
     <string name="description_text">Beschreibung:</string>
     <string name="measure_time_text">Messzeit:</string>
@@ -75,13 +75,17 @@
     <string name="minutes_text">Minuten</string>
     <string name="save_node_button_text">Ort speichern</string>
     <string name="standard_wifi_name">BVG Wi-Fi</string>
-    <string name="measure_wifi_button_text">WiFi-Fingerprint erstellen</string>
+    <string name="measure_wifi_button_text">Fingerprint erstellen</string>
     <string name="record_another_node_title_text">Neuen Ort aufnehmen?</string>
     <string name="please_enter_node_name">Bitte erst einen Namen eingeben.</string>
     <string name="record_another_node_question">Möchtest du noch einen Ort aufnehmen?</string>
     <string name="no_fingerprint_title_text">Kein Fingerprint</string>
     <string name="node_saved_toast">Ort gespeichert</string>
     <string name="node_already_exists_toast">Ort existiert bereits: bitte neuen Namen wählen.</string>
+    <string name="fingerprint_finished">Messung beendet.</string>
+    <string name="initial_wifi_name">Ursprüngliches WLAN:</string>
+    <string name="coordinates_text">Koordinaten:</string>
+
 
     <!-- activity_nodelist -->
     <string name="nodelist_delete_entry_title_question">Eintrag löschen?</string>
@@ -89,14 +93,9 @@
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild</string>
 
-    <!-- acitvity_node_edit -->
-    <string name="coordinates_text">Coordinates:</string>
-    <string name="save_button_text">Speichern</string>
-    <string name="delete_button_text">Löschen</string>
-    <string name="delete_title_question">Löschen?</string>
-    <string name="change_picture_button_text">Bild aufnehmen/ändern</string>
-    <string name="change_fingerprint_button_text">Fingerprint aufnehmen/ändern</string>
-    <string name="input_measure_time">Bitte Messzeit eingeben:</string>
+
+
+
 
     <!-- activity_location -->
     <string name="measured_node_text">Gemessener Ort:</string>
@@ -130,7 +129,13 @@
     <string name="no_route_found">Keine Route gefunden.</string>
 
 
+
+
     <string name="refreshed_toast">WLANs Aktualisiert</string>
     <string name="refresh">refresh_button</string>
+
+    <string name="save_button_text">Speichern</string>
+    <string name="delete_button_text">Löschen</string>
+    <string name="delete_title_question">Löschen?</string>
 
 </resources>

@@ -331,7 +331,7 @@ public class LocationActivity extends BaseActivity {
 
                             if (sr.SSID.equals(wlanName)) {
                                 multiMap.put(sr.BSSID, sr.level);
-                                Log.d("LocationActivity", "Messung, SSID stimmt:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
+                                Log.d("LocationActivity", "Messung, SSID stimmt mit Dropdown überein:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
                                 long timestamp = sr.timestamp;
                                 Log.d("timestamp Sunshine", String.valueOf(timestamp));
                             }
@@ -366,11 +366,11 @@ public class LocationActivity extends BaseActivity {
 
         final List<SignalInformation> signalInformationList = new ArrayList<>();
 
-        for (String blub : bssid) {
+        for (String s : bssid) {
             int value = 0;
             int counter = 0;
 
-            for (int test : multiMap.get(blub)) {
+            for (int test : multiMap.get(s)) {
                 counter++;
                 value += test;
             }
@@ -378,7 +378,7 @@ public class LocationActivity extends BaseActivity {
 
             //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
             List<SignalStrengthInformation> SsiList = new ArrayList<>();
-            SignalStrengthInformation signal = new SignalStrengthInformation(blub, value);
+            SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
             SsiList.add(signal);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
@@ -394,6 +394,7 @@ public class LocationActivity extends BaseActivity {
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
+
                 LocationResultImplementation locationResult;
                 if (foundNode != null) {
 
