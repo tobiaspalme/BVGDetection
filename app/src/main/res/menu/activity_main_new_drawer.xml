@@ -34,15 +34,15 @@
 
         <item
             android:id="@+id/nav_measurement"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/measure"
             android:title="Messen" />
         <item
             android:id="@+id/nav_calibrate"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/calibrate"
             android:title="Kalibrieren" />
         <item
             android:id="@+id/nav_record"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/record"
             android:title="Aufnehmen" />
     </group>
 </menu>
