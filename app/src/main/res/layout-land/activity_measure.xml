@@ -158,22 +158,42 @@
             android:id="@+id/coordinates_measure_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="0.25"
             android:text="@string/measure_start" />
 
         <Button
             android:id="@+id/coordinates_measure_stop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="0.2"
             android:text="@string/measure_stop" />
 
         <Button
             android:id="@+id/coordinates_measure_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="0.2"
             android:text="@string/measure_add" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+
+
+        <ImageView
+            android:id="@+id/coordinates_measure_locate_wifi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            app:srcCompat="@drawable/locate_wifi" />
+
+        <ImageView
+            android:id="@+id/coordinates_measure_locate_qr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            app:srcCompat="@drawable/locate_qr" />
 
     </LinearLayout>
 

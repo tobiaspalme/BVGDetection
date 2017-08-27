@@ -99,6 +99,8 @@ public class MeasureControllerImpl implements MeasureController {
     private boolean handycapFriendly;
     private SensorType compassType;
 
+    private boolean measurementRunning; // to deactivate wifi / qr code localization during measurement
+
 
     @Override
     public void setView(MeasureView view) {
@@ -108,6 +110,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onStartClicked() {
+        measurementRunning = true;
 
         // check for calibration
         if (!alreadyCalibrated()) {
@@ -353,6 +356,8 @@ public class MeasureControllerImpl implements MeasureController {
         if (coords != null) {
             showMeasureFinishDialog();
         }
+
+        measurementRunning = false;
     }
 
     private void saveMeasurementData() {
@@ -410,6 +415,7 @@ public class MeasureControllerImpl implements MeasureController {
         if (indoorMeasurement != null) {
             indoorMeasurement.stop();
         }
+        measurementRunning = false;
     }
 
     @Override
@@ -470,50 +476,54 @@ public class MeasureControllerImpl implements MeasureController {
 
     @Override
     public void onLocateWifiClicked() {
-        WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiManager.startScan();
-        List<ScanResult> wifiScanList = wifiManager.getScanResults();
+        if (!measurementRunning) {
+            WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            wifiManager.startScan();
+            List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-        final ArrayList<String> wifiNamesList = new ArrayList<>();
-        for (ScanResult sr : wifiScanList) {
-            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                wifiNamesList.add(sr.SSID);
+            final ArrayList<String> wifiNamesList = new ArrayList<>();
+            for (ScanResult sr : wifiScanList) {
+                if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                    wifiNamesList.add(sr.SSID);
+                }
             }
-        }
 
 
 
-        final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()-1];
-        for (int i = 0; i < wifiArray.length; i++) {
-            wifiArray[i] = wifiNamesList.get(i);
-        }
-
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle("WLAN wählen");
-        builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.e("value is", "" + which);
-                Log.d("tmp", "wlan: " + wifiArray[which]);
-                getMeasuredNode(wifiNamesList.get(which), 3);
+            final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()-1];
+            for (int i = 0; i < wifiArray.length; i++) {
+                wifiArray[i] = wifiNamesList.get(i);
             }
-        });
-        builder.show();
+
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("WLAN wählen");
+            builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.e("value is", "" + which);
+                    Log.d("tmp", "wlan: " + wifiArray[which]);
+                    getMeasuredNode(wifiNamesList.get(which), 3);
+                }
+            });
+            builder.show();
+        }
     }
 
     @Override
     public void onLocateQrClicked() {
-        Intent intent = new Intent(view.getContext().getApplicationContext(), BarcodeCaptureActivity.class);
-        Activity activity = (Activity) view;
-        activity.startActivityForResult(intent, 1);
+        if (!measurementRunning) {
+            Intent intent = new Intent(view.getContext().getApplicationContext(), BarcodeCaptureActivity.class);
+            Activity activity = (Activity) view;
+            activity.startActivityForResult(intent, 1);
+        }
     }
 
+    // json string: {"id": "nodeid","coordinates":[0.1,1.1,0.15]}
     @Override
     public void onQrResult(String qr) {
-        Toast toast = Toast.makeText(view.getContext(), "qr: " + qr, Toast.LENGTH_SHORT);
-        toast.show();
+
         try {
             JSONObject jsonObject = new JSONObject(qr);
             String id = jsonObject.getString("id");
@@ -554,9 +564,9 @@ public class MeasureControllerImpl implements MeasureController {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast toast = Toast.makeText(view.getContext(), "Fehlerhafter QR-Code", Toast.LENGTH_SHORT);
+            toast.show();
         }
-
 
     }
 
