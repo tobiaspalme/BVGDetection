@@ -1,8 +1,12 @@
 package de.htwberlin.f4.ai.ma.android.measure;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,16 +15,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.measure.barcode.BarcodeCaptureActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.measurement.WKT;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -49,7 +58,13 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private ImageView targetNodeImage;
     private ImageView handycapImage;
     private ImageView edgeArrow;
+    private ImageView locateWifiImage;
+    private ImageView locateQrImage;
 
+    private ArrayAdapter<String> startAdapter;
+    private ArrayAdapter<String> targetAdapter;
+    private final List<String> nodeNames = new ArrayList<>();
+    private final List<Node> nodeList = new ArrayList<>();
 
     public MeasureViewImpl() {
         controller = new MeasureControllerImpl();
@@ -65,11 +80,11 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         getLayoutInflater().inflate(R.layout.activity_measure, contentFrameLayout);
 
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(getContext());
-        final List<Node> nodeList = databaseHandler.getAllNodes();
-        List<String> nodeNames = new ArrayList<>();
+        List<Node> tmpNodeList = databaseHandler.getAllNodes();
 
-        for (Node node : nodeList) {
+        for (Node node : tmpNodeList) {
             nodeNames.add(node.getId());
+            nodeList.add(node);
         }
 
         compassView = (TextView) findViewById(R.id.coordinates_measure_compass);
@@ -117,6 +132,26 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 .load(R.drawable.barrierefrei)
                 .into(handycapImage);
 
+        locateWifiImage = (ImageView) findViewById(R.id.coordinates_measure_locate_wifi);
+        locateWifiImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onLocateWifiClicked();
+                }
+            }
+        });
+
+        locateQrImage = (ImageView) findViewById(R.id.coordinates_measure_locate_qr);
+        locateQrImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller != null) {
+                    controller.onLocateQrClicked();
+                }
+            }
+        });
+
         startNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_start_coords);
         targetNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_target_coords);
 
@@ -157,7 +192,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         btnAdd.setEnabled(false);
 
         startNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_startnode);
-        final ArrayAdapter<String> startAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
+        startAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
         startNodeSpinner.setAdapter(startAdapter);
         startNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -190,7 +225,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         });
 
         targetNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_targetnode);
-        final ArrayAdapter<String> targetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
+        targetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
         targetNodeSpinner.setAdapter(targetAdapter);
         targetNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -339,6 +374,67 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         if (btnAdd != null) {
             btnAdd.setEnabled(false);
         }
+    }
+
+    @Override
+    public void startQrActivity() {
+        Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    // used when we receive startnode from wifi scan or qr code
+    @Override
+    public void setStartNode(Node node) {
+        // check if we know node already and stored it in list
+        boolean found = false;
+        for (String nodeName : nodeNames) {
+            if (node.getId().equals(nodeName)) {
+                found = true;
+                break;
+            }
+        }
+        // new node
+        if (!found) {
+            startAdapter.add(node.getId());
+            nodeList.add(node);
+
+            startNodeSpinner.setSelection(nodeList.indexOf(node));
+            float[] coordinates = WKT.strToCoord(node.getCoordinates());
+            updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+        }
+        // existing node
+        else {
+            // find correct node object stored in nodelist, so we can set spinner selection
+            Node foundNode = null;
+            for (Node tmpNode : nodeList) {
+                if (tmpNode.getId().equals(node.getId())) {
+                    foundNode = tmpNode;
+                    break;
+                }
+            }
+
+            startNodeSpinner.setSelection(nodeList.indexOf(foundNode));
+            float[] coordinates = WKT.strToCoord(node.getCoordinates());
+            updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    if (controller != null) {
+                        controller.onQrResult(barcode.displayValue);
+                    }
+                } else {
+                    if (controller != null) {
+                        controller.onQrResult("");
+                    }
+                }
+            } else Log.e("tmp", "error");
+        } else super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

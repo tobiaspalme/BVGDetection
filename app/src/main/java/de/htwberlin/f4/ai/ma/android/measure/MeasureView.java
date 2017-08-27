@@ -3,6 +3,7 @@ package de.htwberlin.f4.ai.ma.android.measure;
 import android.content.Context;
 
 import de.htwberlin.f4.ai.ma.edge.Edge;
+import de.htwberlin.f4.ai.ma.node.Node;
 
 /**
  * Created by benni on 18.07.2017.
@@ -24,6 +25,8 @@ public interface MeasureView {
     void disableStop();
     void enableAdd();
     void disableAdd();
+    void startQrActivity();
+    void setStartNode(Node node);
 
     Context getContext();
 

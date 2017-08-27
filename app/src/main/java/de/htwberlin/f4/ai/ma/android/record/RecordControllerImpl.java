@@ -158,7 +158,7 @@ public class RecordControllerImpl implements RecordController {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Coordinates/RecordData");
+        File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/SensorData");
         if (!dir.exists()) {
             dir.mkdirs();
         }

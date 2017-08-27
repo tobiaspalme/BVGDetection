@@ -1,26 +1,45 @@
 package de.htwberlin.f4.ai.ma.android.measure;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistanceImpl;
+import de.htwberlin.f4.ai.ma.android.measure.barcode.BarcodeCaptureActivity;
 import de.htwberlin.f4.ai.ma.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorChecker;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorCheckerImpl;
@@ -29,6 +48,8 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ma.location.LocationActivity;
+import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementType;
@@ -39,9 +60,13 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDete
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
 import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**
  * Created by benni on 18.07.2017.
@@ -67,6 +92,7 @@ public class MeasureControllerImpl implements MeasureController {
 
     private Node startNode;
     private Node targetNode;
+    private Node measuredNode; // node retrieved from wifi
 
     private List<StepData> stepList;
     private float[] coords = new float[3];
@@ -441,6 +467,188 @@ public class MeasureControllerImpl implements MeasureController {
             activity.startActivity(intent);
         }
     }
+
+    @Override
+    public void onLocateWifiClicked() {
+        WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.startScan();
+        List<ScanResult> wifiScanList = wifiManager.getScanResults();
+
+        final ArrayList<String> wifiNamesList = new ArrayList<>();
+        for (ScanResult sr : wifiScanList) {
+            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                wifiNamesList.add(sr.SSID);
+            }
+        }
+
+
+
+        final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()-1];
+        for (int i = 0; i < wifiArray.length; i++) {
+            wifiArray[i] = wifiNamesList.get(i);
+        }
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("WLAN wählen");
+        builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("value is", "" + which);
+                Log.d("tmp", "wlan: " + wifiArray[which]);
+                getMeasuredNode(wifiNamesList.get(which), 3);
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onLocateQrClicked() {
+        Intent intent = new Intent(view.getContext().getApplicationContext(), BarcodeCaptureActivity.class);
+        Activity activity = (Activity) view;
+        activity.startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onQrResult(String qr) {
+        Toast toast = Toast.makeText(view.getContext(), "qr: " + qr, Toast.LENGTH_SHORT);
+        toast.show();
+        try {
+            JSONObject jsonObject = new JSONObject(qr);
+            String id = jsonObject.getString("id");
+            JSONArray jsonArray = jsonObject.getJSONArray("coordinates");
+            double x = (double) jsonArray.get(0);
+            double y = (double) jsonArray.get(1);
+            double z = (double) jsonArray.get(2);
+
+            Log.d("tmp", "id= " + id);
+            Log.d("tmp", "x= " + x);
+            Log.d("tmp", "y= " + y);
+            Log.d("tmp", "z= " + z);
+
+            DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
+
+            // check if node from qr code already exists
+            Node node = databaseHandler.getNode(id);
+            // create coordinates
+            float[] nodeCoords = new float[3];
+            nodeCoords[0] = (float) x;
+            nodeCoords[1] = (float) y;
+            nodeCoords[2] = (float) z;
+            String coordStr = WKT.coordToStr(nodeCoords);
+
+            // node exists
+            if (node != null) {
+                // update existing node with coords from qr code
+                node.setCoordinates(coordStr);
+                databaseHandler.updateNode(node, node.getId());
+                // update ui
+                view.setStartNode(node);
+            }
+            // new node
+            else {
+                node = NodeFactory.createInstance(id, null, null, coordStr, null, null);
+                databaseHandler.insertNode(node);
+                view.setStartNode(node);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    // from johann, modified
+    private void getMeasuredNode(final String wlanName, final int times) {
+
+        WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+        Multimap<String, Integer> multiMap = ArrayListMultimap.create();
+        for (int i = 0; i < times; i++) {
+
+            wifiManager.startScan();
+
+            List<ScanResult> wifiScanList = wifiManager.getScanResults();
+
+            if(wifiScanList.get(0).timestamp == 0 && times == 1) {
+                return;
+            }
+
+
+            for (final ScanResult sr : wifiScanList) {
+                if (sr.SSID.equals(wlanName)) {
+                    multiMap.put(sr.BSSID, sr.level);
+                }
+            }
+
+            wifiScanList.clear();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // find node
+        Node node = makeFingerprint(multiMap);
+        if (node != null) {
+            measuredNode = node;
+            Toast toast = Toast.makeText(view.getContext(), "Node: " + node.getId(), Toast.LENGTH_SHORT);
+            toast.show();
+            view.setStartNode(measuredNode);
+        } else {
+            Toast toast = Toast.makeText(view.getContext(), "Es wurde kein Ort gefunden", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    // from johann, modified
+    private Node makeFingerprint(Multimap<String, Integer> multiMap) {
+
+
+        Set<String> bssid = multiMap.keySet();
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
+        final List<Node> actuallyNode = new ArrayList<>();
+        final List<SignalInformation> signalInformationList = new ArrayList<>();
+
+
+
+        for (String s : bssid) {
+            int value = 0;
+            int counter = 0;
+
+            for (int test : multiMap.get(s)) {
+                counter++;
+                value += test;
+            }
+            value = value / counter;
+
+            //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
+            List<SignalStrengthInformation> SsiList = new ArrayList<>();
+            SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
+            SsiList.add(signal);
+            SignalInformation signalInformation = new SignalInformation("", SsiList);
+            signalInformationList.add(signalInformation);
+
+        }
+
+
+        FoundNode foundNode = databaseHandler.calculateNodeId(signalInformationList);
+        Node result = null;
+        if (foundNode != null) {
+            result = databaseHandler.getNode(foundNode.getId());
+        }
+
+        return result;
+    }
+
 
     private void handleNewStep() {
         // with each step we get the new position

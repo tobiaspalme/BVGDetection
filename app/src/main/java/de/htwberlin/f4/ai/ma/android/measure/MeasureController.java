@@ -20,4 +20,7 @@ public interface MeasureController {
     void onEdgeDetailsClicked();
     void onStartNodeImageClicked();
     void onTargetNodeImageClicked();
+    void onLocateWifiClicked();
+    void onLocateQrClicked();
+    void onQrResult(String qr);
 }
