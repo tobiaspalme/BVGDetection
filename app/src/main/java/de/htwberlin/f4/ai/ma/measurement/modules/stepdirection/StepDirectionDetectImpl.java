@@ -41,10 +41,9 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
     private SensorDataModel dataModel;
     private Context context;
 
-    // there seems to be a general lower acceleration for a step left / right
-    // so we chose a quite lower threshold value for those directions
-    private static final float THRESHOLD_POSITIVE_X = 2.25f;
-    private static final float THRESHOLD_NEGATIVE_X = -2.25f;
+
+    private static final float THRESHOLD_POSITIVE_X = 2.5f;
+    private static final float THRESHOLD_NEGATIVE_X = -2.5f;
     private static final float THRESHOLD_POSITIVE_Y = 2.75f;
     private static final float THRESHOLD_NEGATIVE_Y = -2.75f;
 

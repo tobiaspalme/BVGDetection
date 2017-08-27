@@ -6,7 +6,7 @@ package de.htwberlin.f4.ai.ma.android.sensors;
 
 public interface Sensor {
 
-    int SENSOR_RATE_UI = 75;
+    int SENSOR_RATE_UI = 50;
     int SENSOR_RATE_MEASUREMENT = 20;
     int SENSOR_RATE_FASTEST = 0;
 

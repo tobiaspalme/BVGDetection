@@ -15,15 +15,11 @@ import de.htwberlin.f4.ai.ma.measurement.modules.DistanceModule;
 
 public class DistanceModuleA implements DistanceModule {
 
-    protected SensorDataModel dataModel;
-    protected SensorFactory sensorFactory;
     protected float stepLength;
     protected Context context;
 
     public DistanceModuleA(Context context, float stepLength) {
         this.context = context;
-        dataModel = new SensorDataModelImpl();
-        sensorFactory = new SensorFactoryImpl(context);
         this.stepLength = stepLength;
     }
 

@@ -55,7 +55,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private Handler timerHandler;
     private StepDirectionRunnable stepDirectionRunnable;
     // delay for the direction detection in ms
-    private static final int DIRECTION_DETECT_DELAY = 100;
+    private static final int DIRECTION_DETECT_DELAY = 50;
 
 
     public IndoorMeasurementImpl(Context context) {
@@ -115,11 +115,13 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
         if (timerHandler != null) {
             timerHandler.removeCallbacks(stepDirectionRunnable);
         }
+
+        sensorList.clear();
     }
 
     @Override
     public void startSensors(int sensorRate, SensorType... sensorType) {
-        sensorList.clear();
+
 
         for (final SensorType type : sensorType) {
             Sensor sensor = sensorFactory.getSensor(type, sensorRate);

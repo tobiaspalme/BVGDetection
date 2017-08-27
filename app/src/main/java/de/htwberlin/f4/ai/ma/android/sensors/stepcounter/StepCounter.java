@@ -9,6 +9,9 @@ import android.util.Log;
 
 import java.sql.Timestamp;
 
+import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistance;
+import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistanceImpl;
+import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.Sensor;
@@ -31,9 +34,11 @@ public class StepCounter implements Sensor, SensorEventListener{
 
     private boolean firstRun;
     private long lastStepTimestamp;
-    // if next step occurs < THRESHOLD ms to last one, we dont count it
-    private static final int THRESHOLD = 400;
     private int sensorRate;
+    private int stepPeriod;
+    private static final int STEPPERIODTOLERANCE = 100;
+
+    private Context context;
 
 
     public StepCounter(Context context, int sensorRate) {
@@ -43,16 +48,28 @@ public class StepCounter implements Sensor, SensorEventListener{
         firstRun = true;
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         this.sensorRate = sensorRate;
+        this.context = context;
+    }
+
+    private int loadStepPeriod() {
+        CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(context);
+        CalibrationData calibrationData = calibratePersistance.load();
+        if (calibrationData != null) {
+            stepPeriod = calibrationData.getStepPeriod();
+        } else {
+            stepPeriod = 500;
+        }
+
+        return stepPeriod;
     }
 
     @Override
     public void start() {
-        // initialize with -1, because as soon as we start the sensor the event onSensorChanged() gets triggered,
-        // without doing any steps
         stepCount = 0;
         stepCounterSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_DETECTOR);
         if (stepCounterSensor != null) {
             sensorManager.registerListener(this, stepCounterSensor, sensorRate);
+            loadStepPeriod();
         }
     }
 
@@ -98,7 +115,7 @@ public class StepCounter implements Sensor, SensorEventListener{
         }
 
         // if a step was fail detected
-        if (currentStepTimestamp - lastStepTimestamp < THRESHOLD) {
+        if (currentStepTimestamp - lastStepTimestamp < (stepPeriod - STEPPERIODTOLERANCE)) {
             Log.d("tmp", "failstep");
             return;
         }

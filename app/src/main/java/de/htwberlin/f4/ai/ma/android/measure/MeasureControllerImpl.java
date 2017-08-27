@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.carol.bvg.R;
 
@@ -70,6 +71,7 @@ public class MeasureControllerImpl implements MeasureController {
     private List<StepData> stepList;
     private float[] coords = new float[3];
     private boolean handycapFriendly;
+    private SensorType compassType;
 
 
     @Override
@@ -176,9 +178,10 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         indoorMeasurement.startSensors(Sensor.SENSOR_RATE_MEASUREMENT,
-                                       compassType,
-                                       SensorType.BAROMETER,
-                                       SensorType.STEPCOUNTER);
+                                       SensorType.BAROMETER);
+
+        // start compass with ui delay
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI, compassType);
 
         calibrate();
         showWaitForCalibrationDialoag();
@@ -446,7 +449,7 @@ public class MeasureControllerImpl implements MeasureController {
         float[] newStepCoords = WKT.strToCoord(indoorMeasurement.getCoordinates());
         if (newStepCoords != null) {
             // calculate distance from previous step to new step
-            float stepDistance = calcDistance(coords[0], coords[1], newStepCoords[0], newStepCoords[1]);
+            float stepDistance = calcDistance(coords[0], coords[1], coords[2], newStepCoords[0], newStepCoords[1], newStepCoords[2]);
             edgeDistance += stepDistance;
 
             view.updateDistance(edgeDistance);
@@ -538,26 +541,28 @@ public class MeasureControllerImpl implements MeasureController {
                 CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
                 CalibrationData calibrationData = calibratePersistance.load();
 
-                // get coordinates from startnode and initialize measurement with those.
-                // if the node doesn't have any coordinates we initialize with 0,0,0
-                String startCoordinatesStr = startNode.getCoordinates();
-                if (startCoordinatesStr.length() > 0) {
-                    float[] startCoordinates = WKT.strToCoord(startCoordinatesStr);
-
-                    calibrationData.setCoordinates(startCoordinates);
-                }
-
-                calibrationData.setIndoorMeasurementType(measurementType);
-                calibrationData.setLowpassFilterValue(lowpassFilterValue);
-                calibrationData.setUseStepDirection(useStepDirectionDetect);
-
                 if (calibrationData != null) {
+                    // get coordinates from startnode and initialize measurement with those.
+                    // if the node doesn't have any coordinates we initialize with 0,0,0
+                    String startCoordinatesStr = startNode.getCoordinates();
+                    if (startCoordinatesStr != null && startCoordinatesStr.length() > 0) {
+                        float[] startCoordinates = WKT.strToCoord(startCoordinatesStr);
+
+                        calibrationData.setCoordinates(startCoordinates);
+                    }
+
+                    calibrationData.setIndoorMeasurementType(measurementType);
+                    calibrationData.setLowpassFilterValue(lowpassFilterValue);
+                    calibrationData.setUseStepDirection(useStepDirectionDetect);
+
                     // save new calibrated airpressure and azimuth
                     calibrationData.setAirPressure(airPressure);
                     // calibrate the indoormeasurement
                     indoorMeasurement.calibrate(calibrationData);
+                    // start step detector with 0 delay
+                    indoorMeasurement.startSensors(Sensor.SENSOR_RATE_FASTEST,
+                            SensorType.STEPCOUNTER);
                     // start measurement
-                    //indoorMeasurement.start(IndoorMeasurementType.VARIANT_A);
                     indoorMeasurement.start();
                 }
             }
@@ -606,8 +611,8 @@ public class MeasureControllerImpl implements MeasureController {
         }
     }
 
-    // calculate the distance from 2 points in 2 dimensions
-    private float calcDistance(float x1, float y1, float x2, float y2) {
-        return (float) Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
+    // calculate the distance from 2 points in 3 dimensions
+    private float calcDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
+        return (float) Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2),2));
     }
 }

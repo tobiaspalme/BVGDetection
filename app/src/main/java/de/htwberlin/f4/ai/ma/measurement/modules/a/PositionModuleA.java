@@ -47,18 +47,27 @@ public class PositionModuleA implements PositionModule {
         // orientation stuff
         double sina = Math.sin(Math.toRadians(90 - orientation));
         double cosa = Math.cos(Math.toRadians(90 - orientation));
-        float x = (float)cosa * distance;
-        float y = (float)sina * distance;
+        // calculate rho -> altitude = delta z
+        float p = (float) Math.sqrt(Math.pow(distance, 2) - Math.pow(altitude, 2));
+        // calculate movement along x and y axis using the calculated rho value
+        float x = (float)cosa * p;
+        float y = (float)sina * p;
+
+        Log.d("tmp", "calculate position");
 
         Log.d("tmp", "orientation: " + orientation);
-        Log.d("tmp", "calculated x movement: " + x);
-        Log.d("tmp", "calculated y movement: " + y);
+        Log.d("tmp", "calculated x : " + x);
+        Log.d("tmp", "calculated y : " + y);
+        Log.d("tmp", "calculated z : " + coordinates[2]);
+        Log.d("tmp", "calculated p : " + p);
+        Log.d("tmp", "sina : " + sina);
+        Log.d("tmp", "cosa : " + cosa);
 
 
         coordinates[0] += x;
         coordinates[1] += y;
-        // altitude
         coordinates[2] += altitude;
+
 
         Log.d("tmp", "new x: " + coordinates[0]);
         Log.d("tmp", "new y: " + coordinates[1]);
