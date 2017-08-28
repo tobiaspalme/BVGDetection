@@ -69,7 +69,7 @@ public class AltitudeModuleA implements AltitudeModule {
             // set new values
             lastStepTimestamp = currentStepTimestamp;
             //lastAltitude = currentAltitude;
-            if (Math.abs(altitudeDiff) >= 0.15) {
+            if (Math.abs(altitudeDiff) >= 0.1) {
                 lastAltitude = currentAltitude;
             } else {
                 altitudeDiff = 0;

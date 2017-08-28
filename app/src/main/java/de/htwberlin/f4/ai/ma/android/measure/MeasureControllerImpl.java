@@ -179,7 +179,7 @@ public class MeasureControllerImpl implements MeasureController {
                         }
                         break;
                     case STEPCOUNTER:
-                        handleNewStep();
+                        //handleNewStep();
                         break;
                     default:
                         break;
@@ -521,6 +521,7 @@ public class MeasureControllerImpl implements MeasureController {
     }
 
     // json string: {"id": "nodeid","coordinates":[0.1,1.1,0.15]}
+    //json string: {"id": "nodeid","coordinates": "POINT Z(0.1 0.2 0.3)"}
     @Override
     public void onQrResult(String qr) {
 
@@ -678,7 +679,8 @@ public class MeasureControllerImpl implements MeasureController {
             System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
             stepData.setCoords(newStepCoords);
             stepList.add(stepData);
-
+            // TODO: REMOVE
+            save();
         }
 
         view.updateStepCount(stepCount);
@@ -833,4 +835,6 @@ public class MeasureControllerImpl implements MeasureController {
     private float calcDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
         return (float) Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2),2));
     }
+
+
 }
