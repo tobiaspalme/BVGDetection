@@ -82,7 +82,7 @@
         <CheckBoxPreference
             android:key="pref_stepdirection"
             android:title="Schrittrichtung erkennen"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 

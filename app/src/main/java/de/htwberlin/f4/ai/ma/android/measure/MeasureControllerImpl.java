@@ -426,7 +426,7 @@ public class MeasureControllerImpl implements MeasureController {
         lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
         String type = sharedPreferences.getString("pref_measurement_type", "Variante B");
         measurementType = IndoorMeasurementType.fromString(type);
-        useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", true);
+        useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", false);
 
     }
 
