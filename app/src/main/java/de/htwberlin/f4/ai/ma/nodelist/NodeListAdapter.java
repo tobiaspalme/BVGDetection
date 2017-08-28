@@ -97,7 +97,6 @@ public class NodeListAdapter extends ArrayAdapter {
         } else {
             return REGULAR_ITEM;
         }
-        //return super.getItemViewType(position);
     }
 
 

@@ -58,8 +58,6 @@ public class NavigationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_navigation);
-
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_navigation, contentFrameLayout);
@@ -191,6 +189,7 @@ public class NavigationActivity extends BaseActivity {
                     nodeDescriptions.add("");
                     nodePicturePaths.add("");
                     resultListAdapter.notifyDataSetChanged();
+                    totalDistanceTextview.setText("");
 
                 } else {
                     /*
@@ -225,7 +224,7 @@ public class NavigationActivity extends BaseActivity {
                     navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                            // Only nodes will be clickable, not the separators
                             if (position % 2 == 0) {
                                 Intent intent = new Intent(getApplicationContext(), NodeShowActivity.class);
                                 intent.putExtra("nodeName", navigationResultListview.getAdapter().getItem(position).toString());

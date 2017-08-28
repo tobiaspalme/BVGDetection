@@ -9,10 +9,10 @@ import java.nio.channels.FileChannel;
  * Created by Johann Winter
  */
 
-
-// TODO necessary?
 class FileUtils {
     /**
+     * Copies a File from one to another path.
+     *
      * @param fromFile   FileInputStream for the file to copy from.
      * @param toFile     FileInputStream for the file to copy to.
      */

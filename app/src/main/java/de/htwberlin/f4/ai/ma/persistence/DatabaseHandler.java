@@ -26,7 +26,7 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 public interface DatabaseHandler {
 
-    // Node management
+    // Nodes management
     void insertNode(Node node);
     void updateNode(Node node, String oldNodeId);
     ArrayList<Node> getAllNodes();
@@ -50,7 +50,6 @@ public interface DatabaseHandler {
     boolean exportDatabase();
 
     // Calculate my location
-    //FoundNode calculateNodeId(Node node);
     FoundNode calculateNodeId(List<SignalInformation> signalInformationList);
 
     // LocationResult management

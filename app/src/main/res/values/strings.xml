@@ -95,9 +95,6 @@
     <string name="image_placeholder">Bild</string>
 
 
-
-
-
     <!-- activity_location -->
     <string name="measured_node_text">Gemessener Ort:</string>
     <string name="measured_node_textview_text">Bitte Messung durchführen</string>
@@ -126,11 +123,12 @@
     <string name="accessibility_checkbox_text">Barrierefrei</string>
 
     <!-- acitvity_navigation -->
-    <string name="start_navigation_button_text">Route anzeigen</string>
+    <string name="start_navigation_button_text">Route berechnen</string>
     <string name="navigation_result_header">Ihre Route:</string>
     <string name="no_route_found">Keine Route gefunden.</string>
     <string name="navigation_infobox_text"><b>Hinweis:</b> Durch tippen auf die einzelnen Orte der Route können Details angezeigt werden.</string>
-
+    <string name="from_label_text">Route von:</string>
+    <string name="to_label_text">nach:</string>
 
 
 

@@ -52,7 +52,10 @@ public class NodeShowActivity extends BaseActivity {
 
         idTextview.setText(node.getId());
         descriptionTextview.setText(node.getDescription());
-        wifiNameTextview.setText(node.getFingerprint().getWifiName());
+
+        if (node.getFingerprint() != null) {
+            wifiNameTextview.setText(node.getFingerprint().getWifiName());
+        }
         coordinatesTextView.setText(node.getCoordinates());
 
 

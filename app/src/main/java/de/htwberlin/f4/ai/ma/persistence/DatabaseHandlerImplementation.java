@@ -187,7 +187,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         contentValues.put(NODE_ID, node.getId());
         contentValues.put(NODE_DESCRIPTION, node.getDescription());
         contentValues.put(NODE_COORDINATES, node.getCoordinates());
-        contentValues.put(NODE_PICTURE_PATH, node.getPicturePath());
         contentValues.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
 
         // If the Node has a fingerprint
@@ -195,6 +194,21 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
             contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         }
+//TODO
+        /*
+        if (getNode(oldNodeId).getPicturePath() != null) {
+            String sdCardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String newFilePath = "/IndoorPositioning/Pictures/" + node.getId() + "_" + realTimestamp + ".jpg";
+
+            File oldImageFile = new File(node.getPicturePath());
+            File newImageFile = new File(newFilePath);
+
+            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+
+        }
+*/
+
+        contentValues.put(NODE_PICTURE_PATH, node.getPicturePath());
 
         Log.d("DB: update_node: id:", node.getId());
 

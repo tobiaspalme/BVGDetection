@@ -1,79 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_dest_spinners">
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_node_spinner"
-            android:spinnerMode="dropdown">
-        </Spinner>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/destination_node_spinner"
-            android:spinnerMode="dropdown"
-            android:layout_toEndOf="@+id/start_node_spinner">
-        </Spinner>
-
-    </RelativeLayout>
+        android:layout_height="500dp"
+        >
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/accessibly_checkbox_area"
-        android:layout_below="@+id/start_dest_spinners">
-
-        <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="@string/accessibility_checkbox_text"/>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/accessibility_checkbox_navi"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_navigation_button"
-            android:text="@string/start_navigation_button_text"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/total_distance_textview"/>
-
-    </LinearLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/accessibly_checkbox_area">
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/navigation_result_header"
-            android:id="@+id/navigation_result_header_textview"/>
+            android:id="@+id/start_dest_spinners"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/from_label_text"
+                android:id="@+id/start_node_spinner_label"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:id="@+id/start_node_spinner"
+                android:spinnerMode="dropdown"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/start_node_spinner_label"
+                android:layout_marginTop="23dp"
+                android:text="@string/to_label_text"
+                android:id="@+id/destination_node_spinner_label"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/destination_node_spinner"
+                android:spinnerMode="dropdown"
+                android:layout_below="@+id/start_node_spinner"
+                android:layout_marginStart="100dp"
+                />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/accessibly_checkbox_area"
+            android:layout_below="@+id/start_dest_spinners"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accessibility_checkbox_text"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessibility_checkbox_navi"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_navigation_button"
+                android:text="@string/start_navigation_button_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/total_distance_textview"/>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="#7A7A7A"
+            android:layout_below="@+id/accessibly_checkbox_area"
+            android:id="@+id/separator_view"/>
+
 
         <ListView android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/navigation_result_listview"
-            android:layout_below="@+id/navigation_result_header_textview"/>
+            android:layout_below="@+id/separator_view"/>
+
 
     </RelativeLayout>
+
+
 
 
 
