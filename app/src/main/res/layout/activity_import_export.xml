@@ -21,8 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/import_label"
         android:id="@+id/import_button"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/import_button_text"
+        android:background="@android:color/white"
         android:text="@string/import_button_text" />
 
 
@@ -45,10 +47,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/export_label"
         android:id="@+id/export_button"
+        android:layout_marginTop="5dp"
         android:contentDescription="@string/export_button_text"
         android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
         android:text="@string/export_button_text" />
-
 
 
     <TextView

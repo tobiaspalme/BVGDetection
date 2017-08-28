@@ -2,22 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:keepScreenOn="true">
+    android:layout_height="match_parent">
+
 
     <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/wifi_span_linearlayout">
+        android:id="@+id/wifi_span_layout"
+        android:layout_centerHorizontal="true">
 
          <TextView
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
+             android:layout_marginStart="15dp"
+             android:layout_marginTop="8dp"
              android:textAppearance="?android:attr/textAppearanceLarge"
              android:text="@string/wifi_name_text"
              android:labelFor="@+id/wifi_names_dropdown_location"
@@ -36,228 +34,167 @@
              android:layout_height="wrap_content"
              android:layout_toEndOf="@+id/wifi_names_dropdown_location"
              android:contentDescription="@string/image_placeholder"
+             android:layout_marginTop="8dp"
              android:id="@+id/refresh_imageview_locationactivity"/>
 
-     </RelativeLayout>
+    </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttons_and_progress_linearlayout"
-            android:layout_below="@+id/wifi_span_linearlayout">
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/measure_one_second_text"
-                android:id="@+id/start_measuring_1s_button" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/measure_ten_seconds_text"
-                android:id="@+id/start_measurement_10s_button"
-                android:layout_below="@+id/start_measuring_1s_button"
-                />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/start_measurement_10s_button"
-                android:id="@+id/location_progressbar"
-                android:indeterminate="false"
-                android:progress="0" />
-
-        </RelativeLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/buttons_and_progress_linearlayout"
-            android:layout_marginTop="50dp"
-            android:id="@+id/measured_node_name_linearlayout">
-
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textAppearance="?android:attr/textAppearanceLarge"
-                 android:text="@string/measured_node_text"
-                 android:labelFor="@+id/location_textview"
-                 android:id="@+id/measured_node_label_textview"
-                 />
-
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textAppearance="?android:attr/textAppearanceLarge"
-                 android:id="@+id/location_textview"
-                 android:text="@string/measured_node_textview_text"
-                 android:textColor="@android:color/holo_red_dark"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/description_linearlayout"
-            android:layout_below="@+id/measured_node_name_linearlayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/description_text"
-                android:labelFor="@+id/description_textview_location"
-                android:id="@+id/description_label_textview"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/description_textview_location" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/coordinates_linearlayout"
-            android:layout_below="@id/description_linearlayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/coordinates_text"
-                android:labelFor="@+id/coordinates_textview_location"
-                android:id="@+id/coordinates_label_textview"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/coordinates_textview_location" />
-        </LinearLayout>
-
-
-       <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:id="@+id/result_node_linearlayout"
-           android:layout_below="@+id/coordinates_linearlayout">
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:id="@+id/percent_textview"/>
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_toEndOf="@+id/percent_textview"
-               android:id="@+id/percent_label_textview"
-               android:text="@string/percent_label_textview" />
-
-           <ImageView
-               android:layout_width="50dp"
-               android:layout_height="100dp"
-               android:contentDescription="@string/image_placeholder"
-               android:id="@+id/location_imageview"
-               android:layout_below="@+id/percent_textview"/>
-
-
-       </RelativeLayout>
-
-
-
-    <Button
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/location_detailed_results_button"
-        android:text="@string/go_to_detailed_location_results"
-        android:layout_below="@+id/result_node_linearlayout"
-        />
+        android:id="@+id/buttons_layout"
+        android:layout_below="@+id/wifi_span_layout"
+        android:layout_centerHorizontal="true" >
 
-    <!--<View
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/measure_one_second_text"
+            android:id="@+id/start_measuring_1s_button"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/measure_ten_seconds_text"
+            android:id="@+id/start_measurement_10s_button"
+            android:layout_toEndOf="@+id/start_measuring_1s_button"
+            />
+
+    </RelativeLayout>
+
+
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="4dip"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="#000000"
-        android:id="@+id/splitting_view"/>
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_below="@+id/buttons_layout"
+        android:id="@+id/location_progressbar"
+        android:indeterminate="false"
+        android:progress="0" />
+
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="#7A7A7A"
+        android:layout_below="@+id/location_progressbar"
+        android:id="@+id/separator_view_location"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/result_node_linearlayout"
+        android:layout_below="@+id/separator_view_location"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/location_textview"
+            android:text="@string/measured_node_textview_text"
+            android:textColor="@android:color/holo_red_dark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:id="@+id/percent_textview"
+            android:layout_toEndOf="@+id/location_textview"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/percent_textview"
+            android:id="@+id/percent_label_textview"
+            android:text="@string/percent_label_textview" />
+
+<!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/location_textview"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/description_text"
+            android:labelFor="@+id/description_textview_location"
+            android:id="@+id/description_textview_label"/> -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/description_textview_location"
+            android:layout_below="@+id/location_textview"/>
+
+
+<!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/description_textview_label"
+            android:text="@string/coordinates_text"
+            android:labelFor="@+id/coordinates_textview_location"
+            android:id="@+id/coordinates_textview_label"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:id="@+id/coordinates_textview_location"
+            android:layout_toEndOf="@+id/coordinates_textview_label"
+            android:layout_below="@+id/description_textview_location"/>-->
+
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/image_placeholder"
+            android:id="@+id/location_imageview"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/description_textview_location"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_detailed_results_imagebutton"
+            android:text="@string/go_to_detailed_location_results"
+            android:background="@android:color/white"
+            android:contentDescription="@string/detailed_results_button_description"
+            android:layout_toEndOf="@+id/location_imageview"
+            android:layout_below="@+id/location_imageview"
+            />
+
+    </RelativeLayout>
+
 
 
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/results_listview"
-        android:text="@string/"/>
-
-
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/results_listview"/>
-
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nodes_span_linearlayout"
-            android:layout_below="@+id/wifi_span_linearlayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="POI Liste:"
-                android:id="@+id/textView2" />
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown" />
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/nodes_span_linearlayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/timestamp_textview"
-                />
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/timestamp_textview"
-                android:id="@+id/results_listview"/>
-
-        </RelativeLayout>
-
-    </RelativeLayout>-->
+        android:layout_height="80dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingTop="6dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:id="@+id/infobox"
+        android:background="@drawable/info_box"
+        android:text="@string/location_infobox_text"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -44,15 +45,16 @@ public class LocationActivity extends BaseActivity {
 
     Button measure1sButton;
     Button measure10sButton;
-    Button detailedResultsButton;
+    ImageButton detailedResultsImagebutton;
     ImageView locationImageview;
     ImageView refreshImageview;
-    TextView descriptionLabelTextview;
+    //TextView descriptionLabelTextview;
     TextView descriptionTextview;
-    TextView coordinatesLabelTextview;
-    TextView coordinatesTextview;
+   // TextView coordinatesLabelTextview;
+   // TextView coordinatesTextview;
     TextView percentLabelTextview;
     TextView percentTextview;
+    ProgressBar progressBar;
 
     Context context = this;
 
@@ -99,16 +101,17 @@ public class LocationActivity extends BaseActivity {
 
         measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
-        detailedResultsButton = (Button) findViewById(R.id.location_detailed_results_button);
+        detailedResultsImagebutton = (ImageButton) findViewById(R.id.location_detailed_results_imagebutton);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
-        descriptionLabelTextview = (TextView) findViewById(R.id.description_label_textview);
+        //descriptionLabelTextview = (TextView) findViewById(R.id.description_textview_label);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
-        coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_textview);
-        coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
+        //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
+        //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
         percentLabelTextview = (TextView) findViewById(R.id.percent_label_textview);
         percentTextview = (TextView) findViewById(R.id.percent_textview);
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
+        progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
         //listView = (ListView) findViewById(R.id.results_listview);
 
@@ -139,6 +142,7 @@ public class LocationActivity extends BaseActivity {
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         final List<Node> allNodes = databaseHandler.getAllNodes();
 
+        detailedResultsImagebutton.setImageResource(R.drawable.info);
         refreshImageview.setImageResource(R.drawable.refresh);
         refreshImageview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,93 +152,29 @@ public class LocationActivity extends BaseActivity {
         });
 
 
-        descriptionLabelTextview.setVisibility(View.INVISIBLE);
-        coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+        //descriptionLabelTextview.setVisibility(View.INVISIBLE);
+        //coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         percentLabelTextview.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
 
         refreshWifiDropdown();
 
 
-
-
-
-/*
-        //a nodesDropdown list with name of all existing nodes
-        nodesDropdown = (Spinner) findViewById(R.id.spinner);
-        final ArrayList<String> nodeItems = new ArrayList<>();
-        for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
-            nodeItems.add(node.getId());
-        }
-        Collections.sort(nodeItems);
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeItems);
-        nodesDropdown.setAdapter(adapter);
-
-
-
-
-        //fill result list with content
-        //final ArrayList<LocationResultImplementation> arrayOfResults = loadJson();
-
-        final ArrayList<LocationResultImplementation> allResults = databaseHandler.getAllLocationResults();
-
-        resultAdapterdapter = new LocationResultAdapter(this, allResults);
-        listView.setAdapter(resultAdapterdapter);
-
-
-        //delete entry with long click
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(view.getContext())
-                        .setTitle("Eintrag löschen")
-                        .setMessage("Möchten sie den Eintrag löschen?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                databaseHandler.deleteLocationResult(allResults.get(position));
-                                resultAdapterdapter.remove(allResults.get(position));
-                                resultAdapterdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                return false;
-            }
-        });
-*/
-
-        /*
-        //set all preferences
-        fingerprint.setMovingAverage(movingAverage);
-        fingerprint.setKalman(kalmanFilter);
-        fingerprint.setEuclideanDistance(euclideanDistance);
-        fingerprint.setKNN(knnAlgorithm);
-*/
-
-        /*fingerprint.setAverageOrder(Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3")));
-        fingerprint.setKNNValue(Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3")));
-        fingerprint.setKalmanValue(Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2")));
-
-        fingerprint.setAllNodes(allNodes);
-*/
-
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     getMeasuredNode(1);
                 }
             });
 
         measure10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    progressBar.setVisibility(View.VISIBLE);
                     getMeasuredNode(10);
                 }
             });
 
-        detailedResultsButton.setOnClickListener(new View.OnClickListener() {
+        detailedResultsImagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LocationDetailedInfoActivity.class);
@@ -270,12 +210,12 @@ public class LocationActivity extends BaseActivity {
     private void getMeasuredNode(final int times) {
 
         locationImageview.setVisibility(View.INVISIBLE);
-        descriptionLabelTextview.setVisibility(View.INVISIBLE);
-        coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+        //descriptionLabelTextview.setVisibility(View.INVISIBLE);
+       // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         percentLabelTextview.setVisibility(View.INVISIBLE);
 
         descriptionTextview.setText("");
-        coordinatesTextview.setText("");
+//        coordinatesTextview.setText("");
         percentTextview.setText("");
         //locationImageview.setEnabled(false);
 
@@ -287,7 +227,7 @@ public class LocationActivity extends BaseActivity {
             //registerReceiver(mWifiScanReceiver, intentFilter);
 
             final TextView locationTextview = (TextView) findViewById(R.id.location_textview);
-            final ProgressBar progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
+
 
             locationTextview.setText(getString(R.string.searching_node_text));
 
@@ -299,12 +239,7 @@ public class LocationActivity extends BaseActivity {
                         progressBar.setProgress(i + 1);
 
                         mainWifiObj.startScan();
-
-                        //final TextView testTimestampTextview = (TextView) findViewById(R.id.timestamp_textview);
-                        //EditText editText = (EditText) findViewById(R.id.edTx_WlanNameLocation);
-                        //String wlanName = editText.getText().toString();
                         String wlanName = wifiDropdown.getSelectedItem().toString();
-
                         List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 
                         //check if there is a new measurement
@@ -315,7 +250,6 @@ public class LocationActivity extends BaseActivity {
                                         locationTextview.setText("Bitte neu versuchen");
                                     }
                                 });
-
                                 return;
                             }
 
@@ -323,17 +257,17 @@ public class LocationActivity extends BaseActivity {
                             Log.d("timestamp", String.valueOf(timestampWifiManager));
 
                         for (final ScanResult sr : wifiScanList) {
-                            LocationActivity.this.runOnUiThread(new Runnable() {
-                                public void run() {
+                            //LocationActivity.this.runOnUiThread(new Runnable() {
+                              //  public void run() {
                            //         testTimestampTextview.setText(String.valueOf(sr.timestamp));
-                                }
-                            });
+                               // }
+                            //});
 
                             if (sr.SSID.equals(wlanName)) {
                                 multiMap.put(sr.BSSID, sr.level);
                                 Log.d("LocationActivity", "Messung, SSID stimmt mit Dropdown überein:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
                                 long timestamp = sr.timestamp;
-                                Log.d("timestamp Sunshine", String.valueOf(timestamp));
+                                Log.d("timestamp", String.valueOf(timestamp));
                             }
                         }
 
@@ -347,11 +281,12 @@ public class LocationActivity extends BaseActivity {
                     }
 
                     makeFingerprint(times);
+
                 }
             }).start();
-            //return actuallyNode;
         }
     }
+
 
     /**
      * if times measurement is more than one second make a average of values. Try to start a fingerprint and calculate position.
@@ -403,12 +338,12 @@ public class LocationActivity extends BaseActivity {
                     //locationImageview.setEnabled(true);
 
                     locationImageview.setVisibility(View.VISIBLE);
-                    descriptionLabelTextview.setVisibility(View.VISIBLE);
-                    coordinatesLabelTextview.setVisibility(View.VISIBLE);
+                    //descriptionLabelTextview.setVisibility(View.VISIBLE);
+                    //coordinatesLabelTextview.setVisibility(View.VISIBLE);
                     percentLabelTextview.setVisibility(View.VISIBLE);
 
                     descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
-                    coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
+                    //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
                     percentTextview.setText(String.valueOf(foundNode.getPercent()));
 
                     // TODO percentage einfügen

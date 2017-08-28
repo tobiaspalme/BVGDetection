@@ -98,12 +98,14 @@
     <!-- activity_location -->
     <string name="measured_node_text">Gemessener Ort:</string>
     <string name="measured_node_textview_text">Bitte Messung durchführen</string>
-    <string name="measure_one_second_text">Messen (1 Sekunde)</string>
-    <string name="measure_ten_seconds_text">Messen (10 Sekunden)</string>
+    <string name="measure_one_second_text">Messen (1 s)</string>
+    <string name="measure_ten_seconds_text">Messen (10 s)</string>
     <string name="no_node_found_text">Kein Ort gefunden</string>
     <string name="searching_node_text">Ort wird gesucht</string>
     <string name="percent_label_textview"> %</string>
     <string name="go_to_detailed_location_results">Details</string>
+    <string name="detailed_results_button_description">Details</string>
+    <string name="location_infobox_text">Falls die 1-Sekunden-Messung keinen Erfolg hat, probieren Sie bitte die 10-Sekunden-Messung. \n\n<b>Tip:</b> Falls vorhanden, Bild antippen zum vergrößern</string>
 
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>
