@@ -42,8 +42,9 @@ public class StepDirectionDetectImpl implements StepDirectionDetect {
     private Context context;
 
 
-    private static final float THRESHOLD_POSITIVE_X = 2.5f;
-    private static final float THRESHOLD_NEGATIVE_X = -2.5f;
+
+    private static final float THRESHOLD_POSITIVE_X = 2.75f;
+    private static final float THRESHOLD_NEGATIVE_X = -2.75f;
     private static final float THRESHOLD_POSITIVE_Y = 2.75f;
     private static final float THRESHOLD_NEGATIVE_Y = -2.75f;
 

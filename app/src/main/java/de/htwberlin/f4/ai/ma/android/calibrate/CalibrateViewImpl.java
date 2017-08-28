@@ -46,7 +46,7 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle("Kalibrieren");
         loadStepOneView();
     }
 

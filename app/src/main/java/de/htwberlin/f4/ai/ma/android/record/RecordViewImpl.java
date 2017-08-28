@@ -69,6 +69,8 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_sensor_record, contentFrameLayout);
 
+        setTitle("Aufnehmen");
+
         accelerationX = (TextView) findViewById(R.id.fragment_record_acc_x);
         accelerationY = (TextView) findViewById(R.id.fragment_record_acc_y);
         accelerationZ = (TextView) findViewById(R.id.fragment_record_acc_z);

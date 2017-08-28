@@ -74,7 +74,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle("Wegvermessung");
 
         final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_measure, contentFrameLayout);
@@ -399,8 +399,13 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             nodeList.add(node);
 
             startNodeSpinner.setSelection(nodeList.indexOf(node));
-            float[] coordinates = WKT.strToCoord(node.getCoordinates());
-            updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+            if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
+                float[] coordinates = WKT.strToCoord(node.getCoordinates());
+                updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+            } else {
+                updateStartNodeCoordinates(0.0f, 0.0f, 0.0f);
+            }
+
         }
         // existing node
         else {
@@ -414,8 +419,12 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
 
             startNodeSpinner.setSelection(nodeList.indexOf(foundNode));
-            float[] coordinates = WKT.strToCoord(node.getCoordinates());
-            updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+            if (node.getCoordinates() != null && node.getCoordinates().length() > 0) {
+                float[] coordinates = WKT.strToCoord(node.getCoordinates());
+                updateStartNodeCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+            } else {
+                updateStartNodeCoordinates(0.0f, 0.0f, 0.0f);
+            }
         }
     }
 

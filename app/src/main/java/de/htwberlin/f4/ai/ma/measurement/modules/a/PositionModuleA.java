@@ -24,9 +24,9 @@ public class PositionModuleA implements PositionModule {
     protected OrientationModule orientationModule;
     protected Context context;
 
-    // coordinates[0] = x = movement left / right
-    // coordinates[1] = y = movement backward / forward
-    // coordinates[2] = z = movement downward / upward
+    // coordinates[0] = x = east / west
+    // coordinates[1] = y = forward / backward
+    // coordinates[2] = z = movement upward / downward
     private float[] coordinates;
 
     public PositionModuleA(Context context, CalibrationData calibrationData) {
@@ -44,6 +44,12 @@ public class PositionModuleA implements PositionModule {
         float distance = distanceModule.getDistance();
         float orientation = orientationModule.getOrientation();
 
+        // prevent wrong calculcation if delta altitude is bigger than steplength
+        // that can happen when a train arrives in station due to airpressure change...
+        if (altitude > distance) {
+            altitude = 0.0f;
+        }
+
         // orientation stuff
         double sina = Math.sin(Math.toRadians(90 - orientation));
         double cosa = Math.cos(Math.toRadians(90 - orientation));
@@ -53,25 +59,9 @@ public class PositionModuleA implements PositionModule {
         float x = (float)cosa * p;
         float y = (float)sina * p;
 
-        Log.d("tmp", "calculate position");
-
-        Log.d("tmp", "orientation: " + orientation);
-        Log.d("tmp", "calculated x : " + x);
-        Log.d("tmp", "calculated y : " + y);
-        Log.d("tmp", "calculated z : " + coordinates[2]);
-        Log.d("tmp", "calculated p : " + p);
-        Log.d("tmp", "sina : " + sina);
-        Log.d("tmp", "cosa : " + cosa);
-
-
         coordinates[0] += x;
         coordinates[1] += y;
         coordinates[2] += altitude;
-
-
-        Log.d("tmp", "new x: " + coordinates[0]);
-        Log.d("tmp", "new y: " + coordinates[1]);
-        Log.d("tmp", "--------------------");
 
         return coordinates;
     }

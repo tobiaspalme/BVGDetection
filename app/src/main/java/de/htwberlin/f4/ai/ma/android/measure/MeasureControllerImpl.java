@@ -179,7 +179,7 @@ public class MeasureControllerImpl implements MeasureController {
                         }
                         break;
                     case STEPCOUNTER:
-                        handleNewStep();
+                        //handleNewStep();
                         break;
                     default:
                         break;
@@ -477,88 +477,113 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onLocateWifiClicked() {
         if (!measurementRunning) {
-            WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            wifiManager.startScan();
-            List<ScanResult> wifiScanList = wifiManager.getScanResults();
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+            alertDialogBuilder.setTitle("Startposition");
+            alertDialogBuilder.setMessage("Wollen Sie die Startposition per WLAN ermitteln?");
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setIcon(R.drawable.locate_wifi);
 
-            final ArrayList<String> wifiNamesList = new ArrayList<>();
-            for (ScanResult sr : wifiScanList) {
-                if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                    wifiNamesList.add(sr.SSID);
-                }
-            }
+            alertDialogBuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    WifiManager wifiManager = (WifiManager) view.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    wifiManager.startScan();
+                    List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
+                    final ArrayList<String> wifiNamesList = new ArrayList<>();
+                    for (ScanResult sr : wifiScanList) {
+                        if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                            wifiNamesList.add(sr.SSID);
+                        }
+                    }
 
+                    final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()-1];
+                    for (int i = 0; i < wifiArray.length; i++) {
+                        wifiArray[i] = wifiNamesList.get(i);
+                    }
 
-            final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()-1];
-            for (int i = 0; i < wifiArray.length; i++) {
-                wifiArray[i] = wifiNamesList.get(i);
-            }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("WLAN wählen");
+                    builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("WLAN wählen");
-            builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.e("value is", "" + which);
-                    Log.d("tmp", "wlan: " + wifiArray[which]);
-                    getMeasuredNode(wifiNamesList.get(which), 3);
+                            getMeasuredNode(wifiNamesList.get(which), 3);
+                        }
+                    });
+                    builder.show();
                 }
             });
-            builder.show();
+
+            alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
+
+
+
     }
+
 
     @Override
     public void onLocateQrClicked() {
         if (!measurementRunning) {
-            Intent intent = new Intent(view.getContext().getApplicationContext(), BarcodeCaptureActivity.class);
-            Activity activity = (Activity) view;
-            activity.startActivityForResult(intent, 1);
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+            alertDialogBuilder.setTitle("Startposition");
+            alertDialogBuilder.setMessage("Wollen Sie die Startposition per QR-Code ermitteln?");
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setIcon(R.drawable.locate_qr);
+
+            alertDialogBuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Intent intent = new Intent(view.getContext().getApplicationContext(), BarcodeCaptureActivity.class);
+                    Activity activity = (Activity) view;
+                    activity.startActivityForResult(intent, 1);
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
-    // json string: {"id": "nodeid","coordinates":[0.1,1.1,0.15]}
+
+    //json string: {"id": "nodeid","coordinates": "POINT Z(0.1 0.2 0.3)"}
     @Override
     public void onQrResult(String qr) {
 
         try {
             JSONObject jsonObject = new JSONObject(qr);
             String id = jsonObject.getString("id");
-            JSONArray jsonArray = jsonObject.getJSONArray("coordinates");
-            double x = (double) jsonArray.get(0);
-            double y = (double) jsonArray.get(1);
-            double z = (double) jsonArray.get(2);
-
-            Log.d("tmp", "id= " + id);
-            Log.d("tmp", "x= " + x);
-            Log.d("tmp", "y= " + y);
-            Log.d("tmp", "z= " + z);
+            String coordinates = jsonObject.getString("coordinates");
 
             DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
 
             // check if node from qr code already exists
             Node node = databaseHandler.getNode(id);
-            // create coordinates
-            float[] nodeCoords = new float[3];
-            nodeCoords[0] = (float) x;
-            nodeCoords[1] = (float) y;
-            nodeCoords[2] = (float) z;
-            String coordStr = WKT.coordToStr(nodeCoords);
 
             // node exists
             if (node != null) {
                 // update existing node with coords from qr code
-                node.setCoordinates(coordStr);
+                node.setCoordinates(coordinates);
                 databaseHandler.updateNode(node, node.getId());
                 // update ui
                 view.setStartNode(node);
             }
             // new node
             else {
-                node = NodeFactory.createInstance(id, null, null, coordStr, null, null);
+                node = NodeFactory.createInstance(id, null, null, coordinates, null, null);
                 databaseHandler.insertNode(node);
                 view.setStartNode(node);
             }
@@ -678,7 +703,8 @@ public class MeasureControllerImpl implements MeasureController {
             System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
             stepData.setCoords(newStepCoords);
             stepList.add(stepData);
-
+            // TODO: REMOVE
+            save();
         }
 
         view.updateStepCount(stepCount);
@@ -833,4 +859,6 @@ public class MeasureControllerImpl implements MeasureController {
     private float calcDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
         return (float) Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2),2));
     }
+
+
 }
