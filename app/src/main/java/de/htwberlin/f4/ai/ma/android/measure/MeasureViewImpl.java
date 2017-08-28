@@ -74,7 +74,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle("Wegvermessung");
 
         final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_measure, contentFrameLayout);

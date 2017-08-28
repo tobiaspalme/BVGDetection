@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.075"
-            android:text="x | y | z"
+            android:text="0 | 0 | 0"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/holo_red_light"
             android:textSize="40sp"/>

@@ -35,7 +35,7 @@
         <item
             android:id="@+id/nav_measurement"
             android:icon="@drawable/measure"
-            android:title="Messen" />
+            android:title="Wegvermessung" />
         <item
             android:id="@+id/nav_calibrate"
             android:icon="@drawable/calibrate"
