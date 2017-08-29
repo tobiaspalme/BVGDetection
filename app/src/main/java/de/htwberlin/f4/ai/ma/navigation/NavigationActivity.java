@@ -1,6 +1,12 @@
 package de.htwberlin.f4.ai.ma.navigation;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,14 +14,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carol.bvg.R;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -24,10 +35,13 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.NodeShowActivity;
+import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
@@ -39,6 +53,7 @@ public class NavigationActivity extends BaseActivity {
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
     Button startNavigationButton;
+    ImageButton locateButton;
     ListView navigationResultListview;
     ArrayList<String> itemsStartNodeSpinner;
     private ArrayList<String> itemsDestNodeSpinner;
@@ -55,6 +70,9 @@ public class NavigationActivity extends BaseActivity {
     ArrayList<String> nodeDescriptions;
     ArrayList<String> nodePicturePaths;
 
+    WifiManager wifiManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +83,7 @@ public class NavigationActivity extends BaseActivity {
         startNodeSpinner = (Spinner) findViewById(R.id.start_node_spinner);
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);
         startNavigationButton = (Button) findViewById(R.id.start_navigation_button);
+        locateButton = (ImageButton) findViewById(R.id.locate_button);
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
         totalDistanceTextview = (TextView) findViewById(R.id.total_distance_textview);
@@ -79,15 +98,16 @@ public class NavigationActivity extends BaseActivity {
 
         lastSelectedStartNode = "";
 
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
 
-//---------- TEST -------------------
-        Node n1 = NodeFactory.createInstance("n1","", new Fingerprint("", null), "", "", "");
-        Node n2 = NodeFactory.createInstance("n2","", new Fingerprint("", null), "", "", "");
-        Node n3 = NodeFactory.createInstance("n3","", new Fingerprint("", null), "", "", "");
-        Node n4 = NodeFactory.createInstance("n4","", new Fingerprint("", null), "", "", "");
-        Node n5 = NodeFactory.createInstance("n5","", new Fingerprint("", null), "", "", "");
+/*---------- TEST -------------------
+        Node n1 = NodeFactory.createInstance("n1", "", new Fingerprint("", null), "", "", "");
+        Node n2 = NodeFactory.createInstance("n2", "", new Fingerprint("", null), "", "", "");
+        Node n3 = NodeFactory.createInstance("n3", "", new Fingerprint("", null), "", "", "");
+        Node n4 = NodeFactory.createInstance("n4", "", new Fingerprint("", null), "", "", "");
+        Node n5 = NodeFactory.createInstance("n5", "", new Fingerprint("", null), "", "", "");
 
         Edge e1 = new EdgeImplementation(n1, n2, false, 4);
         Edge e2 = new EdgeImplementation(n2, n3, false, 5);
@@ -122,11 +142,12 @@ public class NavigationActivity extends BaseActivity {
         databaseHandler.insertEdge(e4);
         databaseHandler.insertEdge(e5);
         databaseHandler.insertEdge(e6);
-//-----------------------------------
+//-----------------------------------*/
         //navigationResultListview.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
         allNodes = databaseHandler.getAllNodes();
 
+        locateButton.setImageResource(R.drawable.locate);
 
         for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             itemsStartNodeSpinner.add(node.getId());
@@ -167,8 +188,44 @@ public class NavigationActivity extends BaseActivity {
                     lastSelectedStartNode = selectedStartNode;
                 }
             }
-            public void onNothingSelected(AdapterView<?> arg0) {}
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
         });
+
+
+        locateButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                wifiManager.startScan();
+                List<ScanResult> wifiScanList = wifiManager.getScanResults();
+
+                final ArrayList<String> wifiNamesList = new ArrayList<>();
+                for (ScanResult sr : wifiScanList) {
+                    if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
+                        wifiNamesList.add(sr.SSID);
+                    }
+                }
+
+                final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size() - 1];
+                for (int i = 0; i < wifiArray.length; i++) {
+                    wifiArray[i] = wifiNamesList.get(i);
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getString(R.string.select_wifi));
+                builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getMeasuredNode(wifiNamesList.get(which), 1);
+                    }
+                });
+                builder.show();
+            }
+        });
+
+
 
 
         startNavigationButton.setOnClickListener(new View.OnClickListener() {
@@ -192,16 +249,7 @@ public class NavigationActivity extends BaseActivity {
                     totalDistanceTextview.setText("");
 
                 } else {
-                    /*
-                    for (Node n : route) {
-                        nodeNames.add(n.getId());
-                        nodeDescriptions.add(databaseHandler.getNode(n.getId()).getDescription());
-                        nodePicturePaths.add(databaseHandler.getNode(n.getId()).getPicturePath());
-                    }
-                    */
-
                     float totalDistance = 0;
-
                     for (int i = 0; i < route.size(); i++) {
                         nodeNames.add(route.get(i).getId());
                         nodeDescriptions.add(databaseHandler.getNode(route.get(i).getId()).getDescription());
@@ -218,7 +266,7 @@ public class NavigationActivity extends BaseActivity {
                     }
 
                     resultListAdapter.notifyDataSetChanged();
-                    totalDistanceTextview.setText("Strecke: " + String.valueOf(totalDistance) + " m");
+                    totalDistanceTextview.setText("Gesamtstrecke: " + String.valueOf(totalDistance) + " m");
 
                     // Click on Item -> show Node in NodeEditActivity
                     navigationResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -233,11 +281,77 @@ public class NavigationActivity extends BaseActivity {
                         }
                     });
                 }
-
             }
         });
-
-
-
     }
+
+
+    private void getMeasuredNode(final String wlanName, final int times) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+        Multimap<String, Integer> multiMap = ArrayListMultimap.create();
+        for (int i = 0; i < times; i++) {
+
+            wifiManager.startScan();
+            List<ScanResult> wifiScanList = wifiManager.getScanResults();
+
+            if(wifiScanList.get(0).timestamp == 0 && times == 1) {
+                return;
+            }
+
+            for (final ScanResult sr : wifiScanList) {
+                if (sr.SSID.equals(wlanName)) {
+                    multiMap.put(sr.BSSID, sr.level);
+                }
+            }
+
+            wifiScanList.clear();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        FoundNode foundNode = makeFingerprint(multiMap);
+        if (foundNode != null) {
+            Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
+            toast.show();
+            int index = itemsStartNodeSpinner.indexOf(foundNode.getId());
+            startNodeSpinner.setSelection(index);
+        } else {
+            Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    private FoundNode makeFingerprint(Multimap<String, Integer> multiMap) {
+
+        Set<String> bssid = multiMap.keySet();
+        final List<SignalInformation> signalInformationList = new ArrayList<>();
+
+        for (String s : bssid) {
+            int value = 0;
+            int counter = 0;
+
+            for (int test : multiMap.get(s)) {
+                counter++;
+                value += test;
+            }
+            value = value / counter;
+
+            List<SignalStrengthInformation> SsiList = new ArrayList<>();
+            SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
+            SsiList.add(signal);
+            SignalInformation signalInformation = new SignalInformation("", SsiList);
+            signalInformationList.add(signalInformation);
+        }
+
+        return databaseHandler.calculateNodeId(signalInformationList);
+    }
+
 }

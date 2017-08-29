@@ -13,13 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -49,6 +47,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
+import de.htwberlin.f4.ai.ma.persistence.FileUtils;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
@@ -141,7 +140,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_recordactivity);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
-        recordTimeText = (EditText) findViewById(R.id.measure_time_edittext_popup);
+        recordTimeText = (EditText) findViewById(R.id.measure_time_edittext);
         coordinatesEdittext = (EditText) findViewById(R.id.coordinates_edittext);
         wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
         progressTextview = (TextView) findViewById(R.id.progress_textview);
@@ -252,7 +251,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                 } else {
                     takingPictureAtTheMoment = true;
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File file = getFile();
+
+                    timestamp = new Timestamp(System.currentTimeMillis());
+                    File file = FileUtils.getFile(nodeIdEdittext.getText().toString(), timestamp);
+
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                     startActivityForResult(cameraIntent, CAM_REQUEST);
                 }
@@ -400,39 +402,18 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     }
 
 
+    /**
+     * When returning from Camera Activity after taking a picture
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == -1) {
             pictureTaken = true;
             takingPictureAtTheMoment = false;
-
             long realTimestamp = timestamp.getTime();
-
-            picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp +".jpg";
+            picturePath = sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures/" + nodeIdEdittext.getText() + "_" + realTimestamp + ".jpg";
             Glide.with(this).load(picturePath).into(cameraImageview);
         }
-    }
-
-
-    /**
-     * Creates the folder /IndoorPositioning/Pictures in SDCARD path,
-     * then creates a new Imagefile named by the nodeIdEdittext
-     * @return File Object of the Imagefile
-     */
-    private File getFile() {
-        File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
-
-        timestamp = new Timestamp(System.currentTimeMillis());
-        long realTimestamp = timestamp.getTime();
-
-        if (!folder.exists()) {
-            boolean success = folder.mkdirs();
-
-            if (!success) {
-                Log.d("NRecordAndEditActivity", "Die Datei konnte nicht angelegt werden");
-            }
-        }
-        return new File(folder, nodeIdEdittext.getText() + "_" + realTimestamp + ".jpg");
     }
 
 
@@ -451,7 +432,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                 } else {
                     picPathToSave = null;
                 }
-
 
                 final String nodeID = nodeIdEdittext.getText().toString();
                 final String nodeDescription = descriptionEdittext.getText().toString();
@@ -472,18 +452,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                                         jsonWriter.writeJSON(node);
                                         databaseHandler.insertNode(node);
                                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                                        // Reset progressBar and progress and set the inputs enabled
-                                        abortRecording = true;
-                                        progressStatus = 0;
-                                        progressTextview.setText(String.valueOf(progressStatus));
-                                        progressBar.setProgress(progressStatus);
-                                        recordButton.setEnabled(true);
-                                        recordTimeText.setEnabled(true);
-                                        nodeIdEdittext.setEnabled(true);
-                                        wifiNamesDropdown.setEnabled(true);
-                                        descriptionEdittext.setEnabled(true);
-                                        //captureButton.setEnabled(true);
+                                        resetUiElements();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -504,7 +473,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         progressBar.setProgress(progressStatus);
                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                         askForNewNode();
-
                 }
             }
         }
@@ -521,7 +489,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             if (oldNodeId.equals(nodeIdEdittext.getText().toString())) {
                 // old id == new id -> update.
                saveUpdatedNode();
-
             } else {
                 if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString())) {
                     Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_LONG).show();
@@ -553,7 +520,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             }
         }
 
-
         // If no new fingerprint was taken
         if (!fingerprintTaken) {
             // If an old fingerprint exists
@@ -577,25 +543,11 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-
                                 final Node node = NodeFactory.createInstance(nodeID, nodeDescription, null, coordinates, picPathToSave, "");
-
                                 jsonWriter.writeJSON(node);
                                 databaseHandler.updateNode(node, oldNodeId);
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                                // Reset progressBar and progress
-                                abortRecording = true;
-                                progressStatus = 0;
-                                progressTextview.setText(String.valueOf(progressStatus));
-                                progressBar.setProgress(progressStatus);
-
-                                recordButton.setEnabled(true);
-                                recordTimeText.setEnabled(true);
-                                nodeIdEdittext.setEnabled(true);
-                                wifiNamesDropdown.setEnabled(true);
-                                descriptionEdittext.setEnabled(true);
-                                //captureButton.setEnabled(true);
+                                resetUiElements();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -620,6 +572,22 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         }
     }
 
+
+    /**
+     * Reset buttons. textfields, and progress
+     */
+    private void resetUiElements() {
+        // Reset progressBar and progress and set the inputs enabled
+        abortRecording = true;
+        progressStatus = 0;
+        progressTextview.setText(String.valueOf(progressStatus));
+        progressBar.setProgress(progressStatus);
+        recordButton.setEnabled(true);
+        recordTimeText.setEnabled(true);
+        nodeIdEdittext.setEnabled(true);
+        wifiNamesDropdown.setEnabled(true);
+        descriptionEdittext.setEnabled(true);
+    }
 
 
     /**

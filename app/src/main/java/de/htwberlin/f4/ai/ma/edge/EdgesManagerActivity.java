@@ -129,16 +129,13 @@ public class EdgesManagerActivity extends BaseActivity {
                 boolean accessible = false;
                 if (accessibilityCheckbox.isChecked()) { accessible = true; }
 
-                // TODO set expenditure...
-
                 Node nodeA = databaseHandler.getNode(spinnerA.getSelectedItem().toString());
                 Node nodeB = databaseHandler.getNode(spinnerB.getSelectedItem().toString());
 
                 Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, 0);
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
-                    Toast.makeText(getApplicationContext(), "Dieser Weg existiert bereits.",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.edge_already_exists), Toast.LENGTH_SHORT).show();
                 } else {
                     databaseHandler.insertEdge(edge);
                     allEdges.add(edge);

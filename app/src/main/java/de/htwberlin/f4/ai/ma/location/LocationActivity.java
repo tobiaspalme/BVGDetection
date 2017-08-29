@@ -49,6 +49,7 @@ public class LocationActivity extends BaseActivity {
     ImageView locationImageview;
     ImageView refreshImageview;
     //TextView descriptionLabelTextview;
+    TextView locationTextview;
     TextView descriptionTextview;
    // TextView coordinatesLabelTextview;
    // TextView coordinatesTextview;
@@ -69,7 +70,7 @@ public class LocationActivity extends BaseActivity {
     //private LocationResultAdapter resultAdapterdapter;
     //private String foundNodeName;
     private FoundNode foundNode;
-    private WifiManager mainWifiObj;
+    private WifiManager wifiManager;
     private Multimap<String, Integer> multiMap;
     private long timestampWifiManager = 0;
 
@@ -97,7 +98,7 @@ public class LocationActivity extends BaseActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 */
-        mainWifiObj= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
@@ -105,6 +106,7 @@ public class LocationActivity extends BaseActivity {
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
         //descriptionLabelTextview = (TextView) findViewById(R.id.description_textview_label);
+        locationTextview = (TextView) findViewById(R.id.location_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
         //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
         //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
@@ -112,6 +114,8 @@ public class LocationActivity extends BaseActivity {
         percentTextview = (TextView) findViewById(R.id.percent_textview);
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
         progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
+
+
 
         //listView = (ListView) findViewById(R.id.results_listview);
 
@@ -188,8 +192,8 @@ public class LocationActivity extends BaseActivity {
 
     // Scan for WiFi names (SSIDs) and add them to the dropdown
     private void refreshWifiDropdown() {
-        mainWifiObj.startScan();
-        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+        wifiManager.startScan();
+        List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
         ArrayList<String> wifiNamesList = new ArrayList<>();
         for (ScanResult sr : wifiScanList) {
@@ -220,15 +224,8 @@ public class LocationActivity extends BaseActivity {
         //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
-        // if (nodesDropdown.getAdapter().getCount() > 0 && wifiDropdown.getAdapter().getCount() > 0) {
-
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-            //registerReceiver(mWifiScanReceiver, intentFilter);
-
-            final TextView locationTextview = (TextView) findViewById(R.id.location_textview);
-
-
             locationTextview.setText(getString(R.string.searching_node_text));
 
             new Thread(new Runnable() {
@@ -238,9 +235,9 @@ public class LocationActivity extends BaseActivity {
                         progressBar.setMax(times);
                         progressBar.setProgress(i + 1);
 
-                        mainWifiObj.startScan();
+                        wifiManager.startScan();
                         String wlanName = wifiDropdown.getSelectedItem().toString();
-                        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+                        List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
                         //check if there is a new measurement
                          if(wifiScanList.get(0).timestamp == timestampWifiManager && times == 1)
@@ -257,12 +254,6 @@ public class LocationActivity extends BaseActivity {
                             Log.d("timestamp", String.valueOf(timestampWifiManager));
 
                         for (final ScanResult sr : wifiScanList) {
-                            //LocationActivity.this.runOnUiThread(new Runnable() {
-                              //  public void run() {
-                           //         testTimestampTextview.setText(String.valueOf(sr.timestamp));
-                               // }
-                            //});
-
                             if (sr.SSID.equals(wlanName)) {
                                 multiMap.put(sr.BSSID, sr.level);
                                 Log.d("LocationActivity", "Messung, SSID stimmt mit Dropdown überein:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
@@ -270,7 +261,6 @@ public class LocationActivity extends BaseActivity {
                                 Log.d("timestamp", String.valueOf(timestamp));
                             }
                         }
-
                         wifiScanList.clear();
 
                         try {
@@ -279,9 +269,7 @@ public class LocationActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     }
-
                     makeFingerprint(times);
-
                 }
             }).start();
         }
@@ -293,12 +281,7 @@ public class LocationActivity extends BaseActivity {
      * @param measuredTime the measured time
      */
     private void makeFingerprint(final int measuredTime) {
-        final TextView locationTextview = (TextView) findViewById(R.id.location_textview);
-
         Set<String> bssid = multiMap.keySet();
-
-        final List<Node> actuallyNode = new ArrayList<>();
-
         final List<SignalInformation> signalInformationList = new ArrayList<>();
 
         for (String s : bssid) {
@@ -311,26 +294,19 @@ public class LocationActivity extends BaseActivity {
             }
             value = value / counter;
 
-            //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
             List<SignalStrengthInformation> SsiList = new ArrayList<>();
             SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
             SsiList.add(signal);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
-
         }
-
-        //Node node = nodeFactory.createInstance(null, "", new Fingerprint("", signalInformationList), "", "", "");
-
-        //foundNodeName = databaseHandler.calculateNodeId(node);
-        //foundNode = databaseHandler.calculateNodeId(node);
         foundNode = databaseHandler.calculateNodeId(signalInformationList);
 
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
 
-                LocationResultImplementation locationResult;
+                LocationResult locationResult;
                 if (foundNode != null) {
 
                     //if (foundNodeName != null) {
@@ -346,8 +322,7 @@ public class LocationActivity extends BaseActivity {
                     //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
                     percentTextview.setText(String.valueOf(foundNode.getPercent()));
 
-                    // TODO percentage einfügen
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), Double.valueOf(foundNode.getPercent()));
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
 
                     final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 

@@ -24,6 +24,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:id="@+id/nodeA_spinner"
             android:spinnerMode="dropdown"
             android:layout_toEndOf="@+id/start_label">
@@ -34,34 +35,47 @@
             android:layout_height="wrap_content"
             android:text="@string/destination_edgesmanager"
             android:id="@+id/destination_label"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_toEndOf="@+id/nodeA_spinner"/>
+            android:layout_below="@+id/start_label"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:id="@+id/nodeB_spinner"
             android:spinnerMode="dropdown"
+            android:layout_below="@+id/nodeA_spinner"
             android:layout_toEndOf="@+id/destination_label">
         </Spinner>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/accessibility_checkbox"
-            android:layout_marginTop="7dp"
-            android:text="@string/accessibility_checkbox_text"
-            android:layout_below="@+id/nodeA_spinner"/>
 
-        <Button
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:id="@+id/connect_nodes_button"
-            android:text="@string/connect_nodes_button_text"
-            android:layout_below="@+id/nodeA_spinner"
-            android:layout_toEndOf="@+id/accessibility_checkbox"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/nodeB_spinner">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accessibility_checkbox"
+                android:text="@string/accessibility_checkbox_text"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:id="@+id/connect_nodes_button"
+                android:text="@string/connect_nodes_button_text"
+                />
+
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
@@ -89,7 +103,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="35dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
