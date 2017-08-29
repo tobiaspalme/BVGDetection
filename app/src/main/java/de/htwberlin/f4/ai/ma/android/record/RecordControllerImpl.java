@@ -1,8 +1,10 @@
 package de.htwberlin.f4.ai.ma.android.record;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -126,8 +128,10 @@ public class RecordControllerImpl implements RecordController {
     }
 
     private void startTimer() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        float lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
         timerHandler = new Handler(Looper.getMainLooper());
-        recordRunnable = new RecordRunnable(sensorDataModel, indoorMeasurement, timerHandler, savePeriod);
+        recordRunnable = new RecordRunnable(sensorDataModel, indoorMeasurement, timerHandler, savePeriod, lowpassFilterValue);
         timerHandler.postDelayed(recordRunnable, 250);
     }
 
