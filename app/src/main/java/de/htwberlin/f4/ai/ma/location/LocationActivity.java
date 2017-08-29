@@ -347,9 +347,7 @@ public class LocationActivity extends BaseActivity {
                     percentTextview.setText(String.valueOf(foundNode.getPercent()));
 
                     // TODO percentage einfügen
-                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName + " "+fingerprint.getPercentage() +"%");
-                    //locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), foundNodeName);
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", foundNode.getId());
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), Double.valueOf(foundNode.getPercent()));
 
                     final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
@@ -372,8 +370,7 @@ public class LocationActivity extends BaseActivity {
                 } else {
                     locationTextview.setText(getString(R.string.no_node_found_text));
                     //locationImageview.setEnabled(false);
-                //    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), nodesDropdown.getSelectedItem().toString(), getString(R.string.no_node_found_text));
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), "XXXXX", getString(R.string.no_node_found_text));
+                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
 
                 }
                 //makeJson(locationResult);

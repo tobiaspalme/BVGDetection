@@ -15,9 +15,9 @@ public interface LocationResult {
     String getMeasuredTime();
     void setMeasuredTime(String measuredTime);
 
-    String getSelectedNode();
-    void setSelectedNode(String selectedNode);
-
     String getMeasuredNode();
     void setMeasuredNode(String measuredNode);
+
+    double getPercentage();
+    void setPercentage(double percentage);
 }

@@ -76,8 +76,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     private static final String RESULT_ID = "id";
     private static final String RESULT_SETTINGS = "settings";
     private static final String RESULT_MEASURED_TIME = "measuredtime";
-    private static final String RESULT_SELECTED_NODE = "selectednode";
     private static final String RESULT_MEASURED_NODE = "measurednode";
+    private static final String RESULT_PERCENTAGE = "percentage";
 
     private JSONConverter jsonConverter = new JSONConverter();
     private Context context;
@@ -117,9 +117,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 RESULT_ID + " INTEGER PRIMARY KEY," +
                 RESULT_SETTINGS + " TEXT," +
                 RESULT_MEASURED_TIME + " TEXT," +
-                RESULT_SELECTED_NODE + " TEXT," +
-                RESULT_MEASURED_NODE + " TEXT)";
-
+                RESULT_MEASURED_NODE + " TEXT," +
+                RESULT_PERCENTAGE + " REAL)";
 
         db.execSQL(createNodeTableQuery);
         db.execSQL(createEdgeTableQuery);
@@ -486,8 +485,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         values.put(RESULT_ID, locationResult.getId());
         values.put(RESULT_SETTINGS, locationResult.getSettings());
         values.put(RESULT_MEASURED_TIME, locationResult.getMeasuredTime());
-        values.put(RESULT_SELECTED_NODE, locationResult.getSelectedNode());
         values.put(RESULT_MEASURED_NODE, locationResult.getMeasuredNode());
+        values.put(RESULT_PERCENTAGE, locationResult.getPercentage());
 
         database.insert(RESULTS_TABLE, null, values);
 
@@ -513,8 +512,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 locationResultImplementation.setId(Integer.valueOf(cursor.getString(0)));
                 locationResultImplementation.setSettings(cursor.getString(1));
                 locationResultImplementation.setMeasuredTime(cursor.getString(2));
-                locationResultImplementation.setSelectedNode(cursor.getString(3));
-                locationResultImplementation.setMeasuredNode(cursor.getString(4));
+                locationResultImplementation.setMeasuredNode(cursor.getString(3));
+                locationResultImplementation.setPercentage(cursor.getFloat(4));
 
                 allResults.add(locationResultImplementation);
             } while (cursor.moveToNext());
@@ -529,8 +528,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     public void deleteLocationResult(LocationResult locationResult) {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
-
-        Log.d("DB: delete_LOCRESULT", "" + locationResult.getSelectedNode() + " id: " + locationResult.getId());
 
         database.execSQL(deleteQuery);
         database.close();

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
@@ -14,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -59,14 +60,14 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     private Handler mHandler;
     private ProgressBar progressBar;
     private JsonWriter jsonWriter;
-    private TextView progressText;
-    private TextView initialWifiTextview;
-    private TextView initialWifiLabelTextview;
-    private TextView coordinatesLabelTextview;
-    private Button recordButton;
-    Button captureButton;
-    Button saveNodeButton;
-    Button deleteNodeButton;
+    private TextView progressTextview;
+    TextView initialWifiTextview;
+    TextView initialWifiLabelTextview;
+    TextView coordinatesLabelTextview;
+    private ImageButton recordButton;
+    ImageButton captureButton;
+    ImageButton saveNodeButton;
+    ImageButton deleteNodeButton;
     private ImageView cameraImageview;
     ImageView refreshImageview;
     private EditText nodeIdEdittext;
@@ -132,10 +133,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         jsonWriter = new JsonWriter(this);
 
-        recordButton = (Button) findViewById(R.id.record_button);
-        captureButton  = (Button) findViewById(R.id.capture_button);
-        saveNodeButton = (Button) findViewById(R.id.save_node_button);
-        deleteNodeButton = (Button) findViewById(R.id.delete_node_button);
+        recordButton = (ImageButton) findViewById(R.id.record_button);
+        captureButton  = (ImageButton) findViewById(R.id.capture_button);
+        saveNodeButton = (ImageButton) findViewById(R.id.save_node_button);
+        deleteNodeButton = (ImageButton) findViewById(R.id.delete_node_button);
         cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_recordactivity);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
@@ -143,7 +144,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         recordTimeText = (EditText) findViewById(R.id.measure_time_edittext_popup);
         coordinatesEdittext = (EditText) findViewById(R.id.coordinates_edittext);
         wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
-        progressText = (TextView) findViewById(R.id.progress_textview);
+        progressTextview = (TextView) findViewById(R.id.progress_textview);
         initialWifiTextview = (TextView) findViewById(R.id.initial_wifi_textview);
         initialWifiLabelTextview = (TextView) findViewById(R.id.initial_wifi_label_textview);
         coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_textview_editmode);
@@ -163,33 +164,46 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             refreshWifiDropdown();
         }
 
+        deleteNodeButton.setImageResource(R.drawable.trash_node);
+        recordButton.setImageResource(R.drawable.fingerprint);
+        captureButton.setImageResource(R.drawable.camera);
 
+        progressBar.setVisibility(View.INVISIBLE);
+        progressTextview.setVisibility(View.INVISIBLE);
         initialWifiLabelTextview.setVisibility(View.INVISIBLE);
         initialWifiTextview.setVisibility(View.INVISIBLE);
         deleteNodeButton.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesEdittext.setVisibility(View.INVISIBLE);
 
+
+
         // Check if Update-Mode is enabled
         Intent intent = getIntent();
         if (intent.hasExtra("nodeId")) {
             updateMode = true;
             deleteNodeButton.setVisibility(View.VISIBLE);
-            initialWifiLabelTextview.setVisibility(View.VISIBLE);
             initialWifiTextview.setVisibility(View.VISIBLE);
-            coordinatesEdittext.setVisibility(View.VISIBLE);
-            coordinatesLabelTextview.setVisibility(View.VISIBLE);
-
             oldNodeId = (String) intent.getExtras().get("nodeId");
             nodeToUpdate = databaseHandler.getNode(oldNodeId);
             nodeIdEdittext.setText(nodeToUpdate.getId());
             descriptionEdittext.setText(nodeToUpdate.getDescription());
-            coordinatesEdittext.setText(nodeToUpdate.getCoordinates());
             picturePath = nodeToUpdate.getPicturePath();
+
+            //fingerprintTaken = false;
+            //abortRecording = false;
 
 
             if (nodeToUpdate.getFingerprint() != null) {
+                recordButton.setImageResource(R.drawable.fingerprint_done);
+                initialWifiLabelTextview.setVisibility(View.VISIBLE);
                 initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+            }
+
+            if (nodeToUpdate.getCoordinates().length() > 0) {
+                coordinatesEdittext.setVisibility(View.VISIBLE);
+                coordinatesLabelTextview.setVisibility(View.VISIBLE);
+                coordinatesEdittext.setText(nodeToUpdate.getCoordinates());
             }
 
             if (picturePath == null) {
@@ -197,12 +211,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             } else {
                 Glide.with(this).load(picturePath).into(cameraImageview);
             }
-
-            System.out.println("______UPDATE-MODE____");
-
         }
 
 
+        saveNodeButton.setImageResource(R.drawable.save);
         refreshImageview.setImageResource(R.drawable.refresh);
         refreshImageview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,8 +234,12 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     recordButton.setEnabled(false);
                     recordTimeText.setEnabled(false);
                     //nodeIdEdittext.setEnabled(false);
-                    wifiNamesDropdown.setEnabled(false);
                     //descriptionEdittext.setEnabled(false);
+                    wifiNamesDropdown.setEnabled(false);
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressTextview.setVisibility(View.VISIBLE);
+                    recordButton.setImageResource(R.drawable.fingerprint_low_contrast);
 
                     wlanName = wifiNamesDropdown.getSelectedItem().toString();
                     recordTime = Integer.parseInt(recordTimeText.getText().toString());
@@ -241,7 +257,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.please_enter_node_name), Toast.LENGTH_SHORT).show();
                 } else {
                     takingPictureAtTheMoment = true;
-
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -301,8 +316,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         .show();
             }
         });
-
-
     }
 
 
@@ -327,12 +340,13 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
 
     /**
-     * make measurement with given record time
+     * Make Wi-Fi signal strength measurement with given record time
      */
     private void measureNode() {
         progressBar.setMax(60 * recordTime);
         progressBar.setProgress(0);
 
+        // Do recording in an other thread
         new Thread(new Runnable() {
             public void run() {
                 signalInformationList = new ArrayList<>();
@@ -346,7 +360,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     for (ScanResult sr : wifiScanList) {
                         if (sr.SSID.equals(wlanName)) {
                             SignalStrengthInformation signal = new SignalStrengthInformation(sr.BSSID, sr.level);
-                            Log.d("NRecordAndEditActivity", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
+                            Log.d("Recording... ", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
                             signalStrenghtList.add(signal);
                         }
                     }
@@ -362,8 +376,8 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     mHandler.post(new Runnable() {
                         public void run() {
                             progressBar.setProgress(progressStatus);
-                            String progressString = progressBar.getMax() - progressBar.getProgress() + "s";
-                            progressText.setText(progressString);
+                            String progressString = String.valueOf(progressBar.getMax() - progressBar.getProgress());
+                            progressTextview.setText(progressString);
                         }
                     });
                     try {
@@ -372,13 +386,24 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-                //progressStatus = 0;
-                //progressText.setText("Messung beendet.");
+
+                // If thread is finished...
                 fingerprintTaken = true;
+
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        if (abortRecording) {
+                            recordButton.setImageResource(R.drawable.fingerprint);
+                        } else {
+                            recordButton.setImageResource(R.drawable.fingerprint_done);
+                        }
+                        progressBar.setVisibility(View.INVISIBLE);
+                        progressTextview.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         }).start();
     }
-
 
 
     @Override
@@ -457,7 +482,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                                         // Reset progressBar and progress and set the inputs enabled
                                         abortRecording = true;
                                         progressStatus = 0;
-                                        progressText.setText(String.valueOf(progressStatus));
+                                        progressTextview.setText(String.valueOf(progressStatus));
                                         progressBar.setProgress(progressStatus);
                                         recordButton.setEnabled(true);
                                         recordTimeText.setEnabled(true);
@@ -481,7 +506,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         jsonWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
                         progressStatus = 0;
-                        progressText.setText(String.valueOf(progressStatus));
+                        progressTextview.setText(String.valueOf(progressStatus));
                         progressBar.setProgress(progressStatus);
                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                         askForNewNode();
@@ -568,7 +593,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                                 // Reset progressBar and progress
                                 abortRecording = true;
                                 progressStatus = 0;
-                                progressText.setText(String.valueOf(progressStatus));
+                                progressTextview.setText(String.valueOf(progressStatus));
                                 progressBar.setProgress(progressStatus);
 
                                 recordButton.setEnabled(true);

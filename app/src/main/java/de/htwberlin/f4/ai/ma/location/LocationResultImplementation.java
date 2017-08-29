@@ -8,18 +8,18 @@ public class LocationResultImplementation implements LocationResult{
     private int id;
     private String settings;
     private String measuredTime;
-    private String selectedNode;
     private String measuredNode;
+    private double percentage;
 
-    LocationResultImplementation(int id, String settings, String measuredTime, String selectedNode, String measuredNode) {
+    LocationResultImplementation(int id, String settings, String measuredTime, String measuredNode, double percentage) {
         this.id = id;
         this.settings = settings;
         this.measuredTime = measuredTime;
-        this.selectedNode = selectedNode;
         this.measuredNode = measuredNode;
+        this.percentage = percentage;
     }
 
-    public LocationResultImplementation() {};
+    public LocationResultImplementation() {}
 
     public int getId() { return this.id; }
     public void setId(int id) {
@@ -32,9 +32,16 @@ public class LocationResultImplementation implements LocationResult{
     public String getMeasuredTime() { return this.measuredTime; }
     public void setMeasuredTime(String measuredTime) {this.measuredTime = measuredTime; }
 
-    public String getSelectedNode() { return this.selectedNode; }
-    public void setSelectedNode(String selectedNode) { this.selectedNode = selectedNode; }
-
     public String getMeasuredNode() { return this.measuredNode; }
     public void setMeasuredNode(String measuredNode) { this.measuredNode = measuredNode; }
+
+    @Override
+    public double getPercentage() {
+        return this.percentage;
+    }
+
+    @Override
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
+    }
 }

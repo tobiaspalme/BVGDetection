@@ -1,73 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nodes_connector_layout"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerHorizontal="true">
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nodes_connector_linearlayout">
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/nodeA_spinner"
-                android:spinnerMode="dropdown">
-            </Spinner>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/nodeB_spinner"
-                android:spinnerMode="dropdown"
-                android:layout_toRightOf="@+id/nodeA_spinner">
-            </Spinner>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/connect_nodes_button"
-                android:text="@string/connect_nodes_button_text"
-                android:layout_below="@+id/nodeA_spinner"/>
-
-        </RelativeLayout>
-
-
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/accessibly_checkbox_layout"
-            android:layout_below="@+id/nodes_connector_linearlayout">
+            android:text="@string/start_edgesmanager"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/start_label"/>
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/accessibility_checkbox"
-                android:text="@string/accessibility_checkbox_text"/>
-
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Spinner
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/accessibly_checkbox_layout">
+            android:id="@+id/nodeA_spinner"
+            android:spinnerMode="dropdown"
+            android:layout_toEndOf="@+id/start_label">
+        </Spinner>
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edges_listview"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/destination_edgesmanager"
+            android:id="@+id/destination_label"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_toEndOf="@+id/nodeA_spinner"/>
 
-        </LinearLayout>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nodeB_spinner"
+            android:spinnerMode="dropdown"
+            android:layout_toEndOf="@+id/destination_label">
+        </Spinner>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/accessibility_checkbox"
+            android:layout_marginTop="7dp"
+            android:text="@string/accessibility_checkbox_text"
+            android:layout_below="@+id/nodeA_spinner"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:id="@+id/connect_nodes_button"
+            android:text="@string/connect_nodes_button_text"
+            android:layout_below="@+id/nodeA_spinner"
+            android:layout_toEndOf="@+id/accessibility_checkbox"/>
 
     </RelativeLayout>
 
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="#7A7A7A"
+        android:layout_below="@+id/nodes_connector_layout"
+        android:id="@+id/separator_view_edgesmanager"/>
 
-</LinearLayout>
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edges_listview"
+        android:layout_below="@+id/separator_view_edgesmanager"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingTop="6dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:background="@drawable/info_box"
+        android:text="@string/edges_manager_infobox_text"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/record_edit_infobox"/>
+
+</RelativeLayout>

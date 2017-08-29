@@ -138,7 +138,7 @@ public class EdgesManagerActivity extends BaseActivity {
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
                     Toast.makeText(getApplicationContext(), "Dieser Weg existiert bereits.",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     databaseHandler.insertEdge(edge);
                     allEdges.add(edge);
