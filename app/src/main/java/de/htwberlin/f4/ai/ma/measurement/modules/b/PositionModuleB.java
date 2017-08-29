@@ -6,7 +6,7 @@ import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.PositionModuleA;
 
 /**
- * Orientation: CompassFusion
+ * Orientation: CompassFusion (Rotation Vector)
  * Altitude: Barometer
  * Distance: Steplength
  *

@@ -179,7 +179,7 @@ public class MeasureControllerImpl implements MeasureController {
                         }
                         break;
                     case STEPCOUNTER:
-                        //handleNewStep();
+                        handleNewStep();
                         break;
                     default:
                         break;
@@ -589,7 +589,7 @@ public class MeasureControllerImpl implements MeasureController {
             }
 
         } catch (JSONException e) {
-            Toast toast = Toast.makeText(view.getContext(), "Fehlerhafter QR-Code", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(view.getContext(), "Ungültiger QR-Code", Toast.LENGTH_SHORT);
             toast.show();
         }
 

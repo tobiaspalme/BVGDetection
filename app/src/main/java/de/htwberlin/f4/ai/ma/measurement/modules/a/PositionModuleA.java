@@ -10,7 +10,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.OrientationModule;
 import de.htwberlin.f4.ai.ma.measurement.modules.PositionModule;
 
 /**
- * Orientation: CompassFusion
+ * Orientation: CompassFusion (Rotation Vector)
  * Altitude: Barometer
  * Distance: Steplength
  *
