@@ -38,7 +38,7 @@ class LocationResultAdapter extends ArrayAdapter<LocationResultImplementation> {
 
         // Populate the data into the template view using the data object
         settingsTextview.setText(locationResultImplementation.getSettings());
-        resultNodeTextview.setText(locationResultImplementation.getMeasuredNode());
+        resultNodeTextview.setText(locationResultImplementation.getMeasuredNode() + "\n" + locationResultImplementation.getPercentage() + " %");
         measureTimeTextview.setText(locationResultImplementation.getMeasuredTime());
 
         // Return the completed view to render on screen

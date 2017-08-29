@@ -190,10 +190,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             descriptionEdittext.setText(nodeToUpdate.getDescription());
             picturePath = nodeToUpdate.getPicturePath();
 
-            //fingerprintTaken = false;
-            //abortRecording = false;
-
-
             if (nodeToUpdate.getFingerprint() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
                 initialWifiLabelTextview.setVisibility(View.VISIBLE);
@@ -233,8 +229,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
                     recordButton.setEnabled(false);
                     recordTimeText.setEnabled(false);
-                    //nodeIdEdittext.setEnabled(false);
-                    //descriptionEdittext.setEnabled(false);
                     wifiNamesDropdown.setEnabled(false);
 
                     progressBar.setVisibility(View.VISIBLE);
@@ -670,26 +664,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         return true;
     }
 
-/*
-    public boolean hasPermissionInManifest(Context context, String permissionName) {
-        final String packageName = context.getPackageName();
-        try {
-            final PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
-            final String[] declaredPermisisons = packageInfo.requestedPermissions;
-            if (declaredPermisisons != null && declaredPermisisons.length > 0) {
-                for (String p : declaredPermisisons) {
-                    if (p.equals(permissionName)) {
-                        return true;
-                    }
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        }
-        return false;
-    }
-*/
 
     /**
      * Stop recording thread if the Activity is stopped,
