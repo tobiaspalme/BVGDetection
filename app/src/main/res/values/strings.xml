@@ -107,6 +107,7 @@
     <string name="go_to_detailed_location_results">Details</string>
     <string name="detailed_results_button_description">Details</string>
     <string name="location_infobox_text">Falls die 1-Sekunden-Messung keinen Erfolg hat, probieren Sie bitte die 10-Sekunden-Messung. \n\n<b>Tip:</b> Falls vorhanden, Bild antippen zum vergrößern</string>
+    <string name="please_try_again">Bitte erneut versuchen</string>
 
     <!-- activity_import_export -->
     <string name="import_button_text">Daten importieren</string>

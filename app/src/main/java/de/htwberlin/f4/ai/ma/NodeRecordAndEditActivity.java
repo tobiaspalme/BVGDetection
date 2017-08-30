@@ -47,7 +47,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.persistence.FileUtils;
+import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
@@ -241,7 +241,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     timestamp = new Timestamp(System.currentTimeMillis());
-                    File file = FileUtils.getFile(nodeIdEdittext.getText().toString(), timestamp);
+                    File file = FileUtilities.getFile(nodeIdEdittext.getText().toString(), timestamp);
 
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                     startActivityForResult(cameraIntent, CAM_REQUEST);
@@ -335,7 +335,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             public void run() {
                 signalInformationList = new ArrayList<>();
                 while (progressStatus < 60 * recordTime && !abortRecording) {
-                    List<SignalStrengthInformation> signalStrenghtList = new ArrayList<>();
+                    List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
 
                     mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     mainWifiObj.startScan();
@@ -345,14 +345,14 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                         if (sr.SSID.equals(wlanName)) {
                             SignalStrengthInformation signal = new SignalStrengthInformation(sr.BSSID, sr.level);
                             Log.d("Recording... ", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
-                            signalStrenghtList.add(signal);
+                            signalStrengthList.add(signal);
                         }
                     }
                     Log.d("------------------", "--------------------------------------------");
 
                     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
                     String format = s.format(new Date());
-                    SignalInformation signalInformation = new SignalInformation(format, signalStrenghtList);
+                    SignalInformation signalInformation = new SignalInformation(format, signalStrengthList);
                     signalInformationList.add(signalInformation);
 
                     progressStatus += 1;
@@ -512,7 +512,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         if (!fingerprintTaken) {
             // If an old fingerprint exists
             if (nodeToUpdate.getFingerprint() != null) {
-                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, "");
+                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
                 jsonWriter.writeJSON(node);
                 databaseHandler.updateNode(node, oldNodeId);
                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -549,7 +549,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         // If a new fingerprint was taken
         } else {
 
-            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), coordinates, picPathToSave, "");
+            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
             jsonWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();

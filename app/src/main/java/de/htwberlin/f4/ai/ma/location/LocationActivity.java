@@ -21,15 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
@@ -151,6 +150,7 @@ public class LocationActivity extends BaseActivity {
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     progressBar.setVisibility(View.INVISIBLE);
+                    //progressBar.setVisibility(View.VISIBLE);
                     getMeasuredNode(1);
                 }
             });
@@ -194,9 +194,9 @@ public class LocationActivity extends BaseActivity {
 
     /**
      * Check WiFi signal strengths and and save them to a multimap
-     * @param times the time to measure in seconds
+     * @param seconds the time to measure in seconds
      */
-    private void getMeasuredNode(final int times) {
+    private void getMeasuredNode(final int seconds) {
 
         locationImageview.setVisibility(View.INVISIBLE);
         //descriptionLabelTextview.setVisibility(View.INVISIBLE);
@@ -213,128 +213,71 @@ public class LocationActivity extends BaseActivity {
             intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             locationTextview.setText(getString(R.string.searching_node_text));
 
-            new Thread(new Runnable() {
-                public void run() {
-                    multiMap = ArrayListMultimap.create();
-                    for (int i = 0; i < times; i++) {
-                        progressBar.setMax(times);
-                        progressBar.setProgress(i + 1);
+            //int progressVariable = 0;
+            //new FingerprintGenerator(progressVariable).execute();
 
-                        wifiManager.startScan();
-                        String wlanName = wifiDropdown.getSelectedItem().toString();
-                        List<ScanResult> wifiScanList = wifiManager.getScanResults();
+            FingerprintGenerator fingerprintGenerator = new FingerprintGenerator();
+            Fingerprint fingerprint = fingerprintGenerator.getFingerprint(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager);
 
-                        //check if there is a new measurement
-                         if(wifiScanList.get(0).timestamp == timestampWifiManager && times == 1)
-                            {
-                                LocationActivity.this.runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        locationTextview.setText("Bitte neu versuchen");
-                                    }
-                                });
-                                return;
-                            }
-
-                            timestampWifiManager = wifiScanList.get(0).timestamp;
-                            Log.d("timestamp", String.valueOf(timestampWifiManager));
-
-                        for (final ScanResult sr : wifiScanList) {
-                            if (sr.SSID.equals(wlanName)) {
-                                multiMap.put(sr.BSSID, sr.level);
-                                Log.d("LocationActivity", "Messung, SSID stimmt mit Dropdown überein:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
-                                long timestamp = sr.timestamp;
-                                Log.d("timestamp", String.valueOf(timestamp));
-                            }
-                        }
-                        wifiScanList.clear();
-
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    makeFingerprint(times);
-                }
-            }).start();
+            getLocationResult(seconds, fingerprint);
         }
     }
 
 
     /**
-     * If times measurement is more than one second make a average of values. Try calculate the position.
+     * Try to calculate the position.
      * @param measuredTime the measured time
+     * @param fingerprint the fingerprint measured before
      */
-    private void makeFingerprint(final int measuredTime) {
-        Set<String> bssid = multiMap.keySet();
-        final List<SignalInformation> signalInformationList = new ArrayList<>();
+    private void getLocationResult(final int measuredTime, Fingerprint fingerprint) {
+        //List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
+        //foundNode = databaseHandler.calculateNodeId(signalInformations);
+        foundNode = databaseHandler.calculateNodeId(fingerprint.getSignalInformationList());
 
-        for (String s : bssid) {
-            int value = 0;
-            int counter = 0;
 
-            for (int test : multiMap.get(s)) {
-                counter++;
-                value += test;
+        LocationResult locationResult;
+        if (foundNode != null) {
+
+            locationTextview.setText(foundNode.getId());
+            locationImageview.setVisibility(View.VISIBLE);
+            //descriptionLabelTextview.setVisibility(View.VISIBLE);
+            //coordinatesLabelTextview.setVisibility(View.VISIBLE);
+            percentLabelTextview.setVisibility(View.VISIBLE);
+
+            descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
+            //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
+            percentTextview.setText(String.valueOf(foundNode.getPercent()));
+
+            locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
+
+            final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
+
+            if (picturePath != null) {
+                Glide.with(context).load(picturePath).into(locationImageview);
+            } else {
+                Glide.with(context).load(R.drawable.unknown).into(locationImageview);
             }
-            value = value / counter;
 
-            List<SignalStrengthInformation> SsiList = new ArrayList<>();
-            SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
-            SsiList.add(signal);
-            SignalInformation signalInformation = new SignalInformation("", SsiList);
-            signalInformationList.add(signalInformation);
-        }
-        foundNode = databaseHandler.calculateNodeId(signalInformationList);
-
-
-        LocationActivity.this.runOnUiThread(new Runnable() {
-            public void run() {
-                LocationResult locationResult;
-                if (foundNode != null) {
-
-                    locationTextview.setText(foundNode.getId());
-                    locationImageview.setVisibility(View.VISIBLE);
-                    //descriptionLabelTextview.setVisibility(View.VISIBLE);
-                    //coordinatesLabelTextview.setVisibility(View.VISIBLE);
-                    percentLabelTextview.setVisibility(View.VISIBLE);
-
-                    descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
-                    //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
-                    percentTextview.setText(String.valueOf(foundNode.getPercent()));
-
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
-
-                    final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
-
-                    if (picturePath != null) {
-                        Glide.with(context).load(picturePath).into(locationImageview);
-                    } else {
-                        Glide.with(context).load(R.drawable.unknown).into(locationImageview);
-                    }
-
-                    locationImageview.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                            intent.putExtra("picturePath", picturePath);
-                            startActivity(intent);
-                        }
-                    });
-
-
-                } else {
-                    locationTextview.setText(getString(R.string.no_node_found_text));
-                    locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
-
+            locationImageview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                    intent.putExtra("picturePath", picturePath);
+                    startActivity(intent);
                 }
+            });
 
-                locationsCounter++;
-                Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
-                sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
-                databaseHandler.insertLocationResult(locationResult);
-            }
-        });
+
+        } else {
+            locationTextview.setText(getString(R.string.no_node_found_text));
+            locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
+
+        }
+
+        locationsCounter++;
+        Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
+        sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
+        databaseHandler.insertLocationResult(locationResult);
     }
 
 }

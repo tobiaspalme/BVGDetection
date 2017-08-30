@@ -203,7 +203,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             File oldImageFile = new File(node.getPicturePath());
             File newImageFile = new File(newFilePath);
 
-            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+            FileUtilities.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
 
         }
 */
@@ -557,7 +557,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         File newDb = new File(dbPath);
         File oldDb = new File(DB_FILEPATH);
         if (newDb.exists()) {
-            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+            FileUtilities.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
             // Access the copied database so SQLiteHelper will cache it and mark
             // it as created.
             getWritableDatabase().close();

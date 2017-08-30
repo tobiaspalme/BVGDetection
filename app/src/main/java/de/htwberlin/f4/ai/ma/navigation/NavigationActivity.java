@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -21,12 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carol.bvg.R;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -35,8 +31,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -283,38 +278,14 @@ public class NavigationActivity extends BaseActivity {
     /**
      * Try to find the location and set it to the start-spinner
      * @param wifiName the WiFi to measure
-     * @param times duration of the measurement in seconds
+     * @param seconds duration of the measurement in seconds
      */
-    private void findLocation(final String wifiName, final int times) {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+    private void findLocation(String wifiName, int seconds) {
 
-        Multimap<String, Integer> multiMap = ArrayListMultimap.create();
-        for (int i = 0; i < times; i++) {
+        FingerprintGenerator fingerprintGenerator = new FingerprintGenerator();
+        Fingerprint fp = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
 
-            wifiManager.startScan();
-            List<ScanResult> wifiScanList = wifiManager.getScanResults();
-
-            if(wifiScanList.get(0).timestamp == 0 && times == 1) {
-                return;
-            }
-
-            for (final ScanResult sr : wifiScanList) {
-                if (sr.SSID.equals(wifiName)) {
-                    multiMap.put(sr.BSSID, sr.level);
-                }
-            }
-
-            wifiScanList.clear();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        FoundNode foundNode = makeFingerprint(multiMap);
+        FoundNode foundNode = databaseHandler.calculateNodeId(fp.getSignalInformationList());
         if (foundNode != null) {
             Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
             toast.show();
@@ -324,35 +295,5 @@ public class NavigationActivity extends BaseActivity {
             Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);
             toast.show();
         }
-    }
-
-
-    /**
-     * Make average values from the capture and calculate the matching node.
-     * @param multiMap a multimap of BSSIDs and signal strengths
-     * @return the calculated nodeID
-     */
-    private FoundNode makeFingerprint(Multimap<String, Integer> multiMap) {
-
-        Set<String> bssid = multiMap.keySet();
-        final List<SignalInformation> signalInformationList = new ArrayList<>();
-
-        for (String s : bssid) {
-            int value = 0;
-            int counter = 0;
-
-            for (int test : multiMap.get(s)) {
-                counter++;
-                value += test;
-            }
-            value = value / counter;
-
-            List<SignalStrengthInformation> SsiList = new ArrayList<>();
-            SignalStrengthInformation signal = new SignalStrengthInformation(s, value);
-            SsiList.add(signal);
-            SignalInformation signalInformation = new SignalInformation("", SsiList);
-            signalInformationList.add(signalInformation);
-        }
-        return databaseHandler.calculateNodeId(signalInformationList);
     }
 }

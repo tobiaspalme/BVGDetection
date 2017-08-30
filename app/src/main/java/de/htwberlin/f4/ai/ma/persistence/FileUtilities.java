@@ -16,7 +16,7 @@ import java.sql.Timestamp;
  * Provides funcitons for file management (creating and copying).
  */
 
-public class FileUtils {
+public class FileUtilities {
 
     /**
      * Copies a File from one to another path.
@@ -60,7 +60,7 @@ public class FileUtils {
         if (!folder.exists()) {
             boolean success = folder.mkdirs();
             if (!success) {
-                Log.d("FileUtils", "Die Datei konnte nicht angelegt werden");
+                Log.d("FileUtilities", "Die Datei konnte nicht angelegt werden");
             }
         }
         return new File(folder, name + "_" + realTimestamp + ".jpg");
