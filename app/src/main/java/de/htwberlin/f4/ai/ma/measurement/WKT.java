@@ -24,6 +24,10 @@ public class WKT {
     // for example: POINT Z(1.0 2.0 3.0)
     public static float[] strToCoord(String coordinatesStr) {
         float[] coordinates = null;
+        if (!coordinatesStr.contains(POINT_Z)) {
+            return null;
+        }
+
         String subStr = coordinatesStr.substring(coordinatesStr.indexOf("(") + 1, coordinatesStr.indexOf(")"));
         String[] splitted = subStr.split(" ");
 
