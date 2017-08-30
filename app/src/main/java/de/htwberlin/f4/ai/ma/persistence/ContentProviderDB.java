@@ -17,7 +17,7 @@ public class ContentProviderDB extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        databaseHandler = new DatabaseHandlerImplementation(getContext());
+        databaseHandler = new DatabaseHandlerImpl(getContext());
         return true;
     }
 

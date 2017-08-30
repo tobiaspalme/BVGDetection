@@ -131,7 +131,7 @@ public class EdgesManagerActivity extends BaseActivity {
                 Node nodeA = databaseHandler.getNode(spinnerA.getSelectedItem().toString());
                 Node nodeB = databaseHandler.getNode(spinnerB.getSelectedItem().toString());
 
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, 0);
+                Edge edge = new EdgeImpl(nodeA, nodeB, accessible, 0);
 
                 if (databaseHandler.checkIfEdgeExists(edge)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.edge_already_exists), Toast.LENGTH_SHORT).show();

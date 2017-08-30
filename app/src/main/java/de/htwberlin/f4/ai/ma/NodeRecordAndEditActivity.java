@@ -42,6 +42,8 @@ import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
@@ -86,7 +88,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
-    private WifiManager mainWifiObj;
+    private WifiManager wifiManager;
     private Timestamp timestamp;
     private List<SignalInformation> signalInformationList;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
@@ -307,9 +309,9 @@ public class NodeRecordAndEditActivity extends BaseActivity {
      * Scan for WiFi names (SSIDs) and add them to the dropdown
      */
     private void refreshWifiDropdown() {
-        mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        mainWifiObj.startScan();
-        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.startScan();
+        List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
         ArrayList<String> wifiNamesList = new ArrayList<>();
         for (ScanResult sr : wifiScanList) {
@@ -330,6 +332,13 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         progressBar.setMax(60 * recordTime);
         progressBar.setProgress(0);
 
+
+
+        FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
+        fingerprintGenerator.getFingerprint(wlanName, recordTime, wifiManager);
+
+
+
         // Do recording in an other thread
         new Thread(new Runnable() {
             public void run() {
@@ -337,9 +346,9 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                 while (progressStatus < 60 * recordTime && !abortRecording) {
                     List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
 
-                    mainWifiObj = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                    mainWifiObj.startScan();
-                    List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+                    wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    wifiManager.startScan();
+                    List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
                     for (ScanResult sr : wifiScanList) {
                         if (sr.SSID.equals(wlanName)) {
@@ -392,6 +401,8 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
     /**
      * When returning from Camera Activity after taking a picture
+     * if a picture was taken (and not just returned),
+     * save the path and show the picture in the imageview.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -605,7 +616,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
     /**
      * Check for permissions (in a loop)
-     *
      * @param context the context
      * @return boolean, if all permissions are given
      */

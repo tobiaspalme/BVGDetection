@@ -14,7 +14,7 @@ public class DatabaseHandlerFactory {
 
     public static DatabaseHandler getInstance(Context context) {
         if (databaseHandler == null) {
-            databaseHandler = new DatabaseHandlerImplementation(context);
+            databaseHandler = new DatabaseHandlerImpl(context);
         }
 
         return databaseHandler;

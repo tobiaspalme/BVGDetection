@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
+import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
@@ -31,7 +31,7 @@ import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
-import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
+import de.htwberlin.f4.ai.ma.location.LocationResultImpl;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 import de.htwberlin.f4.ai.ma.persistence.calculations.EuclideanDistance;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
@@ -45,7 +45,7 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
  * Created by Johann Winter
  */
 
-class DatabaseHandlerImplementation extends SQLiteOpenHelper implements DatabaseHandler {
+class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
 
     // Static variables
@@ -84,7 +84,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     // Constructor
-    DatabaseHandlerImplementation(Context context) {
+    DatabaseHandlerImpl(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -144,7 +144,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //----------------- N O D E S ------------------------------------------------------------------------------------------
 
-    // Insert
+    /**
+     * Insert a new Node
+     * @param node the node to insert
+     */
     public void insertNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -169,7 +172,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         database.close();
     }
 
-    // Update Nodes
+    /**
+     * Update a Node
+     * @param node the new Node
+     * @param oldNodeId the original nodeID (name) which will be changed
+     */
     public void updateNode(Node node, String oldNodeId) {
 
         // At first, update Edges which contain the updated Node
@@ -218,7 +225,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Get all Nodes
+    /**
+     * Get a List of all Nodes
+     * @return a list of all Nodes
+     */
     public ArrayList<Node> getAllNodes() {
         ArrayList<Node> allNodes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NODES_TABLE;
@@ -247,7 +257,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Get single Node
+    /**
+     * Get a single Node
+     * @param nodeID the name of the Node
+     */
     public Node getNode(String nodeID) {
         SQLiteDatabase database = this.getWritableDatabase();
         String selectQuery = "SELECT * FROM " + NODES_TABLE + " WHERE " + NODE_ID + " ='" + nodeID + "'";
@@ -272,7 +285,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Return true if Node with this nodeID (name) already exists.
+    /**
+     * Check if a node already exists
+     * @param nodeID the name of the Node
+     * @return boolean, if Node exists
+     */
     public boolean checkIfNodeExists(String nodeID) {
         if (getNode(nodeID) != null) {
             return true;
@@ -281,7 +298,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Delete Node
+    /**
+     * Delete a single Node
+     * @param node the Node to be deleted
+     */
     public void deleteNode(Node node) {
         SQLiteDatabase database = this.getWritableDatabase();
 
@@ -300,7 +320,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //----------- E D G E S -------------------------------------------------------------------------------------
 
-    // Insert Edge
+    /**
+     * Insert an edge
+     * @param edge the edge to be inserted
+     */
     public void insertEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -327,7 +350,12 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
         database.close();
     }
 
-    // Update Edges (only for changing nodeA and nodeB attribute)
+    /**
+     * Update an Edge (only for changing nodeA and nodeB attribute of the Edge).
+     * @param edge the Edge to be updated
+     * @param nodeToBeUpdated the Edge's nodeA or nodeB
+     * @param value the ID (name) of the Node
+     */
     public void updateEdge(Edge edge, String nodeToBeUpdated, String value) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -359,7 +387,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Update Edges (everything but Edge's nodeA and nodeB attribute)
+    /**
+     * Update an Edge (everything but Edge's nodeA and nodeB attribute)
+     * @param edge the Edge to be updated
+     */
     public void updateEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -382,7 +413,12 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Get single Edge
+    /**
+     * Get single Edge
+     * @param nodeA the startnode of the Edge
+     * @param nodeB the endnode of the Edge
+     * @return the Edge
+     */
     public Edge getEdge(Node nodeA, Node nodeB) {
         String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + "='" + nodeA.getId() + "' AND " + EDGE_NODE_B + "='" + nodeB.getId() + "' OR " +
                 EDGE_NODE_A + "='" + nodeB.getId() + "' AND " + EDGE_NODE_B + "='" + nodeA.getId() + "'";
@@ -401,7 +437,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
             String stepListString = cursor.getString(4);
             List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
-            Edge edge = new EdgeImplementation(node1, node2, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
+            Edge edge = new EdgeImpl(node1, node2, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
             database.close();
             return edge;
@@ -410,8 +446,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-
-    // Get all Edges
+    /**
+     * Get a list of all Edges
+     * @return the list of Edges
+     */
     public ArrayList<Edge> getAllEdges() {
         ArrayList<Edge> allEdges = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + EDGES_TABLE;
@@ -433,8 +471,8 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 String stepListString = cursor.getString(4);
                 List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
-                //Edge edge = new EdgeImplementation(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                Edge edge = new EdgeImplementation(nodeA, nodeB, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
+                //Edge edge = new EdgeImpl(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
+                Edge edge = new EdgeImpl(nodeA, nodeB, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
                 allEdges.add(edge);
 
@@ -445,7 +483,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Check if Edge already exists
+    /**
+     * Check if an Edge already exists
+     * @param edge the Edge to be checked
+     * @return boolean, if Edge exists
+     */
     public boolean checkIfEdgeExists(Edge edge) {
         String selectQuery = "SELECT * FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "' " +
                 " OR " + EDGE_NODE_A + " ='" + edge.getNodeB().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeA().getId() + "' ";
@@ -462,7 +504,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Delete Edge
+    /**
+     * Delete a single Edge
+     * @param edge the Edge to be deleted
+     */
     public void deleteEdge(Edge edge) {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + EDGES_TABLE + " WHERE " + EDGE_NODE_A + " ='" + edge.getNodeA().getId() + "' AND "+ EDGE_NODE_B + " ='" + edge.getNodeB().getId() + "'"
@@ -478,7 +523,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //----------------- L O C A T I O N     R E S U L T S ------------------------------------------------------------------------------------------
 
-    // Insert LocationResult
+    /**
+     * Insert a LocationResult
+     * @param locationResult the LocationResult to be inserted
+     */
     public void insertLocationResult(LocationResult locationResult) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -497,26 +545,29 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Get all LocationResults
-    public ArrayList<LocationResultImplementation> getAllLocationResults() {
-        ArrayList<LocationResultImplementation> allResults = new ArrayList<>();
+    /**
+     * Get a list of LocationResults
+     * @return the list of LocationResults
+     */
+    public ArrayList<LocationResult> getAllLocationResults() {
+        ArrayList<LocationResult> allResults = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                LocationResultImplementation locationResultImplementation = new LocationResultImplementation();
+                LocationResult locationResult = new LocationResultImpl();
 
                 Log.d("DB: get_all_locations", "###########");
 
-                locationResultImplementation.setId(Integer.valueOf(cursor.getString(0)));
-                locationResultImplementation.setSettings(cursor.getString(1));
-                locationResultImplementation.setMeasuredTime(cursor.getString(2));
-                locationResultImplementation.setMeasuredNode(cursor.getString(3));
-                locationResultImplementation.setPercentage(cursor.getFloat(4));
+                locationResult.setId(Integer.valueOf(cursor.getString(0)));
+                locationResult.setSettings(cursor.getString(1));
+                locationResult.setMeasuredTime(cursor.getString(2));
+                locationResult.setMeasuredNode(cursor.getString(3));
+                locationResult.setPercentage(cursor.getFloat(4));
 
-                allResults.add(locationResultImplementation);
+                allResults.add(locationResult);
             } while (cursor.moveToNext());
         }
 
@@ -525,7 +576,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
 
-    // Delete LocatonResult
+    /**
+     * Delete a single LocationResult
+     * @param locationResult the LocationResult to be deleted
+     */
     public void deleteLocationResult(LocationResult locationResult) {
         SQLiteDatabase database = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
@@ -540,12 +594,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     /**
      * Copies the database file at the specified location over the current
-     * internal application database.
+     * internal application database (existing data will be overwritten!).
      *
      * @param dbPath path to the (new) database file
      * @return return-code: true means successful, false unsuccessful
      */
-
     public boolean importDatabase(String dbPath) throws IOException {
 
         //String DB_FILEPATH = context.getFilesDir().getPath() + "/databases/indoor_data.db";
@@ -570,6 +623,11 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //------------------- E X P O R T ------------------------------------------------------------
 
+
+    /**
+     * Export the database to SDCARD location
+     * @return boolean, if action was successful
+     */
     public boolean exportDatabase() {
         try {
 
@@ -603,7 +661,16 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
     //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
 
-    public FoundNode calculateNodeId(List<SignalInformation> signalInformationList) {
+
+    /**
+     * Calculate a Node for a Fingerprint
+     * @param fingerprint the input Fingerprint to be compared with all existent Nodes to get the position
+     * @return the ID (name) of the resulting Node
+     */
+    //public FoundNode calculateNodeId(List<SignalInformation> signalInformationList) {
+    public FoundNode calculateNodeId(Fingerprint fingerprint) {
+
+        List<SignalInformation> signalInformationList = fingerprint.getSignalInformationList();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -654,7 +721,6 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                     foundNode = new FoundNode(distanceNames.get(0), 100.0);
                 }
             }
-
             return foundNode;
         } else {
             return null;
@@ -689,9 +755,9 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     /**
-     * rewrite nodelist to restrucetd nodes and delete weak mac addresses
+     * Rewrite the nodelist to restrucetd Nodes and delete weak MAC addresses
      * @param allNodes list of all nodes
-     * @return restructed node list
+     * @return restructed Node list
      */
     private List<RestructedNode> calculateNewNodeDateset(List<Node> allNodes) {
         List<String> macAddresses;
@@ -729,10 +795,10 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     /**
-     * create a multimap with mac address and signal strength values
-     * @param node
-     * @param macAdresses
-     * @return multimap with mac address and vales
+     * Create a multimap with MAC address and signal strength values
+     * @param node input Node
+     * @param macAdresses list of MAC addresses
+     * @return multimap with mac address and signal strengths
      */
     private Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
@@ -753,9 +819,9 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     /**
-     * get all mac addresses
-     * @param node
-     * @return list of unique mac addresses
+     * Get all mac addresses of a specific Node
+     * @param node the Node
+     * @return list of unique MAC addresses
      */
     private List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
@@ -764,8 +830,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 macAdresses.add(ssi.macAddress);
             }
         }
-        List<String> uniqueList = new ArrayList<String>(macAdresses);
-        return uniqueList;
+        return new ArrayList<>(macAdresses);
     }
 
 

@@ -4,13 +4,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
-import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**
@@ -49,11 +47,12 @@ public interface DatabaseHandler {
     boolean exportDatabase();
 
     // Calculate my location
-    FoundNode calculateNodeId(List<SignalInformation> signalInformationList);
+    //FoundNode calculateNodeId(List<SignalInformation> signalInformationList);
+    FoundNode calculateNodeId(Fingerprint fingerprint);
 
     // LocationResult management
     void insertLocationResult(LocationResult locationResult);
-    ArrayList<LocationResultImplementation> getAllLocationResults();
+    ArrayList<LocationResult> getAllLocationResults();
     void deleteLocationResult(LocationResult locationResult);
 
 }

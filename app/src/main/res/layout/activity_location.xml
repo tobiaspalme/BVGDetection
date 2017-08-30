@@ -103,22 +103,6 @@
             android:text="@string/measured_node_textview_text"
             android:textColor="@android:color/holo_red_dark"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="10dp"
-            android:id="@+id/percent_textview"
-            android:layout_toEndOf="@+id/location_textview"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/percent_textview"
-            android:id="@+id/percent_label_textview"
-            android:text="@string/percent_label_textview" />
-
 <!--
         <TextView
             android:layout_width="wrap_content"

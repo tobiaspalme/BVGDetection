@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
@@ -52,8 +53,6 @@ public class LocationActivity extends BaseActivity {
     TextView descriptionTextview;
     // TextView coordinatesLabelTextview;
     // TextView coordinatesTextview;
-    TextView percentLabelTextview;
-    TextView percentTextview;
     ProgressBar progressBar;
 
     Context context = this;
@@ -99,8 +98,6 @@ public class LocationActivity extends BaseActivity {
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
         //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
         //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
-        percentLabelTextview = (TextView) findViewById(R.id.percent_label_textview);
-        percentTextview = (TextView) findViewById(R.id.percent_textview);
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
         progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
@@ -142,7 +139,6 @@ public class LocationActivity extends BaseActivity {
 
         //descriptionLabelTextview.setVisibility(View.INVISIBLE);
         //coordinatesLabelTextview.setVisibility(View.INVISIBLE);
-        percentLabelTextview.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
 
         refreshWifiDropdown();
@@ -201,11 +197,9 @@ public class LocationActivity extends BaseActivity {
         locationImageview.setVisibility(View.INVISIBLE);
         //descriptionLabelTextview.setVisibility(View.INVISIBLE);
        // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
-        percentLabelTextview.setVisibility(View.INVISIBLE);
 
         descriptionTextview.setText("");
 //        coordinatesTextview.setText("");
-        percentTextview.setText("");
         //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
@@ -214,9 +208,9 @@ public class LocationActivity extends BaseActivity {
             locationTextview.setText(getString(R.string.searching_node_text));
 
             //int progressVariable = 0;
-            //new FingerprintGenerator(progressVariable).execute();
+            //new FingerprintGeneratorImpl(progressVariable).execute();
 
-            FingerprintGenerator fingerprintGenerator = new FingerprintGenerator();
+            FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
             Fingerprint fingerprint = fingerprintGenerator.getFingerprint(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager);
 
             getLocationResult(seconds, fingerprint);
@@ -232,7 +226,7 @@ public class LocationActivity extends BaseActivity {
     private void getLocationResult(final int measuredTime, Fingerprint fingerprint) {
         //List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
         //foundNode = databaseHandler.calculateNodeId(signalInformations);
-        foundNode = databaseHandler.calculateNodeId(fingerprint.getSignalInformationList());
+        foundNode = databaseHandler.calculateNodeId(fingerprint);
 
 
         LocationResult locationResult;
@@ -242,13 +236,11 @@ public class LocationActivity extends BaseActivity {
             locationImageview.setVisibility(View.VISIBLE);
             //descriptionLabelTextview.setVisibility(View.VISIBLE);
             //coordinatesLabelTextview.setVisibility(View.VISIBLE);
-            percentLabelTextview.setVisibility(View.VISIBLE);
 
             descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
             //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
-            percentTextview.setText(String.valueOf(foundNode.getPercent()));
 
-            locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
+            locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
 
             final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
@@ -270,7 +262,7 @@ public class LocationActivity extends BaseActivity {
 
         } else {
             locationTextview.setText(getString(R.string.no_node_found_text));
-            locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
+            locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
 
         }
 

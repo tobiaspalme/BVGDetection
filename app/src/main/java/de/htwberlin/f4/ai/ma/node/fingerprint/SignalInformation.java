@@ -30,7 +30,7 @@ public class SignalInformation {
 
     /**
      * Setter for the timestamp
-     * @param timestamp
+     * @param timestamp the timestamp
      */
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;

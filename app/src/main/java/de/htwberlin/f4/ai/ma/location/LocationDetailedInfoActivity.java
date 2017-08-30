@@ -37,7 +37,7 @@ public class LocationDetailedInfoActivity extends BaseActivity{
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         // Load LocationResults from database and fill the listview
-        final ArrayList<LocationResultImplementation> allResults = databaseHandler.getAllLocationResults();
+        final ArrayList<LocationResult> allResults = databaseHandler.getAllLocationResults();
         locationResultAdapter = new LocationResultAdapter(this, allResults);
         resultsListview.setAdapter(locationResultAdapter);
 

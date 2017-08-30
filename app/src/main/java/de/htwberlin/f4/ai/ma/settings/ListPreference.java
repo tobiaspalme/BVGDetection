@@ -1,13 +1,15 @@
-package de.htwberlin.f4.ai.ma;
+package de.htwberlin.f4.ai.ma.settings;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
+
 /**
- * Override the standard Edit Text Element. It is now possible to see the value of the child element as summary.
+ * Override the standard ListPreference element. It is now possible to see the value of the child element as summary.
  */
-public class EditTextPreference extends android.preference.EditTextPreference {
-    public EditTextPreference(Context context, AttributeSet attrs) {
+public class ListPreference extends android.preference.ListPreference {
+
+    public ListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -20,6 +22,6 @@ public class EditTextPreference extends android.preference.EditTextPreference {
 
     @Override
     public CharSequence getSummary() {
-        return this.getText();
+        return this.getValue();
     }
 }

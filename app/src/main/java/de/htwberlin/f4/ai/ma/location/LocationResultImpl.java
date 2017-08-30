@@ -3,7 +3,7 @@ package de.htwberlin.f4.ai.ma.location;
 /**
  * A class for the LocationResult with important information
  */
-public class LocationResultImplementation implements LocationResult{
+public class LocationResultImpl implements LocationResult{
 
     private int id;
     private String settings;
@@ -11,7 +11,7 @@ public class LocationResultImplementation implements LocationResult{
     private String measuredNode;
     private double percentage;
 
-    LocationResultImplementation(int id, String settings, String measuredTime, String measuredNode, double percentage) {
+    LocationResultImpl(int id, String settings, String measuredTime, String measuredNode, double percentage) {
         this.id = id;
         this.settings = settings;
         this.measuredTime = measuredTime;
@@ -19,7 +19,7 @@ public class LocationResultImplementation implements LocationResult{
         this.percentage = percentage;
     }
 
-    public LocationResultImplementation() {}
+    public LocationResultImpl() {}
 
     public int getId() { return this.id; }
     public void setId(int id) {

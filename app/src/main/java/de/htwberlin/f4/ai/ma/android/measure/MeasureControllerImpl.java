@@ -13,19 +13,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,8 +41,6 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ma.location.LocationActivity;
-import de.htwberlin.f4.ai.ma.location.LocationResultImplementation;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementType;
@@ -58,9 +49,10 @@ import de.htwberlin.f4.ai.ma.measurement.WKT;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
+import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -383,7 +375,7 @@ public class MeasureControllerImpl implements MeasureController {
 
         // if there is no edge between start and targetnode yet, we create a new one
         if (edge == null) {
-            edge = new EdgeImplementation(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
+            edge = new EdgeImpl(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
             edgeFound = false;
         } else {
             edge.setAccessibility(handycapFriendly);
@@ -452,7 +444,7 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onEdgeDetailsClicked() {
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
-        Edge edge = new EdgeImplementation(startNode, targetNode, false, 0);
+        Edge edge = new EdgeImpl(startNode, targetNode, false, 0);
         if (databaseHandler.checkIfEdgeExists(edge)) {
             BaseActivity activity = (BaseActivity) view;
             activity.loadEdgeDetails(startNode.getId(), targetNode.getId());
@@ -700,7 +692,7 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
 
-        FoundNode foundNode = databaseHandler.calculateNodeId(signalInformationList);
+        FoundNode foundNode = databaseHandler.calculateNodeId(new Fingerprint("", signalInformationList));
         Node result = null;
         if (foundNode != null) {
             result = databaseHandler.getNode(foundNode.getId());
@@ -774,7 +766,7 @@ public class MeasureControllerImpl implements MeasureController {
                     }
                     // if there isn't an edge, update view with placeholder data
                     else {
-                        Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
+                        Edge placeHolderEdge = new EdgeImpl(null, null, true, 0);
                         view.updateEdge(placeHolderEdge);
                     }
                 }
@@ -787,7 +779,7 @@ public class MeasureControllerImpl implements MeasureController {
             // if start and targetnode are equal just update the edge with placeholder
             else {
                 view.disableStart();
-                Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
+                Edge placeHolderEdge = new EdgeImpl(null, null, true, 0);
                 view.updateEdge(placeHolderEdge);
             }
         }

@@ -28,7 +28,7 @@
        <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivityvity" />-->
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationDetailedInfoActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.SettingsActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.settings.SettingsActivity" />
 
         <activity android:name="de.htwberlin.f4.ai.ma.android.measure.MeasureViewImpl" />
         <activity android:name="de.htwberlin.f4.ai.ma.android.measure.barcode.BarcodeCaptureActivity" />

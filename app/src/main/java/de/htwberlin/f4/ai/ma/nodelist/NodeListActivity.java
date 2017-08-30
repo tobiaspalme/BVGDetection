@@ -30,7 +30,6 @@ public class NodeListActivity extends BaseActivity {
     ArrayList<String> nodeNames;
     ArrayList<String> nodeDescriptions;
     ArrayList<String> nodePicturePaths;
-
     ArrayList<Node> allNodes;
     NodeListAdapter nodeListAdapter;
     DatabaseHandler databaseHandler;
@@ -103,6 +102,9 @@ public class NodeListActivity extends BaseActivity {
     }
 
 
+    /**
+     * Refresh the list if the user comes back to this Activity
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -110,6 +112,9 @@ public class NodeListActivity extends BaseActivity {
     }
 
 
+    /**
+     * Clear and reload the Nodelist
+     */
     private void loadDbData() {
 
         nodeDescriptions.clear();

@@ -22,7 +22,7 @@ import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.ImportExportActivity;
 //import de.htwberlin.f4.ai.ma.NodeRecordActivity;
 import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
-import de.htwberlin.f4.ai.ma.SettingsActivity;
+import de.htwberlin.f4.ai.ma.settings.SettingsActivity;
 
 public class BaseActivity extends AppCompatActivity {
 

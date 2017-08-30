@@ -9,7 +9,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
  * Created by Johann Winter
  */
 
-public class EdgeImplementation implements Edge{
+public class EdgeImpl implements Edge{
 
     private Node nodeA;
     private Node nodeB;
@@ -20,7 +20,7 @@ public class EdgeImplementation implements Edge{
 
 
     // Constructor for an Edge without given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, float weight) {
+    public EdgeImpl(Node nodeA, Node nodeB, boolean accessible, float weight) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessible = accessible;
@@ -29,7 +29,7 @@ public class EdgeImplementation implements Edge{
     }
 
     // Constructor for an Edge with given stepCoordList
-    public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, float weight, String additionalInfo) {
+    public EdgeImpl(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, float weight, String additionalInfo) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
         this.accessible = accessible;

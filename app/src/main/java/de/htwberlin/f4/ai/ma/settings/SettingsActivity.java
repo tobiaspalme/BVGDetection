@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma;
+package de.htwberlin.f4.ai.ma.settings;
 
 import android.os.Bundle;
 

@@ -26,12 +26,13 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeImplementation;
+import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -104,12 +105,12 @@ public class NavigationActivity extends BaseActivity {
         Node n4 = NodeFactory.createInstance("n4", "", new Fingerprint("", null), "", "", "");
         Node n5 = NodeFactory.createInstance("n5", "", new Fingerprint("", null), "", "", "");
 
-        Edge e1 = new EdgeImplementation(n1, n2, false, 4);
-        Edge e2 = new EdgeImplementation(n2, n3, false, 5);
-        Edge e3 = new EdgeImplementation(n1, n3, true, 11);
-        Edge e4 = new EdgeImplementation(n1, n4, true, 8);
-        Edge e5 = new EdgeImplementation(n4, n5, true, 1);
-        Edge e6 = new EdgeImplementation(n5, n3, true, 1);
+        Edge e1 = new EdgeImpl(n1, n2, false, 4);
+        Edge e2 = new EdgeImpl(n2, n3, false, 5);
+        Edge e3 = new EdgeImpl(n1, n3, true, 11);
+        Edge e4 = new EdgeImpl(n1, n4, true, 8);
+        Edge e5 = new EdgeImpl(n4, n5, true, 1);
+        Edge e6 = new EdgeImpl(n5, n3, true, 1);
 
         databaseHandler.deleteNode(n1);
         databaseHandler.deleteNode(n2);
@@ -282,10 +283,10 @@ public class NavigationActivity extends BaseActivity {
      */
     private void findLocation(String wifiName, int seconds) {
 
-        FingerprintGenerator fingerprintGenerator = new FingerprintGenerator();
-        Fingerprint fp = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
+        FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
+        Fingerprint fingerprint = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
 
-        FoundNode foundNode = databaseHandler.calculateNodeId(fp.getSignalInformationList());
+        FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
         if (foundNode != null) {
             Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
             toast.show();
