@@ -30,7 +30,7 @@ public class PositionModuleA implements PositionModule {
     private float[] coordinates;
 
     public PositionModuleA(Context context, CalibrationData calibrationData) {
-        altitudeModule = new AltitudeModuleA(context, calibrationData.getAirPressure());
+        altitudeModule = new AltitudeModuleA(context, calibrationData.getAirPressure(), calibrationData.getBarometerThreshold());
         distanceModule = new DistanceModuleA(context, calibrationData.getStepLength());
         orientationModule = new OrientationModuleA(context);
         // set start point to 0,0,0

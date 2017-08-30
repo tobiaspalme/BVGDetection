@@ -89,6 +89,7 @@ public class MeasureControllerImpl implements MeasureController {
     private IndoorMeasurementType measurementType;
     private float lowpassFilterValue;
     private boolean useStepDirectionDetect;
+    private float barometerThreshold;
 
     private Node startNode;
     private Node targetNode;
@@ -441,6 +442,7 @@ public class MeasureControllerImpl implements MeasureController {
         String type = sharedPreferences.getString("pref_measurement_type", "Variante B");
         measurementType = IndoorMeasurementType.fromString(type);
         useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", false);
+        barometerThreshold = Float.valueOf(sharedPreferences.getString("pref_barometer_threshold", "0.1"));
 
     }
 
@@ -837,6 +839,7 @@ public class MeasureControllerImpl implements MeasureController {
                     calibrationData.setIndoorMeasurementType(measurementType);
                     calibrationData.setLowpassFilterValue(lowpassFilterValue);
                     calibrationData.setUseStepDirection(useStepDirectionDetect);
+                    calibrationData.setBarometerThreshold(barometerThreshold);
 
                     // save new calibrated airpressure and azimuth
                     calibrationData.setAirPressure(airPressure);

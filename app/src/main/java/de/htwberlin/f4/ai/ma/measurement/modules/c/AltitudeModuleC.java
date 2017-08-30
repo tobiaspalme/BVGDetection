@@ -10,7 +10,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.a.AltitudeModuleA;
 
 public class AltitudeModuleC extends AltitudeModuleA {
 
-    public AltitudeModuleC(Context context, float airPressure) {
-        super(context, airPressure);
+    public AltitudeModuleC(Context context, float airPressure, float threshold) {
+        super(context, airPressure, threshold);
     }
 }

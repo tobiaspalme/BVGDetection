@@ -18,6 +18,16 @@ public class CalibrationData {
     private float lowpassFilterValue;
     private boolean useStepDirection;
 
+    public float getBarometerThreshold() {
+        return barometerThreshold;
+    }
+
+    public void setBarometerThreshold(float barometerThreshold) {
+        this.barometerThreshold = barometerThreshold;
+    }
+
+    private float barometerThreshold;
+
     public boolean getUseStepDirection() {
         return useStepDirection;
     }

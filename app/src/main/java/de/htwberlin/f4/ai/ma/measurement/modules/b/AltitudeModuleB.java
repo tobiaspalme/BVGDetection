@@ -22,8 +22,8 @@ public class AltitudeModuleB extends AltitudeModuleA {
     private float lowpassFilterValue;
 
 
-    public AltitudeModuleB(Context context, float airPressure, float lowpassFilterValue) {
-        super(context, airPressure);
+    public AltitudeModuleB(Context context, float airPressure, float lowpassFilterValue, float threshold) {
+        super(context, airPressure, threshold);
         this.lowpassFilterValue = lowpassFilterValue;
     }
 

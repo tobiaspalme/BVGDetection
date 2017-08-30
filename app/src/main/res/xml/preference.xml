@@ -79,6 +79,14 @@
             android:defaultValue="0.1"
             />
 
+        <de.htwberlin.f4.ai.ma.EditTextPreference
+            android:key="pref_barometer_threshold"
+            android:title="Barometer Threshold (m)"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:defaultValue="0.1"
+            />
+
         <CheckBoxPreference
             android:key="pref_stepdirection"
             android:title="Schrittrichtung erkennen"
