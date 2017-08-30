@@ -23,4 +23,5 @@ public interface MeasureController {
     void onLocateWifiClicked();
     void onLocateQrClicked();
     void onQrResult(String qr);
+    void onNullpointCheckedStartNode(boolean checked);
 }

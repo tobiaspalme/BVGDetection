@@ -235,7 +235,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:text="Start Ort"
+                    android:text="Start"
                     android:textSize="20sp" />
             </RelativeLayout>
 
@@ -326,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:text="Ziel Ort"
+                    android:text="Ziel"
                     android:textSize="20sp" />
             </RelativeLayout>
 

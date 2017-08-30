@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BVG</string>
+    <string name="app_name">Indoor Navigation</string>
     <string name="pref_movingAverage_default">3</string>
 <!--<string name="title_activity_record">RecordActivity</string>
     <string name="title_activity_choose_app">ChooseAppActivity</string>
