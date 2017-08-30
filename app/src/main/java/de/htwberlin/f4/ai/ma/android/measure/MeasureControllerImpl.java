@@ -180,6 +180,13 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
                     case STEPCOUNTER:
                         handleNewStep();
+                        // fix first step bug...
+                        // first step won't get recognized by sensor so we just fake the step
+                        // and assume the user walks atleast for the two first steps in  the
+                        // same direction
+                        if (stepCount == 1) {
+                            handleNewStep();
+                        }
                         break;
                     default:
                         break;

@@ -59,8 +59,8 @@ public class AltitudeModuleA implements AltitudeModule {
         float altitudeDiff = 0.0f;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
-        // just picking the last value in the interval
-        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
+        // just picking the last value
+        Map<SensorType, List<SensorData>> intervalData = dataModel.getData();
         List<SensorData> dataValues = intervalData.get(SensorType.BAROMETER);
         if (dataValues != null && dataValues.size() > 0) {
             currentAirPressure = dataValues.get(dataValues.size()-1).getValues()[0];
