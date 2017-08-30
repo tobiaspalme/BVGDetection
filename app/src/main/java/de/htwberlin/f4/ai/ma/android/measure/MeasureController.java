@@ -24,4 +24,5 @@ public interface MeasureController {
     void onLocateQrClicked();
     void onQrResult(String qr);
     void onNullpointCheckedStartNode(boolean checked);
+    void onStairsToggle(boolean checked);
 }

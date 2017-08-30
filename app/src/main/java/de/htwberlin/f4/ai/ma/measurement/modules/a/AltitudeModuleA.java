@@ -23,7 +23,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.AltitudeModule;
 
 public class AltitudeModuleA implements AltitudeModule {
 
-
+    private static final float THRESHOLD_MAX = 0.5f;
     protected SensorDataModel dataModel;
     protected SensorFactory sensorFactory;
     protected float airPressure;
@@ -71,7 +71,7 @@ public class AltitudeModuleA implements AltitudeModule {
             // set new values
             lastStepTimestamp = currentStepTimestamp;
             //lastAltitude = currentAltitude;
-            if (Math.abs(altitudeDiff) >= threshold) {
+            if (Math.abs(altitudeDiff) >= threshold && Math.abs(altitudeDiff) <= THRESHOLD_MAX) {
                 lastAltitude = currentAltitude;
             } else {
                 altitudeDiff = 0;

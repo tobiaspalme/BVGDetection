@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,8 +19,10 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -64,7 +69,8 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private ImageView locateQrImage;
 
     private CheckBox nullpointStartCb;
-    private CheckBox nullpointTargetCb;
+
+    private Switch stairsToggle;
 
     private ArrayAdapter<String> startAdapter;
     private ArrayAdapter<String> targetAdapter;
@@ -99,6 +105,16 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         edgeDistanceView = (TextView) findViewById(R.id.coordinates_measure_edge_distance);
 
         coordinatesView = (TextView) findViewById(R.id.coordinates_measure_coordinates);
+
+        stairsToggle = (Switch) findViewById(R.id.coordinates_measure_stairs);
+        stairsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (controller != null) {
+                    controller.onStairsToggle(b);
+                }
+            }
+        });
 
         startNodeImage = (ImageView) findViewById(R.id.coordinates_measure_start_image);
         targetNodeImage = (ImageView) findViewById(R.id.coordinates_measure_target_image);

@@ -17,6 +17,15 @@ public class CalibrationData {
     private IndoorMeasurementType indoorMeasurementType;
     private float lowpassFilterValue;
     private boolean useStepDirection;
+    private boolean stairs;
+
+    public boolean isStairs() {
+        return stairs;
+    }
+
+    public void setStairs(boolean stairs) {
+        this.stairs = stairs;
+    }
 
     public float getBarometerThreshold() {
         return barometerThreshold;

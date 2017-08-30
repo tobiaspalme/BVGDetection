@@ -23,6 +23,7 @@ public class PositionModuleA implements PositionModule {
     protected DistanceModule distanceModule;
     protected OrientationModule orientationModule;
     protected Context context;
+    protected CalibrationData calibrationData;
 
     // coordinates[0] = x = east / west
     // coordinates[1] = y = forward / backward
@@ -35,14 +36,23 @@ public class PositionModuleA implements PositionModule {
         orientationModule = new OrientationModuleA(context);
         // set start point to 0,0,0
         coordinates = calibrationData.getCoordinates();
+        this.calibrationData = calibrationData;
     }
 
     @Override
     public float[] calculatePosition() {
+
         // calculate new position with these 3 values
         float altitude = altitudeModule.getAltitude();
         float distance = distanceModule.getDistance();
         float orientation = orientationModule.getOrientation();
+
+        if (calibrationData.isStairs()) {
+            // adjusting distance when stair toggle is checked
+            // since we dont know if the user goes up or down, we dont manipulate the altitude.
+            // we just rely on barometer data and hope threshold is passed
+            distance = 0.35f;
+        }
 
         // prevent wrong calculcation if delta altitude is bigger than steplength
         // that can happen when a train arrives in station due to airpressure change...
