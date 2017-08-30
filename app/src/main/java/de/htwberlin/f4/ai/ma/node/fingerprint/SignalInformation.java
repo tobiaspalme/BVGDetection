@@ -2,6 +2,8 @@ package de.htwberlin.f4.ai.ma.node.fingerprint;
 
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+
 /**
  * Created by Johann Winter
  *
@@ -12,12 +14,12 @@ import java.util.List;
 public class SignalInformation {
 
     private String timestamp;
-    private List<SignalStrengthInformation> signalStrengthInfoList;
+    private List<SignalStrength> signalStrengthList;
 
 
-    public SignalInformation(String timestamp, List<SignalStrengthInformation> signalStrengthInformationList) {
+    public SignalInformation(String timestamp, List<SignalStrength> signalStrengths) {
         this.timestamp = timestamp;
-        this.signalStrengthInfoList = signalStrengthInformationList;
+        this.signalStrengthList = signalStrengths;
     }
 
     /**
@@ -41,12 +43,9 @@ public class SignalInformation {
      * Getter for the list of SignalStrengths
      * @return the list of SignalStrengths
      */
-    public List<SignalStrengthInformation> getSignalStrengthInfoList() {
-        return signalStrengthInfoList;
+    public List<SignalStrength> getSignalStrengthList() {
+        return signalStrengthList;
     }
 
 
-    //public void setSignalStrengthInfoList(List<SignalStrengthInformation> signalStrengthInfoList) {
-    //    this.signalStrengthInfoList = signalStrengthInfoList;
-    //}
 }

@@ -45,7 +45,8 @@ import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -344,7 +345,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             public void run() {
                 signalInformationList = new ArrayList<>();
                 while (progressStatus < 60 * recordTime && !abortRecording) {
-                    List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
+                    List<SignalStrength> signalStrengthList = new ArrayList<>();
 
                     wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     wifiManager.startScan();
@@ -352,7 +353,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
                     for (ScanResult sr : wifiScanList) {
                         if (sr.SSID.equals(wlanName)) {
-                            SignalStrengthInformation signal = new SignalStrengthInformation(sr.BSSID, sr.level);
+                            SignalStrength signal = new SignalStrengthImpl(sr.BSSID, sr.level);
                             Log.d("Recording... ", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
                             signalStrengthList.add(signal);
                         }

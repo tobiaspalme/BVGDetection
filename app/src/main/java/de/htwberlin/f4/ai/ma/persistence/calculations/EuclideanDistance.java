@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
 
 
 /**
@@ -17,7 +17,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
  */
 public class EuclideanDistance {
 
-    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrengthInformation> measuredSSIs) {
+    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrength> measuredSSIs) {
         List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
@@ -26,10 +26,10 @@ public class EuclideanDistance {
             List<Collection<Double>> matchingSignalStrengths = new ArrayList<>();
             List<Integer> measuredSignalStrength = new ArrayList<>();
             for (int j = 0; j < measuredSSIs.size(); j++) {
-                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(measuredSSIs.get(j).macAddress);
+                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(measuredSSIs.get(j).getMacAddress());
                 if (contains) {
-                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(measuredSSIs.get(j).macAddress));
-                    measuredSignalStrength.add(measuredSSIs.get(j).signalStrength);
+                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(measuredSSIs.get(j).getMacAddress()));
+                    measuredSignalStrength.add(measuredSSIs.get(j).getRSSI());
                 }
             }
 

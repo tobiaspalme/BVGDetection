@@ -1,15 +1,13 @@
 package de.htwberlin.f4.ai.ma.node.fingerprint;
 
-import android.telephony.SignalStrength;
-
 import com.google.common.collect.Multimap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 
 /**
  * Created by Johann Winter
@@ -39,16 +37,16 @@ public class AverageSignalCalculator {
             int value = 0;
             int counter = 0;
 
-            for (SignalStrengthInformation ssi : si.getSignalStrengthInfoList()) {
+            for (SignalStrengthImpl ssi : si.getSignalStrengthList()) {
                 counter++;
                 value += ssi.signalStrength;
             }
             value = value / counter;
 
-            SignalStrengthInformation signalStrengthInformation = new SignalStrengthInformation(si.getSignalStrengthInfoList().)
+            SignalStrengthImpl signalStrengthInformation = new SignalStrengthImpl(si.getSignalStrengthList().)
 
-            List<SignalStrengthInformation> SsiList = new ArrayList<>();
-            SignalStrengthInformation ssi = new SignalStrengthInformation(ssi.macAddress, value);
+            List<SignalStrengthImpl> SsiList = new ArrayList<>();
+            SignalStrengthImpl ssi = new SignalStrengthImpl(ssi.macAddress, value);
             SsiList.add(ssi);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
@@ -66,8 +64,8 @@ public class AverageSignalCalculator {
             }
             value = value / counter;
 
-            List<SignalStrengthInformation> SsiList = new ArrayList<>();
-            SignalStrengthInformation ssi = new SignalStrengthInformation(s, value);
+            List<SignalStrength> SsiList = new ArrayList<>();
+            SignalStrength ssi = new SignalStrengthImpl(s, value);
             SsiList.add(ssi);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);

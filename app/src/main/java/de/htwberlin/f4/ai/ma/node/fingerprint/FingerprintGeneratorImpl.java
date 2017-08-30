@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+
 /**
  * Created by Johann Winter
  */
@@ -46,7 +49,7 @@ public class FingerprintGeneratorImpl implements FingerprintGenerator{
         multiMap = ArrayListMultimap.create();
 
         List<SignalInformation> signalInformationList = new ArrayList<>();
-        List<SignalStrengthInformation> signalStrengthList = new ArrayList<>();
+        List<SignalStrength> signalStrengthList = new ArrayList<>();
 
        // new Thread(new Runnable() {
         //    @Override
@@ -75,7 +78,7 @@ public class FingerprintGeneratorImpl implements FingerprintGenerator{
                             multiMap.put(sr.BSSID, sr.level);
                             Log.d("LocationActivity", "Messung, SSID stimmt mit Dropdown überein:        BSSID = " + sr.BSSID + " LVL = " + sr.level);
 
-                            SignalStrengthInformation ssi = new SignalStrengthInformation(sr.BSSID, sr.level);
+                            SignalStrength ssi = new SignalStrengthImpl(sr.BSSID, sr.level);
                             signalStrengthList.add(ssi);
                         }
                     }

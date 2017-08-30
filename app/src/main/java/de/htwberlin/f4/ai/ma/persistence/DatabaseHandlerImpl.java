@@ -30,7 +30,8 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImpl;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
@@ -708,12 +709,12 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
             }
 
             if (euclideanDistance) {
-                List<SignalStrengthInformation> signalStrengthInformations = getSignalStrengths(signalInformationList);
+                List<SignalStrength> signalStrengths = getSignalStrengths(signalInformationList);
 
-                if (signalStrengthInformations.size() == 0) {
+                if (signalStrengths.size() == 0) {
                     return null;
                 }
-                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, signalStrengthInformations);
+                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, signalStrengths);
                 if (knnAlgorithm) {
                     foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
@@ -734,22 +735,22 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      * @param signalInformationList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
-    private List<SignalStrengthInformation> getSignalStrengths(List<SignalInformation> signalInformationList) {
-        List<SignalStrengthInformation> signalStrengthInformations = new ArrayList<>();
+    private List<SignalStrength> getSignalStrengths(List<SignalInformation> signalInformationList) {
+        List<SignalStrength> signalStrengths = new ArrayList<>();
 
         for (SignalInformation sigInfo : signalInformationList) {
-            for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
+            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
 
-                Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.macAddress + " Strength: " + ssi.signalStrength);
+                Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
 
-                String macAdress = ssi.macAddress;
-                int signalStrength = ssi.signalStrength;
-                SignalStrengthInformation SSI = new SignalStrengthInformation(macAdress, signalStrength);
+                String macAdress = ssi.getMacAddress();
+                int signalStrength = ssi.getRSSI();
+                SignalStrength SSI = new SignalStrengthImpl(macAdress, signalStrength);
 
-                signalStrengthInformations.add(SSI);
+                signalStrengths.add(SSI);
             }
         }
-        return signalStrengthInformations;
+        return signalStrengths;
     }
 
 
@@ -805,9 +806,9 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
         for (SignalInformation signalInfo : node.getFingerprintImpl().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (SignalStrengthInformation ssi : signalInfo.getSignalStrengthInfoList()) {
-                multiMap.put(ssi.macAddress, (double) ssi.signalStrength);
-                actuallyMacAdresses.add(ssi.macAddress);
+            for (SignalStrength ssi : signalInfo.getSignalStrengthList()) {
+                multiMap.put(ssi.getMacAddress(), (double) ssi.getRSSI());
+                actuallyMacAdresses.add(ssi.getMacAddress());
             }
             for (String checkMacAdress : macAdresses) {
                 if (!actuallyMacAdresses.contains(checkMacAdress)) {
@@ -827,8 +828,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
     private List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
         for (SignalInformation sigInfo : node.getFingerprintImpl().getSignalInformationList()) {
-            for (SignalStrengthInformation ssi : sigInfo.getSignalStrengthInfoList()) {
-                macAdresses.add(ssi.macAddress);
+            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
+                macAdresses.add(ssi.getMacAddress());
             }
         }
         return new ArrayList<>(macAdresses);

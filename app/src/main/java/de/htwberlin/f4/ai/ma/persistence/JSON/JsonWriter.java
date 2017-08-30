@@ -95,10 +95,10 @@ public class JsonWriter {
                     JSONObject signalJsonObject = new JSONObject();
                     JSONArray signalStrengthJsonArray = new JSONArray();
 
-                    for (int j = 0; j < node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthInfoList().size(); j++) {
+                    for (int j = 0; j < node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthList().size(); j++) {
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAddress", node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthInfoList().get(j).macAddress);
-                        signalStrenghtObject.put("strength", node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthInfoList().get(j).signalStrength);
+                        signalStrenghtObject.put("macAddress", node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthList().get(j).getMacAddress());
+                        signalStrenghtObject.put("strength", node.getFingerprintImpl().getSignalInformationList().get(i).getSignalStrengthList().get(j).getRSSI());
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
                     signalJsonObject.put("timestamp", node.getFingerprintImpl().getSignalInformationList().get(i).getTimestamp());
