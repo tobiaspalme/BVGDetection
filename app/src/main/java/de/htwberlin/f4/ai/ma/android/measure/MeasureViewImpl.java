@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -60,6 +62,9 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
     private ImageView edgeArrow;
     private ImageView locateWifiImage;
     private ImageView locateQrImage;
+
+    private CheckBox nullpointStartCb;
+    private CheckBox nullpointTargetCb;
 
     private ArrayAdapter<String> startAdapter;
     private ArrayAdapter<String> targetAdapter;
@@ -191,6 +196,19 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         });
         btnAdd.setEnabled(false);
 
+        nullpointStartCb = (CheckBox) findViewById(R.id.coordinates_measure_nullpoint_start);
+
+        nullpointStartCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (controller != null) {
+                    controller.onNullpointCheckedStartNode(b);
+                }
+            }
+        });
+
+
+
         startNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_startnode);
         startAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nodeNames);
         startNodeSpinner.setAdapter(startAdapter);
@@ -216,6 +234,14 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 if (controller != null) {
                     controller.onStartNodeSelected(startNode);
                 }
+
+                if (startNode.getAdditionalInfo() != null && startNode.getAdditionalInfo().contains("NULLPOINT")) {
+                    nullpointStartCb.setChecked(true);
+                } else {
+                    nullpointStartCb.setChecked(false);
+                }
+
+
             }
 
             @Override
@@ -246,6 +272,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                         //targetNodeImage.setImageURI(Uri.parse(targetNode.getPicturePath()));
                     }
                 }
+
 
                 if (controller != null) {
                     controller.onTargetNodeSelected(targetNode);
@@ -426,7 +453,15 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 updateStartNodeCoordinates(0.0f, 0.0f, 0.0f);
             }
         }
+
+        if (node.getAdditionalInfo().contains("NULLPOINT")) {
+            nullpointStartCb.setChecked(true);
+        } else {
+            nullpointStartCb.setChecked(false);
+        }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -97,7 +97,7 @@ public class MeasureControllerImpl implements MeasureController {
     private List<StepData> stepList;
     private float[] coords = new float[3];
     private boolean handycapFriendly;
-    private SensorType compassType;
+
 
     private boolean measurementRunning; // to deactivate wifi / qr code localization during measurement
 
@@ -361,8 +361,15 @@ public class MeasureControllerImpl implements MeasureController {
     }
 
     private void saveMeasurementData() {
-        view.updateTargetNodeCoordinates(coords[0], coords[1], coords[2]);
-        targetNode.setCoordinates(WKT.coordToStr(coords));
+        // make sure the target isnt the nullpoint, nullpoint coordinate change isnt allowed!
+        //if its the nullpoint, we just save the edge data and dont update coordinates
+        if (!targetNode.getAdditionalInfo().contains("NULLPOINT")) {
+            targetNode.setCoordinates(WKT.coordToStr(coords));
+            view.updateTargetNodeCoordinates(coords[0], coords[1], coords[2]);
+        }
+
+
+
         List<String> stepCoords = new ArrayList<>();
         // convert coordinates to string and save into list for edge
         for (StepData stepData : stepList) {
@@ -595,6 +602,24 @@ public class MeasureControllerImpl implements MeasureController {
 
     }
 
+    @Override
+    public void onNullpointCheckedStartNode(boolean checked) {
+
+        DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
+        if (startNode != null) {
+            if (checked) {
+                startNode.setAdditionalInfo("NULLPOINT");
+                //float[] coord = new float[]{0.0f, 0.0f, 0.0f};
+                //startNode.setCoordinates(WKT.coordToStr(coord));
+            } else {
+                startNode.setAdditionalInfo("");
+            }
+            databaseHandler.updateNode(startNode, startNode.getId());
+        }
+    }
+
+
+
 
     // from johann, modified
     private void getMeasuredNode(final String wlanName, final int times) {
@@ -703,8 +728,7 @@ public class MeasureControllerImpl implements MeasureController {
             System.arraycopy(newStepCoords, 0, coords, 0, newStepCoords.length);
             stepData.setCoords(newStepCoords);
             stepList.add(stepData);
-            // TODO: REMOVE
-            save();
+
         }
 
         view.updateStepCount(stepCount);
@@ -734,21 +758,29 @@ public class MeasureControllerImpl implements MeasureController {
             // and enable measurement start
             boolean different = checkNodesDifferent(start, target);
             if (different) {
-                view.enableStart();
+                // make sure that both nodes aren't nullpoints, because its not allowed to measure between two nullpoints
+                if ((start.getAdditionalInfo().contains("NULLPOINT") && !target.getAdditionalInfo().contains("NULLPOINT")) ||
+                        (!start.getAdditionalInfo().contains("NULLPOINT") && target.getAdditionalInfo().contains("NULLPOINT"))) {
+                    view.enableStart();
 
-                DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
+                    DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
 
-                // check if edge already exists
-                Edge existingEdge = databaseHandler.getEdge(startNode, targetNode);
-                if (existingEdge != null) {
-                    // if we found the correct edge update view with correct data
-                    view.updateEdge(existingEdge);
+                    // check if edge already exists
+                    Edge existingEdge = databaseHandler.getEdge(startNode, targetNode);
+                    if (existingEdge != null) {
+                        // if we found the correct edge update view with correct data
+                        view.updateEdge(existingEdge);
 
+                    }
+                    // if there isn't an edge, update view with placeholder data
+                    else {
+                        Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
+                        view.updateEdge(placeHolderEdge);
+                    }
                 }
-                // if there isn't an edge, update view with placeholder data
+                // if both nodes are nullpoints
                 else {
-                    Edge placeHolderEdge = new EdgeImplementation(null, null, true, 0);
-                    view.updateEdge(placeHolderEdge);
+                    view.disableStart();
                 }
 
             }

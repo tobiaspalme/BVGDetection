@@ -28,6 +28,7 @@ public interface MeasureView {
     void startQrActivity();
     void setStartNode(Node node);
 
+
     Context getContext();
 
 }
