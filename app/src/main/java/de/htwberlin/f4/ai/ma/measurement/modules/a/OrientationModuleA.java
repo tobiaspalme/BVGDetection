@@ -44,8 +44,8 @@ public class OrientationModuleA implements OrientationModule {
         float currentOrientation = 0;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
-        // just picking the last value in the interval
-        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
+        // just picking the last value
+        Map<SensorType, List<SensorData>> intervalData = dataModel.getData();
         List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_FUSION);
         if (dataValues != null && dataValues.size() > 0) {
             currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];

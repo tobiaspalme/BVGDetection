@@ -31,14 +31,16 @@ public class AltitudeModuleA implements AltitudeModule {
     protected long lastStepTimestamp;
     protected float lastAltitude;
     protected Context context;
+    private float threshold;
 
-    public AltitudeModuleA(Context context, float airPressure) {
+    public AltitudeModuleA(Context context, float airPressure, float threshold) {
         this.context = context;
         dataModel = new SensorDataModelImpl();
         sensorFactory = new SensorFactoryImpl(context);
         this.airPressure = airPressure;
         lastAltitude = calcAltitude(airPressure);
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+        this.threshold = threshold;
     }
 
 
@@ -59,8 +61,8 @@ public class AltitudeModuleA implements AltitudeModule {
         float altitudeDiff = 0.0f;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
-        // just picking the last value in the interval
-        Map<SensorType, List<SensorData>> intervalData = dataModel.getDataInInterval(lastStepTimestamp, currentStepTimestamp);
+        // just picking the last value
+        Map<SensorType, List<SensorData>> intervalData = dataModel.getData();
         List<SensorData> dataValues = intervalData.get(SensorType.BAROMETER);
         if (dataValues != null && dataValues.size() > 0) {
             currentAirPressure = dataValues.get(dataValues.size()-1).getValues()[0];
@@ -69,7 +71,7 @@ public class AltitudeModuleA implements AltitudeModule {
             // set new values
             lastStepTimestamp = currentStepTimestamp;
             //lastAltitude = currentAltitude;
-            if (Math.abs(altitudeDiff) >= 0.1) {
+            if (Math.abs(altitudeDiff) >= threshold) {
                 lastAltitude = currentAltitude;
             } else {
                 altitudeDiff = 0;

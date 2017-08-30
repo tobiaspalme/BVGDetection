@@ -18,7 +18,7 @@ public class PositionModuleD extends PositionModuleA{
     public PositionModuleD(Context context, CalibrationData calibrationData) {
         super(context, calibrationData);
 
-        altitudeModule = new AltitudeModuleD(context, calibrationData.getAirPressure(), calibrationData.getLowpassFilterValue());
+        altitudeModule = new AltitudeModuleD(context, calibrationData.getAirPressure(), calibrationData.getLowpassFilterValue(), calibrationData.getBarometerThreshold());
         distanceModule = new DistanceModuleD(context, calibrationData.getStepLength());
         orientationModule = new OrientationModuleD(context, calibrationData.getLowpassFilterValue());
     }
