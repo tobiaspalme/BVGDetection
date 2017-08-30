@@ -84,8 +84,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
 
 
     // Constructor
-
-    public DatabaseHandlerImplementation(Context context) {
+    DatabaseHandlerImplementation(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -95,6 +94,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        // Nodes table
         String createNodeTableQuery = "CREATE TABLE " + NODES_TABLE + " (" +
                 NODE_ID + " TEXT PRIMARY KEY," +
                 NODE_DESCRIPTION + " TEXT," +
@@ -104,6 +104,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 NODE_PICTURE_PATH + " TEXT," +
                 NODE_ADDITIONAL_INFO + " TEXT)";
 
+        // Edges table
         String createEdgeTableQuery = "CREATE TABLE " + EDGES_TABLE + " (" +
                 EDGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 EDGE_NODE_A + " TEXT," +
@@ -113,6 +114,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
                 EDGE_WEIGHT + " REAL," +
                 EDGE_ADDITIONAL_INFO + " TEXT);";
 
+        // LocationResults table
         String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
                 RESULT_ID + " INTEGER PRIMARY KEY," +
                 RESULT_SETTINGS + " TEXT," +
@@ -126,8 +128,7 @@ class DatabaseHandlerImplementation extends SQLiteOpenHelper implements Database
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-    }
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) { }
 
     @Override
     public SQLiteDatabase getWritableDatabase() {

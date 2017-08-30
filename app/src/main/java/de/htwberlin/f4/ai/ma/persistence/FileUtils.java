@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 
 /**
  * Created by Johann Winter
+ *
+ * Provides funcitons for file management (creating and copying).
  */
 
 public class FileUtils {

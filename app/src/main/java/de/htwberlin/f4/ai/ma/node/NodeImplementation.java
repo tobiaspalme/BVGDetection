@@ -9,13 +9,21 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 class NodeImplementation implements Node {
 
     private String id;
-
     private String description;
     private Fingerprint fingerprint;
     private String coordinates;
     private String picturePath;
     private String additionalInfo;
 
+
+    NodeImplementation(String id, String description, Fingerprint fingerprint, String coordinates, String picturePath, String additionalInfo) {
+        this.id = id;
+        this.description = description;
+        this.coordinates = coordinates;
+        this.picturePath = picturePath;
+        this.fingerprint = fingerprint;
+        this.additionalInfo = additionalInfo;
+    }
 
     @Override
     public void setId(String id) {
@@ -32,10 +40,10 @@ class NodeImplementation implements Node {
         return this.description;
     }
 
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    //@Override
+    // public void setDescription(String description) {
+    //    this.description = description;
+    //}
 
     @Override
     public Fingerprint getFingerprint() {
@@ -57,10 +65,10 @@ class NodeImplementation implements Node {
         return this.picturePath;
     }
 
-    @Override
-    public void setPicturePath(String picturePath) {
-        this.picturePath = picturePath;
-    }
+    //@Override
+    //public void setPicturePath(String picturePath) {
+    //    this.picturePath = picturePath;
+    //}
 
     @Override
     public String getAdditionalInfo() {
@@ -73,12 +81,5 @@ class NodeImplementation implements Node {
     }
 
 
-    NodeImplementation(String id, String description, Fingerprint fingerprint, String coordinates, String picturePath, String additionalInfo) {
-        this.id = id;
-        this.description = description;
-        this.coordinates = coordinates;
-        this.picturePath = picturePath;
-        this.fingerprint = fingerprint;
-        this.additionalInfo = additionalInfo;
-    }
+
 }

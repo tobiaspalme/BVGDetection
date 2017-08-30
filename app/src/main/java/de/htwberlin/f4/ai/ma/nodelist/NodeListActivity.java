@@ -4,27 +4,24 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-
 import com.example.carol.bvg.R;
-
 import java.io.File;
 import java.util.ArrayList;
-
 import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-//import de.htwberlin.f4.ai.ma.NodeEditActivity;
 
 
 /**
  * Created by Johann Winter
+ *
+ * This activity shows a list of all Nodes from the database.
  */
 
 public class NodeListActivity extends BaseActivity {
@@ -42,12 +39,10 @@ public class NodeListActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_nodelist, contentFrameLayout);
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-
 
         nodeListView = (ListView) findViewById(R.id.nodeListListview);
 

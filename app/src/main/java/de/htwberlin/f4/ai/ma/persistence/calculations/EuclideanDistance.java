@@ -13,11 +13,10 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 
 
 /**
- * calculate all euclidean distances
+ * Calculate the euclidean distances
  */
 public class EuclideanDistance {
 
-    //public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<MeasuredNode> measuredNodeList) {
     public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrengthInformation> measuredSSIs) {
         List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
@@ -59,17 +58,13 @@ public class EuclideanDistance {
                 }
             }
         }
-
-        //List<DistanceClass> distanceList2 = doSelectionSort(distanceClassList);
-        //List<String> distanceList2 = doSelectionSort(distanceClassList);
-
         return sortSelection(distanceClassList);
     }
 
     /**
-     * sort euclidean distances
-     * @param distanceList
-     * @return sorted list
+     * Sort euclidean distances
+     * @param distanceList list of DistanceClasses to sort
+     * @return the sorted list
      */
     private static List<String> sortSelection(List<DistanceClass> distanceList) {
         for (int i = 0; i < distanceList.size() - 1; i++) {

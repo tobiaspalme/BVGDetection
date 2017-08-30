@@ -11,15 +11,26 @@ class DijkstraNode {
     private final Node node;
     private final String id;
 
+
     DijkstraNode(Node node) {
         this.node = node;
         this.id = node.getId();
     }
+
+    /**
+     * Getter for the ID
+     * @return the ID
+     */
     public String getId() {
         return id;
     }
 
 
+    /**
+     * Override hashCode method of the class "Object"
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -28,6 +39,12 @@ class DijkstraNode {
         return result;
     }
 
+
+    /**
+     *
+     * @param obj the input object
+     * @return boolean if the object equals an other object
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -45,11 +62,20 @@ class DijkstraNode {
         return true;
     }
 
+
+    /**
+     * Overrides standard toString() method
+     * @return the id of the DijkstraNode
+     */
     @Override
     public String toString() {
         return id;
     }
 
+    /**
+     * Getter for the node object of the DijkstraNode.
+     * @return the node
+     */
     public Node getNode() {
         return node;
     }

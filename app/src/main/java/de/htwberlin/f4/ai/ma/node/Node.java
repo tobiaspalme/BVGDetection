@@ -1,22 +1,16 @@
 package de.htwberlin.f4.ai.ma.node;
 
-
-// TODO: Interface beschreiben
-
-
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 
 /**
  * Created by Johann Winter
  *
- *
  * This Interface is used to manage nodes ("Orte").
- *
- * The methods "getId" and "setId" are for managing the node's name.
- *
+ * It contains methods for getting and setting the Node's ID and coordinates.
+ * It also contains methods for getting the Node's description
+ * and picturePath (path to the Node's picture on the device storage).
  * The methods "getAdditionalInfo" and "setAdditionalInfo" are for
  * the field "additionalInfo", which is a placeholder for future purposes.
- *
  */
 
 public interface Node {
@@ -25,7 +19,7 @@ public interface Node {
     void setId(String id);
 
     String getDescription();
-    void setDescription(String description);
+    //void setDescription(String description);
 
     Fingerprint getFingerprint();
     //void setFingerprint(Fingerprint fingerprint);
@@ -34,7 +28,7 @@ public interface Node {
     void setCoordinates(String coordinates);
 
     String getPicturePath();
-    void setPicturePath(String picturePath);
+    //void setPicturePath(String picturePath);
 
     String getAdditionalInfo();
     void setAdditionalInfo(String additionalInfo);

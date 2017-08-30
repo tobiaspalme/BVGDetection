@@ -45,10 +45,11 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
+ *
+ * This activity provides the navigation functionality ("Navigation").
  */
 
 public class NavigationActivity extends BaseActivity {
-
 
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
@@ -76,7 +77,6 @@ public class NavigationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_navigation, contentFrameLayout);
 
@@ -91,7 +91,6 @@ public class NavigationActivity extends BaseActivity {
         itemsStartNodeSpinner = new ArrayList<>();
         itemsDestNodeSpinner = new ArrayList<>();
         navigationResultsList = new ArrayList<>();
-
         nodeNames = new ArrayList<>();
         nodeDescriptions = new ArrayList<>();
         nodePicturePaths = new ArrayList<>();
@@ -100,9 +99,10 @@ public class NavigationActivity extends BaseActivity {
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
+        allNodes = databaseHandler.getAllNodes();
 
 
-/*---------- TEST -------------------
+//---------- TEST -------------------
         Node n1 = NodeFactory.createInstance("n1", "", new Fingerprint("", null), "", "", "");
         Node n2 = NodeFactory.createInstance("n2", "", new Fingerprint("", null), "", "", "");
         Node n3 = NodeFactory.createInstance("n3", "", new Fingerprint("", null), "", "", "");
@@ -142,13 +142,13 @@ public class NavigationActivity extends BaseActivity {
         databaseHandler.insertEdge(e4);
         databaseHandler.insertEdge(e5);
         databaseHandler.insertEdge(e6);
-//-----------------------------------*/
+//-----------------------------------
         //navigationResultListview.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
-        allNodes = databaseHandler.getAllNodes();
 
         locateButton.setImageResource(R.drawable.locate);
 
+        // Fill the spinners with Nodes
         for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             itemsStartNodeSpinner.add(node.getId());
             itemsDestNodeSpinner.add(node.getId());
@@ -160,23 +160,18 @@ public class NavigationActivity extends BaseActivity {
         }
 
 
+        // Set adapters and attach the lists
         final ArrayAdapter<String> adapterA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsStartNodeSpinner);
         startNodeSpinner.setAdapter(adapterA);
-
         final ArrayAdapter<String> adapterB = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsDestNodeSpinner);
         destinationNodeSpinner.setAdapter(adapterB);
-
-        //final ArrayAdapter<String> resultListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, navigationResultsList);
-        // navigationResultListview.setAdapter(resultListAdapter);
         resultListAdapter = new NodeListAdapter(this, nodeNames, nodeDescriptions, nodePicturePaths);
         navigationResultListview.setAdapter(resultListAdapter);
 
 
         // Exclude on spinnerA selected item on spinnerB
         startNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parentView,
-                                       View selectedItemView, int position, long id) {
-
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 selectedStartNode = startNodeSpinner.getSelectedItem().toString();
 
                 if (!selectedStartNode.equals(lastSelectedStartNode)) {
@@ -188,12 +183,12 @@ public class NavigationActivity extends BaseActivity {
                     lastSelectedStartNode = selectedStartNode;
                 }
             }
-
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
 
 
+        // Get WiFis around and ask the user which to use
         locateButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -218,7 +213,7 @@ public class NavigationActivity extends BaseActivity {
                 builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        getMeasuredNode(wifiNamesList.get(which), 1);
+                        findLocation(wifiNamesList.get(which), 1);
                     }
                 });
                 builder.show();
@@ -227,7 +222,7 @@ public class NavigationActivity extends BaseActivity {
 
 
 
-
+        // Start the navigation
         startNavigationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,7 +242,6 @@ public class NavigationActivity extends BaseActivity {
                     nodePicturePaths.add("");
                     resultListAdapter.notifyDataSetChanged();
                     totalDistanceTextview.setText("");
-
                 } else {
                     float totalDistance = 0;
                     for (int i = 0; i < route.size(); i++) {
@@ -286,7 +280,12 @@ public class NavigationActivity extends BaseActivity {
     }
 
 
-    private void getMeasuredNode(final String wlanName, final int times) {
+    /**
+     * Try to find the location and set it to the start-spinner
+     * @param wifiName the WiFi to measure
+     * @param times duration of the measurement in seconds
+     */
+    private void findLocation(final String wifiName, final int times) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
@@ -301,7 +300,7 @@ public class NavigationActivity extends BaseActivity {
             }
 
             for (final ScanResult sr : wifiScanList) {
-                if (sr.SSID.equals(wlanName)) {
+                if (sr.SSID.equals(wifiName)) {
                     multiMap.put(sr.BSSID, sr.level);
                 }
             }
@@ -314,7 +313,6 @@ public class NavigationActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-
 
         FoundNode foundNode = makeFingerprint(multiMap);
         if (foundNode != null) {
@@ -329,6 +327,11 @@ public class NavigationActivity extends BaseActivity {
     }
 
 
+    /**
+     * Make average values from the capture and calculate the matching node.
+     * @param multiMap a multimap of BSSIDs and signal strengths
+     * @return the calculated nodeID
+     */
     private FoundNode makeFingerprint(Multimap<String, Integer> multiMap) {
 
         Set<String> bssid = multiMap.keySet();
@@ -350,8 +353,6 @@ public class NavigationActivity extends BaseActivity {
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
         }
-
         return databaseHandler.calculateNodeId(signalInformationList);
     }
-
 }

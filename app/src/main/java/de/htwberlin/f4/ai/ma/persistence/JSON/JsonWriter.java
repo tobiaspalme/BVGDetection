@@ -12,21 +12,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-//import de.htwberlin.f4.ai.ma.fingerprint.Node;
 
 public class JsonWriter {
     private Context context;
 
+    /*
     public JsonWriter(Context context) {
         this.context = context;
-    }
+    }*/
+
 
     /**
-     * write json object to the correct position or create new object
-     * @param node the measured node
+     * Write a JSON object to the JSON file on the device storage
+     * @param node the node to save
      */
     public void writeJSON(de.htwberlin.f4.ai.ma.node.Node node) {
-        String jsonString = loadJSONFromAsset(context);
+//        String jsonString = loadJSONFromAsset(context);
+        String jsonString = loadJSONFromAsset();
         String nodeId = node.getId();
 
         boolean idIsContained = false;
@@ -72,10 +74,10 @@ public class JsonWriter {
     }
 
     /**
-     * make a new json object with all information from measured node
-     * @param jsonObjectNode the old json object
-     * @param node measured node
-     * @return the new json object
+     * Create a new JSON object containing all information from node to save
+     * @param jsonObjectNode the old JSON object
+     * @param node the node to save
+     * @return the new JSON object
      */
     private JSONObject makeJsonNode(JSONObject jsonObjectNode, de.htwberlin.f4.ai.ma.node.Node node) {
         try {
@@ -113,7 +115,7 @@ public class JsonWriter {
     }
 
     /**
-     * save the new jsonSting to file
+     * Save the new jsonSting to file
      * @param jsonObject the new json String
      */
     public void save(JSONObject jsonObject){
@@ -121,7 +123,6 @@ public class JsonWriter {
         File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
         dir.mkdirs();
         File file = new File(dir, "jsonFile.txt");
-        //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonFile.txt");
         FileOutputStream outputStream;
 
         try {
@@ -131,43 +132,25 @@ public class JsonWriter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        String path = null;
-//        try {
-//            path = String.valueOf(context.getAssets().open("ergebnisse.txt"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        ObjectOutputStream outputStream = null;
-//        try {
-//            outputStream = new ObjectOutputStream(new FileOutputStream(path));
-//            System.out.println("Start Writings");
-//            outputStream.writeObject(jsonObject.toString());
-//            outputStream.flush();
-//            outputStream.close();
-//        } catch (Exception e) {
-//            System.err.println("Error: " + e);
-//        }
     }
 
+
     /**
-     * if file exist load .txt file from Files folder and return content as a json String. if no file exist create empty json String
-     * @param context
+     * If file exists, load .txt file from Files folder and return its content as a JSON String.
+     * If no file exist create empty JSON String
+     //* @param context
      * @return json String
      */
-    private String loadJSONFromAsset(Context context) {
+    //private String loadJSONFromAsset(Context context) {
+    private String loadJSONFromAsset() {
         String json = null;
         try {
-            //TODO Exception abfangen
             File sdCard = Environment.getExternalStorageDirectory();
             File dir = new File (sdCard.getAbsolutePath() + "/IndoorPositioning/JSON");
             dir.mkdirs();
             File file = new File(dir, "jsonFile.txt");
-            //File file = new File(Environment.getExternalStorageDirectory(), "/Files/jsonFile.txt");
             if (file.exists()) {
                 FileInputStream is = new FileInputStream(file);
-                //InputStream is = context.getAssets().open("ergebnisse.txt");
                 int size = is.available();
                 byte[] buffer = new byte[size];
                 is.read(buffer);

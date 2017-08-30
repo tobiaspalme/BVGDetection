@@ -54,6 +54,9 @@ import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 public class NodeRecordAndEditActivity extends BaseActivity {
 
     private String wlanName;
+    private String picturePath;
+    private String oldNodeId = null;
+    String[] permissions;
     private int recordTime;
     private int progressStatus = 0;
     private Handler mHandler;
@@ -75,42 +78,25 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     private EditText coordinatesEdittext;
     private Spinner wifiNamesDropdown;
     private DatabaseHandler databaseHandler;
-
     private boolean pictureTaken;
     private boolean fingerprintTaken;
     private boolean takingPictureAtTheMoment;
-
-
-
     private boolean updateMode = false;
-    private String oldNodeId = null;
-    private Node nodeToUpdate;
-
-
-
-    private List<SignalInformation> signalInformationList;
-
-    private String picturePath;
     private boolean abortRecording;
-
-    private static final int CAM_REQUEST = 1;
-
-    //TODO permissions auf Startscreen auslagern
-    String[] permissions;
-    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
-
+    private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
     private WifiManager mainWifiObj;
-
     private Timestamp timestamp;
+    private List<SignalInformation> signalInformationList;
+    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
+    private static final int CAM_REQUEST = 1;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_record_and_edit, contentFrameLayout);
 
@@ -130,7 +116,9 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-        jsonWriter = new JsonWriter(this);
+//        jsonWriter = new JsonWriter(this);
+        jsonWriter = new JsonWriter();
+
 
         recordButton = (ImageButton) findViewById(R.id.record_button);
         captureButton  = (ImageButton) findViewById(R.id.capture_button);

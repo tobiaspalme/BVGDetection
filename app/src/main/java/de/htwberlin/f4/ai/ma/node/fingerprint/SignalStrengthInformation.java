@@ -2,6 +2,8 @@ package de.htwberlin.f4.ai.ma.node.fingerprint;
 
 /**
  * Created by Johann Winter
+ *
+ * A SignalStrengthInformation consists of a MAC-Address and a signal strength in dBm
  */
 
 public class SignalStrengthInformation {

@@ -5,14 +5,13 @@ package de.htwberlin.f4.ai.ma.persistence.calculations;
  */
 
 public class FoundNode {
-    String id;
-    double percent;
+    private String id;
+    private double percent;
 
     public FoundNode(String id, double percent) {
         this.id = id;
         this.percent = percent;
     }
-
 
     public String getId() {
         return this.id;
@@ -20,5 +19,4 @@ public class FoundNode {
     public double getPercent() {
         return this.percent;
     }
-
 }

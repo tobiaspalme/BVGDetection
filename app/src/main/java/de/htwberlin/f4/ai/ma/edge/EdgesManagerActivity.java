@@ -24,6 +24,8 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
+ *
+ * This activity is used to manage (create and delete) edges ("Wege verwalten").
  */
 
 public class EdgesManagerActivity extends BaseActivity {
@@ -47,10 +49,8 @@ public class EdgesManagerActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_edges_manager);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_edges_manager, contentFrameLayout);
-
 
         spinnerA = (Spinner) findViewById(R.id.nodeA_spinner);
         spinnerB = (Spinner) findViewById(R.id.nodeB_spinner);
@@ -66,10 +66,9 @@ public class EdgesManagerActivity extends BaseActivity {
         allEdges = new ArrayList<>();
         lastSelectedItemA = "";
 
-
         allNodes = databaseHandler.getAllNodes();
 
-
+        // Fill the spinners with Nodes
         for (de.htwberlin.f4.ai.ma.node.Node node : allNodes) {
             itemsSpinnerA.add(node.getId());
             itemsSpinnerB.add(node.getId());
@@ -80,7 +79,7 @@ public class EdgesManagerActivity extends BaseActivity {
             connectButton.setEnabled(false);
         }
 
-
+        // Set adapters to spinners and the Edges-list
         final ArrayAdapter<String> adapterA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsSpinnerA);
         spinnerA.setAdapter(adapterA);
 
@@ -150,9 +149,6 @@ public class EdgesManagerActivity extends BaseActivity {
 
             }
         });
-
-
-
 
 
         // Long click on item -> delete item

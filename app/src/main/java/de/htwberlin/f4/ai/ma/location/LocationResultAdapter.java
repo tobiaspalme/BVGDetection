@@ -13,7 +13,7 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 
 /**
- * Adapter for the result listview in LocationDetailedInfoActivity
+ * Adapter for the LocationResult listview in LocationDetailedInfoActivity
  */
 class LocationResultAdapter extends ArrayAdapter<LocationResultImplementation> {
     LocationResultAdapter(Context context, ArrayList<LocationResultImplementation> users) {
@@ -44,6 +44,4 @@ class LocationResultAdapter extends ArrayAdapter<LocationResultImplementation> {
         // Return the completed view to render on screen
         return convertView;
     }
-
-
 }

@@ -19,7 +19,7 @@ public class EdgeImplementation implements Edge{
     private String additionalInfo;
 
 
-    // Edge without given stepCoordList
+    // Constructor for an Edge without given stepCoordList
     public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, float weight) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
@@ -28,7 +28,7 @@ public class EdgeImplementation implements Edge{
         this.stepCoordList = new ArrayList<>();
     }
 
-    // Edge with given stepCoordList
+    // Constructor for an Edge with given stepCoordList
     public EdgeImplementation(Node nodeA, Node nodeB, boolean accessible, List<String> stepCoordList, float weight, String additionalInfo) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
@@ -44,20 +44,20 @@ public class EdgeImplementation implements Edge{
         return this.nodeA;
     }
 
-    @Override
-    public void setNodeA(Node nodeA) {
-        this.nodeA = nodeA;
-    }
+    //@Override
+    //public void setNodeA(Node nodeA) {
+    //    this.nodeA = nodeA;
+    //}
 
     @Override
     public Node getNodeB() {
         return this.nodeB;
     }
 
-    @Override
-    public void setNodeB(Node nodeB) {
-        this.nodeB = nodeB;
-    }
+    //@Override
+    //public void setNodeB(Node nodeB) {
+    //    this.nodeB = nodeB;
+    //}
 
     @Override
     public boolean getAccessibility() {

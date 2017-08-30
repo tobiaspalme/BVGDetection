@@ -16,12 +16,11 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 /**
  * Created by Johann Winter
  *
- *
  * This interface offers all necessary database-functions to
  * create, edit and delete Nodes, Edges and LocationResults
  * and the export of the SQLite DB.
  *
- * It also can calculate the matching node for a given measurement (current location).
+ * It calculates the matching node for a given measurement (current location).
  */
 
 public interface DatabaseHandler {

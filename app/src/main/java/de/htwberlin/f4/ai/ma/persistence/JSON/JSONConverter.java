@@ -16,7 +16,11 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 
 public class JSONConverter {
 
-    // Convert List<SignalInformation> to JSON-String
+    /**
+     * Convert a List<SignalInformation> to JSON-String (for database storing).
+     * @param signalInformationList a list of SignalInformations
+     * @return JSON-String containing the SignalInformations
+     */
     public String convertSignalInfoListToJSON(List<SignalInformation> signalInformationList) {
 
         JSONObject jsonObject = new JSONObject();
@@ -49,7 +53,11 @@ public class JSONConverter {
     }
 
 
-    // Convert JSON-String to List<SignalInformation>
+    /**
+     * Convert JSON-String to a List<SignalInformation>
+     * @param jsonString the JSON-String from the database
+     * @return the list of SignalInformations
+     */
     public List<SignalInformation> convertJsonToSignalInfoList(String jsonString) {
 
         List<SignalInformation> signalInformationList = new ArrayList<>();
@@ -79,7 +87,6 @@ public class JSONConverter {
                     signalInformationList.add(signalInformation);
                 }
             }
-
         } catch (JSONException e) { e.printStackTrace(); }
         return signalInformationList;
     }

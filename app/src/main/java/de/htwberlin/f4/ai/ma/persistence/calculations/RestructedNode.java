@@ -14,13 +14,11 @@ public class RestructedNode {
         return this.id;
     }
 
-    public Multimap<String, Double> getRestructedSignals() {
+    Multimap<String, Double> getRestructedSignals() {
         return this.restructedSignals;
     }
 
 
-
-    // TODO: Private setzen?
     public RestructedNode(String id, Multimap<String, Double> restructedSignals) {
         this.id = id;
         this.restructedSignals = restructedSignals;

@@ -18,12 +18,6 @@ import java.util.List;
  */
 public class KalmanFilter {
 
-    //private static int kalmanValue;
-
-   // public KalmanFilter(int kalmanValue){
-    //    this.kalmanValue = kalmanValue;
-   // };
-
     public static List<RestructedNode> calculateCalman(int kalmanValue, List<RestructedNode> restructedNodeList) {
 
         List<RestructedNode> calculatedNodes = new ArrayList<>();
@@ -87,7 +81,6 @@ public class KalmanFilter {
                 x += Math.pow((average - average), 2);
             }
         }
-
         double temp = ((double) 1 / ((double) count - 1)) * x;
         return Math.sqrt(temp);
     }

@@ -17,17 +17,34 @@ class DijkstraEdge {
         this.weight = weight == 0.0?15000.0:weight;
     }
 
+    /**
+     * Getter for the destination DijkstraNode
+     * @return the destination DijkstraNode
+     */
     DijkstraNode getDestination() {
         return destination;
     }
 
+    /**
+     * Getter for the source DijkstraNode
+     * @return the source DijkstraNode
+     */
     DijkstraNode getSource() {
         return source;
     }
+
+    /**
+     * Getter for the weight (length) of the DijkstraEdge
+     * @return
+     */
     double getWeight() {
         return weight;
     }
 
+    /**
+     * Overrides standard toString() method
+     * @return
+     */
     @Override
     public String toString() {
         return source + " " + destination;

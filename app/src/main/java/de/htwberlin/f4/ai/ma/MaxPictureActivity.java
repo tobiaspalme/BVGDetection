@@ -13,7 +13,6 @@ import de.htwberlin.f4.ai.ma.android.BaseActivity;
 public class MaxPictureActivity extends BaseActivity {
 
     ImageView maxImageView;
-    //File sdCard = Environment.getExternalStorageDirectory();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

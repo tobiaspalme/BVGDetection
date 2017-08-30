@@ -4,10 +4,10 @@ import java.util.List;
 
 /**
  * Created by Johann Winter
+ *
+ * A SignalInformation consists of a timestamp and a list of SignalStrengths at this time.
  */
 
-
-// TODO: Public in package private ändern wenn Package vollständig
 
 public class SignalInformation {
 
@@ -20,20 +20,33 @@ public class SignalInformation {
         this.signalStrengthInfoList = signalStrengthInformationList;
     }
 
-
+    /**
+     * Getter for the timestamp
+     * @return the timestamp
+     */
     public String getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Setter for the timestamp
+     * @param timestamp
+     */
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
+
+    /**
+     * Getter for the list of SignalStrengths
+     * @return the list of SignalStrengths
+     */
     public List<SignalStrengthInformation> getSignalStrengthInfoList() {
         return signalStrengthInfoList;
     }
 
-    public void setSignalStrengthInfoList(List<SignalStrengthInformation> signalStrengthInfoList) {
-        this.signalStrengthInfoList = signalStrengthInfoList;
-    }
+
+    //public void setSignalStrengthInfoList(List<SignalStrengthInformation> signalStrengthInfoList) {
+    //    this.signalStrengthInfoList = signalStrengthInfoList;
+    //}
 }

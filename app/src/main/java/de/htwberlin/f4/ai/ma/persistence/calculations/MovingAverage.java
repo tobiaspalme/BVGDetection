@@ -10,13 +10,11 @@ import java.util.List;
  * Created by Johann Winter
  */
 
-
-/**
- * start moving average depending on the order three or five
- */
 public class MovingAverage {
 
-    // TODO: evtl. private setzen? STATIC??
+    /**
+     * Calculate moving average algorithm depending on the order three or five.
+     */
     public static List<RestructedNode> calculate(List<RestructedNode> restructedNodeList, int order) {
         List<RestructedNode> calculatedNodes = new ArrayList<>();
         Multimap<String, Double> calculatedMultiMap = null;
@@ -97,11 +95,8 @@ public class MovingAverage {
                             double movingAverageValue = ((double) 1 / (double) 5) * (t1 + t2 + t3 + t4 + t5);
                             calculatedMultiMap.put(Key, movingAverageValue);
                         }
-
                     }
-
                 }
-
             }
             calculatedNodes.add(new RestructedNode(restructedNode.id, calculatedMultiMap));
         }

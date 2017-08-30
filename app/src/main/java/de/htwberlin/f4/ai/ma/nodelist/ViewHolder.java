@@ -8,6 +8,8 @@ import com.example.carol.bvg.R;
 
 /**
  * Created by Johann Winter
+ *
+ * A viewholder for the NodeListAdapter
  */
 
 class ViewHolder {

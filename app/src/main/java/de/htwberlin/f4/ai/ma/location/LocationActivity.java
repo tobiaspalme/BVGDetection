@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 import com.google.common.collect.ArrayListMultimap;
@@ -27,11 +26,7 @@ import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-//import de.htwberlin.f4.ai.ma.persistence.fingerprint.Fingerprint;
-//import de.htwberlin.f4.ai.ma.persistence.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
@@ -40,6 +35,11 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 
+/**
+ * Created by Johann Winter
+ *
+ * This activity is for locating the user ("Standort ermitteln").
+ */
 
 public class LocationActivity extends BaseActivity {
 
@@ -51,31 +51,25 @@ public class LocationActivity extends BaseActivity {
     //TextView descriptionLabelTextview;
     TextView locationTextview;
     TextView descriptionTextview;
-   // TextView coordinatesLabelTextview;
-   // TextView coordinatesTextview;
+    // TextView coordinatesLabelTextview;
+    // TextView coordinatesTextview;
     TextView percentLabelTextview;
     TextView percentTextview;
     ProgressBar progressBar;
 
     Context context = this;
 
-    //String[] permissions;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private NodeFactory nodeFactory;
-    //ListView listView;
     private String settings;
-    //private Spinner nodesDropdown;
     private Spinner wifiDropdown;
-    //private LocationResultAdapter resultAdapterdapter;
-    //private String foundNodeName;
     private FoundNode foundNode;
     private WifiManager wifiManager;
     private Multimap<String, Integer> multiMap;
     private long timestampWifiManager = 0;
 
     private int locationsCounter;
-
 
     boolean movingAverage;
     boolean kalmanFilter;
@@ -94,10 +88,6 @@ public class LocationActivity extends BaseActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
 
-       /* permissions = new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-*/
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
@@ -116,12 +106,8 @@ public class LocationActivity extends BaseActivity {
         progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
 
-
-        //listView = (ListView) findViewById(R.id.results_listview);
-
         // Get preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
         kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);
         euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
@@ -144,7 +130,6 @@ public class LocationActivity extends BaseActivity {
 
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-        final List<Node> allNodes = databaseHandler.getAllNodes();
 
         detailedResultsImagebutton.setImageResource(R.drawable.info);
         refreshImageview.setImageResource(R.drawable.refresh);
@@ -162,7 +147,6 @@ public class LocationActivity extends BaseActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
         refreshWifiDropdown();
-
 
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -189,8 +173,9 @@ public class LocationActivity extends BaseActivity {
     }
 
 
-
-    // Scan for WiFi names (SSIDs) and add them to the dropdown
+    /**
+     * Scan for WiFi names (SSIDs) and add them to the dropdown
+     */
     private void refreshWifiDropdown() {
         wifiManager.startScan();
         List<ScanResult> wifiScanList = wifiManager.getScanResults();
@@ -208,8 +193,8 @@ public class LocationActivity extends BaseActivity {
     }
 
     /**
-     * Check WiFi signal strengths and and save to multimap
-     * @param times the measured time: one or ten seconds
+     * Check WiFi signal strengths and and save them to a multimap
+     * @param times the time to measure in seconds
      */
     private void getMeasuredNode(final int times) {
 
@@ -277,7 +262,7 @@ public class LocationActivity extends BaseActivity {
 
 
     /**
-     * if times measurement is more than one second make a average of values. Try to start a fingerprint and calculate position.
+     * If times measurement is more than one second make a average of values. Try calculate the position.
      * @param measuredTime the measured time
      */
     private void makeFingerprint(final int measuredTime) {
@@ -305,14 +290,10 @@ public class LocationActivity extends BaseActivity {
 
         LocationActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-
                 LocationResult locationResult;
                 if (foundNode != null) {
 
-                    //if (foundNodeName != null) {
                     locationTextview.setText(foundNode.getId());
-                    //locationImageview.setEnabled(true);
-
                     locationImageview.setVisibility(View.VISIBLE);
                     //descriptionLabelTextview.setVisibility(View.VISIBLE);
                     //coordinatesLabelTextview.setVisibility(View.VISIBLE);
@@ -344,19 +325,14 @@ public class LocationActivity extends BaseActivity {
 
                 } else {
                     locationTextview.setText(getString(R.string.no_node_found_text));
-                    //locationImageview.setEnabled(false);
                     locationResult = new LocationResultImplementation(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
 
                 }
-                //makeJson(locationResult);
 
                 locationsCounter++;
                 Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
                 sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
                 databaseHandler.insertLocationResult(locationResult);
-
-                //resultAdapterdapter.add(locationResult);
-                //resultAdapterdapter.notifyDataSetChanged();
             }
         });
     }

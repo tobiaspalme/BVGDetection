@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 /**
  * Created Johann Winter
+ *
+ * This is a custom adapter for the NodeListActivity's nodelist.
  */
 
 public class NodeListAdapter extends ArrayAdapter {
@@ -29,7 +31,6 @@ public class NodeListAdapter extends ArrayAdapter {
 
     private final int REGULAR_ITEM = 0;   // For "normal" Nodes
     private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of NavigationActivity
-
 
 
     public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
@@ -99,13 +100,11 @@ public class NodeListAdapter extends ArrayAdapter {
         }
     }
 
-
     @Override
     public int getViewTypeCount() {
         // Two different row types in NavigationActivity
         return 2;
     }
-
 
     @Nullable
     @Override

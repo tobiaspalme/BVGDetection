@@ -23,29 +23,23 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 public class LocationDetailedInfoActivity extends BaseActivity{
 
-    private ListView resultsListview;
+    ListView resultsListview;
     private DatabaseHandler databaseHandler;
     private LocationResultAdapter locationResultAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location_detailed_info, contentFrameLayout);
-
 
         resultsListview = (ListView) findViewById(R.id.results_listview);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
-
-
+        // Load LocationResults from database and fill the listview
         final ArrayList<LocationResultImplementation> allResults = databaseHandler.getAllLocationResults();
-
         locationResultAdapter = new LocationResultAdapter(this, allResults);
         resultsListview.setAdapter(locationResultAdapter);
-
-
 
         //delete entry with long click
         resultsListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -70,8 +64,5 @@ public class LocationDetailedInfoActivity extends BaseActivity{
                 return false;
             }
         });
-
-
-
     }
 }

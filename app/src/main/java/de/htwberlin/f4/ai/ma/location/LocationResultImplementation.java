@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ma.location;
 
 /**
- * a class for the location result with important information
+ * A class for the LocationResult with important information
  */
 public class LocationResultImplementation implements LocationResult{
 
