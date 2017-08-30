@@ -9,6 +9,7 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 
 /**

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
@@ -179,10 +179,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             descriptionEdittext.setText(nodeToUpdate.getDescription());
             picturePath = nodeToUpdate.getPicturePath();
 
-            if (nodeToUpdate.getFingerprint() != null) {
+            if (nodeToUpdate.getFingerprintImpl() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
                 initialWifiLabelTextview.setVisibility(View.VISIBLE);
-                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+                initialWifiTextview.setText(nodeToUpdate.getFingerprintImpl().getWifiName());
             }
 
             if (nodeToUpdate.getCoordinates().length() > 0) {
@@ -443,7 +443,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     if (!fingerprintTaken) {
                         new AlertDialog.Builder(this)
                                 .setTitle(getString(R.string.no_fingerprint_title_text))
-                                .setMessage("Soll der Ort \"" + nodeIdEdittext.getText().toString() + "\" wirklich ohne Fingerprint erstellt werden?")
+                                .setMessage("Soll der Ort \"" + nodeIdEdittext.getText().toString() + "\" wirklich ohne FingerprintImpl erstellt werden?")
                                 .setCancelable(false)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -463,7 +463,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     // If a fingerprint has been captured...
                     } else {
 
-                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), "", picPathToSave, "");
+                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new FingerprintImpl(wlanName, signalInformationList), "", picPathToSave, "");
 
                         jsonWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
@@ -522,8 +522,8 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         // If no new fingerprint was taken
         if (!fingerprintTaken) {
             // If an old fingerprint exists
-            if (nodeToUpdate.getFingerprint() != null) {
-                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+            if (nodeToUpdate.getFingerprintImpl() != null) {
+                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprintImpl(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
                 jsonWriter.writeJSON(node);
                 databaseHandler.updateNode(node, oldNodeId);
                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -535,10 +535,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             // If no new fingerprint was taken and no old exists
             } else {
 
-            //if (nodeToUpdate.getFingerprint() == null) {
+            //if (nodeToUpdate.getFingerprintImpl() == null) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.no_fingerprint_title_text))
-                        .setMessage("Soll der Ort \"" + nodeIdEdittext.getText() + "\" wirklich ohne Fingerprint gespeichert werden?")
+                        .setMessage("Soll der Ort \"" + nodeIdEdittext.getText() + "\" wirklich ohne FingerprintImpl gespeichert werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -560,7 +560,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         // If a new fingerprint was taken
         } else {
 
-            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new Fingerprint(wlanName, signalInformationList), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new FingerprintImpl(wlanName, signalInformationList), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
             jsonWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();

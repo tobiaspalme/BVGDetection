@@ -1,6 +1,7 @@
 package de.htwberlin.f4.ai.ma.node;
 
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 
 /**
  * Created by Johann Winter
@@ -21,8 +22,8 @@ public interface Node {
     String getDescription();
     //void setDescription(String description);
 
-    Fingerprint getFingerprint();
-    //void setFingerprint(Fingerprint fingerprint);
+    Fingerprint getFingerprintImpl();
+    //void setFingerprint(FingerprintImpl fingerprint);
 
     String getCoordinates();
     void setCoordinates(String coordinates);

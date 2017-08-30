@@ -40,8 +40,8 @@ public class FingerprintGeneratorImpl implements FingerprintGenerator{
 
     Multimap<String, Integer> multiMap;
 
-    public Fingerprint getFingerprint(final String wifiName, final int seconds, final WifiManager wifiManager) {
-//    public Fingerprint getFingerprint(final String wifiName, final int seconds, final WifiManager wifiManager, ProgressBar progressBar, TextView progressTextview) {
+    public FingerprintImpl getFingerprint(final String wifiName, final int seconds, final WifiManager wifiManager) {
+//    public FingerprintImpl getFingerprintImpl(final String wifiName, final int seconds, final WifiManager wifiManager, ProgressBar progressBar, TextView progressTextview) {
 
         multiMap = ArrayListMultimap.create();
 
@@ -97,7 +97,7 @@ public class FingerprintGeneratorImpl implements FingerprintGenerator{
                 List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
          //   }
         //}).start();
-        return new Fingerprint(wifiName, signalInformations);
+        return new FingerprintImpl(wifiName, signalInformations);
     }
 
 /*

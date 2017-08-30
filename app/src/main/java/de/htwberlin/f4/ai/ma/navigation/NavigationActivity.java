@@ -27,10 +27,11 @@ import java.util.List;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
-import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
+import de.htwberlin.f4.ai.ma.node.Node;
+import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithmImpl;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
@@ -99,11 +100,11 @@ public class NavigationActivity extends BaseActivity {
 
 
 //---------- TEST -------------------
-        Node n1 = NodeFactory.createInstance("n1", "", new Fingerprint("", null), "", "", "");
-        Node n2 = NodeFactory.createInstance("n2", "", new Fingerprint("", null), "", "", "");
-        Node n3 = NodeFactory.createInstance("n3", "", new Fingerprint("", null), "", "", "");
-        Node n4 = NodeFactory.createInstance("n4", "", new Fingerprint("", null), "", "", "");
-        Node n5 = NodeFactory.createInstance("n5", "", new Fingerprint("", null), "", "", "");
+        Node n1 = NodeFactory.createInstance("n1", "", new FingerprintImpl("", null), "", "", "");
+        Node n2 = NodeFactory.createInstance("n2", "", new FingerprintImpl("", null), "", "", "");
+        Node n3 = NodeFactory.createInstance("n3", "", new FingerprintImpl("", null), "", "", "");
+        Node n4 = NodeFactory.createInstance("n4", "", new FingerprintImpl("", null), "", "", "");
+        Node n5 = NodeFactory.createInstance("n5", "", new FingerprintImpl("", null), "", "", "");
 
         Edge e1 = new EdgeImpl(n1, n2, false, 4);
         Edge e2 = new EdgeImpl(n2, n3, false, 5);
@@ -228,7 +229,7 @@ public class NavigationActivity extends BaseActivity {
 
                 boolean accessible = accessibilityCheckbox.isChecked();
 
-                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(getApplicationContext(), accessible);
+                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithmImpl(getApplicationContext(), accessible);
                 dijkstraAlgorithm.execute(selectedStartNode);
                 List<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 
@@ -284,9 +285,9 @@ public class NavigationActivity extends BaseActivity {
     private void findLocation(String wifiName, int seconds) {
 
         FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
-        Fingerprint fingerprint = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
+        FingerprintImpl fingerprintImpl = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
 
-        FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
+        FoundNode foundNode = databaseHandler.calculateNodeId(fingerprintImpl);
         if (foundNode != null) {
             Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
             toast.show();

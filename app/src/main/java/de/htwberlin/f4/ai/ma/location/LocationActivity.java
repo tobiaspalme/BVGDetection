@@ -29,7 +29,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
@@ -211,9 +211,9 @@ public class LocationActivity extends BaseActivity {
             //new FingerprintGeneratorImpl(progressVariable).execute();
 
             FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
-            Fingerprint fingerprint = fingerprintGenerator.getFingerprint(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager);
+            FingerprintImpl fingerprintImpl = fingerprintGenerator.getFingerprint(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager);
 
-            getLocationResult(seconds, fingerprint);
+            getLocationResult(seconds, fingerprintImpl);
         }
     }
 
@@ -221,12 +221,12 @@ public class LocationActivity extends BaseActivity {
     /**
      * Try to calculate the position.
      * @param measuredTime the measured time
-     * @param fingerprint the fingerprint measured before
+     * @param fingerprintImpl the fingerprintImpl measured before
      */
-    private void getLocationResult(final int measuredTime, Fingerprint fingerprint) {
+    private void getLocationResult(final int measuredTime, FingerprintImpl fingerprintImpl) {
         //List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
         //foundNode = databaseHandler.calculateNodeId(signalInformations);
-        foundNode = databaseHandler.calculateNodeId(fingerprint);
+        foundNode = databaseHandler.calculateNodeId(fingerprintImpl);
 
 
         LocationResult locationResult;

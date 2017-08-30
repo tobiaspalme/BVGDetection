@@ -5,41 +5,14 @@ import java.util.List;
 /**
  * Created by Johann Winter
  *
- * A fingerprint consists of a WiFi-Name (SSID) and a list of SignalInformations.
+ * This interface is for fingerprints.
+ * A fingerprint contains a field for the name of the measured WiFi
+ * and a list of SignalInformation which contain each a timestamp and a list
+ * of measured MAC addresses in combination with a signal strength.
  */
 
-public class Fingerprint {
+public interface Fingerprint {
 
-    private String wifiName;
-    private List<SignalInformation> signalInformationList;
-
-
-    public Fingerprint(String wifiName, List<SignalInformation> signalInformationList) {
-        this.wifiName = wifiName;
-        this.signalInformationList = signalInformationList;
-    }
-
-    /**
-     * Getter for the WiFi name
-     * @return the WiFi name
-     */
-    public String getWifiName() {
-        return this.wifiName;
-    }
-
-
-    /**
-     * Getter for the list of SignalInformations
-     * @return the list of SignalInformations
-     */
-    public List<SignalInformation> getSignalInformationList() {
-        return this.signalInformationList;
-    }
-
-
-    //public void setWifiName(String wifiName) {
-   //     this.wifiName = wifiName;
-   // }
-
-
+    String getWifiName();
+    List<SignalInformation> getSignalInformationList();
 }

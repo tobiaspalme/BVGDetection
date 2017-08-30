@@ -52,7 +52,7 @@ import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalStrengthInformation;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -701,7 +701,7 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
 
-        FoundNode foundNode = databaseHandler.calculateNodeId(new Fingerprint("", signalInformationList));
+        FoundNode foundNode = databaseHandler.calculateNodeId(new FingerprintImpl("", signalInformationList));
         Node result = null;
         if (foundNode != null) {
             result = databaseHandler.getNode(foundNode.getId());
