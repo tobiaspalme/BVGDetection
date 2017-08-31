@@ -24,6 +24,7 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
@@ -31,9 +32,10 @@ import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithmImpl;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -46,7 +48,7 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
  * This activity provides the navigation functionality ("Navigation").
  */
 
-public class NavigationActivity extends BaseActivity {
+public class NavigationActivity extends BaseActivity implements AsyncResponse {
 
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
@@ -284,18 +286,24 @@ public class NavigationActivity extends BaseActivity {
      */
     private void findLocation(String wifiName, int seconds) {
 
-        FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
-        FingerprintImpl fingerprintImpl = fingerprintGenerator.getFingerprint(wifiName, seconds, wifiManager);
+        FingerprintTask fingerprintTask = new FingerprintTask(wifiName, seconds, wifiManager, true, null, null);
+        fingerprintTask.delegate = this;
+        fingerprintTask.execute();
+    }
 
-        FoundNode foundNode = databaseHandler.calculateNodeId(fingerprintImpl);
-        if (foundNode != null) {
-            Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
-            toast.show();
-            int index = itemsStartNodeSpinner.indexOf(foundNode.getId());
-            startNodeSpinner.setSelection(index);
-        } else {
-            Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);
-            toast.show();
+    @Override
+    public void processFinish(Fingerprint fingerprint, int seconds) {
+        if (fingerprint != null) {
+            FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
+            if (foundNode != null) {
+                Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
+                toast.show();
+                int index = itemsStartNodeSpinner.indexOf(foundNode.getId());
+                startNodeSpinner.setSelection(index);
+            } else {
+                Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -32,21 +31,15 @@ import com.example.carol.bvg.R;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -54,7 +47,7 @@ import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
-public class NodeRecordAndEditActivity extends BaseActivity {
+public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResponse {
 
     private String wlanName;
     private String picturePath;
@@ -91,7 +84,9 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     private Context context = this;
     private WifiManager wifiManager;
     private Timestamp timestamp;
-    private List<SignalInformation> signalInformationList;
+    //private List<SignalInformation> signalInformationList;
+    private Fingerprint fingerprint;
+    private FingerprintTask fingerprintTask;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
     private static final int CAM_REQUEST = 1;
 
@@ -180,10 +175,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             descriptionEdittext.setText(nodeToUpdate.getDescription());
             picturePath = nodeToUpdate.getPicturePath();
 
-            if (nodeToUpdate.getFingerprintImpl() != null) {
+            if (nodeToUpdate.getFingerprint() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
                 initialWifiLabelTextview.setVisibility(View.VISIBLE);
-                initialWifiTextview.setText(nodeToUpdate.getFingerprintImpl().getWifiName());
+                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
             }
 
             if (nodeToUpdate.getCoordinates().length() > 0) {
@@ -227,7 +222,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
                     wlanName = wifiNamesDropdown.getSelectedItem().toString();
                     recordTime = Integer.parseInt(recordTimeText.getText().toString());
-                    measureNode();
+
+                    fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                    fingerprintTask.delegate = NodeRecordAndEditActivity.this;
+                    fingerprintTask.execute();
                 }
                 abortRecording = false;
                 }
@@ -307,6 +305,25 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
 
     /**
+     * If the fingerprinting background task finished
+     * @param fp the Fingerprint from the AsyncTask
+     */
+    @Override
+    public void processFinish(Fingerprint fp, int seconds) {
+        fingerprint = fp;
+
+        if (fp == null) {
+            recordButton.setImageResource(R.drawable.fingerprint);
+        } else {
+            recordButton.setImageResource(R.drawable.fingerprint_done);
+        }
+        progressBar.setVisibility(View.INVISIBLE);
+        progressTextview.setVisibility(View.INVISIBLE);
+        fingerprintTaken = true;
+    }
+
+
+    /**
      * Scan for WiFi names (SSIDs) and add them to the dropdown
      */
     private void refreshWifiDropdown() {
@@ -323,80 +340,6 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
         wifiNamesDropdown.setAdapter(dropdownAdapter);
         Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     * Make Wi-Fi signal strength measurement with given record time
-     */
-    private void measureNode() {
-        progressBar.setMax(60 * recordTime);
-        progressBar.setProgress(0);
-
-
-
-        FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
-        fingerprintGenerator.getFingerprint(wlanName, recordTime, wifiManager);
-
-
-
-        // Do recording in an other thread
-        new Thread(new Runnable() {
-            public void run() {
-                signalInformationList = new ArrayList<>();
-                while (progressStatus < 60 * recordTime && !abortRecording) {
-                    List<SignalStrength> signalStrengthList = new ArrayList<>();
-
-                    wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                    wifiManager.startScan();
-                    List<ScanResult> wifiScanList = wifiManager.getScanResults();
-
-                    for (ScanResult sr : wifiScanList) {
-                        if (sr.SSID.equals(wlanName)) {
-                            SignalStrength signal = new SignalStrengthImpl(sr.BSSID, sr.level);
-                            Log.d("Recording... ", "BSSID = " + sr.BSSID + " LVL = " + sr.level);
-                            signalStrengthList.add(signal);
-                        }
-                    }
-                    Log.d("------------------", "--------------------------------------------");
-
-                    SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
-                    String format = s.format(new Date());
-                    SignalInformation signalInformation = new SignalInformation(format, signalStrengthList);
-                    signalInformationList.add(signalInformation);
-
-                    progressStatus += 1;
-
-                    mHandler.post(new Runnable() {
-                        public void run() {
-                            progressBar.setProgress(progressStatus);
-                            String progressString = String.valueOf(progressBar.getMax() - progressBar.getProgress());
-                            progressTextview.setText(progressString);
-                        }
-                    });
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // If thread is finished...
-                fingerprintTaken = true;
-
-                mHandler.post(new Runnable() {
-                    public void run() {
-                        if (abortRecording) {
-                            recordButton.setImageResource(R.drawable.fingerprint);
-                        } else {
-                            recordButton.setImageResource(R.drawable.fingerprint_done);
-                        }
-                        progressBar.setVisibility(View.INVISIBLE);
-                        progressTextview.setVisibility(View.INVISIBLE);
-                    }
-                });
-            }
-        }).start();
     }
 
 
@@ -444,7 +387,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     if (!fingerprintTaken) {
                         new AlertDialog.Builder(this)
                                 .setTitle(getString(R.string.no_fingerprint_title_text))
-                                .setMessage("Soll der Ort \"" + nodeIdEdittext.getText().toString() + "\" wirklich ohne FingerprintImpl erstellt werden?")
+                                .setMessage("Soll der Ort \"" + nodeIdEdittext.getText().toString() + "\" wirklich ohne Fingerprint erstellt werden?")
                                 .setCancelable(false)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -464,7 +407,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
                     // If a fingerprint has been captured...
                     } else {
 
-                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new FingerprintImpl(wlanName, signalInformationList), "", picPathToSave, "");
+                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
 
                         jsonWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
@@ -523,8 +466,8 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         // If no new fingerprint was taken
         if (!fingerprintTaken) {
             // If an old fingerprint exists
-            if (nodeToUpdate.getFingerprintImpl() != null) {
-                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprintImpl(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+            if (nodeToUpdate.getFingerprint() != null) {
+                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
                 jsonWriter.writeJSON(node);
                 databaseHandler.updateNode(node, oldNodeId);
                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -536,10 +479,10 @@ public class NodeRecordAndEditActivity extends BaseActivity {
             // If no new fingerprint was taken and no old exists
             } else {
 
-            //if (nodeToUpdate.getFingerprintImpl() == null) {
+            //if (nodeToUpdate.getFingerprint() == null) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.no_fingerprint_title_text))
-                        .setMessage("Soll der Ort \"" + nodeIdEdittext.getText() + "\" wirklich ohne FingerprintImpl gespeichert werden?")
+                        .setMessage("Soll der Ort \"" + nodeIdEdittext.getText() + "\" wirklich ohne Fingerprint gespeichert werden?")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -561,7 +504,7 @@ public class NodeRecordAndEditActivity extends BaseActivity {
         // If a new fingerprint was taken
         } else {
 
-            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, new FingerprintImpl(wlanName, signalInformationList), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
             jsonWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -574,10 +517,15 @@ public class NodeRecordAndEditActivity extends BaseActivity {
 
 
     /**
-     * Reset buttons. textfields, and progress
+     * Reset buttons. textfields, and progress.
+     * Cancel the fingerprinting backgroundtask.
      */
     private void resetUiElements() {
-        // Reset progressBar and progress and set the inputs enabled
+
+        if (fingerprintTask != null) {
+            fingerprintTask.cancel(false);
+        }
+
         abortRecording = true;
         progressStatus = 0;
         progressTextview.setText(String.valueOf(progressStatus));
@@ -640,8 +588,13 @@ public class NodeRecordAndEditActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         if (!takingPictureAtTheMoment) {
+            if (fingerprintTask != null) {
+                fingerprintTask.cancel(false);
+            }
+
+
+
             abortRecording = true;
         }
     }
-
 }

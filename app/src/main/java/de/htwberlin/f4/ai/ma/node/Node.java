@@ -22,7 +22,7 @@ public interface Node {
     String getDescription();
     //void setDescription(String description);
 
-    Fingerprint getFingerprintImpl();
+    Fingerprint getFingerprint();
     //void setFingerprint(FingerprintImpl fingerprint);
 
     String getCoordinates();

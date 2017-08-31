@@ -24,12 +24,14 @@ import com.example.carol.bvg.R;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGenerator;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintGeneratorImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
+import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
@@ -41,7 +43,7 @@ import de.htwberlin.f4.ai.ma.MaxPictureActivity;
  * This activity is for locating the user ("Standort ermitteln").
  */
 
-public class LocationActivity extends BaseActivity {
+public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     Button measure1sButton;
     Button measure10sButton;
@@ -203,17 +205,13 @@ public class LocationActivity extends BaseActivity {
         //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+            //IntentFilter intentFilter = new IntentFilter();
+            //intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             locationTextview.setText(getString(R.string.searching_node_text));
 
-            //int progressVariable = 0;
-            //new FingerprintGeneratorImpl(progressVariable).execute();
-
-            FingerprintGenerator fingerprintGenerator = new FingerprintGeneratorImpl();
-            FingerprintImpl fingerprintImpl = fingerprintGenerator.getFingerprint(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager);
-
-            getLocationResult(seconds, fingerprintImpl);
+            FingerprintTask fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
+            fingerprintTask.delegate = this;
+            fingerprintTask.execute();
         }
     }
 
@@ -221,12 +219,12 @@ public class LocationActivity extends BaseActivity {
     /**
      * Try to calculate the position.
      * @param measuredTime the measured time
-     * @param fingerprintImpl the fingerprintImpl measured before
+     * @param fingerprint the fingerprintImpl measured before
      */
-    private void getLocationResult(final int measuredTime, FingerprintImpl fingerprintImpl) {
+    private void getLocationResult(final int measuredTime, Fingerprint fingerprint) {
         //List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
         //foundNode = databaseHandler.calculateNodeId(signalInformations);
-        foundNode = databaseHandler.calculateNodeId(fingerprintImpl);
+        foundNode = databaseHandler.calculateNodeId(fingerprint);
 
 
         LocationResult locationResult;
@@ -272,4 +270,12 @@ public class LocationActivity extends BaseActivity {
         databaseHandler.insertLocationResult(locationResult);
     }
 
+
+    // Get Fingerprint from finished AsyncTask
+    @Override
+    public void processFinish(Fingerprint fingerprint, int seconds) {
+        if (fingerprint != null) {
+            getLocationResult(seconds, fingerprint);
+        }
+    }
 }

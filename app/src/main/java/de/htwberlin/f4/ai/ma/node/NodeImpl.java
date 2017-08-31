@@ -46,7 +46,7 @@ class NodeImpl implements Node {
     //    this.description = description;
     //}
 
-    public Fingerprint getFingerprintImpl() {
+    public Fingerprint getFingerprint() {
         return this.fingerprint;
     }
 

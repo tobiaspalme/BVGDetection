@@ -158,9 +158,9 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         values.put(NODE_DESCRIPTION, node.getDescription());
 
         // If the Node has a fingerprint
-        if (node.getFingerprintImpl() != null) {
-            values.put(NODE_WIFI_NAME, node.getFingerprintImpl().getWifiName());
-            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprintImpl().getSignalInformationList()));
+        if (node.getFingerprint() != null) {
+            values.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         }
 
         values.put(NODE_COORDINATES, node.getCoordinates());
@@ -199,9 +199,9 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         contentValues.put(NODE_ADDITIONAL_INFO, node.getAdditionalInfo());
 
         // If the Node has a fingerprint
-        if (node.getFingerprintImpl() != null) {
-            contentValues.put(NODE_WIFI_NAME, node.getFingerprintImpl().getWifiName());
-            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprintImpl().getSignalInformationList()));
+        if (node.getFingerprint() != null) {
+            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         }
 //TODO
         /*
@@ -691,8 +691,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         // Load all nodes which have a valid fingerprintImpl
         List<Node> nodesWithFingerprint = new ArrayList<>();
         for (Node n : getAllNodes()) {
-            if (n.getFingerprintImpl() != null) {
-            //if (!n.getFingerprintImpl().getSignalInformationList().isEmpty()) {
+            if (n.getFingerprint() != null) {
+            //if (!n.getFingerprint().getSignalInformationList().isEmpty()) {
                 nodesWithFingerprint.add(n);
             }
         }
@@ -769,7 +769,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         Multimap<String, Double> multiMap = null;
 
         for (Node node : allNodes) {
-            count = node.getFingerprintImpl().getSignalInformationList().size();
+            count = node.getFingerprint().getSignalInformationList().size();
             double minValue = (((double) 1 / (double) 3) * (double) count);
             macAddresses = getMacAddresses(node);
             multiMap = getMultiMap(node, macAddresses);
@@ -804,7 +804,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      */
     private Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
-        for (SignalInformation signalInfo : node.getFingerprintImpl().getSignalInformationList()) {
+        for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
             for (SignalStrength ssi : signalInfo.getSignalStrengthList()) {
                 multiMap.put(ssi.getMacAddress(), (double) ssi.getRSSI());
@@ -827,7 +827,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      */
     private List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
-        for (SignalInformation sigInfo : node.getFingerprintImpl().getSignalInformationList()) {
+        for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
             for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
                 macAdresses.add(ssi.getMacAddress());
             }
