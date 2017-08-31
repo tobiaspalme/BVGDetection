@@ -83,6 +83,7 @@ public class MeasureControllerImpl implements MeasureController {
     private float lowpassFilterValue;
     private boolean useStepDirectionDetect;
     private float barometerThreshold;
+    private CalibrationData calibrationData;
 
     private Node startNode;
     private Node targetNode;
@@ -436,7 +437,9 @@ public class MeasureControllerImpl implements MeasureController {
         measurementType = IndoorMeasurementType.fromString(type);
         useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", false);
         barometerThreshold = Float.valueOf(sharedPreferences.getString("pref_barometer_threshold", "0.1"));
-
+        // load steplength and stepperiod calibration
+        CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
+        calibrationData = calibratePersistance.load();
     }
 
     @Override
@@ -515,7 +518,6 @@ public class MeasureControllerImpl implements MeasureController {
                     builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             getMeasuredNode(wifiNamesList.get(which), 3);
                         }
                     });
@@ -620,7 +622,12 @@ public class MeasureControllerImpl implements MeasureController {
         }
     }
 
-
+    @Override
+    public void onStairsToggle(boolean checked) {
+        if (calibrationData != null) {
+            calibrationData.setStairs(checked);
+        }
+    }
 
 
     // from johann, modified
@@ -661,7 +668,7 @@ public class MeasureControllerImpl implements MeasureController {
         Node node = makeFingerprint(multiMap);
         if (node != null) {
             measuredNode = node;
-            Toast toast = Toast.makeText(view.getContext(), "Node: " + node.getId(), Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(view.getContext(), "Ort gefunden: " + node.getId(), Toast.LENGTH_SHORT);
             toast.show();
             view.setStartNode(measuredNode);
         } else {
@@ -815,9 +822,7 @@ public class MeasureControllerImpl implements MeasureController {
                 calibrationDialog.dismiss();
                 timerHandler.removeCallbacks(pressureCalibration);
                 calibrated = true;
-                // load steplength and stepperiod calibration
-                CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
-                CalibrationData calibrationData = calibratePersistance.load();
+
 
                 if (calibrationData != null) {
                     // get coordinates from startnode and initialize measurement with those.
@@ -833,8 +838,7 @@ public class MeasureControllerImpl implements MeasureController {
                     calibrationData.setLowpassFilterValue(lowpassFilterValue);
                     calibrationData.setUseStepDirection(useStepDirectionDetect);
                     calibrationData.setBarometerThreshold(barometerThreshold);
-
-                    // save new calibrated airpressure and azimuth
+                    // save new calibrated airpressure
                     calibrationData.setAirPressure(airPressure);
                     // calibrate the indoormeasurement
                     indoorMeasurement.calibrate(calibrationData);

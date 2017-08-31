@@ -54,13 +54,14 @@ public class StepCounter implements Sensor, SensorEventListener{
     private int loadStepPeriod() {
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(context);
         CalibrationData calibrationData = calibratePersistance.load();
+        int period;
         if (calibrationData != null) {
-            stepPeriod = calibrationData.getStepPeriod();
+            period = calibrationData.getStepPeriod();
         } else {
-            stepPeriod = 500;
+            period = 500;
         }
 
-        return stepPeriod;
+        return period;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class StepCounter implements Sensor, SensorEventListener{
         stepCounterSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_DETECTOR);
         if (stepCounterSensor != null) {
             sensorManager.registerListener(this, stepCounterSensor, sensorRate);
-            loadStepPeriod();
+            stepPeriod = loadStepPeriod();
         }
     }
 
