@@ -14,6 +14,9 @@ public class MovingAverage {
 
     /**
      * Calculate moving average algorithm depending on the order three or five.
+     * @param order the order (3 or 5)
+     * @param restructedNodeList the list of restructed Nodes
+     * @return the list of restructed Nodes
      */
     public static List<RestructedNode> calculate(List<RestructedNode> restructedNodeList, int order) {
         List<RestructedNode> calculatedNodes = new ArrayList<>();

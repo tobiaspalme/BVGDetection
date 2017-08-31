@@ -291,6 +291,10 @@ public class NavigationActivity extends BaseActivity implements AsyncResponse {
         fingerprintTask.execute();
     }
 
+    /**
+     * If the fingerprinting background task finished
+     * @param fingerprint the Fingerprint from the AsyncTask
+     */
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {

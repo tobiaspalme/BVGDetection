@@ -11,14 +11,17 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
 
-
-/**
- * Calculate the euclidean distances
- */
 public class EuclideanDistance {
 
+
+    /**
+     * Calculate the euclidean distances
+     * @param restructedNodes a list of restructed Nodes
+     * @param measuredSSIs a list of measured SignalStrengths (RSSI)
+     * @return a sorted list of distances
+     */
     public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrength> measuredSSIs) {
-        List<String> distanceName = new ArrayList<>();
+        //List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
         for (int i = 0; i < restructedNodes.size(); i++) {

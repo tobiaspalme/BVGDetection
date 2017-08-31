@@ -75,17 +75,15 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
     private Spinner wifiNamesDropdown;
     private DatabaseHandler databaseHandler;
     private boolean pictureTaken;
-    private boolean fingerprintTaken;
     private boolean takingPictureAtTheMoment;
     private boolean updateMode = false;
-    private boolean abortRecording;
     private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
     private WifiManager wifiManager;
     private Timestamp timestamp;
     //private List<SignalInformation> signalInformationList;
-    private Fingerprint fingerprint;
+    private Fingerprint fingerprint = null;
     private FingerprintTask fingerprintTask;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 3;
     private static final int CAM_REQUEST = 1;
@@ -140,8 +138,6 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
         picturePath = null;
 
         pictureTaken = false;
-        fingerprintTaken = false;
-        abortRecording = false;
         takingPictureAtTheMoment = false;
 
 
@@ -227,7 +223,6 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
                     fingerprintTask.delegate = NodeRecordAndEditActivity.this;
                     fingerprintTask.execute();
                 }
-                abortRecording = false;
                 }
         });
 
@@ -254,7 +249,7 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
         cameraImageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fingerprintTaken) {
+                if (fingerprint != null) {
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", picturePath);
                     startActivity(intent);
@@ -319,7 +314,7 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
         }
         progressBar.setVisibility(View.INVISIBLE);
         progressTextview.setVisibility(View.INVISIBLE);
-        fingerprintTaken = true;
+        //fingerprintTaken = true;
     }
 
 
@@ -384,7 +379,7 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
                 } else {
 
                     // If no fingerprint has been captured...
-                    if (!fingerprintTaken) {
+                    if (fingerprint == null) {
                         new AlertDialog.Builder(this)
                                 .setTitle(getString(R.string.no_fingerprint_title_text))
                                 .setMessage("Soll der Ort \"" + nodeIdEdittext.getText().toString() + "\" wirklich ohne Fingerprint erstellt werden?")
@@ -408,7 +403,6 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
                     } else {
 
                         final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
-
                         jsonWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
                         progressStatus = 0;
@@ -464,7 +458,7 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
         }
 
         // If no new fingerprint was taken
-        if (!fingerprintTaken) {
+        if (fingerprint == null) {
             // If an old fingerprint exists
             if (nodeToUpdate.getFingerprint() != null) {
                 final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
@@ -526,7 +520,6 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
             fingerprintTask.cancel(false);
         }
 
-        abortRecording = true;
         progressStatus = 0;
         progressTextview.setText(String.valueOf(progressStatus));
         progressBar.setProgress(progressStatus);
@@ -591,10 +584,8 @@ public class NodeRecordAndEditActivity extends BaseActivity implements AsyncResp
             if (fingerprintTask != null) {
                 fingerprintTask.cancel(false);
             }
-
-
-
-            abortRecording = true;
         }
     }
+
+
 }

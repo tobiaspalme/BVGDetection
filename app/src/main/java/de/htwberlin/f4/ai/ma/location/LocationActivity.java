@@ -50,7 +50,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     ImageButton detailedResultsImagebutton;
     ImageView locationImageview;
     ImageView refreshImageview;
-    //TextView descriptionLabelTextview;
     TextView locationTextview;
     TextView descriptionTextview;
     // TextView coordinatesLabelTextview;
@@ -95,7 +94,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         detailedResultsImagebutton = (ImageButton) findViewById(R.id.location_detailed_results_imagebutton);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
-        //descriptionLabelTextview = (TextView) findViewById(R.id.description_textview_label);
         locationTextview = (TextView) findViewById(R.id.location_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
         //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
@@ -139,7 +137,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         });
 
 
-        //descriptionLabelTextview.setVisibility(View.INVISIBLE);
         //coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
 
@@ -197,7 +194,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     private void getMeasuredNode(final int seconds) {
 
         locationImageview.setVisibility(View.INVISIBLE);
-        //descriptionLabelTextview.setVisibility(View.INVISIBLE);
        // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
 
         descriptionTextview.setText("");
@@ -232,7 +228,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
             locationTextview.setText(foundNode.getId());
             locationImageview.setVisibility(View.VISIBLE);
-            //descriptionLabelTextview.setVisibility(View.VISIBLE);
             //coordinatesLabelTextview.setVisibility(View.VISIBLE);
 
             descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());

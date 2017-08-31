@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * start kalman filter
+ * The kalman filter
  */
 public class KalmanFilter {
 
