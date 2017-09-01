@@ -41,7 +41,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.NodeShowActivity;
+import de.htwberlin.f4.ai.ma.node.NodeShowActivity;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**

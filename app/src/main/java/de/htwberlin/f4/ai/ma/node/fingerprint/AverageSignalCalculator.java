@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
 
 /**
  * Created by Johann Winter
@@ -37,16 +37,16 @@ public class AverageSignalCalculator {
             int value = 0;
             int counter = 0;
 
-            for (SignalStrengthImpl ssi : si.getSignalStrengthList()) {
+            for (AccessPointSampleImpl ssi : si.getAccessPointSampleList()) {
                 counter++;
                 value += ssi.signalStrength;
             }
             value = value / counter;
 
-            SignalStrengthImpl signalStrengthInformation = new SignalStrengthImpl(si.getSignalStrengthList().)
+            AccessPointSampleImpl signalStrengthInformation = new AccessPointSampleImpl(si.getAccessPointSampleList().)
 
-            List<SignalStrengthImpl> SsiList = new ArrayList<>();
-            SignalStrengthImpl ssi = new SignalStrengthImpl(ssi.macAddress, value);
+            List<AccessPointSampleImpl> SsiList = new ArrayList<>();
+            AccessPointSampleImpl ssi = new AccessPointSampleImpl(ssi.macAddress, value);
             SsiList.add(ssi);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
@@ -64,8 +64,8 @@ public class AverageSignalCalculator {
             }
             value = value / counter;
 
-            List<SignalStrength> SsiList = new ArrayList<>();
-            SignalStrength ssi = new SignalStrengthImpl(s, value);
+            List<AccessPointSample> SsiList = new ArrayList<>();
+            AccessPointSample ssi = new AccessPointSampleImpl(s, value);
             SsiList.add(ssi);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);

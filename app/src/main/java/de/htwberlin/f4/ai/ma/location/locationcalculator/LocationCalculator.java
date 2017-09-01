@@ -9,7 +9,7 @@ import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
 
 /**
  * Created by Johann Winter
@@ -32,7 +32,7 @@ public interface LocationCalculator {
      * @param signalInformationList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
-    List<SignalStrength> getSignalStrengths(List<SignalInformation> signalInformationList);
+    List<AccessPointSample> getSignalStrengths(List<SignalInformation> signalInformationList);
 
 
     /**

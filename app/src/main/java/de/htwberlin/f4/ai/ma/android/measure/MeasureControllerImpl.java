@@ -56,8 +56,8 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.MaxPictureActivity;
@@ -702,8 +702,8 @@ public class MeasureControllerImpl implements MeasureController {
             value = value / counter;
 
             //List<de.htwberlin.f4.ai.ma.fingerprint.Node.SignalInformation> signalInformationList = new ArrayList<>();
-            List<SignalStrength> SsiList = new ArrayList<>();
-            SignalStrength signal = new SignalStrengthImpl(s, value);
+            List<AccessPointSample> SsiList = new ArrayList<>();
+            AccessPointSample signal = new AccessPointSampleImpl(s, value);
             SsiList.add(signal);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);

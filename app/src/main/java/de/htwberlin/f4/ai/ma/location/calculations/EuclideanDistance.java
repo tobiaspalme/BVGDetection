@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
 
 public class EuclideanDistance {
 
@@ -20,7 +20,7 @@ public class EuclideanDistance {
      * @param measuredSSIs a list of measured SignalStrengths (RSSI)
      * @return a sorted list of distances
      */
-    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<SignalStrength> measuredSSIs) {
+    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointSample> measuredSSIs) {
         //List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 

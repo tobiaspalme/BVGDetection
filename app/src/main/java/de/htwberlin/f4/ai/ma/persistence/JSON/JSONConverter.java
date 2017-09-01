@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
 
 /**
  * Created by Johann Winter
@@ -34,11 +34,11 @@ public class JSONConverter {
                     JSONObject signalJsonObject = new JSONObject();
                     JSONArray signalStrengthJsonArray = new JSONArray();
 
-                    for (int j = 0; j < signalInformationList.get(i).getSignalStrengthList().size(); j++) {
+                    for (int j = 0; j < signalInformationList.get(i).getAccessPointSampleList().size(); j++) {
 
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAddress", signalInformationList.get(i).getSignalStrengthList().get(j).getMacAddress());
-                        signalStrenghtObject.put("strength", signalInformationList.get(i).getSignalStrengthList().get(j).getRSSI());
+                        signalStrenghtObject.put("macAddress", signalInformationList.get(i).getAccessPointSampleList().get(j).getMacAddress());
+                        signalStrenghtObject.put("strength", signalInformationList.get(i).getAccessPointSampleList().get(j).getRSSI());
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
                     signalJsonObject.put("timestamp", signalInformationList.get(i).getTimestamp());
@@ -75,13 +75,13 @@ public class JSONConverter {
                     String timestamp = signalJsonObject.getString("timestamp");
 
                     JSONArray signalStrengthJsonArray = signalJsonObject.getJSONArray("signalStrength");
-                    List<SignalStrength> signalStrenghtList = new ArrayList<>();
+                    List<AccessPointSample> signalStrenghtList = new ArrayList<>();
 
                     for (int k = 0; k < signalStrengthJsonArray.length(); k++) {
                         JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
                         String macAdress = signalStrenghtObject.getString("macAddress");
                         int signalStrenght = signalStrenghtObject.getInt("strength");
-                        SignalStrength ssi = new SignalStrengthImpl(macAdress, signalStrenght);
+                        AccessPointSample ssi = new AccessPointSampleImpl(macAdress, signalStrenght);
                         signalStrenghtList.add(ssi);
                     }
                     SignalInformation signalInformation = new SignalInformation(timestamp, signalStrenghtList);

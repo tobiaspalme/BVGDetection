@@ -1,17 +1,17 @@
-package de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength;
+package de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample;
 
 /**
  * Created by Johann Winter
  *
- * A SignalStrengthImpl consists of a MAC-Address and a signal strength (RSSI) in dBm
+ * A AccessPointSampleImpl consists of a MAC-Address and a signal strength (RSSI) in dBm
  */
 
-public class SignalStrengthImpl implements SignalStrength {
+public class AccessPointSampleImpl implements AccessPointSample {
 
     private String macAddress;
     private int RSSI;
 
-    public SignalStrengthImpl(String macAddress, int RSSI) {
+    public AccessPointSampleImpl(String macAddress, int RSSI) {
         this.macAddress = macAddress;
         this.RSSI = RSSI;
     }

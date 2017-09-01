@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma;
+package de.htwberlin.f4.ai.ma.node;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,23 +28,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
-import com.google.common.collect.Multiset;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
+import de.htwberlin.f4.ai.ma.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -80,6 +73,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private DatabaseHandler databaseHandler;
     private boolean pictureTaken;
     private boolean takingPictureAtTheMoment;
+    private boolean showingBigPictureAtTheMoment;
     private boolean updateMode = false;
     private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
@@ -134,6 +128,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         pictureTaken = false;
         takingPictureAtTheMoment = false;
+        showingBigPictureAtTheMoment = false;
 
 
         if (hasPermissions(this, permissions)) {
@@ -280,11 +275,13 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         cameraImageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showingBigPictureAtTheMoment = true;
                 if (pictureTaken) {
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", picturePath);
                     startActivity(intent);
                 } else if (nodeToUpdate != null && nodeToUpdate.getPicturePath() != null) {
+
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", nodeToUpdate.getPicturePath());
                     startActivity(intent);
@@ -590,7 +587,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     @Override
     protected void onStop() {
         super.onStop();
-        if (!takingPictureAtTheMoment) {
+        if (!takingPictureAtTheMoment && !showingBigPictureAtTheMoment) {
             if (fingerprintTask != null) {
                 fingerprintTask.cancel(false);
             }

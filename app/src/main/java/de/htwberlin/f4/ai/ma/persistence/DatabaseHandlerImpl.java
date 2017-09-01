@@ -2,16 +2,11 @@ package de.htwberlin.f4.ai.ma.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +15,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
@@ -29,18 +23,9 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImpl;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
-import de.htwberlin.f4.ai.ma.location.calculations.EuclideanDistance;
-import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
-import de.htwberlin.f4.ai.ma.location.calculations.KNearestNeighbor;
-import de.htwberlin.f4.ai.ma.location.calculations.KalmanFilter;
-import de.htwberlin.f4.ai.ma.location.calculations.MovingAverage;
-import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 
 
 /**

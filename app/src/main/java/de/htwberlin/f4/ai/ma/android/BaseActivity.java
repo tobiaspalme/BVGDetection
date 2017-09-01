@@ -21,7 +21,7 @@ import de.htwberlin.f4.ai.ma.routefinder.RouteFinderActivity;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.ImportExportActivity;
 //import de.htwberlin.f4.ai.ma.NodeRecordActivity;
-import de.htwberlin.f4.ai.ma.NodeRecordEditActivity;
+import de.htwberlin.f4.ai.ma.node.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.settings.SettingsActivity;
 
 public class BaseActivity extends AppCompatActivity {

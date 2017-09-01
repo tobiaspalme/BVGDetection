@@ -15,8 +15,8 @@ import java.util.List;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.EuclideanDistance;
@@ -83,12 +83,12 @@ public class LocationCalculatorImpl implements LocationCalculator {
             }
 
             if (euclideanDistance) {
-                List<SignalStrength> signalStrengths = getSignalStrengths(signalInformationList);
+                List<AccessPointSample> accessPointSamples = getSignalStrengths(signalInformationList);
 
-                if (signalStrengths.size() == 0) {
+                if (accessPointSamples.size() == 0) {
                     return null;
                 }
-                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, signalStrengths);
+                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, accessPointSamples);
                 if (knnAlgorithm) {
                     foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
@@ -109,22 +109,22 @@ public class LocationCalculatorImpl implements LocationCalculator {
      * @param signalInformationList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
-    public List<SignalStrength> getSignalStrengths(List<SignalInformation> signalInformationList) {
-        List<SignalStrength> signalStrengths = new ArrayList<>();
+    public List<AccessPointSample> getSignalStrengths(List<SignalInformation> signalInformationList) {
+        List<AccessPointSample> accessPointSamples = new ArrayList<>();
 
         for (SignalInformation sigInfo : signalInformationList) {
-            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
+            for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
 
                 Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
 
                 String macAdress = ssi.getMacAddress();
                 int signalStrength = ssi.getRSSI();
-                SignalStrength SSI = new SignalStrengthImpl(macAdress, signalStrength);
+                AccessPointSample SSI = new AccessPointSampleImpl(macAdress, signalStrength);
 
-                signalStrengths.add(SSI);
+                accessPointSamples.add(SSI);
             }
         }
-        return signalStrengths;
+        return accessPointSamples;
     }
 
 
@@ -180,7 +180,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
         for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (SignalStrength ssi : signalInfo.getSignalStrengthList()) {
+            for (AccessPointSample ssi : signalInfo.getAccessPointSampleList()) {
                 multiMap.put(ssi.getMacAddress(), (double) ssi.getRSSI());
                 actuallyMacAdresses.add(ssi.getMacAddress());
             }
@@ -202,7 +202,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
     public List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
         for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
-            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
+            for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
                 macAdresses.add(ssi.getMacAddress());
             }
         }

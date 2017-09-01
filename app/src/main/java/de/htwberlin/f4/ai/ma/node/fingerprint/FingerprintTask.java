@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
+
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -37,7 +38,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private WifiManager wifiManager;
     private Multimap<String, Integer> multiMap;
     private List<SignalInformation> signalInformationList;
-    private List<SignalStrength> signalStrengthList;
+    private List<AccessPointSample> accessPointSampleList;
     private boolean calculateAverage = false;
     public AsyncResponse delegate = null;
 
@@ -56,7 +57,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     protected Fingerprint doInBackground(Void... voids) {
             for (int i = 0; i < seconds; i++) {
 
-                signalStrengthList = new ArrayList<>();
+                accessPointSampleList = new ArrayList<>();
 
                 // If task gets aborted
                 if (isCancelled()) {
@@ -75,8 +76,8 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
                         multiMap.put(sr.BSSID, sr.level);
 
-                        SignalStrength signalStrength = new SignalStrengthImpl(sr.BSSID, sr.level);
-                        signalStrengthList.add(signalStrength);
+                        AccessPointSample accessPointSample = new AccessPointSampleImpl(sr.BSSID, sr.level);
+                        accessPointSampleList.add(accessPointSample);
                     }
                 }
                 Log.d("--------", "-------------------------------------------------");
@@ -85,7 +86,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
                 SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
                 String format = s.format(new Date());
-                SignalInformation signalInformation = new SignalInformation(format, signalStrengthList);
+                SignalInformation signalInformation = new SignalInformation(format, accessPointSampleList);
                 signalInformationList.add(signalInformation);
 
 
@@ -120,7 +121,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
         }
         multiMap = ArrayListMultimap.create();
         signalInformationList = new ArrayList<>();
-        signalStrengthList = new ArrayList<>();
+        accessPointSampleList = new ArrayList<>();
     }
 
     @Override

@@ -2,24 +2,24 @@ package de.htwberlin.f4.ai.ma.node.fingerprint;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
+import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
 
 /**
  * Created by Johann Winter
  *
- * A SignalInformation consists of a timestamp and a list of SignalStrengths at this time.
+ * A SignalInformation consists of a timestamp and a list of AccessPointSamples at that time.
  */
 
 
 public class SignalInformation {
 
     private String timestamp;
-    private List<SignalStrength> signalStrengthList;
+    private List<AccessPointSample> accessPointSampleList;
 
 
-    public SignalInformation(String timestamp, List<SignalStrength> signalStrengths) {
+    public SignalInformation(String timestamp, List<AccessPointSample> accessPointSamples) {
         this.timestamp = timestamp;
-        this.signalStrengthList = signalStrengths;
+        this.accessPointSampleList = accessPointSamples;
     }
 
     /**
@@ -43,8 +43,8 @@ public class SignalInformation {
      * Getter for the list of SignalStrengths
      * @return the list of SignalStrengths
      */
-    public List<SignalStrength> getSignalStrengthList() {
-        return signalStrengthList;
+    public List<AccessPointSample> getAccessPointSampleList() {
+        return accessPointSampleList;
     }
 
 
