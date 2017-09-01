@@ -24,10 +24,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
+import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
@@ -35,12 +35,12 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.location.LocationResultImpl;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
-import de.htwberlin.f4.ai.ma.persistence.calculations.EuclideanDistance;
-import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
-import de.htwberlin.f4.ai.ma.persistence.calculations.KNearestNeighbor;
-import de.htwberlin.f4.ai.ma.persistence.calculations.KalmanFilter;
-import de.htwberlin.f4.ai.ma.persistence.calculations.MovingAverage;
-import de.htwberlin.f4.ai.ma.persistence.calculations.RestructedNode;
+import de.htwberlin.f4.ai.ma.location.calculations.EuclideanDistance;
+import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.location.calculations.KNearestNeighbor;
+import de.htwberlin.f4.ai.ma.location.calculations.KalmanFilter;
+import de.htwberlin.f4.ai.ma.location.calculations.MovingAverage;
+import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 
 
 /**
@@ -248,7 +248,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                     fingerprint = new FingerprintImpl(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
                 }
 
-                Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
+                Node node = new NodeImpl(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -279,7 +279,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 fingerprint = new FingerprintImpl(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
             }
 
-            node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
+            node = new NodeImpl(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
             Log.d("DB: select_node", nodeID);
         }
         database.close();
@@ -657,184 +657,6 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         } catch(Exception e) {e.printStackTrace();}
         return false;
     }
-
-
-
-
-    //------------------- F I N D   N O D E   F O R   P O S I T I O N ------------------------------------------------------------
-
-
-    /**
-     * Calculate a Node for a FingerprintImpl
-     * @param fingerprint the input FingerprintImpl to be compared with all existent Nodes to get the position
-     * @return the ID (name) of the resulting Node
-     */
-    //public FoundNode calculateNodeId(List<SignalInformation> signalInformationList) {
-    public FoundNode calculateNodeId(Fingerprint fingerprint) {
-
-        List<SignalInformation> signalInformationList = fingerprint.getSignalInformationList();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        boolean movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
-        boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", true);
-        boolean euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", true);
-        boolean knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
-
-        int movingAverageOrder = Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3"));
-        int knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
-        int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
-
-        FoundNode foundNode = null;
-
-
-        // Load all nodes which have a valid fingerprintImpl
-        List<Node> nodesWithFingerprint = new ArrayList<>();
-        for (Node n : getAllNodes()) {
-            if (n.getFingerprint() != null) {
-            //if (!n.getFingerprint().getSignalInformationList().isEmpty()) {
-                nodesWithFingerprint.add(n);
-            }
-        }
-
-        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithFingerprint);
-        List<RestructedNode> calculatedNodeList = new ArrayList<>();
-
-        if (!restructedNodeList.isEmpty()) {
-            if (movingAverage) {
-                calculatedNodeList = MovingAverage.calculate(restructedNodeList, movingAverageOrder);
-
-            } else if (kalmanFilter) {
-                calculatedNodeList = KalmanFilter.calculateCalman(kalmanValue, restructedNodeList);
-            }
-
-            if (euclideanDistance) {
-                List<SignalStrength> signalStrengths = getSignalStrengths(signalInformationList);
-
-                if (signalStrengths.size() == 0) {
-                    return null;
-                }
-                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, signalStrengths);
-                if (knnAlgorithm) {
-                    foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
-
-                } else if (!distanceNames.isEmpty()) {
-                    //TODO hier 100%?
-                    foundNode = new FoundNode(distanceNames.get(0), 100.0);
-                }
-            }
-            return foundNode;
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Get a list of SignalStrengthInformations by passing a list of SignalInformation (unwrap).
-     * @param signalInformationList a list of SignalInformations
-     * @return a list of SignalStrengthInformations
-     */
-    private List<SignalStrength> getSignalStrengths(List<SignalInformation> signalInformationList) {
-        List<SignalStrength> signalStrengths = new ArrayList<>();
-
-        for (SignalInformation sigInfo : signalInformationList) {
-            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
-
-                Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
-
-                String macAdress = ssi.getMacAddress();
-                int signalStrength = ssi.getRSSI();
-                SignalStrength SSI = new SignalStrengthImpl(macAdress, signalStrength);
-
-                signalStrengths.add(SSI);
-            }
-        }
-        return signalStrengths;
-    }
-
-
-
-
-    /**
-     * Rewrite the nodelist to restrucetd Nodes and delete weak MAC addresses
-     * @param allNodes list of all nodes
-     * @return restructed Node list
-     */
-    private List<RestructedNode> calculateNewNodeDateset(List<Node> allNodes) {
-        List<String> macAddresses;
-        int count = 0;
-
-        List<RestructedNode> restructedNodes = new ArrayList<>();
-        Multimap<String, Double> multiMap = null;
-
-        for (Node node : allNodes) {
-            count = node.getFingerprint().getSignalInformationList().size();
-            double minValue = (((double) 1 / (double) 3) * (double) count);
-            macAddresses = getMacAddresses(node);
-            multiMap = getMultiMap(node, macAddresses);
-
-            //delete weak addresses
-            for (String macAddress : macAddresses) {
-                int countValue = 0;
-
-                for (Double signalValue : multiMap.get(macAddress)) {
-                    if (signalValue != null) {
-                        countValue++;
-                    }
-                }
-                if (countValue <= minValue) {
-                    multiMap.removeAll(macAddress);
-                    Log.d("DatabaseHandlerImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
-                }
-            }
-            //fill restructed Nodes
-            RestructedNode restructedNode = new RestructedNode(node.getId(), multiMap);
-            restructedNodes.add(restructedNode);
-        }
-        return restructedNodes;
-    }
-
-
-    /**
-     * Create a multimap with MAC address and signal strength values
-     * @param node input Node
-     * @param macAdresses list of MAC addresses
-     * @return multimap with mac address and signal strengths
-     */
-    private Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
-        Multimap<String, Double> multiMap = ArrayListMultimap.create();
-        for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
-            HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (SignalStrength ssi : signalInfo.getSignalStrengthList()) {
-                multiMap.put(ssi.getMacAddress(), (double) ssi.getRSSI());
-                actuallyMacAdresses.add(ssi.getMacAddress());
-            }
-            for (String checkMacAdress : macAdresses) {
-                if (!actuallyMacAdresses.contains(checkMacAdress)) {
-                    multiMap.put(checkMacAdress, null);
-                }
-            }
-        }
-        return multiMap;
-    }
-
-
-    /**
-     * Get all mac addresses of a specific Node
-     * @param node the Node
-     * @return list of unique MAC addresses
-     */
-    private List<String> getMacAddresses(Node node) {
-        HashSet<String> macAdresses = new HashSet<String>();
-        for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
-            for (SignalStrength ssi : sigInfo.getSignalStrengthList()) {
-                macAdresses.add(ssi.getMacAddress());
-            }
-        }
-        return new ArrayList<>(macAdresses);
-    }
-
 
 }
 

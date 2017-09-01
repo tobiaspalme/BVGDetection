@@ -28,10 +28,12 @@ import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculator;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculatorImpl;
+import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmImpl;
-import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
@@ -40,7 +42,7 @@ import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.NodeShowActivity;
-import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
@@ -102,11 +104,11 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
 
 //---------- TEST -------------------
-        Node n1 = NodeFactory.createInstance("n1", "", new FingerprintImpl("", null), "", "", "");
-        Node n2 = NodeFactory.createInstance("n2", "", new FingerprintImpl("", null), "", "", "");
-        Node n3 = NodeFactory.createInstance("n3", "", new FingerprintImpl("", null), "", "", "");
-        Node n4 = NodeFactory.createInstance("n4", "", new FingerprintImpl("", null), "", "", "");
-        Node n5 = NodeFactory.createInstance("n5", "", new FingerprintImpl("", null), "", "", "");
+        Node n1 = new NodeImpl("n1", "", new FingerprintImpl("", null), "", "", "");
+        Node n2 = new NodeImpl("n2", "", new FingerprintImpl("", null), "", "", "");
+        Node n3 = new NodeImpl("n3", "", new FingerprintImpl("", null), "", "", "");
+        Node n4 = new NodeImpl("n4", "", new FingerprintImpl("", null), "", "", "");
+        Node n5 = new NodeImpl("n5", "", new FingerprintImpl("", null), "", "", "");
 
         Edge e1 = new EdgeImpl(n1, n2, false, 4);
         Edge e2 = new EdgeImpl(n2, n3, false, 5);
@@ -292,7 +294,9 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
-            FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
+            //FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
+            LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
+            FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
             if (foundNode != null) {
                 Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
                 toast.show();

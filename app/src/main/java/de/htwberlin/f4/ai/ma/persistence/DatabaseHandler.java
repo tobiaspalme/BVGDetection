@@ -9,15 +9,14 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
-import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
  *
- * This interface offers all necessary database-functions to
- * create, edit and delete Nodes, Edges and LocationResults
- * and the export of the SQLite DB.
+ * This interface offers all necessary database functions to
+ * create, edit and delete Nodes, Edges and LocationResults,
+ * Import and the export of the SQLite DB.
  *
  * It calculates the matching node for a given measurement (current location).
  */
@@ -49,7 +48,7 @@ public interface DatabaseHandler {
 
     // Calculate my location
     //FoundNode calculateNodeId(List<SignalInformation> signalInformationList);
-    FoundNode calculateNodeId(Fingerprint fingerprint);
+    //FoundNode calculateNodeId(Fingerprint fingerprint);
 
     // LocationResult management
     void insertLocationResult(LocationResult locationResult);

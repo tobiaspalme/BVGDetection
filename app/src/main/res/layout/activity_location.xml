@@ -151,20 +151,21 @@
             android:layout_marginTop="15dp"
             android:layout_below="@+id/description_textview_location"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/location_detailed_results_imagebutton"
-            android:text="@string/go_to_detailed_location_results"
-            android:background="@android:color/white"
-            android:contentDescription="@string/detailed_results_button_description"
-            android:layout_toEndOf="@+id/location_imageview"
-            android:layout_below="@+id/location_imageview"
-            />
+
 
     </RelativeLayout>
 
-
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/location_detailed_results_imagebutton"
+        android:text="@string/go_to_detailed_location_results"
+        android:background="@android:color/white"
+        android:contentDescription="@string/detailed_results_button_description"
+        android:layout_above="@+id/infobox"
+        />
 
     <TextView
         android:layout_width="match_parent"

@@ -8,7 +8,7 @@ import java.util.List;
  * This interface is for fingerprints.
  * A fingerprint contains a field for the name of the measured WiFi
  * and a list of SignalInformation which contain each a timestamp and a list
- * of measured MAC addresses in combination with a signal strength.
+ * of measured MAC addresses (with the same SSID) in combination with a signal strength.
  */
 
 public interface Fingerprint {

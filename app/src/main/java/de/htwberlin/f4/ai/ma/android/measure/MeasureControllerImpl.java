@@ -41,6 +41,8 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculator;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementType;
@@ -51,7 +53,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDete
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.node.NodeFactory;
+import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
@@ -59,7 +61,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.MaxPictureActivity;
-import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**
  * Created by benni on 18.07.2017.
@@ -594,7 +596,7 @@ public class MeasureControllerImpl implements MeasureController {
             }
             // new node
             else {
-                node = NodeFactory.createInstance(id, null, null, coordinates, null, null);
+                node = new NodeImpl(id, null, null, coordinates, null, null);
                 databaseHandler.insertNode(node);
                 view.setStartNode(node);
             }
@@ -708,8 +710,9 @@ public class MeasureControllerImpl implements MeasureController {
 
         }
 
-
-        FoundNode foundNode = databaseHandler.calculateNodeId(new FingerprintImpl("", signalInformationList));
+        LocationCalculator locationCalculator = new LocationCalculatorImpl(view.getContext());
+        //FoundNode foundNode = databaseHandler.calculateNodeId(new FingerprintImpl("", signalInformationList));
+        FoundNode foundNode = locationCalculator.calculateNodeId(new FingerprintImpl("", signalInformationList));
         Node result = null;
         if (foundNode != null) {
             result = databaseHandler.getNode(foundNode.getId());

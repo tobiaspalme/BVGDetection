@@ -7,7 +7,7 @@ import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
  * Created by Johann Winter
  */
 
-class NodeImpl implements Node {
+public class NodeImpl implements Node {
 
     private String id;
     private String description;
@@ -17,7 +17,7 @@ class NodeImpl implements Node {
     private String additionalInfo;
 
 
-    NodeImpl(String id, String description, Fingerprint fingerprint, String coordinates, String picturePath, String additionalInfo) {
+    public NodeImpl(String id, String description, Fingerprint fingerprint, String coordinates, String picturePath, String additionalInfo) {
         this.id = id;
         this.description = description;
         this.coordinates = coordinates;

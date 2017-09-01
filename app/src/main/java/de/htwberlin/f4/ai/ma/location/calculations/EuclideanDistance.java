@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.persistence.calculations;
+package de.htwberlin.f4.ai.ma.location.calculations;
 
 /**
  * Created by Johann Winter

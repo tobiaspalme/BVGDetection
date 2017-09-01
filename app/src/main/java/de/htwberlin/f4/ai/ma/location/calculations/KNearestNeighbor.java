@@ -1,10 +1,8 @@
-package de.htwberlin.f4.ai.ma.persistence.calculations;
+package de.htwberlin.f4.ai.ma.location.calculations;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by Johann Winter

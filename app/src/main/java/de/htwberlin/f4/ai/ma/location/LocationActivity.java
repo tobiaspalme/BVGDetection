@@ -2,9 +2,7 @@ package de.htwberlin.f4.ai.ma.location;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,21 +20,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import de.htwberlin.f4.ai.ma.WifiScanner;
 import de.htwberlin.f4.ai.ma.WifiScannerImpl;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculator;
+import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.NodeFactory;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 
 /**
@@ -62,7 +59,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
-    private NodeFactory nodeFactory;
     private String settings;
     private Spinner wifiDropdown;
     private FoundNode foundNode;
@@ -85,7 +81,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
 
@@ -147,15 +142,14 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    //progressBar.setVisibility(View.VISIBLE);
-                    getMeasuredNode(1);
+                    findLocation(1);
                 }
             });
 
         measure10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     progressBar.setVisibility(View.VISIBLE);
-                    getMeasuredNode(10);
+                    findLocation(10);
                 }
             });
 
@@ -184,10 +178,10 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     }
 
     /**
-     * Check WiFi signal strengths and and save them to a multimap
+     * Create a fingerprint
      * @param seconds the time to measure in seconds
      */
-    private void getMeasuredNode(final int seconds) {
+    private void findLocation(final int seconds) {
 
         locationImageview.setVisibility(View.INVISIBLE);
        // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
@@ -197,8 +191,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
-            //IntentFilter intentFilter = new IntentFilter();
-            //intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
             locationTextview.setText(getString(R.string.searching_node_text));
 
             FingerprintTask fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
@@ -208,65 +200,63 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     }
 
 
+
     /**
      * Try to calculate the position.
-     * @param measuredTime the measured time
-     * @param fingerprint the fingerprintImpl measured before
+     * @param seconds the measured time
+     * @param fingerprint the fingerprint measured before
      */
-    private void getLocationResult(final int measuredTime, Fingerprint fingerprint) {
-        //List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
-        //foundNode = databaseHandler.calculateNodeId(signalInformations);
-        foundNode = databaseHandler.calculateNodeId(fingerprint);
-
-
-        LocationResult locationResult;
-        if (foundNode != null) {
-
-            locationTextview.setText(foundNode.getId());
-            locationImageview.setVisibility(View.VISIBLE);
-            //coordinatesLabelTextview.setVisibility(View.VISIBLE);
-
-            descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
-            //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
-
-            locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(measuredTime), foundNode.getId(), foundNode.getPercent());
-
-            final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
-
-            if (picturePath != null) {
-                Glide.with(context).load(picturePath).into(locationImageview);
-            } else {
-                Glide.with(context).load(R.drawable.unknown).into(locationImageview);
-            }
-
-            locationImageview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
-                    intent.putExtra("picturePath", picturePath);
-                    startActivity(intent);
-                }
-            });
-
-
-        } else {
-            locationTextview.setText(getString(R.string.no_node_found_text));
-            locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(measuredTime), getString(R.string.no_node_found_text), 0);
-
-        }
-
-        locationsCounter++;
-        Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
-        sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
-        databaseHandler.insertLocationResult(locationResult);
-    }
-
-
-    // Get Fingerprint from finished AsyncTask
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
-            getLocationResult(seconds, fingerprint);
+
+            LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
+            foundNode = locationCalculator.calculateNodeId(fingerprint);
+            //foundNode = databaseHandler.calculateNodeId(fingerprint);
+
+
+            LocationResult locationResult;
+            if (foundNode != null) {
+
+                locationTextview.setText(foundNode.getId());
+                locationImageview.setVisibility(View.VISIBLE);
+                //coordinatesLabelTextview.setVisibility(View.VISIBLE);
+
+                descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
+                //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
+
+                locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
+
+                final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
+
+                if (picturePath != null) {
+                    Glide.with(context).load(picturePath).into(locationImageview);
+                } else {
+                    Glide.with(context).load(R.drawable.unknown).into(locationImageview);
+                }
+
+                locationImageview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
+                        intent.putExtra("picturePath", picturePath);
+                        startActivity(intent);
+                    }
+                });
+
+
+            } else {
+                locationTextview.setText(getString(R.string.no_node_found_text));
+                locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
+
+            }
+
+            locationsCounter++;
+            Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
+            sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
+            databaseHandler.insertLocationResult(locationResult);
         }
     }
+
+
 }
