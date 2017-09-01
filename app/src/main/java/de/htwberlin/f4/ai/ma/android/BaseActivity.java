@@ -17,11 +17,11 @@ import de.htwberlin.f4.ai.ma.android.measure.edges.EdgeDetailsViewImpl;
 import de.htwberlin.f4.ai.ma.android.record.RecordViewImpl;
 import de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity;
 import de.htwberlin.f4.ai.ma.location.LocationActivity;
-import de.htwberlin.f4.ai.ma.navigation.NavigationActivity;
+import de.htwberlin.f4.ai.ma.routefinder.RouteFinderActivity;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.ImportExportActivity;
 //import de.htwberlin.f4.ai.ma.NodeRecordActivity;
-import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
+import de.htwberlin.f4.ai.ma.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.settings.SettingsActivity;
 
 public class BaseActivity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.nav_location_record:
-                        intent = new Intent(getApplicationContext(), NodeRecordAndEditActivity.class);
+                        intent = new Intent(getApplicationContext(), NodeRecordEditActivity.class);
                         startActivity(intent);
                         drawerLayout.closeDrawers();
                         break;
@@ -78,8 +78,8 @@ public class BaseActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
 
-                    case R.id.nav_navigation:
-                        intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    case R.id.nav_route_finder:
+                        intent = new Intent(getApplicationContext(), RouteFinderActivity.class);
                         startActivity(intent);
                         drawerLayout.closeDrawers();
                         break;

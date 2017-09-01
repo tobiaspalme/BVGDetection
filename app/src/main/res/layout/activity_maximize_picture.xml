@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:id="@+id/maxImageView"
         android:contentDescription="@string/image_placeholder"
+        android:background="@android:color/black"
         />
 
 </LinearLayout>

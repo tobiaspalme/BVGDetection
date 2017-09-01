@@ -57,16 +57,8 @@
     <string name="compass_fusion">Compass Fusion</string>
     <string name="period_hint">Bitte wählen Sie in welchem Zeitabstand (ms) die Werte gespeichert werden sollen</string>
 
-    <!-- activity_main -->
-    <!--<string name="record_button">Node aufnehmen</string>
-    <string name="nodelist_button">Nodes verwalten</string>
-    <string name="edges_manager_button">Kanten verwalten</string>
-    <string name="calculate_button">Standort ermitteln</string>
-    <string name="navigation_button_text">Navigation</string>
-    <string name="import_export_button_text">Importieren / Exportieren</string>
-    <string name="settings_button">Einstellungen</string>-->
 
-    <!-- activity_node_record_and_edit -->
+    <!-- activity_node_record_edit -->
     <string name="capture_button">Bild aufnehmen</string>
     <string name="description_text">Beschreibung:</string>
     <string name="measure_time_text">Messzeit:</string>
@@ -86,6 +78,8 @@
     <string name="initial_wifi_name">Urspr. WLAN:</string>
     <string name="coordinates_text">Koordinaten:</string>
     <string name="record_and_edit_infobox">Bitte Eingaben machen und Foto sowie Fingerprint aufnehmen. Zum Speichern auf die Diskette tippen.</string>
+    <string name="permissions_warning_title_text">Bitte Zugriff erlauben</string>
+    <string name="permissions_warning_text">Die App benötigt Zugriff auf Kamera, Standort und externen Speicher des Gerätes um zu funktionieren.</string>
 
 
     <!-- activity_nodelist -->
@@ -94,6 +88,7 @@
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild</string>
+    <string name="node_show_infobox_text"><b>Hinweis:</b> Bild antippen zum Vergrößern</string>
 
 
     <!-- activity_location -->

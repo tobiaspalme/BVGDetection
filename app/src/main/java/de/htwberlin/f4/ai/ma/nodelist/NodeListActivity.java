@@ -11,7 +11,7 @@ import android.widget.ListView;
 import com.example.carol.bvg.R;
 import java.io.File;
 import java.util.ArrayList;
-import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
+import de.htwberlin.f4.ai.ma.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -60,7 +60,7 @@ public class NodeListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!nodeListIsEmpty) {
-                    Intent intent = new Intent(getApplicationContext(), NodeRecordAndEditActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), NodeRecordEditActivity.class);
                     intent.putExtra("nodeId",nodeListView.getAdapter().getItem(position).toString());
                     startActivity(intent);
                 }

@@ -30,7 +30,7 @@ public class NodeListAdapter extends ArrayAdapter {
     private ArrayList<String> nodePicturePaths;
 
     private final int REGULAR_ITEM = 0;   // For "normal" Nodes
-    private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of NavigationActivity
+    private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of RouteFinderActivity
 
 
     public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
@@ -102,7 +102,7 @@ public class NodeListAdapter extends ArrayAdapter {
 
     @Override
     public int getViewTypeCount() {
-        // Two different row types in NavigationActivity
+        // Two different row types in RouteFinderActivity
         return 2;
     }
 

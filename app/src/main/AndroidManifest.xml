@@ -24,7 +24,7 @@
         <activity android:name="de.htwberlin.f4.ai.ma.NodeShowActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.ImportExportActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity" />
-        <activity android:name="de.htwberlin.f4.ai.ma.navigation.NavigationActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.routefinder.RouteFinderActivity" />
        <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivityvity" />-->
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationDetailedInfoActivity"/>
@@ -48,7 +48,7 @@
         </activity>
         -->
         <activity
-            android:name="de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity"
+            android:name="de.htwberlin.f4.ai.ma.NodeRecordEditActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.navigation;
+package de.htwberlin.f4.ai.ma.routefinder;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,13 +24,12 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.NodeRecordAndEditActivity;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
-import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithm;
+import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.navigation.dijkstra.DijkstraAlgorithmImpl;
+import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmImpl;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
@@ -45,10 +44,10 @@ import de.htwberlin.f4.ai.ma.persistence.calculations.FoundNode;
 /**
  * Created by Johann Winter
  *
- * This activity provides the navigation functionality ("Navigation").
+ * This activity provides the find_route functionality ("Navigation").
  */
 
-public class NavigationActivity extends BaseActivity implements AsyncResponse {
+public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
@@ -221,7 +220,7 @@ public class NavigationActivity extends BaseActivity implements AsyncResponse {
 
 
 
-        // Start the navigation
+        // Start the find_route
         startNavigationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

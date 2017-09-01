@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.navigation.dijkstra;
+package de.htwberlin.f4.ai.ma.routefinder.dijkstra;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

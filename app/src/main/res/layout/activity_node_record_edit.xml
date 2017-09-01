@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/initial_wifi_textview"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_toEndOf="@+id/initial_wifi_label_textview" />
 
         <TextView
@@ -184,7 +184,7 @@
         android:layout_marginEnd="8dp"
         android:layout_above="@+id/buttons_layout_rec_and_edit"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/record_edit_infobox"
@@ -196,17 +196,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/capture_button"
-            android:text="@string/capture_button"
             />
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/capture_button"
+            android:id="@+id/fingerprint_button_layout">
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/measure_wifi_button_text"
                 android:contentDescription="@string/measure_wifi_button_text"
                 android:id="@+id/record_button"
                 />
@@ -229,16 +229,19 @@
             android:id="@+id/save_node_button"
             android:text="@string/save_node_button_text"
             android:contentDescription="@string/save_button_text"
+            android:layout_toEndOf="@+id/fingerprint_button_layout"
             />
 
+        <!--
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete_button_text"
             android:id="@+id/delete_node_button"
-            android:contentDescription="@string/delete_button_text"/>
+            android:contentDescription="@string/delete_button_text"
+            android:layout_toEndOf="@+id/save_node_button"
+            />-->
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <TextView

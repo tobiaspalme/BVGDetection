@@ -79,7 +79,7 @@
             android:defaultValue="0.1"
             />
 
-        <de.htwberlin.f4.ai.ma.EditTextPreference
+        <de.htwberlin.f4.ai.ma.settings.EditTextPreference
             android:key="pref_barometer_threshold"
             android:title="Barometer Threshold (m)"
             android:inputType="numberDecimal"

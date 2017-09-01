@@ -24,7 +24,9 @@ public class NodeShowActivity extends BaseActivity {
     TextView idTextview;
     TextView descriptionTextview;
     TextView wifiNameTextview;
-    TextView coordinatesTextView;
+    TextView wifiLabelTextview;
+    TextView coordinatesTextview;
+    TextView coordinatesLabelTextview;
     ImageView cameraImageView;
 
     private Node node;
@@ -38,10 +40,12 @@ public class NodeShowActivity extends BaseActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_show, contentFrameLayout);
 
-        idTextview = (TextView) findViewById(R.id.id_textview_show);
+        idTextview = (TextView) findViewById(R.id.id_textview_node_show);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_show);
         wifiNameTextview = (TextView) findViewById(R.id.wifi_name_textview_show);
-        coordinatesTextView = (TextView) findViewById(R.id.coordinates_textview_show);
+        wifiLabelTextview = (TextView) findViewById(R.id.wifi_label_show);
+        coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_show);
+        coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_show);
         cameraImageView = (ImageView) findViewById(R.id.camera_imageview_show);
 
         final Intent intent = getIntent();
@@ -50,13 +54,26 @@ public class NodeShowActivity extends BaseActivity {
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         node = databaseHandler.getNode(nodeName);
 
+        wifiLabelTextview.setVisibility(View.INVISIBLE);
+        wifiNameTextview.setVisibility(View.INVISIBLE);
+        coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+        coordinatesTextview.setVisibility(View.INVISIBLE);
+
+
         idTextview.setText(node.getId());
         descriptionTextview.setText(node.getDescription());
 
         if (node.getFingerprint() != null) {
+            wifiLabelTextview.setVisibility(View.VISIBLE);
+            wifiNameTextview.setVisibility(View.VISIBLE);
             wifiNameTextview.setText(node.getFingerprint().getWifiName());
         }
-        coordinatesTextView.setText(node.getCoordinates());
+
+        if (node.getCoordinates() != null) {
+            coordinatesLabelTextview.setVisibility(View.INVISIBLE);
+            coordinatesTextview.setVisibility(View.INVISIBLE);
+            coordinatesTextview.setText(node.getCoordinates());
+        }
 
 
         if (node.getPicturePath() != null) {
