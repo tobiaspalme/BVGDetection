@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +23,8 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
@@ -51,7 +52,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
-    Button startNavigationButton;
+    Button startRouteFinder;
     ImageButton locateButton;
     ListView navigationResultListview;
     ArrayList<String> itemsStartNodeSpinner;
@@ -80,7 +81,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         startNodeSpinner = (Spinner) findViewById(R.id.start_node_spinner);
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);
-        startNavigationButton = (Button) findViewById(R.id.start_navigation_button);
+        startRouteFinder = (Button) findViewById(R.id.start_navigation_button);
         locateButton = (ImageButton) findViewById(R.id.locate_button);
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
@@ -154,7 +155,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         // Disable connect-button if spinnerB has no elements (spinnerA has one or less elements)
         if (itemsStartNodeSpinner.size() < 2) {
-            startNavigationButton.setEnabled(false);
+            startRouteFinder.setEnabled(false);
         }
 
 
@@ -191,17 +192,11 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
             @Override
             public void onClick(View view) {
-                wifiManager.startScan();
-                List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-                final ArrayList<String> wifiNamesList = new ArrayList<>();
-                for (ScanResult sr : wifiScanList) {
-                    if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                        wifiNamesList.add(sr.SSID);
-                    }
-                }
+                WifiScanner wifiScanner = new WifiScannerImpl();
+                final List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
-                final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size() - 1];
+                final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()];
                 for (int i = 0; i < wifiArray.length; i++) {
                     wifiArray[i] = wifiNamesList.get(i);
                 }
@@ -221,7 +216,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
 
         // Start the find_route
-        startNavigationButton.setOnClickListener(new View.OnClickListener() {
+        startRouteFinder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nodeNames.clear();

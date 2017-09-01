@@ -29,11 +29,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
+import com.google.common.collect.Multiset;
 
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
@@ -236,6 +242,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         recordButton.setEnabled(false);
                         recordTimeText.setEnabled(false);
                         wifiNamesDropdown.setEnabled(false);
+                        refreshImageview.setEnabled(false);
 
                         progressBar.setVisibility(View.VISIBLE);
                         progressTextview.setVisibility(View.VISIBLE);
@@ -313,6 +320,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         }
         progressBar.setVisibility(View.INVISIBLE);
         progressTextview.setVisibility(View.INVISIBLE);
+        refreshImageview.setEnabled(true);
         //fingerprintTaken = true;
     }
 
@@ -321,16 +329,11 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
      * Scan for WiFi names (SSIDs) and add them to the dropdown
      */
     private void refreshWifiDropdown() {
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiManager.startScan();
-        List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-        ArrayList<String> wifiNamesList = new ArrayList<>();
-        for (ScanResult sr : wifiScanList) {
-            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                wifiNamesList.add(sr.SSID);
-            }
-        }
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiScanner wifiScanner = new WifiScannerImpl();
+        List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
+
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
         wifiNamesDropdown.setAdapter(dropdownAdapter);
         Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();

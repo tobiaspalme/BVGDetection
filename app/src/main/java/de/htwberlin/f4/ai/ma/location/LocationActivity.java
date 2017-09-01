@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import de.htwberlin.f4.ai.ma.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
@@ -172,19 +174,13 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
      * Scan for WiFi names (SSIDs) and add them to the dropdown
      */
     private void refreshWifiDropdown() {
-        wifiManager.startScan();
-        List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-        ArrayList<String> wifiNamesList = new ArrayList<>();
-        for (ScanResult sr : wifiScanList) {
-            if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
-                wifiNamesList.add(sr.SSID);
-            }
-        }
+        WifiScanner wifiScanner = new WifiScannerImpl();
+        List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
+
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
         wifiDropdown.setAdapter(dropdownAdapter);
         Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
-
     }
 
     /**

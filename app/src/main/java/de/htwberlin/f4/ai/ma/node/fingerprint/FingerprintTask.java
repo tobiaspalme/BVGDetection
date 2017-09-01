@@ -12,12 +12,19 @@ import java.util.Locale;
 import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrength;
 import de.htwberlin.f4.ai.ma.node.fingerprint.signalstrength.SignalStrengthImpl;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 /**
  * Created by Johann Winter
+ *
+ * This class generates a WiFi fingerprint by measuring signal strengths for a given WiFi name (SSID).
+ * It takes as parameter: SSID ("wifiName"), measuring time in seconds ("seconds"), a WifiManager,
+ * a boolean if the result should be averaged, and a TextView and ProgressBar for displaying Progress.
+ * The TextView and ProgressBar can be null.
  */
 
 
@@ -35,7 +42,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     public AsyncResponse delegate = null;
 
 
-    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, Boolean calculateAverage, ProgressBar progressBar, TextView progressTextview) {
+    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, Boolean calculateAverage, @Nullable ProgressBar progressBar, @Nullable TextView progressTextview) {
         this.wifiManager = wifiManager;
         this.wifiName = wifiName;
         this.seconds = seconds;
@@ -64,12 +71,16 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 for (final ScanResult sr : wifiScanList) {
                     if (sr.SSID.equals(wifiName)) {
 
+                        Log.d("Scanning... ", "MAC: " +  sr.BSSID + "   Level: " + sr.level);
+
                         multiMap.put(sr.BSSID, sr.level);
 
                         SignalStrength signalStrength = new SignalStrengthImpl(sr.BSSID, sr.level);
                         signalStrengthList.add(signalStrength);
                     }
                 }
+                Log.d("--------", "-------------------------------------------------");
+
                 wifiScanList.clear();
 
                 SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
