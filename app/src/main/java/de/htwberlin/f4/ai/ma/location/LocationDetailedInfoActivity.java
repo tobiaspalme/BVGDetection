@@ -12,6 +12,7 @@ import com.example.carol.bvg.R;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -37,7 +38,7 @@ public class LocationDetailedInfoActivity extends BaseActivity{
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         // Load LocationResults from database and fill the listview
-        final ArrayList<LocationResult> allResults = databaseHandler.getAllLocationResults();
+        final List<LocationResult> allResults = databaseHandler.getAllLocationResults();
         locationResultAdapter = new LocationResultAdapter(this, allResults);
         resultsListview.setAdapter(locationResultAdapter);
 

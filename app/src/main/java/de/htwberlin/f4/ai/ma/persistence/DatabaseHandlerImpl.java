@@ -216,8 +216,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      * Get a List of all Nodes
      * @return a list of all Nodes
      */
-    public ArrayList<Node> getAllNodes() {
-        ArrayList<Node> allNodes = new ArrayList<>();
+    public List<Node> getAllNodes() {
+        List<Node> allNodes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + NODES_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -437,8 +437,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      * Get a list of all Edges
      * @return the list of Edges
      */
-    public ArrayList<Edge> getAllEdges() {
-        ArrayList<Edge> allEdges = new ArrayList<>();
+    public List<Edge> getAllEdges() {
+        List<Edge> allEdges = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + EDGES_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -536,8 +536,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      * Get a list of LocationResults
      * @return the list of LocationResults
      */
-    public ArrayList<LocationResult> getAllLocationResults() {
-        ArrayList<LocationResult> allResults = new ArrayList<>();
+    public List<LocationResult> getAllLocationResults() {
+        List<LocationResult> allResults = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);

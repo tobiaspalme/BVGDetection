@@ -68,8 +68,8 @@ public class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      * @param nodes a list of Nodes
      * @return a list of DijkstraNodes
      */
-    public List<DijkstraNode> mapNodes(ArrayList<Node> nodes) {
-        ArrayList<DijkstraNode> dijkstraNodes = new ArrayList<>(nodes.size());
+    public List<DijkstraNode> mapNodes(List<Node> nodes) {
+        List<DijkstraNode> dijkstraNodes = new ArrayList<>(nodes.size());
         for(Node node : nodes){
             dijkstraNodes.add(new DijkstraNode(node));
         }
@@ -84,8 +84,8 @@ public class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      * @param edges a list of Edges
      * @return a list of DijkstraEdges
      */
-    public List<DijkstraEdge> mapEdges(ArrayList<Edge> edges) {
-        ArrayList<DijkstraEdge> dijkstraEdges = new ArrayList<>();
+    public List<DijkstraEdge> mapEdges(List<Edge> edges) {
+        List<DijkstraEdge> dijkstraEdges = new ArrayList<>();
 
         for (Edge edge : edges) {
 

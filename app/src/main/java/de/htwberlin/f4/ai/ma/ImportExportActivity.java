@@ -62,6 +62,13 @@ public class ImportExportActivity extends BaseActivity {
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//TODO
+               // Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+               // startActivityForResult(Intent.createChooser(intent, getString(R.string.folderchooser_title)), PICKFILE_REQUEST_CODE);
+
+
+
                 boolean exportSuccessful = databaseHandler.exportDatabase();
                 if (exportSuccessful) {
                     Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();

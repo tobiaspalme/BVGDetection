@@ -25,7 +25,6 @@
         <activity android:name="de.htwberlin.f4.ai.ma.ImportExportActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.routefinder.RouteFinderActivity" />
-       <!-- <activity android:name="de.htwberlin.f4.ai.ma.prototype_temp.NodeRecordActivityvity" />-->
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.location.LocationDetailedInfoActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.settings.SettingsActivity" />

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -35,12 +36,12 @@ public class EdgesManagerActivity extends BaseActivity {
 
     Button connectButton;
     ListView edgesListView;
-    ArrayList<Node> allNodes;
-    ArrayList<String> itemsSpinnerA;
+    List<Node> allNodes;
+    List<String> itemsSpinnerA;
 
-    private ArrayList<String> itemsSpinnerB;
-    private ArrayList<String> itemsEdgesList;
-    private ArrayList<Edge> allEdges;
+    private List<String> itemsSpinnerB;
+    private List<String> itemsEdgesList;
+    private List<Edge> allEdges;
     DatabaseHandler databaseHandler;
     private CheckBox accessibilityCheckbox;
     private String lastSelectedItemA;

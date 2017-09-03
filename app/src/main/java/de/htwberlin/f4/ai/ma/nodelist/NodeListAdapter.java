@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created Johann Winter
@@ -25,15 +26,15 @@ import java.util.ArrayList;
 public class NodeListAdapter extends ArrayAdapter {
 
     private Activity context;
-    private ArrayList<String> nodeNames;
-    private ArrayList<String> nodeDescriptions;
-    private ArrayList<String> nodePicturePaths;
+    private List<String> nodeNames;
+    private List<String> nodeDescriptions;
+    private List<String> nodePicturePaths;
 
     private final int REGULAR_ITEM = 0;   // For "normal" Nodes
     private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of RouteFinderActivity
 
 
-    public NodeListAdapter(Activity context, ArrayList<String> nodeNames, ArrayList<String> nodeDescriptions, ArrayList<String> nodePicturePaths) {
+    public NodeListAdapter(Activity context, List<String> nodeNames, List<String> nodeDescriptions, List<String> nodePicturePaths) {
         super(context, R.layout.item_nodes_listview);
 
         this.context = context;

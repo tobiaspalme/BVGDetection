@@ -11,12 +11,13 @@ import android.widget.TextView;
 import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter for the LocationResult listview in LocationDetailedInfoActivity
  */
 class LocationResultAdapter extends ArrayAdapter<LocationResult> {
-    LocationResultAdapter(Context context, ArrayList<LocationResult> users) {
+    LocationResultAdapter(Context context, List<LocationResult> users) {
         super(context, 0, users);
     }
 

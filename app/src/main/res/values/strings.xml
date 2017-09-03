@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Indoor Navigation</string>
+    <string name="app_name">Indoor Route Finder</string>
     <string name="pref_movingAverage_default">3</string>
 <!--<string name="title_activity_record">RecordActivity</string>
     <string name="title_activity_choose_app">ChooseAppActivity</string>
@@ -115,6 +115,7 @@
     <string name="wrong_file_extension">Falsche Dateiendung</string>
     <string name="try_again">Erneut versuchen</string>
     <string name="filechooser_title">Bitte .db Datei wählen</string>
+    <string name="folderchooser_title">Bitte einen Ordner wählen</string>
     <string name="import_export_infobox_text"><b>Hinweis:</b> Wenn Sie neue Daten importieren, gehen alle bisherigen Daten verloren!</string>
 
     <!-- activity_edges_manager -->

@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
@@ -26,7 +27,7 @@ public interface DatabaseHandler {
     // Nodes management
     void insertNode(Node node);
     void updateNode(Node node, String oldNodeId);
-    ArrayList<Node> getAllNodes();
+    List<Node> getAllNodes();
     Node getNode(String nodeID);
     boolean checkIfNodeExists(String nodeID);
     void deleteNode(Node node);
@@ -34,7 +35,7 @@ public interface DatabaseHandler {
     // Edges management
     void insertEdge(Edge edge);
     Edge getEdge(Node nodeA, Node nodeB);
-    ArrayList<Edge> getAllEdges();
+    List<Edge> getAllEdges();
     void updateEdge(Edge edge);
     void updateEdge(Edge edge, String nodeToBeUpdated, String value);
     boolean checkIfEdgeExists(Edge edge);
@@ -52,7 +53,7 @@ public interface DatabaseHandler {
 
     // LocationResult management
     void insertLocationResult(LocationResult locationResult);
-    ArrayList<LocationResult> getAllLocationResults();
+    List<LocationResult> getAllLocationResults();
     void deleteLocationResult(LocationResult locationResult);
 
 }

@@ -27,7 +27,7 @@ public interface DijkstraAlgorithm {
      * @param nodes a list of Nodes
      * @return a list of DijkstraNodes
      */
-    List<DijkstraNode> mapNodes(ArrayList<Node> nodes);
+    List<DijkstraNode> mapNodes(List<Node> nodes);
 
     /**
      * Map the normal Edge objects from the Model to the custom DijkstraEdge of the Dijkstra
@@ -36,7 +36,7 @@ public interface DijkstraAlgorithm {
      * @param edges a list of Edges
      * @return a list of DijkstraEdges
      */
-    List<DijkstraEdge> mapEdges(ArrayList<Edge> edges);
+    List<DijkstraEdge> mapEdges(List<Edge> edges);
 
     /**
      * Executes all the calculations and the shortest paths from the specified source node.

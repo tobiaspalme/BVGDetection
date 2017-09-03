@@ -57,20 +57,20 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     Button startRouteFinder;
     ImageButton locateButton;
     ListView navigationResultListview;
-    ArrayList<String> itemsStartNodeSpinner;
+    List<String> itemsStartNodeSpinner;
     private ArrayList<String> itemsDestNodeSpinner;
     CheckBox accessibilityCheckbox;
     private TextView totalDistanceTextview;
 
-    ArrayList<String> navigationResultsList;
-    ArrayList<Node> allNodes;
+    List<String> navigationResultsList;
+    List<Node> allNodes;
     DatabaseHandler databaseHandler;
     private String selectedStartNode;
     private String lastSelectedStartNode;
     NodeListAdapter resultListAdapter;
-    ArrayList<String> nodeNames;
-    ArrayList<String> nodeDescriptions;
-    ArrayList<String> nodePicturePaths;
+    List<String> nodeNames;
+    List<String> nodeDescriptions;
+    List<String> nodePicturePaths;
 
     WifiManager wifiManager;
 
