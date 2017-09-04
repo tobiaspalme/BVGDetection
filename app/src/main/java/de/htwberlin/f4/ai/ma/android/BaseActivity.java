@@ -55,44 +55,37 @@ public class BaseActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.nav_location_record:
-                        intent = new Intent(getApplicationContext(), NodeRecordEditActivity.class);
-                        startActivity(intent);
+                        loadNodeRecordEdit();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_location_manager:
-                        intent = new Intent(getApplicationContext(), NodeListActivity.class);
-                        startActivity(intent);
+                        loadNodelist();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_edges_manager:
-                        intent = new Intent(getApplicationContext(), EdgesManagerActivity.class);
-                        startActivity(intent);
+                        loadEdgesManager();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_location_detect:
-                        intent = new Intent(getApplicationContext(), LocationActivity.class);
-                        startActivity(intent);
+                        loadLocation();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_route_finder:
-                        intent = new Intent(getApplicationContext(), RouteFinderActivity.class);
-                        startActivity(intent);
+                        loadRouteFinder();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_import:
-                        intent = new Intent(getApplicationContext(), ImportExportActivity.class);
-                        startActivity(intent);
+                        loadImportExport();
                         drawerLayout.closeDrawers();
                         break;
 
                     case R.id.nav_settings:
-                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(intent);
+                        loadSettings();
                         drawerLayout.closeDrawers();
                         break;
 
@@ -127,6 +120,54 @@ public class BaseActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
     }
+
+    public void loadNodeRecordEdit() {
+        Intent intent = new Intent(getApplicationContext(), NodeRecordEditActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadNodelist() {
+        Intent intent = new Intent(getApplicationContext(), NodeListActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadEdgesManager() {
+        Intent intent = new Intent(getApplicationContext(), EdgesManagerActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadLocation() {
+        Intent intent = new Intent(getApplicationContext(), LocationActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadRouteFinder() {
+        Intent intent = new Intent(getApplicationContext(), RouteFinderActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadImportExport() {
+        Intent intent = new Intent(getApplicationContext(), ImportExportActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void loadSettings() {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+
+
+
+
+
 
     public void loadMeasurement() {
         Intent intent = new Intent(getApplicationContext(), MeasureViewImpl.class);
