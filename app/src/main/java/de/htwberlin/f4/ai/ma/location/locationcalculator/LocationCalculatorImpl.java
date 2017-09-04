@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -32,7 +33,7 @@ import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 
 public class LocationCalculatorImpl implements LocationCalculator {
 
-    private Context context;
+    Context context;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
 
@@ -43,7 +44,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
     }
 
     /**
-     * Calculate a Node for a FingerprintImpl
+     * Calculate a Node for a Fingerprint
      * @param fingerprint the input FingerprintImpl to be compared with all existent Nodes to get the position
      * @return the ID (name) of the resulting Node
      */
@@ -63,7 +64,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
         FoundNode foundNode = null;
 
 
-        // Load all nodes which have a valid fingerprintImpl
+        // Load all nodes which have a valid fingerprint
         List<Node> nodesWithFingerprint = new ArrayList<>();
         for (Node n : databaseHandler.getAllNodes()) {
             if (n.getFingerprint() != null) {
@@ -97,6 +98,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
                     foundNode = new FoundNode(distanceNames.get(0), 100.0);
                 }
             }
+
             return foundNode;
         } else {
             return null;
