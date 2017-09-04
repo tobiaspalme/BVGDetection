@@ -7,10 +7,10 @@ package de.htwberlin.f4.ai.ma.measurement.modules.stepdirection;
 public class StepDirectionRunnable implements Runnable {
 
     private StepDirectionDetectListener listener;
-    private StepDirectionDetect stepDirectionDetect;
+    private StepDirectionModule stepDirectionDetect;
 
 
-    public StepDirectionRunnable(StepDirectionDetect stepDirectionDetect) {
+    public StepDirectionRunnable(StepDirectionModule stepDirectionDetect) {
         this.stepDirectionDetect = stepDirectionDetect;
     }
 

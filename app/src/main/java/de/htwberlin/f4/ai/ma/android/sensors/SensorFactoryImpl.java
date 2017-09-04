@@ -48,7 +48,7 @@ public class SensorFactoryImpl implements SensorFactory{
                 return new GyroscopeUncalibrated(context, sensorRate);
             case MAGNETIC_FIELD:
                 return new MagneticFieldSensor(context, sensorRate);
-            case STEPCOUNTER:
+            case STEP_DETECTOR:
                 return new StepCounter(context, sensorRate);
             case THERMOMETER:
                 return new Thermometer(context, sensorRate);
