@@ -38,7 +38,7 @@ public class SensorCheckerImpl implements SensorChecker {
         Sensor accelerometerSensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_SIMPLE, Sensor.SENSOR_RATE_UI);
         accelerometer = accelerometerSensor.isSensorAvailable();
 
-        Sensor stepcounterSensor = sensorFactory.getSensor(SensorType.STEPCOUNTER, Sensor.SENSOR_RATE_UI);
+        Sensor stepcounterSensor = sensorFactory.getSensor(SensorType.STEP_DETECTOR, Sensor.SENSOR_RATE_UI);
         stepcounter = stepcounterSensor.isSensorAvailable();
 
 

@@ -15,7 +15,7 @@ public enum SensorType {
     GYROSCOPE,
     GYROSCOPE_UNCALIBRATED,
     MAGNETIC_FIELD,
-    STEPCOUNTER,
+    STEP_DETECTOR,
     THERMOMETER,
 
 }

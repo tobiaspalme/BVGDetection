@@ -27,8 +27,8 @@ import de.htwberlin.f4.ai.ma.measurement.modules.a.PositionModuleA;
 import de.htwberlin.f4.ai.ma.measurement.modules.b.PositionModuleB;
 import de.htwberlin.f4.ai.ma.measurement.modules.c.PositionModuleC;
 import de.htwberlin.f4.ai.ma.measurement.modules.d.PositionModuleD;
-import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetect;
-import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectImpl;
+import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionModule;
+import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionModuleImpl;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionRunnable;
 
@@ -47,7 +47,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     private CalibrationData calibrationData;
 
     private PositionModule positionModule;
-    private StepDirectionDetect directionDetect;
+    private StepDirectionModule directionDetect;
     private StepDirectionDetectListener stepDirectionListener;
     private Context context;
 
@@ -74,7 +74,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
     public void start() {
         if (calibrationData.getUseStepDirection()) {
             timerHandler = new Handler(Looper.getMainLooper());
-            directionDetect = new StepDirectionDetectImpl(context);
+            directionDetect = new StepDirectionModuleImpl(context);
             stepDirectionRunnable = new StepDirectionRunnable(directionDetect);
             // TODO: inform controller about direction and handle it, if direction != forward
             if (stepDirectionListener != null) {

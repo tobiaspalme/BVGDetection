@@ -470,7 +470,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
         }
 
-        if (node.getAdditionalInfo().contains("NULLPOINT")) {
+        if (node.getAdditionalInfo() != null && node.getAdditionalInfo().contains("NULLPOINT")) {
             nullpointStartCb.setChecked(true);
         } else {
             nullpointStartCb.setChecked(false);

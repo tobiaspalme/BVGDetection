@@ -68,6 +68,8 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
         final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_edge_details, contentFrameLayout);
 
+        setTitle("Wegdetails");
+
         Bundle bundle = getIntent().getBundleExtra(EDGE_DETAILS_BUNDLE);
 
         if (bundle != null) {

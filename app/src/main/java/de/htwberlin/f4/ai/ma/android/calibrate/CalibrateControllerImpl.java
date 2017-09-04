@@ -40,7 +40,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {
-                if (sensorData.getSensorType() == SensorType.STEPCOUNTER) {
+                if (sensorData.getSensorType() == SensorType.STEP_DETECTOR) {
                     stepCount = (int) sensorData.getValues()[0];
                     view.updateStepCount(stepCount);
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -49,7 +49,7 @@ public class CalibrateControllerImpl implements CalibrateController {
             }
 
         });
-        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_FASTEST, SensorType.STEPCOUNTER);
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_FASTEST, SensorType.STEP_DETECTOR);
         view.updateStepCount(stepCount);
     }
 

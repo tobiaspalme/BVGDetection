@@ -54,16 +54,12 @@ public class PositionModuleA implements PositionModule {
             distance = 0.35f;
         }
 
-        // prevent wrong calculcation if delta altitude is bigger than steplength
-        // that can happen when a train arrives in station due to airpressure change...
-        if (altitude > distance) {
-            altitude = 0.0f;
-        }
+
 
         // orientation stuff
         double sina = Math.sin(Math.toRadians(90 - orientation));
         double cosa = Math.cos(Math.toRadians(90 - orientation));
-        // calculate rho -> altitude = delta z
+        // calculate distance -> altitude = delta z
         float p = (float) Math.sqrt(Math.pow(distance, 2) - Math.pow(altitude, 2));
         // calculate movement along x and y axis using the calculated rho value
         float x = (float)cosa * p;
