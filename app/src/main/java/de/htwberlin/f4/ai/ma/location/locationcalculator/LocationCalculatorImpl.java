@@ -115,7 +115,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
         for (SignalInformation sigInfo : signalInformationList) {
             for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
 
-                Log.d("DatabaseHanderlImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
+                Log.d("LocationCalculatorImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
 
                 String macAdress = ssi.getMacAddress();
                 int signalStrength = ssi.getRSSI();
@@ -159,7 +159,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
                 }
                 if (countValue <= minValue) {
                     multiMap.removeAll(macAddress);
-                    Log.d("DatabaseHandlerImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
+                    Log.d("LocationCalculatorImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
                 }
             }
             //fill restructed Nodes

@@ -43,7 +43,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     public AsyncResponse delegate = null;
 
 
-    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, Boolean calculateAverage, @Nullable ProgressBar progressBar, @Nullable TextView progressTextview) {
+    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage, final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview) {
         this.wifiManager = wifiManager;
         this.wifiName = wifiName;
         this.seconds = seconds;
@@ -71,13 +71,11 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
                 for (final ScanResult sr : wifiScanList) {
                     if (sr.SSID.equals(wifiName)) {
-
-                        Log.d("Scanning... ", "MAC: " +  sr.BSSID + "   Level: " + sr.level);
-
-                        multiMap.put(sr.BSSID, sr.level);
-
+                        Log.d("Scanning... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level);
                         AccessPointSample accessPointSample = new AccessPointSampleImpl(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
+                        multiMap.put(sr.BSSID, sr.level);
+
                     }
                 }
                 Log.d("--------", "-------------------------------------------------");

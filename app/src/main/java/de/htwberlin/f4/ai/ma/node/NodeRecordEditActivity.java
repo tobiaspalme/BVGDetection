@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -586,12 +587,16 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     @Override
     protected void onStop() {
         super.onStop();
-        if (!takingPictureAtTheMoment && !showingBigPictureAtTheMoment) {
-            if (fingerprintTask != null) {
-                fingerprintTask.cancel(false);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isInteractive();
+
+        if (isScreenOn) {
+            if (!takingPictureAtTheMoment && !showingBigPictureAtTheMoment) {
+                if (fingerprintTask != null) {
+                    fingerprintTask.cancel(false);
+                }
             }
         }
     }
-
-
 }

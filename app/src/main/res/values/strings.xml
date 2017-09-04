@@ -111,7 +111,7 @@
     <string name="import_database_warining">Soll die gewählte Datei wirklich importiert werden? Es werden alle Daten in der Datenbank überschrieben!</string>
     <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
     <string name="database_imported_toast">Datenbank importiert.</string>
-    <string name="database_exported_toast">Datenbank exportiert.</string>
+    <string name="database_exported_toast">Datenbank nach \"/IndoorPositioning/Exported/\" exportiert.</string>
     <string name="wrong_file_extension">Falsche Dateiendung</string>
     <string name="try_again">Erneut versuchen</string>
     <string name="filechooser_title">Bitte .db Datei wählen</string>

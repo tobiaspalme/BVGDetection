@@ -85,6 +85,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
@@ -122,7 +123,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                 + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
 
 
-        databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
         detailedResultsImagebutton.setImageResource(R.drawable.info);
         refreshImageview.setImageResource(R.drawable.refresh);
@@ -168,7 +168,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
      * Scan for WiFi names (SSIDs) and add them to the dropdown
      */
     private void refreshWifiDropdown() {
-
         WifiScanner wifiScanner = new WifiScannerImpl();
         List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
@@ -187,7 +186,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
        // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
 
         descriptionTextview.setText("");
-//        coordinatesTextview.setText("");
+        //coordinatesTextview.setText("");
         //locationImageview.setEnabled(false);
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
@@ -202,7 +201,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
 
     /**
-     * Try to calculate the position.
+     * If the background FingerprintTask is finished, display results
+     * and save the LocationResult.
      * @param seconds the measured time
      * @param fingerprint the fingerprint measured before
      */
@@ -212,7 +212,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
             LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
             foundNode = locationCalculator.calculateNodeId(fingerprint);
-            //foundNode = databaseHandler.calculateNodeId(fingerprint);
 
 
             LocationResult locationResult;
