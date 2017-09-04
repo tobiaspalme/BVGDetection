@@ -30,6 +30,7 @@ public class PositionModuleA implements PositionModule {
     // coordinates[2] = z = movement upward / downward
     private float[] coordinates;
 
+
     public PositionModuleA(Context context, CalibrationData calibrationData) {
         altitudeModule = new AltitudeModuleA(context, calibrationData.getAirPressure(), calibrationData.getBarometerThreshold());
         distanceModule = new DistanceModuleA(context, calibrationData.getStepLength());
@@ -44,16 +45,8 @@ public class PositionModuleA implements PositionModule {
 
         // calculate new position with these 3 values
         float altitude = altitudeModule.getAltitude();
-        float distance = distanceModule.getDistance();
+        float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
-
-        if (calibrationData.isStairs()) {
-            // adjusting distance when stair toggle is checked
-            // since we dont know if the user goes up or down, we dont manipulate the altitude.
-            // we just rely on barometer data and hope threshold is passed
-            distance = 0.35f;
-        }
-
 
 
         // orientation stuff

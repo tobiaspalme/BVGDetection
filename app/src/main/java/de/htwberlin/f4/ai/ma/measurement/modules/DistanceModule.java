@@ -6,7 +6,7 @@ package de.htwberlin.f4.ai.ma.measurement.modules;
 
 public interface DistanceModule{
 
-    float getDistance();
+    float getDistance(boolean stairs);
     void start();
     void stop();
 }

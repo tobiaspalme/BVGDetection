@@ -175,7 +175,7 @@ public class MeasureControllerImpl implements MeasureController {
                             sensorDataModel.insertData(sensorData);
                         }
                         break;
-                    case STEPCOUNTER:
+                    case STEP_DETECTOR:
                         handleNewStep();
                         // fix first step bug...
                         // first step won't get recognized by sensor so we just fake the step
@@ -772,7 +772,8 @@ public class MeasureControllerImpl implements MeasureController {
             if (different) {
                 // make sure that both nodes aren't nullpoints, because its not allowed to measure between two nullpoints
                 if ((start.getAdditionalInfo().contains("NULLPOINT") && !target.getAdditionalInfo().contains("NULLPOINT")) ||
-                        (!start.getAdditionalInfo().contains("NULLPOINT") && target.getAdditionalInfo().contains("NULLPOINT"))) {
+                        (!start.getAdditionalInfo().contains("NULLPOINT") && target.getAdditionalInfo().contains("NULLPOINT")) ||
+                        (!start.getAdditionalInfo().contains("NULLPOINT") && !target.getAdditionalInfo().contains("NULLPOINT"))) {
                     view.enableStart();
 
                     DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
@@ -847,7 +848,7 @@ public class MeasureControllerImpl implements MeasureController {
                     indoorMeasurement.calibrate(calibrationData);
                     // start step detector with 0 delay
                     indoorMeasurement.startSensors(Sensor.SENSOR_RATE_FASTEST,
-                            SensorType.STEPCOUNTER);
+                            SensorType.STEP_DETECTOR);
                     // start measurement
                     indoorMeasurement.start();
                 }

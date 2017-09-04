@@ -11,7 +11,8 @@ import de.htwberlin.f4.ai.ma.android.sensors.gravity.GravitySensor;
 import de.htwberlin.f4.ai.ma.android.sensors.gyroscope.Gyroscope;
 import de.htwberlin.f4.ai.ma.android.sensors.gyroscope.GyroscopeUncalibrated;
 import de.htwberlin.f4.ai.ma.android.sensors.magneticfield.MagneticFieldSensor;
-import de.htwberlin.f4.ai.ma.android.sensors.stepcounter.StepCounter;
+
+import de.htwberlin.f4.ai.ma.android.sensors.stepcounter.StepDetector;
 import de.htwberlin.f4.ai.ma.android.sensors.temperature.Thermometer;
 
 /**
@@ -49,7 +50,7 @@ public class SensorFactoryImpl implements SensorFactory{
             case MAGNETIC_FIELD:
                 return new MagneticFieldSensor(context, sensorRate);
             case STEP_DETECTOR:
-                return new StepCounter(context, sensorRate);
+                return new StepDetector(context, sensorRate);
             case THERMOMETER:
                 return new Thermometer(context, sensorRate);
             default:
