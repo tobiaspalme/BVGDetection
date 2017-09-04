@@ -55,16 +55,14 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     // TextView coordinatesTextview;
     ProgressBar progressBar;
 
-    Context context = this;
+    Context context;
 
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private String settings;
     private Spinner wifiDropdown;
-    private FoundNode foundNode;
+    //private FoundNode foundNode;
     private WifiManager wifiManager;
-    private Multimap<String, Integer> multiMap;
-    private long timestampWifiManager = 0;
 
     private int locationsCounter;
 
@@ -83,6 +81,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
+
+        context = this;
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
@@ -141,13 +141,18 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    //progressBar.setVisibility(View.INVISIBLE);
+                    measure1sButton.setEnabled(false);
+                    measure10sButton.setEnabled(false);
                     findLocation(1);
+
                 }
             });
 
         measure10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    measure1sButton.setEnabled(false);
+                    measure10sButton.setEnabled(false);
                     progressBar.setVisibility(View.VISIBLE);
                     findLocation(10);
                 }
@@ -191,7 +196,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
             locationTextview.setText(getString(R.string.searching_node_text));
-
             FingerprintTask fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
             fingerprintTask.delegate = this;
             fingerprintTask.execute();
@@ -211,7 +215,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         if (fingerprint != null) {
 
             LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
-            foundNode = locationCalculator.calculateNodeId(fingerprint);
+            FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
 
 
             LocationResult locationResult;
@@ -255,6 +259,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
             databaseHandler.insertLocationResult(locationResult);
         }
+        measure1sButton.setEnabled(true);
+        measure10sButton.setEnabled(true);
     }
 
 

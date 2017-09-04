@@ -195,6 +195,8 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             @Override
             public void onClick(View view) {
 
+                locateButton.setEnabled(false);
+
                 WifiScanner wifiScanner = new WifiScannerImpl();
                 final List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
@@ -211,6 +213,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
                         findLocation(wifiNamesList.get(which), 1);
                     }
                 });
+                builder.setCancelable(false);
                 builder.show();
             }
         });
@@ -288,13 +291,12 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     }
 
     /**
-     * If the fingerprinting background task finished
+     * When the fingerprinting background task finished
      * @param fingerprint the Fingerprint from the AsyncTask
      */
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
-            //FoundNode foundNode = databaseHandler.calculateNodeId(fingerprint);
             LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
             FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
             if (foundNode != null) {
@@ -307,5 +309,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
                 toast.show();
             }
         }
+        locateButton.setEnabled(true);
     }
 }
