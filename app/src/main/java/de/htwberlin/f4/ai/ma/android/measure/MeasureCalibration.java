@@ -7,7 +7,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Created by benni on 30.07.2017.
+ * MeasureCalibration Class which implements Runnable Interface
+ *
+ * measure airpressure and calculates the average
+ *
+ * Author: Benjamin Kneer
  */
 
 public class MeasureCalibration implements Runnable {
@@ -19,18 +23,21 @@ public class MeasureCalibration implements Runnable {
         this.sensorDataModel = sensorDataModel;
     }
 
-    public void setListener(MeasureCalibrationListener listener) {
-        this.listener = listener;
-    }
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
 
     @Override
     public void run() {
-        // simply calculating the avg, should be improved
+        // simply calculating the avg
         float pressureAvg = 0.0f;
 
-        // calibrate without lowpass filter
-
-        // calc avg barometer
+        // calc average airpressure
+        // get all barometer sensor data from model
         List<SensorData> barometerData = sensorDataModel.getData().get(SensorType.BAROMETER);
         if (barometerData != null) {
             float pressureSum = 0.0f;
@@ -39,41 +46,25 @@ public class MeasureCalibration implements Runnable {
             for (SensorData data : barometerData) {
                 pressureSum += data.getValues()[0];
             }
-            // calculate avg
+            // calculate average
             pressureAvg = pressureSum / barometerData.size();
         }
 
-        /*
-        // calibrate with lowpass filter
-        else if (indoorMeasurementType == IndoorMeasurementType.VARIANT_B || indoorMeasurementType == IndoorMeasurementType.VARIANT_D) {
-
-            List<SensorData> barometerData = sensorDataModel.getData().get(SensorType.BAROMETER);
-            if (barometerData != null) {
-
-                // apply lowpass filter
-                for (int i = 1; i < barometerData.size(); i++) {
-                    float lastValue = barometerData.get(i-1).getValues()[0];
-                    float newValue = barometerData.get(i).getValues()[0];
-                    newValue = LowPassFilter.filter(lastValue, newValue, 0.1f);
-                    barometerData.get(i).setValues(new float[]{newValue});
-                }
-
-
-                float pressureSum = 0.0f;
-
-                // sum up all airpressure values
-                for (SensorData data : barometerData) {
-                    pressureSum += data.getValues()[0];
-                }
-                // calculate avg
-                pressureAvg = pressureSum / barometerData.size();
-            }
-        }*/
-
-
+        // inform listener about calculated airpressure average
         if (listener != null) {
             listener.onFinish(pressureAvg);
         }
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Class Methods                                       *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    public void setListener(MeasureCalibrationListener listener) {
+        this.listener = listener;
+    }
 }

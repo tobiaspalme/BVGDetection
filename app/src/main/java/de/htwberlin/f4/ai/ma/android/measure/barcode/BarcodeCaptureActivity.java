@@ -17,7 +17,7 @@
  * Daniell Algar (included due to copyright reason)
  */
 
-// Source: https://github.com/varvet/BarcodeReaderSample
+
 package de.htwberlin.f4.ai.ma.android.measure.barcode;
 
 import android.Manifest;
@@ -52,6 +52,15 @@ import de.htwberlin.f4.ai.ma.android.measure.camera.CameraSource;
 import de.htwberlin.f4.ai.ma.android.measure.camera.CameraSourcePreview;
 
 import java.io.IOException;
+
+/**
+ * BarcodeCaptureActivity Class
+ *
+ * Used for getting QR-Code content
+ *
+ * Source: https://github.com/varvet/BarcodeReaderSample
+ */
+
 
 public final class BarcodeCaptureActivity extends AppCompatActivity
         implements BarcodeTracker.BarcodeGraphicTrackerCallback {

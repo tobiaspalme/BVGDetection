@@ -1,14 +1,9 @@
 package de.htwberlin.f4.ai.ma.android.measure;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
@@ -206,7 +199,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
-                    controller.onAddClicked();
+                    controller.onStepClicked();
                 }
             }
         });

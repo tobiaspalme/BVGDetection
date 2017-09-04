@@ -8,7 +8,11 @@ import com.example.carol.bvg.R;
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 
 /**
+ * CalibratePersistanceImpl Class
+ *
  * Save / load calibration from SharedPreferences
+ *
+ * Author: Benjamin Kneer
  */
 
 public class CalibratePersistanceImpl implements CalibratePersistance {
@@ -19,27 +23,45 @@ public class CalibratePersistanceImpl implements CalibratePersistance {
         this.context = context;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * load the calibration from sharedpreferences
+     *
+     * @return CalibrationData
+     */
     @Override
     public CalibrationData load() {
         CalibrationData calibrationData = null;
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
 
-        // just checking if the keys exist, maybe we should check if the value is != 0 too...
+        // check if key for step length and step period exists
         if (sharedPreferences.contains(context.getString(R.string.coordinates_shared_preferences_steplength)) &&
                 sharedPreferences.contains(context.getString(R.string.coordinates_shared_preferences_stepperiod))) {
-
+            // load the calibration
             calibrationData = new CalibrationData();
             calibrationData.setStepLength(sharedPreferences.getFloat(context.getString(R.string.coordinates_shared_preferences_steplength), 0.0f));
             calibrationData.setStepPeriod(sharedPreferences.getInt(context.getString(R.string.coordinates_shared_preferences_stepperiod), 0));
-
         }
 
         return calibrationData;
     }
 
+
+    /**
+     * Save calibrationData into sharedpreferences
+     *
+     * @param calibrationData calibrationData to save
+     */
     @Override
     public void save(CalibrationData calibrationData) {
-        // just saving steplength and stepperiod, because azimuth and airpressure change with every calibration
+        // just saving steplength and stepperiod
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.coordinates_shared_preferences), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat(context.getString(R.string.coordinates_shared_preferences_steplength), calibrationData.getStepLength());

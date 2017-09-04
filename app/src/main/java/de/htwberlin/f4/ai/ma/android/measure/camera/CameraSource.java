@@ -73,6 +73,13 @@ import java.util.Map;
  * </ul>
  */
 
+/**
+ *  Used for getting QR-Code content
+ *
+ * Source: https://github.com/varvet/BarcodeReaderSample
+ */
+
+
 public class CameraSource {
     @SuppressLint("InlinedApi")
     public static final int CAMERA_FACING_BACK = CameraInfo.CAMERA_FACING_BACK;

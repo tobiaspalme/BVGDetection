@@ -32,7 +32,7 @@ public class DistanceModuleA implements DistanceModule {
         if (stairs) {
             distance = distance - (2 * STAIRHIGH);
         }
-        
+
         return distance;
     }
 
