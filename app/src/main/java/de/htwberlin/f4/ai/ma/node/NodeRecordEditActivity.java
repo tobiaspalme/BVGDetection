@@ -33,13 +33,12 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 import de.htwberlin.f4.ai.ma.WifiScanner;
 import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
+import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
+import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.node.fingerprint;
+package de.htwberlin.f4.ai.ma.fingerprint;
 
 import java.util.List;
 

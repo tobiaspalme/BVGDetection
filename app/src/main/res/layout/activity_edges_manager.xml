@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/destination_edgesmanager"
             android:id="@+id/destination_label"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_below="@+id/start_label"/>
 
@@ -55,7 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/destination_label">
+            android:layout_below="@+id/destination_label"
+            android:layout_marginTop="10dp">
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -71,8 +72,6 @@
                 android:id="@+id/connect_nodes_button"
                 android:text="@string/connect_nodes_button_text"
                 />
-
-
 
         </LinearLayout>
 

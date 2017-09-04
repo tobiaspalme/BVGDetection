@@ -1,7 +1,6 @@
 package de.htwberlin.f4.ai.ma.node;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 
 /**
  * Created by Johann Winter

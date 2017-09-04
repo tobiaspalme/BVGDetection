@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.node.fingerprint;
+package de.htwberlin.f4.ai.ma.fingerprint;
 
 import com.google.common.collect.Multimap;
 
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
 
 /**
  * Created by Johann Winter

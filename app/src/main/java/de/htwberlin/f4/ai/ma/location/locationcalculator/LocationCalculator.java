@@ -7,9 +7,9 @@ import java.util.List;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
 
 /**
  * Created by Johann Winter

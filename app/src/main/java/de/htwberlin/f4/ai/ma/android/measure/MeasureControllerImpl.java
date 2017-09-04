@@ -54,13 +54,13 @@ import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.node.MaxPictureActivity;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**

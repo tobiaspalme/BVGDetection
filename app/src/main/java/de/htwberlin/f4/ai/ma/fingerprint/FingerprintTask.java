@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.node.fingerprint;
+package de.htwberlin.f4.ai.ma.fingerprint;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;

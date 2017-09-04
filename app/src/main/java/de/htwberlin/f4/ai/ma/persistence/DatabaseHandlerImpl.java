@@ -19,8 +19,8 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;

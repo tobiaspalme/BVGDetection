@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.node.fingerprint.accesspointsample;
+package de.htwberlin.f4.ai.ma.fingerprint.accesspointsample;
 
 /**
  * Created by Johann Winter

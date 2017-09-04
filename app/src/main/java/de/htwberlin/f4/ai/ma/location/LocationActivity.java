@@ -27,14 +27,14 @@ import de.htwberlin.f4.ai.ma.WifiScanner;
 import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.locationcalculator.LocationCalculatorImpl;
-import de.htwberlin.f4.ai.ma.node.fingerprint.AsyncResponse;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
+import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.fingerprint.FingerprintTask;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
-import de.htwberlin.f4.ai.ma.MaxPictureActivity;
+import de.htwberlin.f4.ai.ma.node.MaxPictureActivity;
 
 /**
  * Created by Johann Winter

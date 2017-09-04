@@ -10,9 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
 
-import de.htwberlin.f4.ai.ma.MaxPictureActivity;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 

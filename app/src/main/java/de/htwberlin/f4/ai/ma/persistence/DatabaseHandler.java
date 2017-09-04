@@ -3,14 +3,11 @@ package de.htwberlin.f4.ai.ma.persistence;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.LocationResult;
-import de.htwberlin.f4.ai.ma.node.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 
 /**
  * Created by Johann Winter
