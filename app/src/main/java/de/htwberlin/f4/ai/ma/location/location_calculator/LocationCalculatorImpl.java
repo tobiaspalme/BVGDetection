@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.location.locationcalculator;
+package de.htwberlin.f4.ai.ma.location.location_calculator;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -94,11 +94,10 @@ public class LocationCalculatorImpl implements LocationCalculator {
                     foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
                 } else if (!distanceNames.isEmpty()) {
-                    //TODO hier 100%?
+                    //TODO hier 100%? ...... 100.0/distanceNames.size()
                     foundNode = new FoundNode(distanceNames.get(0), 100.0);
                 }
             }
-
             return foundNode;
         } else {
             return null;
@@ -116,13 +115,9 @@ public class LocationCalculatorImpl implements LocationCalculator {
 
         for (SignalInformation sigInfo : signalInformationList) {
             for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
-
-                Log.d("LocationCalculatorImpl", "getSignalStrengths,  MAC: " + ssi.getMacAddress() + " Strength: " + ssi.getRSSI());
-
                 String macAdress = ssi.getMacAddress();
                 int signalStrength = ssi.getRSSI();
                 AccessPointSample SSI = new AccessPointSampleImpl(macAdress, signalStrength);
-
                 accessPointSamples.add(SSI);
             }
         }
@@ -161,7 +156,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
                 }
                 if (countValue <= minValue) {
                     multiMap.removeAll(macAddress);
-                    Log.d("LocationCalculatorImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
+                    //Log.d("LocationCalculatorImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
                 }
             }
             //fill restructed Nodes

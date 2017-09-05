@@ -234,7 +234,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 }
 
                 Node node = new NodeImpl(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
-                Log.d("DB: get_all_nodes", cursor.getString(0));
+                //Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
             } while (cursor.moveToNext());
@@ -526,7 +526,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         database.insert(RESULTS_TABLE, null, values);
 
-        Log.d("DB: insert_result", "###########");
+        //Log.d("DB: insert_result", "###########");
 
         database.close();
     }
@@ -546,7 +546,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
             do {
                 LocationResult locationResult = new LocationResultImpl();
 
-                Log.d("DB: get_all_locations", "###########");
+                //Log.d("DB: get_all_locations", "###########");
 
                 locationResult.setId(Integer.valueOf(cursor.getString(0)));
                 locationResult.setSettings(cursor.getString(1));

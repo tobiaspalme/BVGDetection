@@ -14,7 +14,7 @@ import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl
  */
 
 
-public class AverageSignalCalculator {
+class AverageSignalCalculator {
 
     // TODO doku
     /**
@@ -22,12 +22,9 @@ public class AverageSignalCalculator {
     // * @param signalInformations a list of BSSIDs and signal strengths
      * @return the calculated nodeID
      */
-    public static List<SignalInformation> calculateAverageSignal(Multimap<String, Integer> multiMap) {
+    static List<SignalInformation> calculateAverageSignal(Multimap<String, Integer> multiMap) {
 
-        Set<String> bssid = multiMap.keySet();
-
-
-
+        Set<String> BSSIDs = multiMap.keySet();
 
         final List<SignalInformation> signalInformationList = new ArrayList<>();
 
@@ -54,7 +51,7 @@ public class AverageSignalCalculator {
 
 
 
-        for (String s : bssid) {
+        for (String s : BSSIDs) {
             int value = 0;
             int counter = 0;
 

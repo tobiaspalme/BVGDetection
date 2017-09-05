@@ -19,7 +19,7 @@ public class WifiScannerImpl implements WifiScanner {
 
         wifiManager.startScan();
         List<ScanResult> wifiScanList = wifiManager.getScanResults();
-        System.out.println("+++ SR count: " + wifiScanList.size());
+        System.out.println("+++ ScanResult count: " + wifiScanList.size());
 
         List<String> SSIDs = new ArrayList<>();
         List<String> wifiNamesList = new ArrayList<>();

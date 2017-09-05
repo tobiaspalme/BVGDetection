@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.location.locationcalculator;
+package de.htwberlin.f4.ai.ma.location.location_calculator;
 
 import com.google.common.collect.Multimap;
 
