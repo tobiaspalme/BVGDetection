@@ -31,7 +31,13 @@ import java.io.IOException;
 
 import de.htwberlin.f4.ai.ma.android.measure.camera.CameraSource;
 
-// Source: https://github.com/varvet/BarcodeReaderSample
+/**
+ * Used for getting QR-Code content
+ *
+ * Source: https://github.com/varvet/BarcodeReaderSample
+ *
+ */
+
 public class CameraSourcePreview extends ViewGroup {
     private static final String TAG = CameraSourcePreview.class.getSimpleName();
 

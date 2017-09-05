@@ -3,11 +3,18 @@ package de.htwberlin.f4.ai.ma.android.calibrate;
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 
 /**
- * Created by benni on 30.07.2017.
+ * CalibratePersistance Interface
+ *
+ * Used for saving / loading the calibration
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface CalibratePersistance {
 
+    // load the calibration
     CalibrationData load();
+
+    // save the calibration
     void save(CalibrationData calibrationData);
 }

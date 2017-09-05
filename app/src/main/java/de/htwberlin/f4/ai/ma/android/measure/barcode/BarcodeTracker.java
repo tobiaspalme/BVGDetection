@@ -22,6 +22,14 @@ import android.content.Context;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
 
+/**
+ * BarcodeTracer Class
+ *
+ * Used for getting QR-Code content
+ *
+ * Source: https://github.com/varvet/BarcodeReaderSample
+ *
+ */
 class BarcodeTracker extends Tracker<Barcode> {
     private BarcodeGraphicTrackerCallback mListener;
 

@@ -16,24 +16,29 @@ import com.example.carol.bvg.R;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 
 /**
- * Created by benni on 17.07.2017.
+ * CalibrateViewImpl Class which implements the CalibrateView interface
+ *
+ * Used for Steplength and Stepperiod calibration
+ *
+ * Author: Benjamin Kneer
  */
 
 public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
     private CalibrateController controller;
+
     private TextView stepCountView;
     private TextView stepDistanceView;
     private TextView stepPeriodView;
-    private ImageView compassView;
     private TextView azimuthView;
+
+    private ImageView compassView;
 
     private Button btnStepIncStepOne;
     private Button btnStepDecStepOne;
     private Button btnNextStepOne;
     private Button btnStartStepOne;
     private Button btnStopStepOne;
-
     private Button btnNextStepTwo;
     private Button btnBackStepTwo;
 
@@ -43,6 +48,14 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         controller.setView(this);
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Activity Methods                                    *
+    *                                                                                   *
+    *************************************************************************************/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,20 +63,6 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         loadStepOneView();
     }
 
-    /*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_calibrate_step1, container, false);
-
-        return root;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        loadStepOneView();
-    }*/
 
     @Override
     public void onPause() {
@@ -73,16 +72,41 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         }
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * set the responsible controller
+     *
+     * @param controller CalibrateController
+     */
     @Override
     public void setController(CalibrateController controller) {
         this.controller = controller;
     }
 
+
+    /**
+     * update the step count
+     *
+     * @param stepCount current step count
+     */
     @Override
     public void updateStepCount(int stepCount) {
         stepCountView.setText(String.valueOf(stepCount));
     }
 
+
+    /**
+     * load a specific calibration step
+     *
+     * @param setupStep number of the calibration setup step
+     */
     @Override
     public void loadCalibrateStep(int setupStep) {
         switch (setupStep) {
@@ -100,43 +124,73 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         }
     }
 
+
+    /**
+     * update the average stepdistance
+     *
+     * @param distance average stepdistance
+     */
     @Override
     public void updateAverageStepdistance(float distance) {
         stepDistanceView.setText(getString(R.string.step_setup_average_stepdistance) + " " + distance);
     }
 
+
+    /**
+     * update the average stepperiod
+     *
+     * @param period average step period
+     */
     @Override
     public void updateAverageStepperiod(int period) {
         stepPeriodView.setText(getString(R.string.step_setup_average_stepperiod) + " " + period);
     }
 
+
+    /**
+     * update the azimuth
+     *
+     * @param azimuth azimuth value
+     */
     @Override
     public void updateAzimuth(int azimuth) {
         azimuthView.setText(azimuth + "°");
         compassView.setRotation(-azimuth);
     }
 
+
+    /**
+     * get the view's context
+     *
+     * @return Context
+     */
     @Override
     public Context getContext() {
         return this;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Class Methods                                       *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Load view for the first calibration setup step
+     */
     private void loadStepOneView() {
-        //LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        //View view = inflater.inflate(R.layout.activity_calibrate_step1, null);
-
+        // find contentframe
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        // remove old content
         contentFrameLayout.removeAllViews();
-
+        // inflate new layout
         View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step1, contentFrameLayout);
 
-
-        //ViewGroup rootView = (ViewGroup) getView();
-        //rootView.removeAllViews();
-        //rootView.addView(view);
-
-
         stepCountView = (TextView) view.findViewById(R.id.coordinates_calibrate_tv_step);
+
+        /************        find UI Elements and set listeners          ************/
 
         btnStepIncStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepinc);
         btnStepIncStepOne.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +201,6 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
             }
         });
         btnStepIncStepOne.setEnabled(false);
-
 
         btnStepDecStepOne = (Button) view.findViewById(R.id.coordinates_calibrate_btn_stepdec);
         btnStepDecStepOne.setOnClickListener(new View.OnClickListener() {
@@ -199,22 +252,19 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
         btnStopStepOne.setEnabled(false);
     }
 
+
+    /**
+     * Load view for the second calibration setup step
+     */
     private void loadStepTwoView() {
-        /*
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.activity_calibrate_step2, null);
-
-
-        ViewGroup rootView = (ViewGroup) getView();
-        rootView.removeAllViews();
-        rootView.addView(view);*/
-
-
+        // find contentframe
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        // remove old content
         contentFrameLayout.removeAllViews();
+        // inflate new layout
         View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step2, contentFrameLayout);
 
-
+        /************        find UI Elements and set listeners          ************/
 
         btnNextStepTwo = (Button) view.findViewById(R.id.coordinates_calibrate_next_2);
         btnNextStepTwo.setOnClickListener(new View.OnClickListener() {
@@ -263,20 +313,22 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
         stepDistanceView = (TextView) view.findViewById(R.id.coordinates_calibrate_avgstepdistance);
         stepPeriodView = (TextView) view.findViewById(R.id.coordinates_calibrate_avgstepperiod);
-
     }
 
-    private void loadStepThreeView() {
-        /*
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.activity_calibrate_step3, null);
-        ViewGroup rootView = (ViewGroup) getView();
-        rootView.removeAllViews();
-        rootView.addView(view);*/
 
+    /**
+     * Load view for the third calibration setup step
+     */
+    private void loadStepThreeView() {
+
+        // find content frame
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        // remove old content
         contentFrameLayout.removeAllViews();
+        // inflate new layout
         View view = getLayoutInflater().inflate(R.layout.activity_calibrate_step3, contentFrameLayout);
+
+        /************        find UI Elements and set listeners          ************/
 
         Button btnNext = (Button) view.findViewById(R.id.coordinates_calibrate_next_3);
         btnNext.setOnClickListener(new View.OnClickListener() {
@@ -301,8 +353,5 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
 
         compassView = (ImageView) view.findViewById(R.id.coordinates_calibrate_compass_iv);
         azimuthView = (TextView) view.findViewById(R.id.coordinates_calibrate_compass_value);
-
-
-
     }
 }

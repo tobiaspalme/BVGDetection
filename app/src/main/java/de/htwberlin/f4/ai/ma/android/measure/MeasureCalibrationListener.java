@@ -1,10 +1,15 @@
 package de.htwberlin.f4.ai.ma.android.measure;
 
 /**
- * Created by benni on 30.07.2017.
+ * MeasureCalibrationListener Interface
+ *
+ * Used to inform about calculated average airpressure
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface MeasureCalibrationListener {
 
+    // calculation finished
     void onFinish(float airPressure);
 }
