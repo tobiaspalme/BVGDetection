@@ -17,10 +17,10 @@ public class EuclideanDistance {
     /**
      * Calculate the euclidean distances
      * @param restructedNodes a list of restructed Nodes
-     * @param measuredSSIs a list of measured SignalStrengths (RSSI)
+     * @param accessPointSamples a list of measured SignalStrengths (RSSI)
      * @return a sorted list of distances
      */
-    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointSample> measuredSSIs) {
+    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointSample> accessPointSamples) {
         //List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
@@ -28,11 +28,12 @@ public class EuclideanDistance {
 
             List<Collection<Double>> matchingSignalStrengths = new ArrayList<>();
             List<Integer> measuredSignalStrength = new ArrayList<>();
-            for (int j = 0; j < measuredSSIs.size(); j++) {
-                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(measuredSSIs.get(j).getMacAddress());
+            for (int j = 0; j < accessPointSamples.size(); j++) {
+                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(accessPointSamples.get(j).getMacAddress());
                 if (contains) {
-                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(measuredSSIs.get(j).getMacAddress()));
-                    measuredSignalStrength.add(measuredSSIs.get(j).getRSSI());
+                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(accessPointSamples.get(j).getMacAddress()));
+                    measuredSignalStrength.add(accessPointSamples.get(j).getRSSI());
+                    //measuredSignalStrength.add(accessPointSamples.get(j).getMilliwatt());
                 }
             }
 

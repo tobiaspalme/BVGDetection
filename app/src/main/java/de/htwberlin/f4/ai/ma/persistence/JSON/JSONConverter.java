@@ -39,6 +39,7 @@ public class JSONConverter {
                         JSONObject signalStrenghtObject = new JSONObject();
                         signalStrenghtObject.put("macAddress", signalInformationList.get(i).getAccessPointSampleList().get(j).getMacAddress());
                         signalStrenghtObject.put("strength", signalInformationList.get(i).getAccessPointSampleList().get(j).getRSSI());
+                        //signalStrenghtObject.put("strength", signalInformationList.get(i).getAccessPointSampleList().get(j).getMilliwatt());
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
                     signalJsonObject.put("timestamp", signalInformationList.get(i).getTimestamp());
@@ -75,16 +76,16 @@ public class JSONConverter {
                     String timestamp = signalJsonObject.getString("timestamp");
 
                     JSONArray signalStrengthJsonArray = signalJsonObject.getJSONArray("signalStrength");
-                    List<AccessPointSample> signalStrenghtList = new ArrayList<>();
+                    List<AccessPointSample> accessPointSamples = new ArrayList<>();
 
                     for (int k = 0; k < signalStrengthJsonArray.length(); k++) {
                         JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
                         String macAdress = signalStrenghtObject.getString("macAddress");
-                        int signalStrenght = signalStrenghtObject.getInt("strength");
-                        AccessPointSample ssi = new AccessPointSampleImpl(macAdress, signalStrenght);
-                        signalStrenghtList.add(ssi);
+                        int signalStrength = signalStrenghtObject.getInt("strength");
+                        AccessPointSample accessPointSample = new AccessPointSampleImpl(macAdress, signalStrength);
+                        accessPointSamples.add(accessPointSample);
                     }
-                    SignalInformation signalInformation = new SignalInformation(timestamp, signalStrenghtList);
+                    SignalInformation signalInformation = new SignalInformation(timestamp, accessPointSamples);
                     signalInformationList.add(signalInformation);
                 }
             }

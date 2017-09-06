@@ -64,7 +64,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
         FoundNode foundNode = null;
 
 
-        // Load all nodes which have a valid fingerprint
+        // Load all nodes which have a fingerprint
         List<Node> nodesWithFingerprint = new ArrayList<>();
         for (Node n : databaseHandler.getAllNodes()) {
             if (n.getFingerprint() != null) {
@@ -106,7 +106,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
 
 
     /**
-     * Get a list of SignalStrengthInformations by passing a list of SignalInformation (unwrap).
+     * Get a list of AccessPointSamples by passing a list of SignalInformation (unwrap).
      * @param signalInformationList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
@@ -114,11 +114,12 @@ public class LocationCalculatorImpl implements LocationCalculator {
         List<AccessPointSample> accessPointSamples = new ArrayList<>();
 
         for (SignalInformation sigInfo : signalInformationList) {
-            for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
-                String macAdress = ssi.getMacAddress();
-                int signalStrength = ssi.getRSSI();
-                AccessPointSample SSI = new AccessPointSampleImpl(macAdress, signalStrength);
-                accessPointSamples.add(SSI);
+            for (AccessPointSample accessPointSample : sigInfo.getAccessPointSampleList()) {
+                String macAdress = accessPointSample.getMacAddress();
+                int signalStrength = accessPointSample.getRSSI();
+                //double signalStrength = accessPointSample.getMilliwatt();
+                AccessPointSample aps = new AccessPointSampleImpl(macAdress, signalStrength);
+                accessPointSamples.add(aps);
             }
         }
         return accessPointSamples;
@@ -177,9 +178,10 @@ public class LocationCalculatorImpl implements LocationCalculator {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
         for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (AccessPointSample ssi : signalInfo.getAccessPointSampleList()) {
-                multiMap.put(ssi.getMacAddress(), (double) ssi.getRSSI());
-                actuallyMacAdresses.add(ssi.getMacAddress());
+            for (AccessPointSample accessPointSample : signalInfo.getAccessPointSampleList()) {
+                multiMap.put(accessPointSample.getMacAddress(), (double) accessPointSample.getRSSI());
+                //multiMap.put(accessPointSample.getMacAddress(), (double) accessPointSample.getMilliwatt());
+                actuallyMacAdresses.add(accessPointSample.getMacAddress());
             }
             for (String checkMacAdress : macAdresses) {
                 if (!actuallyMacAdresses.contains(checkMacAdress)) {
@@ -199,8 +201,8 @@ public class LocationCalculatorImpl implements LocationCalculator {
     public List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
         for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
-            for (AccessPointSample ssi : sigInfo.getAccessPointSampleList()) {
-                macAdresses.add(ssi.getMacAddress());
+            for (AccessPointSample accessPointSample : sigInfo.getAccessPointSampleList()) {
+                macAdresses.add(accessPointSample.getMacAddress());
             }
         }
         return new ArrayList<>(macAdresses);

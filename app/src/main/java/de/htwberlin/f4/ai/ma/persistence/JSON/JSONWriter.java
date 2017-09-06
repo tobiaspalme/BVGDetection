@@ -13,11 +13,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class JsonWriter {
+public class JSONWriter {
     private Context context;
 
     /*
-    public JsonWriter(Context context) {
+    public JSONWriter(Context context) {
         this.context = context;
     }*/
 
@@ -99,6 +99,7 @@ public class JsonWriter {
                         JSONObject signalStrenghtObject = new JSONObject();
                         signalStrenghtObject.put("macAddress", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getMacAddress());
                         signalStrenghtObject.put("strength", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getRSSI());
+                        //signalStrenghtObject.put("strength", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getMilliwatt());
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
                     signalJsonObject.put("timestamp", node.getFingerprint().getSignalInformationList().get(i).getTimestamp());

@@ -31,7 +31,7 @@ public interface Edge {
     float getWeight();
     void setWeight(float weight);
 
-    void insertStepCoords(String coords);
+    //void insertStepCoords(String coords);
     List<String> getStepCoordsList();
 
     String getAdditionalInfo();

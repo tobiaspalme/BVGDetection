@@ -61,10 +61,10 @@ class AverageSignalCalculator {
             }
             value = value / counter;
 
-            List<AccessPointSample> SsiList = new ArrayList<>();
-            AccessPointSample ssi = new AccessPointSampleImpl(s, value);
-            SsiList.add(ssi);
-            SignalInformation signalInformation = new SignalInformation("", SsiList);
+            List<AccessPointSample> accessPointSamples = new ArrayList<>();
+            AccessPointSample accessPointSample = new AccessPointSampleImpl(s, value);
+            accessPointSamples.add(accessPointSample);
+            SignalInformation signalInformation = new SignalInformation("", accessPointSamples);
             signalInformationList.add(signalInformation);
         }
         return signalInformationList;

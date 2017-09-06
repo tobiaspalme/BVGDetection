@@ -18,7 +18,7 @@ import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
 public interface LocationCalculator {
 
     /**
-     * Calculate a Node for a Fingerprint
+     * Calculate a Node from a given Fingerprint
      *
      * @param fingerprint the input Fingerprint to be compared with all existent Nodes to get the position
      * @return the ID (name) of the resulting Node

@@ -8,7 +8,8 @@ package de.htwberlin.f4.ai.ma.fingerprint.accesspointsample;
 
 public interface AccessPointSample {
 
-    int getRSSI();
     String getMacAddress();
+    int getRSSI();
+    double getMilliwatt();
 
 }

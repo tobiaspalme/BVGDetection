@@ -1,6 +1,5 @@
 package de.htwberlin.f4.ai.ma.routefinder.dijkstra;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -91,8 +90,8 @@ public interface DijkstraAlgorithm {
      * This method returns the path from the source to the selected target and
      * NULL if no path exists
      *
-     * @param targetSourceId the ID of the target Node
+     * @param targetNodeID the ID of the target Node
      */
-    LinkedList<Node> getPath(String targetSourceId);
+    LinkedList<Node> getPath(String targetNodeID);
 
 }

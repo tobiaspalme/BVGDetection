@@ -254,11 +254,11 @@ public class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      * This method returns the path from the source to the selected target and
      * NULL if no path exists
      *
-     * @param targetSourceId the ID of the target Node
+     * @param targetNodeID the ID of the target Node
      */
-    public LinkedList<Node> getPath(String targetSourceId) {
+    public LinkedList<Node> getPath(String targetNodeID) {
         LinkedList<Node> path = new LinkedList<>();
-        DijkstraNode step = new DijkstraNode(databaseHandler.getNode(targetSourceId));
+        DijkstraNode step = new DijkstraNode(databaseHandler.getNode(targetNodeID));
 
         // check if a path exists
         if (predecessors.get(step) == null) {

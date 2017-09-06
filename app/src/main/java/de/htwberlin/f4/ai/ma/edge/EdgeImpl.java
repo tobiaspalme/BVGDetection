@@ -79,10 +79,10 @@ public class EdgeImpl implements Edge{
         this.weight = weight;
     }
 
-    @Override
-    public void insertStepCoords(String coords) {
-        this.stepCoordList.add(coords);
-    }
+    //@Override
+    //public void insertStepCoords(String coords) {
+    //    this.stepCoordList.add(coords);
+    //}
 
     @Override
     public List<String> getStepCoordsList() {

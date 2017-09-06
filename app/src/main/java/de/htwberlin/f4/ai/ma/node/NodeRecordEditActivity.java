@@ -44,7 +44,7 @@ import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
-import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
+import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
 
 
 public class NodeRecordEditActivity extends BaseActivity implements AsyncResponse {
@@ -55,7 +55,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private int recordTime;
     private int progressStatus = 0;
     private ProgressBar progressBar;
-    private JsonWriter jsonWriter;
+    private JSONWriter JSONWriter;
     private TextView progressTextview;
     TextView initialWifiTextview;
     TextView initialWifiLabelTextview;
@@ -102,7 +102,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         }
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-        jsonWriter = new JsonWriter();
+        JSONWriter = new JSONWriter();
 
 
         recordButton = (ImageButton) findViewById(R.id.record_button);
@@ -386,7 +386,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         final Node node = new NodeImpl(nodeID, nodeDescription, null, "", picPathToSave, "");
-                                        jsonWriter.writeJSON(node);
+                                        JSONWriter.writeJSON(node);
                                         databaseHandler.insertNode(node);
                                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                                         resetUiElements();
@@ -402,7 +402,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                     } else {
 
                         final Node node = new NodeImpl(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
-                        jsonWriter.writeJSON(node);
+                        JSONWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
                         progressStatus = 0;
                         progressTextview.setText(String.valueOf(progressStatus));
@@ -461,7 +461,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             // If an old fingerprint exists
             if (nodeToUpdate.getFingerprint() != null) {
                 final Node node = new NodeImpl(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
-                jsonWriter.writeJSON(node);
+                JSONWriter.writeJSON(node);
                 databaseHandler.updateNode(node, oldNodeId);
                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
 
@@ -480,7 +480,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Node node = new NodeImpl(nodeID, nodeDescription, null, coordinates, picPathToSave, "");
-                                jsonWriter.writeJSON(node);
+                                JSONWriter.writeJSON(node);
                                 databaseHandler.updateNode(node, oldNodeId);
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                                 resetUiElements();
@@ -498,7 +498,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         } else {
 
             final Node node = new NodeImpl(nodeID, nodeDescription, fingerprint, coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
-            jsonWriter.writeJSON(node);
+            JSONWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
 
