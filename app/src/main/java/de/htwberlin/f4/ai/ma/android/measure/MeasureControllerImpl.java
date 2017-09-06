@@ -55,9 +55,9 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.node.MaxPictureActivity;
@@ -524,7 +524,7 @@ public class MeasureControllerImpl implements MeasureController {
             // new node
             else {
                 // create a new node
-                node = new NodeImpl(id, null, null, coordinates, null, null);
+                node = NodeFactory.createInstance(id, null, null, coordinates, null, null);
                 // save the node into database
                 databaseHandler.insertNode(node);
                 // update ui

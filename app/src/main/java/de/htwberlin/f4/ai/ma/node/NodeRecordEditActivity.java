@@ -385,7 +385,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 .setCancelable(false)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        final Node node = new NodeImpl(nodeID, nodeDescription, null, "", picPathToSave, "");
+                                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, null, "", picPathToSave, "");
                                         JSONWriter.writeJSON(node);
                                         databaseHandler.insertNode(node);
                                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -401,7 +401,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                     // If a fingerprint has been captured...
                     } else {
 
-                        final Node node = new NodeImpl(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
+                        final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
                         JSONWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
                         progressStatus = 0;
@@ -460,7 +460,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         if (fingerprint == null) {
             // If an old fingerprint exists
             if (nodeToUpdate.getFingerprint() != null) {
-                final Node node = new NodeImpl(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, nodeToUpdate.getFingerprint(), coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
                 JSONWriter.writeJSON(node);
                 databaseHandler.updateNode(node, oldNodeId);
                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -479,7 +479,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                final Node node = new NodeImpl(nodeID, nodeDescription, null, coordinates, picPathToSave, "");
+                                final Node node = NodeFactory.createInstance(nodeID, nodeDescription, null, coordinates, picPathToSave, "");
                                 JSONWriter.writeJSON(node);
                                 databaseHandler.updateNode(node, oldNodeId);
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
@@ -497,7 +497,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         // If a new fingerprint was taken
         } else {
 
-            final Node node = new NodeImpl(nodeID, nodeDescription, fingerprint, coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
+            final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
             JSONWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();

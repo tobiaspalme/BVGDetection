@@ -20,11 +20,11 @@ import java.util.List;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
-import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 
 
@@ -233,7 +233,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                     fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
                 }
 
-                Node node = new NodeImpl(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
+                Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 //Log.d("DB: get_all_nodes", cursor.getString(0));
 
                 allNodes.add(node);
@@ -264,7 +264,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
             }
 
-            node = new NodeImpl(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
+            node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
             Log.d("DB: select_node", nodeID);
         }
         database.close();

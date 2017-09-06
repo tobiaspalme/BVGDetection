@@ -31,7 +31,7 @@ import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
-import de.htwberlin.f4.ai.ma.node.NodeImpl;
+import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmImpl;
@@ -104,11 +104,11 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
 
 //---------- TEST -------------------
-        Node n1 = new NodeImpl("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node n2 = new NodeImpl("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node n3 = new NodeImpl("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node n4 = new NodeImpl("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node n5 = new NodeImpl("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n1 = NodeFactory.createInstance("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n2 = NodeFactory.createInstance("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n3 = NodeFactory.createInstance("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n4 = NodeFactory.createInstance("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n5 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
 
         Edge e1 = EdgeFactory.createInstance(n1, n2, false, 4);
         Edge e2 = EdgeFactory.createInstance(n2, n3, false, 5);
