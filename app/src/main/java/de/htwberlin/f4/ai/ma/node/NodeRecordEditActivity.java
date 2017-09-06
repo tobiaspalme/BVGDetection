@@ -34,8 +34,8 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.WifiScanner;
-import de.htwberlin.f4.ai.ma.WifiScannerImpl;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -328,7 +328,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private void refreshWifiDropdown() {
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        WifiScanner wifiScanner = new WifiScannerImpl();
+        WifiScanner wifiScanner = WifiScannerFactory.createInstance();
         List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);

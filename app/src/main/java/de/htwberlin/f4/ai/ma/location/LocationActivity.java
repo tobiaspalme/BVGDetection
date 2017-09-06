@@ -22,8 +22,8 @@ import com.example.carol.bvg.R;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.WifiScanner;
-import de.htwberlin.f4.ai.ma.WifiScannerImpl;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -176,7 +176,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     private void refreshWifiDropdown() {
         //wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        WifiScanner wifiScanner = new WifiScannerImpl();
+        WifiScanner wifiScanner = WifiScannerFactory.createInstance();
         List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);

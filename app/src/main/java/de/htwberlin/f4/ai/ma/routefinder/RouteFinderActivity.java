@@ -23,8 +23,8 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.WifiScanner;
-import de.htwberlin.f4.ai.ma.WifiScannerImpl;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.WifiScanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
@@ -197,7 +197,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
                 locateButton.setEnabled(false);
 
-                WifiScanner wifiScanner = new WifiScannerImpl();
+                WifiScanner wifiScanner = WifiScannerFactory.createInstance();
                 final List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
                 final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()];

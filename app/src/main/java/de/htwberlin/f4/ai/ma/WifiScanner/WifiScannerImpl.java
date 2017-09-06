@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma;
+package de.htwberlin.f4.ai.ma.WifiScanner;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Johann Winter
  */
 
-public class WifiScannerImpl implements WifiScanner {
+class WifiScannerImpl implements WifiScanner {
 
 
     @Override
