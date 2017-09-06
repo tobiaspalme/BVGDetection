@@ -18,13 +18,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
+import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.location.LocationResult;
-import de.htwberlin.f4.ai.ma.location.LocationResultImpl;
+import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 
 
@@ -544,7 +544,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         if (cursor.moveToFirst()) {
             do {
-                LocationResult locationResult = new LocationResultImpl();
+                LocationResult locationResult = LocationResultFactory.createInstance();
 
                 //Log.d("DB: get_all_locations", "###########");
 

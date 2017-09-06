@@ -1,9 +1,9 @@
-package de.htwberlin.f4.ai.ma.location;
+package de.htwberlin.f4.ai.ma.location.locationresult;
 
 /**
  * A class for the LocationResult with important information
  */
-public class LocationResultImpl implements LocationResult{
+class LocationResultImpl implements LocationResult{
 
     private int id;
     private String settings;
@@ -19,7 +19,7 @@ public class LocationResultImpl implements LocationResult{
         this.percentage = percentage;
     }
 
-    public LocationResultImpl() {}
+    LocationResultImpl() {}
 
     public int getId() { return this.id; }
     public void setId(int id) {

@@ -30,6 +30,8 @@ import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
+import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
+import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
@@ -229,7 +231,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                 descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
                 //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
 
-                locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
+                locationResult = LocationResultFactory.createInstance(locationsCounter, settings, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
 
                 final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
@@ -251,7 +253,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
             } else {
                 locationTextview.setText(getString(R.string.no_node_found_text));
-                locationResult = new LocationResultImpl(locationsCounter, settings, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
+                locationResult = LocationResultFactory.createInstance(locationsCounter, settings, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
 
             }
 

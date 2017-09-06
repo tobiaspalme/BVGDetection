@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.location;
+package de.htwberlin.f4.ai.ma.location.locationresult;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,14 +10,14 @@ import android.widget.TextView;
 //import com.example.carol.bvg.LocationResultImpl;
 import com.example.carol.bvg.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Adapter for the LocationResult listview in LocationDetailedInfoActivity
  */
-class LocationResultAdapter extends ArrayAdapter<LocationResult> {
-    LocationResultAdapter(Context context, List<LocationResult> users) {
+public class LocationResultAdapter extends ArrayAdapter<LocationResult> {
+
+    public LocationResultAdapter(Context context, List<LocationResult> users) {
         super(context, 0, users);
     }
 

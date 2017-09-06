@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.location;
+package de.htwberlin.f4.ai.ma.location.locationresult;
 
 /**
  * Created by Johann Winter

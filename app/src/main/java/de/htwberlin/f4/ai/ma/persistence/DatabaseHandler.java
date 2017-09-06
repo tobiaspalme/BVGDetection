@@ -7,7 +7,7 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.location.LocationResult;
+import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
 
 /**
  * Created by Johann Winter
