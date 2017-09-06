@@ -23,8 +23,8 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.WifiScanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.WifiScanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
@@ -47,7 +47,7 @@ import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmFactory;
 /**
  * Created by Johann Winter
  *
- * This activity provides the find_route functionality ("Navigation").
+ * This activity provides the find route functionality ("Route finden").
  */
 
 public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
@@ -103,19 +103,20 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         allNodes = databaseHandler.getAllNodes();
 
 
-//---------- TEST -------------------
+/*---------- TEST -------------------
         Node n1 = NodeFactory.createInstance("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node n2 = NodeFactory.createInstance("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node n3 = NodeFactory.createInstance("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node n4 = NodeFactory.createInstance("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node n5 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
 
-        Edge e1 = EdgeFactory.createInstance(n1, n2, false, 4);
+        Edge e1 = EdgeFactory.createInstance(n1, n2, true, 4);
         Edge e2 = EdgeFactory.createInstance(n2, n3, false, 5);
         Edge e3 = EdgeFactory.createInstance(n1, n3, true, 11);
         Edge e4 = EdgeFactory.createInstance(n1, n4, true, 8);
         Edge e5 = EdgeFactory.createInstance(n4, n5, true, 1);
         Edge e6 = EdgeFactory.createInstance(n5, n3, true, 1);
+
 
         databaseHandler.deleteNode(n1);
         databaseHandler.deleteNode(n2);
@@ -143,6 +144,57 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         databaseHandler.insertEdge(e4);
         databaseHandler.insertEdge(e5);
         databaseHandler.insertEdge(e6);
+
+        *///----------------------
+
+        Node k1 = NodeFactory.createInstance("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k2 = NodeFactory.createInstance("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k3 = NodeFactory.createInstance("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k4 = NodeFactory.createInstance("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k5 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k6 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
+
+        Edge l1 = EdgeFactory.createInstance(k1, k2, true, 3);
+        Edge l2 = EdgeFactory.createInstance(k2, k3, true, 1);
+        Edge l3 = EdgeFactory.createInstance(k1, k4, false, 3);
+        Edge l4 = EdgeFactory.createInstance(k1, k5, false, 2);
+        Edge l5 = EdgeFactory.createInstance(k4, k3, false, 1);
+        Edge l6 = EdgeFactory.createInstance(k5, k6, false, 1);
+        Edge l7 = EdgeFactory.createInstance(k5, k3, false, 1);
+
+
+        databaseHandler.deleteNode(k1);
+        databaseHandler.deleteNode(k2);
+        databaseHandler.deleteNode(k3);
+        databaseHandler.deleteNode(k4);
+        databaseHandler.deleteNode(k5);
+        databaseHandler.deleteNode(k6);
+
+        databaseHandler.deleteEdge(l1);
+        databaseHandler.deleteEdge(l2);
+        databaseHandler.deleteEdge(l3);
+        databaseHandler.deleteEdge(l4);
+        databaseHandler.deleteEdge(l5);
+        databaseHandler.deleteEdge(l6);
+        databaseHandler.deleteEdge(l7);
+
+
+        databaseHandler.insertNode(k1);
+        databaseHandler.insertNode(k2);
+        databaseHandler.insertNode(k3);
+        databaseHandler.insertNode(k4);
+        databaseHandler.insertNode(k5);
+        databaseHandler.insertNode(k6);
+
+        databaseHandler.insertEdge(l1);
+        databaseHandler.insertEdge(l2);
+        databaseHandler.insertEdge(l3);
+        databaseHandler.insertEdge(l4);
+        databaseHandler.insertEdge(l5);
+        databaseHandler.insertEdge(l6);
+        databaseHandler.insertEdge(l7);
+
+
 //-----------------------------------
         //navigationResultListview.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
