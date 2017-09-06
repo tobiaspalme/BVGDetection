@@ -99,11 +99,11 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
             if (calculateAverage) {
                 // Calculate average values
                 List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
-                return new FingerprintImpl(wifiName, signalInformations);
+                return FingerprintFactory.createInstance(wifiName, signalInformations);
             }
 
             else {
-                return new FingerprintImpl(wifiName, signalInformationList);
+                return FingerprintFactory.createInstance(wifiName, signalInformationList);
             }
 
     }

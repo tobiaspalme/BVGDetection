@@ -42,6 +42,7 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
@@ -55,7 +56,6 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDete
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
-import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -681,7 +681,7 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         LocationCalculator locationCalculator = new LocationCalculatorImpl(view.getContext());
-        FoundNode foundNode = locationCalculator.calculateNodeId(new FingerprintImpl("", signalInformationList));
+        FoundNode foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalInformationList));
         Node result = null;
         if (foundNode != null) {
             result = databaseHandler.getNode(foundNode.getId());

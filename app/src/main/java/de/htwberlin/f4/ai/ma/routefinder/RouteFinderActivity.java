@@ -28,6 +28,7 @@ import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
@@ -36,7 +37,6 @@ import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -104,11 +104,11 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
 
 //---------- TEST -------------------
-        Node n1 = new NodeImpl("n1", "", new FingerprintImpl("", null), "", "", "");
-        Node n2 = new NodeImpl("n2", "", new FingerprintImpl("", null), "", "", "");
-        Node n3 = new NodeImpl("n3", "", new FingerprintImpl("", null), "", "", "");
-        Node n4 = new NodeImpl("n4", "", new FingerprintImpl("", null), "", "", "");
-        Node n5 = new NodeImpl("n5", "", new FingerprintImpl("", null), "", "", "");
+        Node n1 = new NodeImpl("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n2 = new NodeImpl("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n3 = new NodeImpl("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n4 = new NodeImpl("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node n5 = new NodeImpl("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
 
         Edge e1 = EdgeFactory.createInstance(n1, n2, false, 4);
         Edge e2 = EdgeFactory.createInstance(n2, n3, false, 5);
