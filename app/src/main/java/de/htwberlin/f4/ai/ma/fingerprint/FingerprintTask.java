@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
+
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -73,7 +74,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 for (final ScanResult sr : wifiScanList) {
                     if (sr.SSID.equals(wifiName)) {
                         Log.d("Fingerprinting... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level + " dBm");
-                        AccessPointSample accessPointSample = new AccessPointSampleImpl(sr.BSSID, sr.level);
+                        AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
                         multiMap.put(sr.BSSID, sr.level);
 

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.EuclideanDistance;
@@ -118,7 +118,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
                 String macAdress = accessPointSample.getMacAddress();
                 int signalStrength = accessPointSample.getRSSI();
                 //double signalStrength = accessPointSample.getMilliwatt();
-                AccessPointSample aps = new AccessPointSampleImpl(macAdress, signalStrength);
+                AccessPointSample aps = AccessPointSampleFactory.getInstance(macAdress, signalStrength);
                 accessPointSamples.add(aps);
             }
         }

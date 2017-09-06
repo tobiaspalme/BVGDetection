@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 
 /**
  * Created by Johann Winter
@@ -62,7 +62,7 @@ class AverageSignalCalculator {
             value = value / counter;
 
             List<AccessPointSample> accessPointSamples = new ArrayList<>();
-            AccessPointSample accessPointSample = new AccessPointSampleImpl(s, value);
+            AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(s, value);
             accessPointSamples.add(accessPointSample);
             SignalInformation signalInformation = new SignalInformation("", accessPointSamples);
             signalInformationList.add(signalInformation);

@@ -6,12 +6,12 @@ package de.htwberlin.f4.ai.ma.fingerprint.accesspointsample;
  * A AccessPointSampleImpl consists of a MAC-Address and a signal strength (RSSI) in dBm.
  */
 
-public class AccessPointSampleImpl implements AccessPointSample {
+class AccessPointSampleImpl implements AccessPointSample {
 
     private String macAddress;
     private int RSSI;
 
-    public AccessPointSampleImpl(String macAddress, int RSSI) {
+    AccessPointSampleImpl(String macAddress, int RSSI) {
         this.macAddress = macAddress;
         this.RSSI = RSSI;
     }

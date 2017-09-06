@@ -41,6 +41,7 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
@@ -57,7 +58,6 @@ import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.node.MaxPictureActivity;
@@ -673,7 +673,7 @@ public class MeasureControllerImpl implements MeasureController {
             value = value / counter;
 
             List<AccessPointSample> SsiList = new ArrayList<>();
-            AccessPointSample signal = new AccessPointSampleImpl(s, value);
+            AccessPointSample signal = AccessPointSampleFactory.getInstance(s, value);
             SsiList.add(signal);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);

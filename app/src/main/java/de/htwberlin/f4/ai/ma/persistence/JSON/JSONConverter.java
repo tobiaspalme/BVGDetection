@@ -9,7 +9,7 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleImpl;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 
 /**
  * Created by Johann Winter
@@ -82,7 +82,7 @@ public class JSONConverter {
                         JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
                         String macAdress = signalStrenghtObject.getString("macAddress");
                         int signalStrength = signalStrenghtObject.getInt("strength");
-                        AccessPointSample accessPointSample = new AccessPointSampleImpl(macAdress, signalStrength);
+                        AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(macAdress, signalStrength);
                         accessPointSamples.add(accessPointSample);
                     }
                     SignalInformation signalInformation = new SignalInformation(timestamp, accessPointSamples);
