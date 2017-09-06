@@ -19,22 +19,20 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
+ *
+ * Thanks to tognitos for contribution.
+ *
+ * The Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
+ * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
+ * It is important that methods from the Node and Edge classes (of the Model) are avoided.
+ * This allows us to change just how the mapping to the DijkstraNodes and DijkstraEdges work.
+ * Prinzip der "losen Kopplung".
  */
 
 
 // TODO: RETURNS
 
-public class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
-
-    /**
-     * Thanks to tognitos for contribution.
-     *
-     * The Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
-     * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
-     * It is important that methods from the Node and Edge classes (of the Model) are avoided.
-     * This allows us to change just how the mapping to the DijkstraNodes and DijkstraEdges work.
-     * Prinzip der "losen Kopplung".
-     */
+class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
     // DijkstraNodes and dijkstraEdges
     final List<DijkstraNode> dijkstraNodes;
@@ -54,7 +52,7 @@ public class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
     private boolean accessible;
 
 
-    public DijkstraAlgorithmImpl(Context context, boolean accessible) {
+    DijkstraAlgorithmImpl(Context context, boolean accessible) {
         databaseHandler = DatabaseHandlerFactory.getInstance(context);
         this.accessible = accessible;
         this.dijkstraNodes = mapNodes(databaseHandler.getAllNodes());

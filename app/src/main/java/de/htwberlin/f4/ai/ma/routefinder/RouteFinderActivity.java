@@ -34,7 +34,6 @@ import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFact
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
@@ -43,6 +42,7 @@ import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.node.NodeShowActivity;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
+import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithmFactory;
 
 /**
  * Created by Johann Winter
@@ -230,7 +230,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
                 boolean accessible = accessibilityCheckbox.isChecked();
 
-                DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithmImpl(getApplicationContext(), accessible);
+                DijkstraAlgorithm dijkstraAlgorithm = DijkstraAlgorithmFactory.createInstance(getApplicationContext(), accessible);
                 dijkstraAlgorithm.execute(selectedStartNode);
                 List<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 
