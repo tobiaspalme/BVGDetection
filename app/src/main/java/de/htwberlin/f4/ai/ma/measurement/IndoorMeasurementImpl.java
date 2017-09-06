@@ -143,7 +143,7 @@ public class IndoorMeasurementImpl implements IndoorMeasurement {
 
         //saveRecordData(dataModel);
         //StepDirection direction = directionDetect.getLastStepDirection(dataModel);
-        //Context context = CoordinatesActivity.getInstance().getApplicationContext();
+        //Context context = CoordinatesActivity.createInstance().getApplicationContext();
         //Toast toast = Toast.makeText(context, "Direction: " + direction, Toast.LENGTH_SHORT);
         //toast.show();
 

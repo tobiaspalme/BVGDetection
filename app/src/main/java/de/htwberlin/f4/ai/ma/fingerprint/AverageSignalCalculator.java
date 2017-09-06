@@ -62,7 +62,7 @@ class AverageSignalCalculator {
             value = value / counter;
 
             List<AccessPointSample> accessPointSamples = new ArrayList<>();
-            AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(s, value);
+            AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(s, value);
             accessPointSamples.add(accessPointSample);
             SignalInformation signalInformation = new SignalInformation("", accessPointSamples);
             signalInformationList.add(signalInformation);

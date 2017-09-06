@@ -82,7 +82,7 @@ public class JSONConverter {
                         JSONObject signalStrenghtObject = signalStrengthJsonArray.getJSONObject(k);
                         String macAdress = signalStrenghtObject.getString("macAddress");
                         int signalStrength = signalStrenghtObject.getInt("strength");
-                        AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(macAdress, signalStrength);
+                        AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(macAdress, signalStrength);
                         accessPointSamples.add(accessPointSample);
                     }
                     SignalInformation signalInformation = new SignalInformation(timestamp, accessPointSamples);

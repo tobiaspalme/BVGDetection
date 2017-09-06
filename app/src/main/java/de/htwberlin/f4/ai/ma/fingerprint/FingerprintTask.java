@@ -18,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 /**
@@ -74,7 +73,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 for (final ScanResult sr : wifiScanList) {
                     if (sr.SSID.equals(wifiName)) {
                         Log.d("Fingerprinting... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level + " dBm");
-                        AccessPointSample accessPointSample = AccessPointSampleFactory.getInstance(sr.BSSID, sr.level);
+                        AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
                         multiMap.put(sr.BSSID, sr.level);
 

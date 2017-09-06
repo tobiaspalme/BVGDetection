@@ -6,7 +6,7 @@ package de.htwberlin.f4.ai.ma.fingerprint.accesspointsample;
 
 public class AccessPointSampleFactory {
 
-    public static AccessPointSample getInstance(String macAddress, int RSSI) {
+    public static AccessPointSample createInstance(String macAddress, int RSSI) {
         return new AccessPointSampleImpl(macAddress, RSSI);
     }
 }

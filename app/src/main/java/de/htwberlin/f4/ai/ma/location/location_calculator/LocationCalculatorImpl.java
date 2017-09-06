@@ -3,8 +3,6 @@ package de.htwberlin.f4.ai.ma.location.location_calculator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -118,7 +116,7 @@ public class LocationCalculatorImpl implements LocationCalculator {
                 String macAdress = accessPointSample.getMacAddress();
                 int signalStrength = accessPointSample.getRSSI();
                 //double signalStrength = accessPointSample.getMilliwatt();
-                AccessPointSample aps = AccessPointSampleFactory.getInstance(macAdress, signalStrength);
+                AccessPointSample aps = AccessPointSampleFactory.createInstance(macAdress, signalStrength);
                 accessPointSamples.add(aps);
             }
         }

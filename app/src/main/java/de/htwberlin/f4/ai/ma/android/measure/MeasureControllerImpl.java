@@ -41,6 +41,7 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
+import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
@@ -52,7 +53,6 @@ import de.htwberlin.f4.ai.ma.measurement.WKT;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
@@ -345,7 +345,7 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onEdgeDetailsClicked() {
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
-        Edge edge = new EdgeImpl(startNode, targetNode, false, 0);
+        Edge edge = EdgeFactory.createInstance(startNode, targetNode, false, 0);
         // check if edge between nodes exists
         if (databaseHandler.checkIfEdgeExists(edge)) {
             // load EdgeDetails View
@@ -673,7 +673,7 @@ public class MeasureControllerImpl implements MeasureController {
             value = value / counter;
 
             List<AccessPointSample> SsiList = new ArrayList<>();
-            AccessPointSample signal = AccessPointSampleFactory.getInstance(s, value);
+            AccessPointSample signal = AccessPointSampleFactory.createInstance(s, value);
             SsiList.add(signal);
             SignalInformation signalInformation = new SignalInformation("", SsiList);
             signalInformationList.add(signalInformation);
@@ -769,7 +769,7 @@ public class MeasureControllerImpl implements MeasureController {
                     }
                     // if there isn't an edge, update view with placeholder data
                     else {
-                        Edge placeHolderEdge = new EdgeImpl(null, null, true, 0);
+                        Edge placeHolderEdge = EdgeFactory.createInstance(null, null, true, 0);
                         view.updateEdge(placeHolderEdge);
                     }
                 }
@@ -781,7 +781,7 @@ public class MeasureControllerImpl implements MeasureController {
             // if start and targetnode are equal just update the edge with placeholder and disable start button
             else {
                 view.disableStart();
-                Edge placeHolderEdge = new EdgeImpl(null, null, true, 0);
+                Edge placeHolderEdge = EdgeFactory.createInstance(null, null, true, 0);
                 view.updateEdge(placeHolderEdge);
             }
         }
@@ -1073,7 +1073,7 @@ public class MeasureControllerImpl implements MeasureController {
 
         // if there is no edge between start and targetnode yet, we create a new one
         if (edge == null) {
-            edge = new EdgeImpl(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
+            edge = EdgeFactory.createInstance(startNode, targetNode, handycapFriendly, stepCoords, 0, "");
             edgeFound = false;
         }
         // otherwise we update existing edge

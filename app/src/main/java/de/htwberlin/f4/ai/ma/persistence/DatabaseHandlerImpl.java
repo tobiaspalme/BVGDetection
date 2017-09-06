@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
+import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintImpl;
@@ -424,7 +424,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
             String stepListString = cursor.getString(4);
             List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
-            Edge edge = new EdgeImpl(node1, node2, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
+            Edge edge = EdgeFactory.createInstance(node1, node2, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
             database.close();
             return edge;
@@ -459,7 +459,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 List<String> stepList = new ArrayList<>(Arrays.asList(stepListString.split("\t")));
 
                 //Edge edge = new EdgeImpl(Integer.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), accessibly, cursor.getInt(4));
-                Edge edge = new EdgeImpl(nodeA, nodeB, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
+                Edge edge = EdgeFactory.createInstance(nodeA, nodeB, accessible, stepList, cursor.getFloat(5), cursor.getString(6));
 
                 allEdges.add(edge);
 

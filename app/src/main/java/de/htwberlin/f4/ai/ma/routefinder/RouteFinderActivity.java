@@ -27,7 +27,7 @@ import de.htwberlin.f4.ai.ma.WifiScanner;
 import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeImpl;
+import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
@@ -110,12 +110,12 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         Node n4 = new NodeImpl("n4", "", new FingerprintImpl("", null), "", "", "");
         Node n5 = new NodeImpl("n5", "", new FingerprintImpl("", null), "", "", "");
 
-        Edge e1 = new EdgeImpl(n1, n2, false, 4);
-        Edge e2 = new EdgeImpl(n2, n3, false, 5);
-        Edge e3 = new EdgeImpl(n1, n3, true, 11);
-        Edge e4 = new EdgeImpl(n1, n4, true, 8);
-        Edge e5 = new EdgeImpl(n4, n5, true, 1);
-        Edge e6 = new EdgeImpl(n5, n3, true, 1);
+        Edge e1 = EdgeFactory.createInstance(n1, n2, false, 4);
+        Edge e2 = EdgeFactory.createInstance(n2, n3, false, 5);
+        Edge e3 = EdgeFactory.createInstance(n1, n3, true, 11);
+        Edge e4 = EdgeFactory.createInstance(n1, n4, true, 8);
+        Edge e5 = EdgeFactory.createInstance(n4, n5, true, 1);
+        Edge e6 = EdgeFactory.createInstance(n5, n3, true, 1);
 
         databaseHandler.deleteNode(n1);
         databaseHandler.deleteNode(n2);
