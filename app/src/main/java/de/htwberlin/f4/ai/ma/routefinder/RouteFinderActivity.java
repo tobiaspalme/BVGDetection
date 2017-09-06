@@ -30,7 +30,7 @@ import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
-import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
+import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
 import de.htwberlin.f4.ai.ma.node.NodeImpl;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
@@ -297,7 +297,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
-            LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
+            LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
             FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
             if (foundNode != null) {
                 Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);

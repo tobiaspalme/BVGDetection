@@ -29,13 +29,13 @@ import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
  * Created by Johann Winter
  */
 
-public class LocationCalculatorImpl implements LocationCalculator {
+class LocationCalculatorImpl implements LocationCalculator {
 
     Context context;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
 
-    public LocationCalculatorImpl (Context context) {
+    LocationCalculatorImpl(Context context) {
         this.context = context;
         databaseHandler = DatabaseHandlerFactory.getInstance(context);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

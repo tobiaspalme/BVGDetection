@@ -25,11 +25,11 @@ import java.util.List;
 import de.htwberlin.f4.ai.ma.WifiScanner;
 import de.htwberlin.f4.ai.ma.WifiScannerImpl;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
-import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
+import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
 import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
 import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
@@ -217,7 +217,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
 
-            LocationCalculator locationCalculator = new LocationCalculatorImpl(this);
+            LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
             FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
 
 

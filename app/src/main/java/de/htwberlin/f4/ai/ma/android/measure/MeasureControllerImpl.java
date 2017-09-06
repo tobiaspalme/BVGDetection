@@ -45,7 +45,7 @@ import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
-import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorImpl;
+import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementType;
@@ -680,7 +680,7 @@ public class MeasureControllerImpl implements MeasureController {
 
         }
 
-        LocationCalculator locationCalculator = new LocationCalculatorImpl(view.getContext());
+        LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(view.getContext());
         FoundNode foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalInformationList));
         Node result = null;
         if (foundNode != null) {
