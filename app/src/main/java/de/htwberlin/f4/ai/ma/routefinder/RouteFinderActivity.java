@@ -22,6 +22,7 @@ import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
 import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
@@ -284,7 +285,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
                 DijkstraAlgorithm dijkstraAlgorithm = DijkstraAlgorithmFactory.createInstance(getApplicationContext(), accessible);
                 dijkstraAlgorithm.execute(selectedStartNode);
-                List<Node> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
+                List<String> route = dijkstraAlgorithm.getPath(destinationNodeSpinner.getSelectedItem().toString());
 
                 if (route == null) {
                     nodeNames.add(getString(R.string.no_route_found));
@@ -295,13 +296,16 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
                 } else {
                     float totalDistance = 0;
                     for (int i = 0; i < route.size(); i++) {
-                        nodeNames.add(route.get(i).getId());
-                        nodeDescriptions.add(databaseHandler.getNode(route.get(i).getId()).getDescription());
-                        nodePicturePaths.add(databaseHandler.getNode(route.get(i).getId()).getPicturePath());
+                        nodeNames.add(route.get(i));
+                        nodeDescriptions.add(databaseHandler.getNode(route.get(i)).getDescription());
+                        nodePicturePaths.add(databaseHandler.getNode(route.get(i)).getPicturePath());
 
                         // Add distance (weight) to the results list
                         if (i+1 < route.size()) {
-                            Edge e = databaseHandler.getEdge(route.get(i), route.get(i + 1));
+                            Node nodeA = databaseHandler.getNode(route.get(i));
+                            Node nodeB = databaseHandler.getNode(route.get(i + 1));
+
+                            Edge e = databaseHandler.getEdge(nodeA, nodeB);
                             nodeNames.add("\t" + String.valueOf(e.getWeight()) + " m");
                             nodeDescriptions.add("");
                             nodePicturePaths.add("");

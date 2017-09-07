@@ -29,7 +29,6 @@ class AverageSignalCalculator {
         final List<SignalInformation> signalInformationList = new ArrayList<>();
 
         /*
-
         for (SignalInformation si : signalInformations) {
             int value = 0;
             int counter = 0;

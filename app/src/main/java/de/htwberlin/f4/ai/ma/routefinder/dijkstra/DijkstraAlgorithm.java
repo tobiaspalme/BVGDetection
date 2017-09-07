@@ -92,6 +92,6 @@ public interface DijkstraAlgorithm {
      *
      * @param targetNodeID the ID of the target Node
      */
-    LinkedList<Node> getPath(String targetNodeID);
+    LinkedList<String> getPath(String targetNodeID);
 
 }

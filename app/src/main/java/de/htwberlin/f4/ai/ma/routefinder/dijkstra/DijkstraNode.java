@@ -8,12 +8,10 @@ import de.htwberlin.f4.ai.ma.node.Node;
 
 class DijkstraNode {
 
-    private final Node node;
     private final String id;
 
 
     DijkstraNode(Node node) {
-        this.node = node;
         this.id = node.getId();
     }
 
@@ -26,6 +24,7 @@ class DijkstraNode {
     }
 
 
+    // TODO return
     /**
      * Override hashCode method of the class "Object"
      *
@@ -41,7 +40,6 @@ class DijkstraNode {
 
 
     /**
-     *
      * @param obj the input object
      * @return boolean if the object equals an other object
      */
@@ -72,11 +70,4 @@ class DijkstraNode {
         return id;
     }
 
-    /**
-     * Getter for the node object of the DijkstraNode.
-     * @return the node
-     */
-    public Node getNode() {
-        return node;
-    }
 }

@@ -87,7 +87,7 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
         for (Edge edge : edges) {
 
-            // Since it is an undirected graph, add both directions
+            // Because it is an undirected graph, add both directions
             DijkstraNode source = new DijkstraNode(edge.getNodeA());
             DijkstraNode destination = new DijkstraNode(edge.getNodeB());
 
@@ -98,7 +98,8 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
                     DijkstraEdge destinationToSource = new DijkstraEdge(destination, source, edge.getWeight());
                     dijkstraEdges.add(sourceToDestination);
                     dijkstraEdges.add(destinationToSource);
-                }// If accessibility doesn't play a role
+                }
+            // If accessibility doesn't play a role
             } else {
                 DijkstraEdge sourceToDestination = new DijkstraEdge(source, destination, edge.getWeight());
                 DijkstraEdge destinationToSource = new DijkstraEdge(destination, source, edge.getWeight());
@@ -168,16 +169,16 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
         for (DijkstraEdge dijkstraEdge : dijkstraEdges) {
             Log.d("-------", "---------------------------------------------------------");
-            Log.d("getDistance", "--- dijkstraEdge.getSource().getNode().getId() = " + dijkstraEdge.getSource().getNode().getId());
-            Log.d("getDistance", "--- node.getNode().getId()= " + node.getNode().getId());
+            Log.d("getDistance", "--- dijkstraEdge.getSource().getNode().getId() = " + dijkstraEdge.getSource().getId());
+            Log.d("getDistance", "--- node.getNode().getId()= " + node.getId());
 
-            Log.d("getDistance", "+++ dijkstraEdge.getDestination().getNode().getId() = " + dijkstraEdge.getDestination().getNode().getId());
-            Log.d("getDistance", "+++ target.getNode().getId()= " + target.getNode().getId());
+            Log.d("getDistance", "+++ dijkstraEdge.getDestination().getNode().getId() = " + dijkstraEdge.getDestination().getId());
+            Log.d("getDistance", "+++ target.getNode().getId()= " + target.getId());
             Log.d("-------", "---------------------------------------------------------");
-            Log.d("getDistance", "SOURCE = node.getNode    " + dijkstraEdge.getSource().getNode().equals(node.getNode()));
-            Log.d("getDistance", "DEST = target.getNode    " + dijkstraEdge.getDestination().getNode().equals(target.getNode()));
+            Log.d("getDistance", "SOURCE = node.getNode    " + dijkstraEdge.getSource().equals(node));
+            Log.d("getDistance", "DEST = target.getNode    " + dijkstraEdge.getDestination().equals(target));
 
-            if (dijkstraEdge.getSource().getNode().getId().equals(node.getNode().getId()) && dijkstraEdge.getDestination().getNode().getId().equals(target.getNode().getId())) {
+            if (dijkstraEdge.getSource().getId().equals(node.getId()) && dijkstraEdge.getDestination().getId().equals(target.getId())) {
                 Log.d("getDistance", "Edge weight: " + dijkstraEdge.getWeight());
                 return dijkstraEdge.getWeight();
             }
@@ -254,18 +255,18 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      *
      * @param targetNodeID the ID of the target Node
      */
-    public LinkedList<Node> getPath(String targetNodeID) {
-        LinkedList<Node> path = new LinkedList<>();
+    public LinkedList<String> getPath(String targetNodeID) {
+        LinkedList<String> path = new LinkedList<>();
         DijkstraNode step = new DijkstraNode(databaseHandler.getNode(targetNodeID));
 
         // check if a path exists
         if (predecessors.get(step) == null) {
             return null;
         }
-        path.add(step.getNode());
+        path.add(step.getId());
         while (predecessors.get(step) != null) {
             step = predecessors.get(step);
-            path.add(step.getNode());
+            path.add(step.getId());
         }
         // Put it into the correct order
         Collections.reverse(path);

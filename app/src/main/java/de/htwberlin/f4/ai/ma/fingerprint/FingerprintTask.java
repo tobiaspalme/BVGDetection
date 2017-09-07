@@ -76,7 +76,6 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                         AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
                         multiMap.put(sr.BSSID, sr.level);
-
                     }
                 }
                 Log.d("--------", "-------------------------------------------------");
