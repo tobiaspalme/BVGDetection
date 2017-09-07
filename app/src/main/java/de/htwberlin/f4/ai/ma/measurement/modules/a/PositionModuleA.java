@@ -2,6 +2,7 @@ package de.htwberlin.f4.ai.ma.measurement.modules.a;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.measurement.modules.AltitudeModule;
@@ -38,15 +39,20 @@ public class PositionModuleA implements PositionModule {
         // set start point to 0,0,0
         coordinates = calibrationData.getCoordinates();
         this.calibrationData = calibrationData;
+        this.context = context;
     }
 
     @Override
     public float[] calculatePosition() {
 
         // calculate new position with these 3 values
-        float altitude = altitudeModule.getAltitude();
+        //float altitude = altitudeModule.getAltitude();
+        float altitude = 0f;
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
+
+        //Toast toast = Toast.makeText(context, "Orientation: " + orientation, Toast.LENGTH_SHORT);
+        //toast.show();
 
 
         // orientation stuff

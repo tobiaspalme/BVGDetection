@@ -36,7 +36,7 @@ public class StepDetector implements Sensor, SensorEventListener{
     private long lastStepTimestamp;
     private int sensorRate;
     private int stepPeriod;
-    private static final int STEPPERIODTOLERANCE = 100;
+    private static final int STEPPERIODTOLERANCE = 400;
 
     private Context context;
 
@@ -58,7 +58,7 @@ public class StepDetector implements Sensor, SensorEventListener{
         if (calibrationData != null) {
             period = calibrationData.getStepPeriod();
         } else {
-            period = 500;
+            period = 750;
         }
 
         return period;
@@ -114,6 +114,7 @@ public class StepDetector implements Sensor, SensorEventListener{
             firstRun = false;
             return;
         }
+        
 
         // if a step was fail detected
         if (currentStepTimestamp - lastStepTimestamp < (stepPeriod - STEPPERIODTOLERANCE)) {
