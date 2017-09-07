@@ -47,20 +47,20 @@ public class FileUtilities {
 
     /**
      * Creates the folder /IndoorPositioning/Pictures in SDCARD path,
-     * then creates a new Imagefile named by the nodeIdEdittext
+     * then creates a new imagefile.
      *
      * @param name the filename
      * @return File Object of the Imagefile
      */
     public static File getFile(String name, Timestamp timestamp) {
-        File sdCard = Environment.getExternalStorageDirectory();
-        File folder = new File(sdCard.getAbsolutePath() + "/IndoorPositioning/Pictures");
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        File folder = new File(externalStorageDirectory.getAbsolutePath() + "/IndoorPositioning/Pictures");
         long realTimestamp = timestamp.getTime();
 
         if (!folder.exists()) {
             boolean success = folder.mkdirs();
             if (!success) {
-                Log.d("FileUtilities", "Die Datei konnte nicht angelegt werden");
+                Log.d("FileUtilities", "Der Ordner konnte nicht angelegt werden");
             }
         }
         return new File(folder, name + "_" + realTimestamp + ".jpg");

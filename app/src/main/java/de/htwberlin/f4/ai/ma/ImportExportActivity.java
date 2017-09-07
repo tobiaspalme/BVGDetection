@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.carol.bvg.R;
 
+import java.io.File;
 import java.io.IOException;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
@@ -37,7 +39,7 @@ public class ImportExportActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        final FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_import_export, contentFrameLayout);
 
         context = getApplicationContext();
@@ -53,73 +55,84 @@ public class ImportExportActivity extends BaseActivity {
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_title)), PICKFILE_REQUEST_CODE);
+                importDatabase();
             }
         });
+
 
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//TODO
-               // Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-               // startActivityForResult(Intent.createChooser(intent, getString(R.string.folderchooser_title)), PICKFILE_REQUEST_CODE);
-
-
-
-                boolean exportSuccessful = databaseHandler.exportDatabase();
-                if (exportSuccessful) {
-                    Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();
-                }
+                exortDatabase();
             }
         });
     }
 
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            final Uri selectedFile = data.getData();
-
-            // Check if selected file has extension .db
-            if (!selectedFile.getPath().endsWith(".db")) {
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.wrong_file_extension))
-                        .setMessage(getString(R.string.import_database_wrong_file_extension_error))
-                        .setCancelable(true)
-                        .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                intent.setType("file/*");
-                                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_title)), PICKFILE_REQUEST_CODE);
+    /**
+     * Ask the user if he or she wants to overwrite the application's database
+     * and then copy the file "/IndoorPositioning/Exported/indoor_data.db" over the internal database.
+     */
+    private void importDatabase() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.import_title_question))
+                .setMessage(getString(R.string.import_database_warining))
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            boolean importSuccessful = DatabaseHandlerFactory.getInstance(context).importDatabase();
+                            if (importSuccessful) {
+                                Toast.makeText(context, getString(R.string.database_imported_toast), Toast.LENGTH_LONG).show();
                             }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            } else {
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.import_title_question))
-                        .setMessage(getString(R.string.import_database_warining))
-                        .setCancelable(true)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    boolean importSuccessful = DatabaseHandlerFactory.getInstance(context).importDatabase(selectedFile.getPath());
-                                    if (importSuccessful) {
-                                        Toast.makeText(context, getString(R.string.database_imported_toast), Toast.LENGTH_LONG).show();
-                                    }
-                                } catch (IOException e) {e.printStackTrace();}
+                        } catch (IOException e) {e.printStackTrace();}
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {}
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
+    /**
+     * If already existent, ask the user if he wants to overwrite the exported database file "/IndoorPositioning/Exported/indoor_data.db".
+     * If the user agrees, or the file is non-existent, it will be overwritten by the database dump which
+     * will be created from the application's database.
+     */
+    private void exortDatabase() {
+        File exportFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorPositioning/Exported/indoor_data.db");
+
+        if (exportFile.exists()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.export_title_question))
+                    .setMessage(getString(R.string.export_database_warning))
+                    .setCancelable(true)
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            boolean exportSuccessful = databaseHandler.exportDatabase();
+                            if (exportSuccessful) {
+                                Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();
                             }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {}
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {}
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+        } else {
+            boolean exportSuccessful = databaseHandler.exportDatabase();
+            if (exportSuccessful) {
+                Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();
             }
         }
+
+
     }
+
+
+
 }

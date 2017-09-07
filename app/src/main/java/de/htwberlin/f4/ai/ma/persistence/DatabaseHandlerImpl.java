@@ -583,10 +583,11 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
      * Copies the database file at the specified location over the current
      * internal application database (existing data will be overwritten!).
      *
-     * @param dbPath path to the (new) database file
+ //    * @param dbPath path to the (new) database file
      * @return return-code: true means successful, false unsuccessful
      */
-    public boolean importDatabase(String dbPath) throws IOException {
+    //public boolean importDatabase(String dbPath) throws IOException {
+    public boolean importDatabase() throws IOException {
 
         //String DB_FILEPATH = context.getFilesDir().getPath() + "/databases/indoor_data.db";
         String DB_FILEPATH = context.getApplicationInfo().dataDir + "/databases/indoor_data.db";
@@ -594,9 +595,17 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         // Close the SQLiteOpenHelper so it will commit the created empty database to internal storage
         close();
 
-        File newDb = new File(dbPath);
+        //File newDb = new File(dbPath);
+        //File oldDb = new File(DB_FILEPATH);
+
+        //System.out.println("+++ OLD FILEPATH: " + oldDb.getAbsolutePath());
+        //System.out.println("+++ NEW FILEPATH: " + newDb.getAbsolutePath());
+
         File oldDb = new File(DB_FILEPATH);
+        File newDb = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorPositioning/Exported/indoor_data.db");
+
         if (newDb.exists()) {
+            System.out.println("+++ new db exists");
             FileUtilities.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
             // Access the copied database so SQLiteHelper will cache it and mark
             // it as created.
@@ -631,13 +640,10 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 File backupDB = new File(exportFolder, exportFilename);
 
                 if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
+                    FileUtilities.copyFile(new FileInputStream(currentDB), new FileOutputStream(backupDB));
                     return true;
                 }
+
             }
         } catch(Exception e) {e.printStackTrace();}
         return false;

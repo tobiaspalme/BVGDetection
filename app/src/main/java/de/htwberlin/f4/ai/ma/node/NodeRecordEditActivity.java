@@ -329,6 +329,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiScanner wifiScanner = WifiScannerFactory.createInstance();
+
         List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
         final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);

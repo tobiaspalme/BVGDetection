@@ -41,12 +41,9 @@ public interface DatabaseHandler {
     // Import / Export
     SQLiteDatabase getReadableDatabase();
     SQLiteDatabase getWritableDatabase();
-    boolean importDatabase(String dbPath) throws IOException;
+    //boolean importDatabase(String dbPath) throws IOException;
+    boolean importDatabase() throws IOException;
     boolean exportDatabase();
-
-    // Calculate my location
-    //FoundNode calculateNodeId(List<SignalInformation> signalInformationList);
-    //FoundNode calculateNodeId(Fingerprint fingerprint);
 
     // LocationResult management
     void insertLocationResult(LocationResult locationResult);

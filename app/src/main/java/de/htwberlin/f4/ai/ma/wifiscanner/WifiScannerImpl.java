@@ -13,7 +13,6 @@ import java.util.List;
 
 class WifiScannerImpl implements WifiScanner {
 
-
     @Override
     public List<String> getAvailableNetworks(WifiManager wifiManager, boolean onlyNetworksWithTwoOrMoreAPs) {
 
@@ -45,7 +44,5 @@ class WifiScannerImpl implements WifiScanner {
         } else {
             return wifiNamesList;
         }
-
-
     }
 }

@@ -108,15 +108,18 @@
     <string name="import_button_text">Daten importieren</string>
     <string name="export_button_text">Daten exportieren</string>
     <string name="import_title_question">Importieren?</string>
+    <string name="export_title_question">Überschreiben?</string>
     <string name="import_database_warining">Soll die gewählte Datei wirklich importiert werden? Es werden alle Daten in der Datenbank überschrieben!</string>
-    <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
+    <string name="export_database_warning">Es existiert bereits eine exportierte Datenbankdatei. Soll diese überschrieben werden?</string>
     <string name="database_imported_toast">Datenbank importiert.</string>
-    <string name="database_exported_toast">Datenbank nach \"/IndoorPositioning/Exported/\" exportiert.</string>
-    <string name="wrong_file_extension">Falsche Dateiendung</string>
+    <string name="database_exported_toast">Datenbank nach \"/IndoorPositioning/Exported\" exportiert.</string>
+    <string name="import_export_infobox_text">Die Daten werden in die Datei\n \"<b>/IndoorPositioning/Exported/indoor_data.db</b>\"\nim externen Speicher des Gerätes exportiert und auch aus dieser wieder importiert.</string>
+
+    <!--<string name="wrong_file_extension">Falsche Dateiendung</string>
+    <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
     <string name="try_again">Erneut versuchen</string>
     <string name="filechooser_title">Bitte .db Datei wählen</string>
-    <string name="folderchooser_title">Bitte einen Ordner wählen</string>
-    <string name="import_export_infobox_text"><b>Hinweis:</b> Wenn Sie neue Daten importieren, gehen alle bisherigen Daten verloren!</string>
+    <string name="folderchooser_title">Bitte einen Ordner wählen</string>-->
 
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>

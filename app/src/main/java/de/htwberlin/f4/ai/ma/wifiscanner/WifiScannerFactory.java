@@ -7,6 +7,8 @@ package de.htwberlin.f4.ai.ma.wifiscanner;
 public class WifiScannerFactory {
 
     public static WifiScanner createInstance() {
-        return new WifiScannerImpl();
+        WifiScannerImpl wifiScannerImpl = new WifiScannerImpl();
+        System.out.println("---  WifiScanner created Instance: " + wifiScannerImpl);
+        return wifiScannerImpl;
     }
 }

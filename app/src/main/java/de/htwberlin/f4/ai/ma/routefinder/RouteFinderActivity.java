@@ -147,12 +147,12 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         *///----------------------
 
-        Node k1 = NodeFactory.createInstance("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node k2 = NodeFactory.createInstance("n2", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node k3 = NodeFactory.createInstance("n3", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node k4 = NodeFactory.createInstance("n4", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node k5 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
-        Node k6 = NodeFactory.createInstance("n5", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k1 = NodeFactory.createInstance("k1", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k2 = NodeFactory.createInstance("k2", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k3 = NodeFactory.createInstance("k3", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k4 = NodeFactory.createInstance("k4", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k5 = NodeFactory.createInstance("k5", "", FingerprintFactory.createInstance("", null), "", "", "");
+        Node k6 = NodeFactory.createInstance("k6", "", FingerprintFactory.createInstance("", null), "", "", "");
 
         Edge l1 = EdgeFactory.createInstance(k1, k2, true, 3);
         Edge l2 = EdgeFactory.createInstance(k2, k3, true, 1);
@@ -160,7 +160,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         Edge l4 = EdgeFactory.createInstance(k1, k5, false, 2);
         Edge l5 = EdgeFactory.createInstance(k4, k3, false, 1);
         Edge l6 = EdgeFactory.createInstance(k5, k6, false, 1);
-        Edge l7 = EdgeFactory.createInstance(k5, k3, false, 1);
+        Edge l7 = EdgeFactory.createInstance(k6, k3, false, 1);
 
 
         databaseHandler.deleteNode(k1);
