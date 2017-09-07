@@ -94,6 +94,7 @@ public class RecordControllerImpl implements RecordController {
             }
         });
 
+        /*
         indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI,
                                 SensorType.ACCELEROMETER_SIMPLE,
                                 SensorType.ACCELEROMETER_LINEAR,
@@ -103,7 +104,11 @@ public class RecordControllerImpl implements RecordController {
                                 SensorType.MAGNETIC_FIELD,
                                 SensorType.COMPASS_FUSION,
                                 SensorType.COMPASS_SIMPLE,
-                                SensorType.BAROMETER);
+                                SensorType.BAROMETER);*/
+
+        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_MEASUREMENT,
+                SensorType.COMPASS_FUSION,
+                SensorType.COMPASS_SIMPLE);
 
         startTimer();
 

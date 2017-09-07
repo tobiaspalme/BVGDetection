@@ -229,6 +229,7 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
 
                     case STEP_DETECTOR:
+                        /*
                         handleNewStep();
                         // fix first step bug...
                         // first step won't get recognized by sensor so we just fake the step
@@ -236,7 +237,7 @@ public class MeasureControllerImpl implements MeasureController {
                         // same direction
                         if (stepCount == 1) {
                             handleNewStep();
-                        }
+                        }*/
                         break;
                     default:
                         break;
@@ -1097,6 +1098,9 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler.updateNode(targetNode, targetNode.getId());
         // update view with new edge data
         view.updateEdge(edge);
+
+        //TODO: REMOVE
+        save();
     }
 
     //todo: remove
@@ -1110,16 +1114,18 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
 
-        File file = new File(dir, "steps.txt");
+        File file = new File(dir, "steps" + timestamp + ".txt");
 
         FileOutputStream outputStream;
 
 
         try {
             outputStream = new FileOutputStream(file);
+            int i = 0;
             for (StepData stepData: stepList) {
+                i++;
                 StringBuilder builder = new StringBuilder();
-                builder.append(stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
+                builder.append("Step " + i + ";" + stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
                 outputStream.write(builder.toString().getBytes());
                 outputStream.write(System.lineSeparator().getBytes());
             }
