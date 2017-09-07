@@ -19,16 +19,13 @@ public interface Node {
     void setId(String id);
 
     String getDescription();
-    //void setDescription(String description);
 
     Fingerprint getFingerprint();
-    //void setFingerprint(FingerprintImpl fingerprint);
 
     String getCoordinates();
     void setCoordinates(String coordinates);
 
     String getPicturePath();
-    //void setPicturePath(String picturePath);
 
     String getAdditionalInfo();
     void setAdditionalInfo(String additionalInfo);

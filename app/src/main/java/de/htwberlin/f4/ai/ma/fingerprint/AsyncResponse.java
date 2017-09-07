@@ -5,5 +5,6 @@ package de.htwberlin.f4.ai.ma.fingerprint;
  */
 
 public interface AsyncResponse {
+
     void processFinish(Fingerprint fingerprint, int seconds);
 }

@@ -20,10 +20,8 @@ import de.htwberlin.f4.ai.ma.node.Node;
 public interface Edge {
 
     Node getNodeA();
-    //void setNodeA(Node nodeA);
 
     Node getNodeB();
-    //void setNodeB(Node nodeB);
 
     boolean getAccessibility();
     void setAccessibility(boolean accessable);
@@ -31,7 +29,6 @@ public interface Edge {
     float getWeight();
     void setWeight(float weight);
 
-    //void insertStepCoords(String coords);
     List<String> getStepCoordsList();
 
     String getAdditionalInfo();
