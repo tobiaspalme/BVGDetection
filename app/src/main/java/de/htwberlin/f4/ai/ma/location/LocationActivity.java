@@ -52,6 +52,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     ImageView refreshImageview;
     TextView locationTextview;
     TextView descriptionTextview;
+
+    TextView infobox;
     // TextView coordinatesLabelTextview;
     // TextView coordinatesTextview;
     ProgressBar progressBar;
@@ -60,7 +62,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
-    private String settings;
+    private String settingsString;
     private Spinner wifiDropdown;
     //private FoundNode foundNode;
     private WifiManager wifiManager;
@@ -71,6 +73,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     boolean kalmanFilter;
     boolean euclideanDistance;
     boolean knnAlgorithm;
+    private boolean verboseMode;
 
     int knnValue;
     int movingAverageOrder;
@@ -95,6 +98,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
         locationTextview = (TextView) findViewById(R.id.location_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
+        infobox = (TextView) findViewById(R.id.infobox_location);
         //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
         //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
         wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
@@ -107,6 +111,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         kalmanFilter = sharedPreferences.getBoolean("pref_kalman", false);
         euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
         knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
+        verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
+
 
         locationsCounter = sharedPreferences.getInt("locationsCounter", -1);
         Log.d("LocationActivity", "locationsCounter onCreate= " + locationsCounter);
@@ -118,7 +124,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
-        settings = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPreferences.getString("pref_movivngAverageOrder", "3")
+        settingsString = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPreferences.getString("pref_movivngAverageOrder", "3")
                 + "\r\nKalman Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPreferences.getString("pref_kalmanValue","2")
                 + "\r\nEuclidische Distanz: " + euclideanDistance
                 + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
@@ -199,7 +205,15 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         if (wifiDropdown.getAdapter().getCount() > 0) {
             locationTextview.setText(getString(R.string.searching_node_text));
-            FingerprintTask fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
+
+            FingerprintTask fingerprintTask;
+
+            if (verboseMode) {
+                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null, infobox );
+            } else {
+                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
+            }
+
             fingerprintTask.delegate = this;
             fingerprintTask.execute();
         }
@@ -231,7 +245,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                 descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
                 //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
 
-                locationResult = LocationResultFactory.createInstance(locationsCounter, settings, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
+                locationResult = LocationResultFactory.createInstance(locationsCounter, settingsString, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
 
                 final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
@@ -253,7 +267,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
             } else {
                 locationTextview.setText(getString(R.string.no_node_found_text));
-                locationResult = LocationResultFactory.createInstance(locationsCounter, settings, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
+                locationResult = LocationResultFactory.createInstance(locationsCounter, settingsString, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
 
             }
 

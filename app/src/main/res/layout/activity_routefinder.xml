@@ -134,6 +134,7 @@
         android:paddingTop="10dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:id="@+id/infobox_routefinder"
         android:background="@drawable/info_box"
         android:text="@string/navigation_infobox_text"
         android:layout_alignParentBottom="true"/>

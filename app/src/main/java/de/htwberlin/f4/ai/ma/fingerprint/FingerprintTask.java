@@ -2,6 +2,7 @@ package de.htwberlin.f4.ai.ma.fingerprint;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
     private ProgressBar progressBar;
     private TextView progressTextview;
+    private TextView verboseOutputTextview;
     private String wifiName;
     private int seconds;
     private WifiManager wifiManager;
@@ -43,14 +45,27 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private boolean calculateAverage = false;
     public AsyncResponse delegate = null;
 
-
-    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage, final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview) {
+    // Normal mode
+    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage,
+                           final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview) {
         this.wifiManager = wifiManager;
         this.wifiName = wifiName;
         this.seconds = seconds;
         this.calculateAverage = calculateAverage;
         this.progressBar = progressBar;
         this.progressTextview = progressTextview;
+    }
+
+    // Verbose mode
+    public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage,
+                           final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview, final TextView verboseOutputTextview) {
+        this.wifiManager = wifiManager;
+        this.wifiName = wifiName;
+        this.seconds = seconds;
+        this.calculateAverage = calculateAverage;
+        this.progressBar = progressBar;
+        this.progressTextview = progressTextview;
+        this.verboseOutputTextview = verboseOutputTextview;
     }
 
 
@@ -65,8 +80,6 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                     return null;
                 }
 
-                publishProgress(i);
-
                 wifiManager.startScan();
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
@@ -79,6 +92,8 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                     }
                 }
                 Log.d("--------", "-------------------------------------------------");
+
+                publishProgress(i);
 
                 wifiScanList.clear();
 
@@ -127,8 +142,24 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
         if (progressBar != null) {
             progressBar.setProgress(values[0] + 1);
         }
-        if (progressTextview != null) {
-            progressTextview.setText(String.valueOf(seconds - values[0]));
+
+        // Verbose-Mode (show measuring data in UI)
+        if (verboseOutputTextview != null) {
+            String textviewString = "";
+
+            for (int i = 0; i < accessPointSampleList.size(); i++) {
+                textviewString += accessPointSampleList.get(i).getMacAddress() + "  " + accessPointSampleList.get(i).getRSSI() + "         ";
+            }
+            verboseOutputTextview.setText(textviewString);
+            if (progressTextview != null) {
+                progressTextview.setText(String.valueOf(seconds - values[0]));
+            }
+
+        // Normal mode
+        } else {
+            if (progressTextview != null) {
+                progressTextview.setText(String.valueOf(seconds - values[0]));
+            }
         }
     }
 

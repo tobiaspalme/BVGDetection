@@ -112,6 +112,6 @@
         android:background="@drawable/info_box"
         android:text="@string/edges_manager_infobox_text"
         android:layout_alignParentBottom="true"
-        android:id="@+id/record_edit_infobox"/>
+        android:id="@+id/infobox_record_edit"/>
 
 </RelativeLayout>

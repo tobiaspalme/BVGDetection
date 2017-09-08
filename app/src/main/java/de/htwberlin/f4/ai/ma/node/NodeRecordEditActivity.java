@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -60,6 +62,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     TextView initialWifiTextview;
     TextView initialWifiLabelTextview;
     TextView coordinatesLabelTextview;
+    private TextView infobox;
     private ImageButton recordButton;
     ImageButton captureButton;
     ImageButton saveNodeButton;
@@ -71,10 +74,12 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private EditText coordinatesEdittext;
     private Spinner wifiNamesDropdown;
     private DatabaseHandler databaseHandler;
+    private SharedPreferences sharedPreferences;
     private boolean pictureTaken;
     private boolean takingPictureAtTheMoment;
     private boolean showingBigPictureAtTheMoment;
     private boolean updateMode = false;
+    private boolean verboseMode;
     private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
@@ -119,6 +124,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         initialWifiTextview = (TextView) findViewById(R.id.initial_wifi_textview);
         initialWifiLabelTextview = (TextView) findViewById(R.id.initial_wifi_label_textview);
         coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_textview_editmode);
+        infobox = (TextView) findViewById(R.id.infobox_record_edit);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         buttonsLayout = (RelativeLayout) findViewById(R.id.buttons_layout_rec_and_edit);
@@ -245,7 +251,16 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
 
-                        fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+
+                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
+
+                        if (verboseMode) {
+                            fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
+                        } else {
+                            fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                        }
+
                         fingerprintTask.delegate = NodeRecordEditActivity.this;
                         fingerprintTask.execute();
                     }

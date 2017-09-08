@@ -8,7 +8,6 @@ public class WifiScannerFactory {
 
     public static WifiScanner createInstance() {
         WifiScannerImpl wifiScannerImpl = new WifiScannerImpl();
-        System.out.println("---  WifiScanner created Instance: " + wifiScannerImpl);
         return wifiScannerImpl;
     }
 }

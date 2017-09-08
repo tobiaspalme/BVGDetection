@@ -187,7 +187,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/record_edit_infobox"
+        android:layout_above="@+id/infobox_record_edit"
         android:layout_centerHorizontal="true"
         android:id="@+id/buttons_layout_rec_and_edit">
 
@@ -246,7 +246,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="10dp"
         android:paddingTop="6dp"
         android:paddingStart="10dp"
@@ -254,6 +254,6 @@
         android:background="@drawable/info_box"
         android:text="@string/record_and_edit_infobox"
         android:layout_alignParentBottom="true"
-        android:id="@+id/record_edit_infobox"/>
+        android:id="@+id/infobox_record_edit"/>
 
 </RelativeLayout>

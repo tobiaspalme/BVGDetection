@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +24,6 @@ import com.example.carol.bvg.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
 import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
@@ -62,16 +63,19 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     private ArrayList<String> itemsDestNodeSpinner;
     CheckBox accessibilityCheckbox;
     private TextView totalDistanceTextview;
+    private TextView infobox;
 
     List<String> navigationResultsList;
     List<Node> allNodes;
     DatabaseHandler databaseHandler;
+    private SharedPreferences sharedPreferences;
     private String selectedStartNode;
     private String lastSelectedStartNode;
     NodeListAdapter resultListAdapter;
     List<String> nodeNames;
     List<String> nodeDescriptions;
     List<String> nodePicturePaths;
+    private boolean verboseMode;
 
     WifiManager wifiManager;
 
@@ -80,7 +84,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.activity_navigation, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_routefinder, contentFrameLayout);
 
         startNodeSpinner = (Spinner) findViewById(R.id.start_node_spinner);
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);
@@ -89,6 +93,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
         totalDistanceTextview = (TextView) findViewById(R.id.total_distance_textview);
+        infobox = (TextView) findViewById(R.id.infobox_routefinder);
 
         itemsStartNodeSpinner = new ArrayList<>();
         itemsDestNodeSpinner = new ArrayList<>();
@@ -101,6 +106,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         allNodes = databaseHandler.getAllNodes();
 
 
@@ -341,7 +347,14 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
      */
     private void findLocation(String wifiName, int seconds) {
 
-        FingerprintTask fingerprintTask = new FingerprintTask(wifiName, seconds, wifiManager, true, null, null);
+        verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
+
+        FingerprintTask fingerprintTask;
+        if (verboseMode) {
+            fingerprintTask = new FingerprintTask(wifiName, seconds, wifiManager, true, null, null, infobox);
+        } else {
+            fingerprintTask = new FingerprintTask(wifiName, seconds, wifiManager, true, null, null);
+        }
         fingerprintTask.delegate = this;
         fingerprintTask.execute();
     }

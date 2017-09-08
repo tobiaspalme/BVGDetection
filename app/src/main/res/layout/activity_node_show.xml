@@ -96,7 +96,7 @@
         android:paddingTop="6dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:id="@+id/infobox"
+        android:id="@+id/infobox_location"
         android:background="@drawable/info_box"
         android:text="@string/node_show_infobox_text"
         android:layout_alignParentBottom="true"/>
