@@ -46,7 +46,7 @@ import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
-import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
+import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
 public class NodeRecordEditActivity extends BaseActivity implements AsyncResponse {
@@ -57,7 +57,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private int recordTime;
     private int progressStatus = 0;
     private ProgressBar progressBar;
-    private JSONWriter JSONWriter;
+    private JsonWriter JSONWriter;
     private TextView progressTextview;
     TextView initialWifiTextview;
     TextView initialWifiLabelTextview;
@@ -107,7 +107,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         }
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-        JSONWriter = new JSONWriter();
+        JSONWriter = new JsonWriter();
 
 
         recordButton = (ImageButton) findViewById(R.id.record_button);

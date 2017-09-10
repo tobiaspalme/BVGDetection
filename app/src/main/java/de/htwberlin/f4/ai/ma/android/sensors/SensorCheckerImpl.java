@@ -5,7 +5,11 @@ import android.content.Context;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementType;
 
 /**
- * Created by benni on 14.08.2017.
+ * SensorCheckerImpl Class which implements the SensorChecker interface
+ *
+ * Used to check if every required sensor is available on the device
+ *
+ * Author: Benjamin Kneer
  */
 
 public class SensorCheckerImpl implements SensorChecker {
@@ -16,6 +20,20 @@ public class SensorCheckerImpl implements SensorChecker {
         this.context = context;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * check if every required sensor for the IndoorMeasurementType is available
+     *
+     * @param indoorMeasurementType measurementtype to use
+     * @return true / false
+     */
     @Override
     public boolean checkSensor(IndoorMeasurementType indoorMeasurementType) {
         boolean rotation;

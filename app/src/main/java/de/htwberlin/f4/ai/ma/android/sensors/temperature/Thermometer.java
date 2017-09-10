@@ -14,7 +14,13 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Note: no temperature sensor in nexus 5x
+ * Thermometer Class which implements the Sensor and SensorEventListener Interface
+ *
+ * Used Android Sensor: Sensor.TYPE_AMBIENT_TEMPERATURE
+ *
+ * Note: There is no temerature sensor in nexus 5x
+ *
+ * Author: Benjamin Kneer
  */
 
 public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.android.sensors.Sensor {
@@ -37,6 +43,17 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.a
         this.sensorRate = sensorRate;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Sensor Interface Methods                            *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Get sensor from SensorManager and register Listener
+     */
     @Override
     public void start() {
         value = 0.0f;
@@ -46,6 +63,10 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.a
         }
     }
 
+
+    /**
+     * Unregister sensor listener
+     */
     @Override
     public void stop() {
         if (sensorManager != null) {
@@ -53,12 +74,23 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.a
         }
     }
 
+
+    /**
+     * Get the latest sensor values
+     *
+     * @return latest sensor values
+     */
     @Override
     public SensorData getValues() {
         return sensorData;
     }
 
 
+    /**
+     * Check if the sensor is available on the device
+     *
+     * @return available true / false
+     */
     @Override
     public boolean isSensorAvailable() {
         if (sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) == null) {
@@ -68,18 +100,42 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.a
         return true;
     }
 
+
+    /**
+     * set the custom sensor listener
+     *
+     * @param listener sensorlistener
+     */
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
 
+
+    /**
+     * get the type of sensor
+     *
+     * @return sensortype
+     */
     @Override
     public SensorType getSensorType() {
         return SENSORTYPE;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                      SensorEventListener Interface Methods                        *
+    *                                                                                   *
+    *************************************************************************************/
+
+
     /**
+     * Copy sensor values and create SensorData Object with sensortype, correct timestamp and
+     * sensor values
+     *
      * values[0]: Ambient air temperature in °C
+     *
      * @param sensorEvent
      */
     @Override
@@ -87,8 +143,6 @@ public class Thermometer implements SensorEventListener, de.htwberlin.f4.ai.ma.a
         if (sensorEvent.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             value = sensorEvent.values[0];
 
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            long realTimestamp = timestamp.getTime();
             float[] values = new float[]{value};
 
             long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();

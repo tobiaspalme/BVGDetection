@@ -1,7 +1,11 @@
-package de.htwberlin.f4.ai.ma.android.measure;
+package de.htwberlin.f4.ai.ma.android.measure.edges;
 
 /**
- * Created by benni on 03.08.2017.
+ * StepData Class
+ *
+ * used to store details for each step so we can save it later in edge object
+ *
+ * Author: Benjamin Kneer
  */
 
 public class StepData {

@@ -1,7 +1,11 @@
 package de.htwberlin.f4.ai.ma.android.sensors;
 
 /**
- * Created by benni on 29.07.2017.
+ * SensorData Class
+ *
+ * small model class to store sensor values, sensortype and corrected unix timestamp
+ *
+ * Author: Benjamin Kneer
  */
 
 public class SensorData {
@@ -25,6 +29,14 @@ public class SensorData {
         values[1] = y;
         values[2] = z;
     }
+
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Get & Set                                           *
+    *                                                                                   *
+    *************************************************************************************/
+
 
     public long getTimestamp() {
         return timestamp;

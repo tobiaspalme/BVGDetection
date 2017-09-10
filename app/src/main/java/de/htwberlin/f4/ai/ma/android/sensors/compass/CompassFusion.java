@@ -17,7 +17,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 
 /**
- * Created by benni on 23.07.2017.
+ * CompassFusion Class which implements the Sensor and SensorEventListener Interface
+ *
+ * Used Android Sensor: Sensor.TYPE_ROTATION_VECTOR
+ *
+ * Author: Benjamin Kneer
  */
 
 public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma.android.sensors.Sensor{
@@ -47,6 +51,17 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
         this.sensorRate = sensorRate;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Sensor Interface Methods                            *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Get sensor from SensorManager and register Listener
+     */
     @Override
     public void start() {
         rotationSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
@@ -55,6 +70,10 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
         }
     }
 
+
+    /**
+     * Unregister sensor listener
+     */
     @Override
     public void stop() {
         if (sensorManager != null) {
@@ -62,12 +81,23 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
         }
     }
 
+
+    /**
+     * Get the latest sensor values
+     *
+     * @return latest sensor values
+     */
     @Override
     public SensorData getValues() {
         return sensorData;
     }
 
 
+    /**
+     * Check if the sensor is available on the device
+     *
+     * @return available true / false
+     */
     @Override
     public boolean isSensorAvailable() {
         if (sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR) == null) {
@@ -77,16 +107,52 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
         return true;
     }
 
+
+    /**
+     * set the custom sensor listener
+     *
+     * @param listener sensorlistener
+     */
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
 
+
+    /**
+     * get the type of sensor
+     *
+     * @return sensortype
+     */
     @Override
     public SensorType getSensorType() {
         return SENSORTYPE;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                      SensorEventListener Interface Methods                        *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Copy sensor values and create SensorData Object with sensortype, correct timestamp and
+     * sensor values
+     *
+     * The rotation vector represents the orientation of the device as a combination of an angle and
+     * an axis, in which the device has rotated through an angle θ around an axis <x, y, z>
+     *
+     * The result of rotation vector is used to calculate azimuth, pitch and and roll using the getOrientation()
+     * Method
+     *
+     * values[0]: azimuth
+     * values[1]: pitch
+     * values[2]: roll
+     *
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
@@ -152,21 +218,10 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
                 roll = (float) (Math.toDegrees(orientation[2]));
             }
 
-
-
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            long realTimestamp = timestamp.getTime();
             float[] values = new float[]{azimuth, pitch, roll};
 
             long timeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime();
             long calcTimestamp = (sensorEvent.timestamp / 1000000L) + timeOffset;
-
-            //Log.d("tmp", "Compass[0]: " + azimuth + " original: " + Math.toDegrees(orientation[0]));
-            //Log.d("tmp", "Compass[1]: " + pitch + " original: " + Math.toDegrees(orientation[1]));
-            //Log.d("tmp", "Compass[2]: " + roll + " original: " + Math.toDegrees(orientation[2]));
-
-            //Log.d("tmp", "realtimestamp: " + realTimestamp);
-            //Log.d("tmp", "calctimestamp: " + calcTimestamp);
 
             sensorData = new SensorData();
             sensorData.setSensorType(SENSORTYPE);

@@ -25,7 +25,11 @@ import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurementFactory;
 
 
 /**
- * Created by benni on 22.07.2017.
+ * RecordControllerImpl Class which implements the RecordController Interface
+ *
+ * used for recording sensor values
+ *
+ * Author: Benjamin Kneer
  */
 
 public class RecordControllerImpl implements RecordController {
@@ -43,16 +47,34 @@ public class RecordControllerImpl implements RecordController {
         savePeriod = 0;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * set the responsible RecordView
+     *
+     * @param view RecordView
+     */
     @Override
     public void setView(RecordView view) {
         this.view = view;
     }
 
+
+    /**
+     * triggered by clicked on start button.
+     * start sensors and register listeners
+     */
     @Override
     public void onStartClicked() {
 
-        SensorFactory sensorFactory = new SensorFactoryImpl(view.getContext());
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
+        // register sensor listener
         indoorMeasurement.setSensorListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData sensorData) {
@@ -89,12 +111,11 @@ public class RecordControllerImpl implements RecordController {
                         break;
                     default:
                         break;
-
                 }
             }
         });
 
-        /*
+        // start sensors
         indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI,
                                 SensorType.ACCELEROMETER_SIMPLE,
                                 SensorType.ACCELEROMETER_LINEAR,
@@ -104,16 +125,17 @@ public class RecordControllerImpl implements RecordController {
                                 SensorType.MAGNETIC_FIELD,
                                 SensorType.COMPASS_FUSION,
                                 SensorType.COMPASS_SIMPLE,
-                                SensorType.BAROMETER);*/
+                                SensorType.BAROMETER);
 
-        indoorMeasurement.startSensors(Sensor.SENSOR_RATE_MEASUREMENT,
-                SensorType.COMPASS_FUSION,
-                SensorType.COMPASS_SIMPLE);
-
+        // start the timer for recording data
         startTimer();
-
     }
 
+
+    /**
+     * triggered by clicking on stop button.
+     * Stop all sensors and save data
+     */
     @Override
     public void onStopClicked() {
         stopMeasurement();
@@ -121,31 +143,63 @@ public class RecordControllerImpl implements RecordController {
         saveRecordData();
     }
 
+
+    /**
+     * triggered by activity onPause()
+     */
     @Override
     public void onPause() {
         stopMeasurement();
         stopTimer();
     }
 
+
+    /**
+     * triggered by changing the save period
+     *
+     * @param value new saveperiod value
+     */
     @Override
     public void onSavePeriodChanged(int value) {
         savePeriod = value;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Class Methods                                       *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * start the timer for saving sensor data
+     */
     private void startTimer() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        // get lowpass filter value from settings
         float lowpassFilterValue = Float.valueOf(sharedPreferences.getString("pref_lowpass_value", "0.1"));
+        // create a new thread handler
         timerHandler = new Handler(Looper.getMainLooper());
         recordRunnable = new RecordRunnable(sensorDataModel, indoorMeasurement, timerHandler, savePeriod, lowpassFilterValue);
-        timerHandler.postDelayed(recordRunnable, 250);
+        // start thread with 100ms delay
+        timerHandler.postDelayed(recordRunnable, 100);
     }
 
+
+    /**
+     * stop the timer for saving sensor data
+     */
     private void stopTimer() {
         if (timerHandler != null) {
             timerHandler.removeCallbacks(recordRunnable);
         }
     }
 
+
+    /**
+     * stop all sensors
+     */
     private void stopMeasurement() {
         if (indoorMeasurement != null) {
             indoorMeasurement.stop();
@@ -153,14 +207,8 @@ public class RecordControllerImpl implements RecordController {
     }
 
     /**
-     * In order to access the data do the following on your phone:
-     * Open settings -> Memory & USB -> explore -> navigate to the directory
-     * Open the File in GoogleDocs -> open it on PC
+     * Write Sensordata to file in csv format
      *
-     * This is necessary because Nexus5X doesn't have a real external storage (SD CARD)
-     * and Android prevents user access to files unless you have rooted your device.
-     *
-     * Write Sensordatas to file in csv format
      * sensortype;timestamp;value[0];value[1];value[2]
      */
     private void saveRecordData() {
@@ -172,11 +220,8 @@ public class RecordControllerImpl implements RecordController {
             dir.mkdirs();
         }
 
-
         File file = new File(dir, String.valueOf(timestamp.getTime()) + ".txt");
-
         FileOutputStream outputStream;
-
 
         try {
             outputStream = new FileOutputStream(file);
@@ -185,10 +230,9 @@ public class RecordControllerImpl implements RecordController {
             for (Map.Entry<SensorType, List<SensorData>> entry : data.entrySet()) {
                 SensorType sensorType = entry.getKey();
                 List<SensorData> sensorValues = entry.getValue();
-
                 // loop through the sensordata list
                 for (SensorData valueEntry : sensorValues) {
-
+                    // build string to write
                     StringBuilder builder = new StringBuilder();
                     builder.append(sensorType + ";" + valueEntry.getTimestamp());
 
@@ -197,6 +241,7 @@ public class RecordControllerImpl implements RecordController {
                     }
 
                     builder.append(";");
+                    // write string to file
                     outputStream.write(builder.toString().getBytes());
                     outputStream.write(System.lineSeparator().getBytes());
                 }

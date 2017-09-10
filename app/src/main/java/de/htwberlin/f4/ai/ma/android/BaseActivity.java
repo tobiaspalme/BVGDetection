@@ -24,6 +24,12 @@ import de.htwberlin.f4.ai.ma.ImportExportActivity;
 import de.htwberlin.f4.ai.ma.node.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.settings.SettingsActivity;
 
+/**
+ * BasicActivity Class
+ *
+ * All Activities inherit from this class. That's required because of the NavigationDrawer
+ */
+
 public class BaseActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -51,7 +57,6 @@ public class BaseActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                Intent intent;
                 switch (item.getItemId()) {
 
                     case R.id.nav_location_record:
@@ -104,7 +109,6 @@ public class BaseActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
 
-
                     default:
                         break;
 
@@ -112,7 +116,6 @@ public class BaseActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
     @Override
@@ -162,12 +165,6 @@ public class BaseActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
-
-
-
-
-
-
 
     public void loadMeasurement() {
         Intent intent = new Intent(getApplicationContext(), MeasureViewImpl.class);

@@ -13,7 +13,9 @@ import com.example.carol.bvg.R;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 
 /**
- * Created by benni on 22.07.2017.
+ * RecordViewImpl Class which implements the RecordView Interface
+ *
+ * Author: Benjamin Kneer
  */
 
 public class RecordViewImpl extends BaseActivity implements RecordView {
@@ -62,14 +64,26 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         controller.setView(this);
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Activity Events                                     *
+    *                                                                                   *
+    *************************************************************************************/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // find contentframe
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        // inflate coorect layout
         getLayoutInflater().inflate(R.layout.activity_sensor_record, contentFrameLayout);
 
         setTitle("Aufnehmen");
+
+        /************        find UI Elements and set listeners          ************/
 
         accelerationX = (TextView) findViewById(R.id.fragment_record_acc_x);
         accelerationY = (TextView) findViewById(R.id.fragment_record_acc_y);
@@ -127,7 +141,6 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         });
         periodSeekbar.setProgress(250);
 
-
         Button btnStart = (Button) findViewById(R.id.fragment_record_start_btn);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -147,92 +160,6 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         });
     }
 
-    /*
-    @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_sensor_record, container, false);
-
-        accelerationX = (TextView) root.findViewById(R.id.fragment_record_acc_x);
-        accelerationY = (TextView) root.findViewById(R.id.fragment_record_acc_y);
-        accelerationZ = (TextView) root.findViewById(R.id.fragment_record_acc_z);
-
-        accelerationLinearX = (TextView) root.findViewById(R.id.fragment_record_acc_linear_x);
-        accelerationLinearY = (TextView) root.findViewById(R.id.fragment_record_acc_linear_y);
-        accelerationLinearZ = (TextView) root.findViewById(R.id.fragment_record_acc_linear_z);
-
-        gravityX = (TextView) root.findViewById(R.id.fragment_record_gravity_x);
-        gravityY = (TextView) root.findViewById(R.id.fragment_record_gravity_y);
-        gravityZ = (TextView) root.findViewById(R.id.fragment_record_gravity_z);
-
-        gyroscopeX = (TextView) root.findViewById(R.id.fragment_record_gyroscope_x);
-        gyroscopeY = (TextView) root.findViewById(R.id.fragment_record_gyroscope_y);
-        gyroscopeZ = (TextView) root.findViewById(R.id.fragment_record_gyroscope_z);
-
-        gyroscopeUncalibratedX = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_x);
-        gyroscopeUncalibratedY = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_y);
-        gyroscopeUncalibratedZ = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_z);
-        gyroscopeUncalibratedDriftX = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_x);
-        gyroscopeUncalibratedDriftY = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_y);
-        gyroscopeUncalibratedDriftZ = (TextView) root.findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_z);
-
-        magneticFieldX = (TextView) root.findViewById(R.id.fragment_record_magneticfield_x);
-        magneticFieldY = (TextView) root.findViewById(R.id.fragment_record_magneticfield_y);
-        magneticFieldZ = (TextView) root.findViewById(R.id.fragment_record_magneticfield_z);
-
-        compassFusion = (TextView) root.findViewById(R.id.fragment_record_compass_fusion);
-        compassSimple = (TextView) root.findViewById(R.id.fragment_record_compass_simple);
-
-        barometer = (TextView) root.findViewById(R.id.fragment_record_barometer);
-
-        periodValue = (TextView) root.findViewById(R.id.fragment_record_period);
-
-        periodSeekbar = (SeekBar) root.findViewById(R.id.fragment_record_period_seekbar);
-        periodSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                periodValue.setText(String.valueOf(i));
-                if (controller != null) {
-                    controller.onSavePeriodChanged(i);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        periodSeekbar.setProgress(250);
-
-
-        Button btnStart = (Button) root.findViewById(R.id.fragment_record_start_btn);
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (controller != null) {
-                    controller.onStartClicked();
-                }
-            }
-        });
-
-        Button btnStop = (Button) root.findViewById(R.id.fragment_record_stop_btn);
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (controller != null) {
-                    controller.onStopClicked();
-                }
-            }
-        });
-
-
-
-        return root;
-    }
-*/
 
     @Override
     public void onPause() {
@@ -243,6 +170,18 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
     }
 
 
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * update the acceleration sensor view
+     *
+     * @param values new acceleration sensor values
+     */
     @Override
     public void updateAcceleration(float[] values) {
         accelerationX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -250,6 +189,12 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         accelerationZ.setText(getString(R.string.z_caption) + " " + values[2]);
     }
 
+
+    /**
+     * update the acceleration_linear sensor view
+     *
+     * @param values new acceleration_linear sensor values
+     */
     @Override
     public void updateAccelerationLinear(float[] values) {
         accelerationLinearX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -257,6 +202,12 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         accelerationLinearZ.setText(getString(R.string.z_caption) + " " + values[2]);
     }
 
+
+    /**
+     * update the gravity sensor view
+     *
+     * @param values new gravity sensor values
+     */
     @Override
     public void updateGravity(float[] values) {
         gravityX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -264,6 +215,12 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         gravityZ.setText(getString(R.string.z_caption) + " " + values[2]);
     }
 
+
+    /**
+     * update the gyroscope sensor view
+     *
+     * @param values new gyroscope sensor values
+     */
     @Override
     public void updateGyroscope(float[] values) {
         gyroscopeX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -271,6 +228,12 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         gyroscopeZ.setText(getString(R.string.z_caption) + " " + values[2]);
     }
 
+
+    /**
+     * update the gyroscope_uncalibrated view
+     *
+     * @param values new gyroscope_uncalibrated sensor values
+     */
     @Override
     public void updateGyroscopeUncalibrated(float[] values) {
         gyroscopeUncalibratedX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -281,6 +244,12 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         gyroscopeUncalibratedDriftZ.setText(getString(R.string.x_caption) + " " + values[5]);
     }
 
+
+    /**
+     * update the magneticfield sensor view
+     *
+     * @param values new magneticfield sensor values
+     */
     @Override
     public void updateMagneticField(float[] values) {
         magneticFieldX.setText(getString(R.string.x_caption) + " " + values[0]);
@@ -288,21 +257,45 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         magneticFieldZ.setText(getString(R.string.z_caption) + " " + values[2]);
     }
 
+
+    /**
+     * update the compassfusion view
+     *
+     * @param value new compassfusion sensor values
+     */
     @Override
     public void updateCompassFusion(float value) {
         compassFusion.setText(getString(R.string.compass_fusion) + ": " + value);
     }
 
+
+    /**
+     * update the compass simple view
+     *
+     * @param value new compass simple sensor values
+     */
     @Override
     public void updateCompassSimple(float value) {
         compassSimple.setText(getString(R.string.compass_simple) + ": " + value);
     }
 
+
+    /**
+     * update the barometer view
+     *
+     * @param value new barometer sensor values
+     */
     @Override
     public void updatePressure(float value) {
         barometer.setText(getString(R.string.measure_pressure) + " " + value);
     }
 
+
+    /**
+     * get the view's context
+     *
+     * @return context
+     */
     @Override
     public Context getContext() {
         return this;

@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by benni on 24.07.2017.
+ * SensorDataModelImpl Class which implements the SensorDataModel Interface
+ *
+ * Model Class for storing all sensor data in a map (by sensortype)
+ *
+ * Author: Benjamin Kneer
  */
 
 public class SensorDataModelImpl implements SensorDataModel {
@@ -18,11 +22,34 @@ public class SensorDataModelImpl implements SensorDataModel {
         data = new HashMap<>();
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * get sensors data mapped by sensortype
+     *
+     * @return Map containing all sensor data
+     */
     @Override
     public Map<SensorType, List<SensorData>> getData() {
         return data;
     }
 
+
+    /**
+     * since we calculate the position every step, we need to calculate the orientation etc
+     * by using values in a specific time interval. Filter all values with the timestamp >=
+     * start and timestamp <= end
+     *
+     * @param start start timestamp
+     * @param end end timestamp
+     * @return filtered map
+     */
     @Override
     public Map<SensorType, List<SensorData>> getDataInInterval(long start, long end) {
         Map<SensorType, List<SensorData>> result = new HashMap<>();
@@ -45,6 +72,12 @@ public class SensorDataModelImpl implements SensorDataModel {
         return result;
     }
 
+
+    /**
+     * insert sensor data into model
+     *
+     * @param sensorData data to insert
+     */
     @Override
     public void insertData(SensorData sensorData) {
         boolean keyExists = false;
@@ -70,6 +103,10 @@ public class SensorDataModelImpl implements SensorDataModel {
         }
     }
 
+
+    /**
+     * remove all data from model
+     */
     @Override
     public void clearData() {
         data.clear();

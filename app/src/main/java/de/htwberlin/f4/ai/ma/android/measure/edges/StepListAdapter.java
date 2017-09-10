@@ -13,8 +13,6 @@ import com.example.carol.bvg.R;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.android.measure.StepData;
-
 /**
  * StepListAdapter Class
  *

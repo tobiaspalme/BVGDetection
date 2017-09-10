@@ -17,7 +17,12 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.modules.OrientationModule;
 
 /**
- * Created by benni on 28.07.2017.
+ * OrientationModuleA Class which implements the OrientationModule interface
+ *
+ * Calculate current heading / azimuth so the system knows the direction where
+ * of the user's movement
+ *
+ * Author: Benjamin Kneer
  */
 
 public class OrientationModuleA implements OrientationModule {
@@ -25,8 +30,6 @@ public class OrientationModuleA implements OrientationModule {
     protected SensorDataModel dataModel;
     protected SensorFactory sensorFactory;
     protected Sensor compass;
-    //private float orientation;
-    protected float lastOrientation;
     protected long lastStepTimestamp;
     protected Context context;
 
@@ -37,7 +40,19 @@ public class OrientationModuleA implements OrientationModule {
         lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
     }
 
-    // calculate the orientation change from calibrated azimuth
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * get azimuth from compassfusion sensor
+     *
+     * @return azimuth
+     */
     @Override
     public float getOrientation() {
 
@@ -55,6 +70,10 @@ public class OrientationModuleA implements OrientationModule {
         return currentOrientation;
     }
 
+
+    /**
+     * start sensor and register listener
+     */
     @Override
     public void start() {
         compass = sensorFactory.getSensor(SensorType.COMPASS_FUSION, Sensor.SENSOR_RATE_MEASUREMENT);
@@ -67,6 +86,10 @@ public class OrientationModuleA implements OrientationModule {
         compass.start();
     }
 
+
+    /**
+     * stop sensor and unregister listener
+     */
     @Override
     public void stop() {
         if (compass != null) {

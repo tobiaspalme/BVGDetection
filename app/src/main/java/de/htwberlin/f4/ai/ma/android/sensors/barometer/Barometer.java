@@ -14,7 +14,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Created by benni on 19.07.2017.
+ * Barometer Class which implements the Sensor and SensorEventListener Interface
+ *
+ * Used Android Sensor: Sensor.TYPE_PRESSURE
+ *
+ * Author: Benjamin Kneer
  */
 
 public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ma.android.sensors.Sensor {
@@ -35,6 +39,17 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ma.and
         this.sensorRate = sensorRate;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Sensor Interface Methods                            *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Get sensor from SensorManager and register Listener
+     */
     @Override
     public void start() {
         Sensor barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -43,6 +58,10 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ma.and
         }
     }
 
+
+    /**
+     * Unregister sensor listener
+     */
     @Override
     public void stop() {
         if (sensorManager != null) {
@@ -50,11 +69,23 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ma.and
         }
     }
 
+
+    /**
+     * Get the latest sensor values
+     *
+     * @return latest sensor values
+     */
     @Override
     public SensorData getValues() {
         return sensorData;
     }
 
+
+    /**
+     * Check if the sensor is available on the device
+     *
+     * @return available true / false
+     */
     @Override
     public boolean isSensorAvailable() {
         if (sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) == null) {
@@ -64,21 +95,47 @@ public class Barometer implements SensorEventListener, de.htwberlin.f4.ai.ma.and
         return true;
     }
 
+
+    /**
+     * set the custom sensor listener
+     *
+     * @param listener sensorlistener
+     */
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
 
+
+    /**
+     * get the type of sensor
+     *
+     * @return sensortype
+     */
     @Override
     public SensorType getSensorType() {
         return SENSORTYPE;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                      SensorEventListener Interface Methods                        *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Copy sensor values and create SensorData Object with sensortype, correct timestamp and
+     * sensor values
+     *
+     * values[0]: Atmospheric pressure in hPa
+     *
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_PRESSURE) {
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            long realTimestamp = timestamp.getTime();
             float[] values = new float[sensorEvent.values.length];
             System.arraycopy(sensorEvent.values, 0, values, 0, sensorEvent.values.length);
 
