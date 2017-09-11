@@ -13,7 +13,16 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.OrientationModuleA;
 
 /**
- * Created by benni on 10.08.2017.
+ * OrientationModuleC Class which implements the OrientationModule interface
+ *
+ * Calculate current heading / azimuth so the system knows the direction
+ * of the user's movement
+ *
+ * Sensor: CompassSimple
+ *
+ * Np lowpass filter used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class OrientationModuleC extends OrientationModuleA{
@@ -22,6 +31,19 @@ public class OrientationModuleC extends OrientationModuleA{
         super(context);
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * get azimuth from compasssimple sensor
+     *
+     * @return azimuth
+     */
     @Override
     public float getOrientation() {
         float currentOrientation = 0;
@@ -37,6 +59,10 @@ public class OrientationModuleC extends OrientationModuleA{
         return currentOrientation;
     }
 
+
+    /**
+     * start sensor and register listener
+     */
     @Override
     public void start() {
         compass = sensorFactory.getSensor(SensorType.COMPASS_SIMPLE, Sensor.SENSOR_RATE_MEASUREMENT);

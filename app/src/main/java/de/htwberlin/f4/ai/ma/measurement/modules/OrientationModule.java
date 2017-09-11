@@ -1,12 +1,21 @@
 package de.htwberlin.f4.ai.ma.measurement.modules;
 
 /**
- * Created by benni on 28.07.2017.
+ * OrientationModule Interface
+ *
+ * used to get the users heading direction
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface OrientationModule{
 
+    // get the heading / orientation (azimuth)
     float getOrientation();
+
+    // start module
     void start();
+
+    // stop module
     void stop();
 }

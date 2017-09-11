@@ -1,7 +1,9 @@
 package de.htwberlin.f4.ai.ma.measurement.modules.stepdirection;
 
 /**
- * Created by benni on 05.08.2017.
+ * Enumeration for the step direction
+ *
+ * Author: Benjamin Kneer
  */
 
 public enum StepDirection {

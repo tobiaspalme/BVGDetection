@@ -9,7 +9,7 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ma.measurement.modules.DistanceModule;
 
 /**
- * DistanceModuleA Clas which implements the DistanceModule Interface
+ * DistanceModuleA Class which implements the DistanceModule Interface
  *
  * Simply calculate distance by using the previously calibrated
  * step length. Change distance if stair toggle is active

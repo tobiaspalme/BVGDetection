@@ -22,6 +22,8 @@ import de.htwberlin.f4.ai.ma.measurement.modules.AltitudeModule;
  *
  * Calculate the relative height using the airpressure from barometer sensor
  *
+ * No lowpass filter used
+ *
  * Author: Benjamin Kneer
  */
 

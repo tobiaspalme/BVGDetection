@@ -33,6 +33,16 @@ public class AltitudeModuleB extends AltitudeModuleA {
         this.lowpassFilterValue = lowpassFilterValue;
     }
 
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * start sensor, register listener and apply lowpass filter
+     */
     @Override
     public void start() {
         airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER, Sensor.SENSOR_RATE_MEASUREMENT);

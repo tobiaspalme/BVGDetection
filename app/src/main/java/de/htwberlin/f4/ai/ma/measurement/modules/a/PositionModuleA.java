@@ -13,6 +13,8 @@ import de.htwberlin.f4.ai.ma.measurement.modules.PositionModule;
 /**
  * PositionModuleA Class which implements the PositionModule Interface
  *
+ * Used for IndoorMeasurementType.VARIANT_A
+ *
  * Orientation: CompassFusion (Rotation Vector)
  * Altitude: Barometer
  * Distance: Steplength
@@ -66,29 +68,15 @@ public class PositionModuleA implements PositionModule {
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
 
-        //Toast toast = Toast.makeText(context, "Orientation: " + orientation, Toast.LENGTH_SHORT);
-        //toast.show();
-
-        /*
-        // orientation stuff
-        double sina = Math.sin(Math.toRadians(90 - orientation));
-        double cosa = Math.cos(Math.toRadians(90 - orientation));
-        // calculate distance -> altitude = delta z
-        float p = (float) Math.sqrt(Math.pow(distance, 2) - Math.pow(altitude, 2));
-        // calculate movement along x and y axis using the calculated rho value
-        float x = (float)cosa * p;
-        float y = (float)sina * p;
-        */
-
         // calculate spherical coordinates and transform them to cartesian coordinates
-        double sina = Math.sin(Math.toRadians(90 - orientation));
-        double cosa = Math.cos(Math.toRadians(90 - orientation));
+        double sinlambda = Math.sin(Math.toRadians(90 - orientation));
+        double coslambda = Math.cos(Math.toRadians(90 - orientation));
         // calculate inclination angle
         double phi = Math.toDegrees(Math.asin(altitude / distance));
         double cosphi = Math.cos(Math.toRadians(phi));
 
-        float x = (float) (distance * cosphi * cosa);
-        float y = (float) (distance * cosphi * sina);
+        float x = (float) (distance * cosphi * coslambda);
+        float y = (float) (distance * cosphi * sinlambda);
 
         coordinates[0] += x;
         coordinates[1] += y;

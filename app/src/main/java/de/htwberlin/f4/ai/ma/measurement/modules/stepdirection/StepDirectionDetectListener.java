@@ -1,10 +1,15 @@
 package de.htwberlin.f4.ai.ma.measurement.modules.stepdirection;
 
 /**
- * Created by benni on 07.08.2017.
+ * StepDirectionDetectListener Interface
+ *
+ * simple listener for stepdirectiondetect
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface StepDirectionDetectListener {
 
+    // inform listener about last stepdirection
     void onDirectionDetect(StepDirection stepDirection);
 }

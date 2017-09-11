@@ -1,7 +1,11 @@
 package de.htwberlin.f4.ai.ma.measurement.modules.stepdirection;
 
 /**
- * Created by benni on 07.08.2017.
+ * StepDirectionRunnable class which implements the Runnable Interface
+ *
+ * used for stepdetection in a thread
+ *
+ * Author: Benjamin Kneer
  */
 
 public class StepDirectionRunnable implements Runnable {
@@ -14,6 +18,14 @@ public class StepDirectionRunnable implements Runnable {
         this.stepDirectionDetect = stepDirectionDetect;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
     @Override
     public void run() {
         StepDirection direction = stepDirectionDetect.getLastStepDirection();
@@ -22,6 +34,14 @@ public class StepDirectionRunnable implements Runnable {
             listener.onDirectionDetect(direction);
         }
     }
+
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Class Methods                                       *
+    *                                                                                   *
+    *************************************************************************************/
+
 
     public void setListener(StepDirectionDetectListener listener) {
         this.listener = listener;

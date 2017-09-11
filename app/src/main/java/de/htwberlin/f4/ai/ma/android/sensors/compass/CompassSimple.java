@@ -155,8 +155,8 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ma
      *
      * Determine a rotation matrix by using the values of both sensors
      *
-     * The result is used to calculate azimuth, pitch and and roll using the getOrientation()
-     * Method
+     * The result is used to calculate a rotation matrix to calculate the azimuth, pitch and
+     * and roll using the getOrientation() Method
      *
      * values[0]: azimuth
      * values[1]: pitch

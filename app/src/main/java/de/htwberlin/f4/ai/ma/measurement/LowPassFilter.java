@@ -1,8 +1,11 @@
 package de.htwberlin.f4.ai.ma.measurement;
 
 /**
- * Lowpass filter to smooth out noise from sensors.
+ * Lowpass filter (weighted smoothing) to smooth out noise from sensors.
+ *
  * Source: Professional Android Sensor Programming pp. 108
+ *
+ * Author: Benjamin Kneer
  */
 
 public class LowPassFilter {

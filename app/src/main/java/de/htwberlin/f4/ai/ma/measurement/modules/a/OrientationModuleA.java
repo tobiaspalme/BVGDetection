@@ -19,8 +19,12 @@ import de.htwberlin.f4.ai.ma.measurement.modules.OrientationModule;
 /**
  * OrientationModuleA Class which implements the OrientationModule interface
  *
- * Calculate current heading / azimuth so the system knows the direction where
+ * Calculate current heading / azimuth so the system knows the direction
  * of the user's movement
+ *
+ * Sensor: CompassFusion
+ *
+ * No lowpass filter used
  *
  * Author: Benjamin Kneer
  */

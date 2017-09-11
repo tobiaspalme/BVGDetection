@@ -3,9 +3,11 @@ package de.htwberlin.f4.ai.ma.measurement;
 import android.content.Context;
 
 /**
- * Factory returning an concrete implementation
+ * IndoorMeasurementFactory Class
  *
- * TODO: throw exception if not calibrated
+ * Create IndoorMeasurement Instance
+ *
+ * Author: Benjamin Kneer
  */
 
 public class IndoorMeasurementFactory {

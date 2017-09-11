@@ -144,8 +144,8 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
      * The rotation vector represents the orientation of the device as a combination of an angle and
      * an axis, in which the device has rotated through an angle θ around an axis <x, y, z>
      *
-     * The result of rotation vector is used to calculate azimuth, pitch and and roll using the getOrientation()
-     * Method
+     * The result of rotation vector is used to calculate a rotation matrix for calculating
+     * azimuth, pitch and and roll using the getOrientation() Method
      *
      * values[0]: azimuth
      * values[1]: pitch
