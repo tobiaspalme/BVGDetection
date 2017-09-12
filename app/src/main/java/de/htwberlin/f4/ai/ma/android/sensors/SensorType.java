@@ -1,7 +1,7 @@
 package de.htwberlin.f4.ai.ma.android.sensors;
 
 /**
- * Created by benni on 23.07.2017.
+ * Enum for custom sensor names
  */
 
 public enum SensorType {

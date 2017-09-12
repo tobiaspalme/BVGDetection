@@ -1,12 +1,21 @@
 package de.htwberlin.f4.ai.ma.measurement.modules;
 
 /**
- * Created by benni on 03.08.2017.
+ * PositionModule Interface
+ *
+ * used to calculate the current position (cartesian coordinates)
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface PositionModule{
 
+    // calculate the cartesian coordinates of the current position
     float[] calculatePosition();
+
+    // start module
     void start();
+
+    // stop module
     void stop();
 }

@@ -10,34 +10,37 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 
 /**
- * Simple interface for the Indoor Measurement.
- * Responsible for all sensor stuff.
+ * IndoorMeasurement Interface
+ *
+ * Used to determine the position and handle all sensor stuff
+ *
+ * Author: Benjamin Kneer
  */
 
 public interface IndoorMeasurement {
 
-    // calibrate steplength (m), stepperiod (ms), airpressure
+    // calibrate steplength (m), stepperiod (ms), airpressure and some other stuff
     void calibrate(CalibrationData calibrationData);
 
-    // start recording for postion calculcation
+    // start PositionModule for position calculcation
     void start();
 
-    // stop sensors
+    // stop sensors and PositionModule
     void stop();
 
-    // start specific sensors
+    // start 1..x specific sensors with the specified sample rate
     void startSensors(int sensorRate, SensorType... sensorType);
 
-    // get the relative coordinates in WKT FORMAT
+    // get the coordinates in WKT FORMAT
     String getCoordinates();
 
     // set the listener which receives updates from sensors
     void setSensorListener(SensorListener listener);
 
+    // set the stepdirectiondetect listener
     void setStepDirectionListener(StepDirectionDetectListener listener);
 
     // get the last values of every registered sensor, so we can read them
-    // at a specific time. That's required because every sensor got a different
-    // interval.
+    // at a specific time
     Map<SensorType, SensorData> getLastSensorValues();
 }

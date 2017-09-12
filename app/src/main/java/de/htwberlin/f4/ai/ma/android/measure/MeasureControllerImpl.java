@@ -33,6 +33,7 @@ import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistanceImpl;
 import de.htwberlin.f4.ai.ma.android.measure.barcode.BarcodeCaptureActivity;
+import de.htwberlin.f4.ai.ma.android.measure.edges.StepData;
 import de.htwberlin.f4.ai.ma.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorChecker;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorCheckerImpl;
@@ -135,7 +136,7 @@ public class MeasureControllerImpl implements MeasureController {
         String type = sharedPreferences.getString("pref_measurement_type", "Variante B");
         measurementType = IndoorMeasurementType.fromString(type);
         useStepDirectionDetect = sharedPreferences.getBoolean("pref_stepdirection", false);
-        barometerThreshold = Float.valueOf(sharedPreferences.getString("pref_barometer_threshold", "0.1"));
+        barometerThreshold = Float.valueOf(sharedPreferences.getString("pref_barometer_threshold", "0.14"));
         // load steplength and stepperiod calibration
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(view.getContext());
         calibrationData = calibratePersistance.load();
@@ -229,7 +230,6 @@ public class MeasureControllerImpl implements MeasureController {
                         break;
 
                     case STEP_DETECTOR:
-                        /*
                         handleNewStep();
                         // fix first step bug...
                         // first step won't get recognized by sensor so we just fake the step
@@ -237,7 +237,7 @@ public class MeasureControllerImpl implements MeasureController {
                         // same direction
                         if (stepCount == 1) {
                             handleNewStep();
-                        }*/
+                        }
                         break;
                     default:
                         break;
@@ -1098,9 +1098,6 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler.updateNode(targetNode, targetNode.getId());
         // update view with new edge data
         view.updateEdge(edge);
-
-        //TODO: REMOVE
-        save();
     }
 
     //todo: remove

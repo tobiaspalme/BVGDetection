@@ -13,7 +13,16 @@ import de.htwberlin.f4.ai.ma.measurement.LowPassFilter;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.OrientationModuleA;
 
 /**
- * Created by benni on 04.08.2017.
+ * OrientationModuleB Class which implements the OrientationModule interface
+ *
+ * Calculate current heading / azimuth so the system knows the direction
+ * of the user's movement
+ *
+ * Sensor: CompassFusion
+ *
+ * lowpass filter used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class OrientationModuleB extends OrientationModuleA {
@@ -25,6 +34,17 @@ public class OrientationModuleB extends OrientationModuleA {
         this.lowpassFilterValue = lowpassFilterValue;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * start sensor, register listener and apply lowpass filter
+     */
     @Override
     public void start() {
         compass = sensorFactory.getSensor(SensorType.COMPASS_FUSION, Sensor.SENSOR_RATE_MEASUREMENT);

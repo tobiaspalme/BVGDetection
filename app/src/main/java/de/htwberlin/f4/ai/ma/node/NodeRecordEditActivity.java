@@ -36,8 +36,8 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -46,7 +46,7 @@ import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
-import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
+import de.htwberlin.f4.ai.ma.persistence.JSON.JsonWriter;
 
 
 public class NodeRecordEditActivity extends BaseActivity implements AsyncResponse {
@@ -57,7 +57,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private int recordTime;
     private int progressStatus = 0;
     private ProgressBar progressBar;
-    private JSONWriter JSONWriter;
+    private JsonWriter JSONWriter;
     private TextView progressTextview;
     TextView initialWifiTextview;
     TextView initialWifiLabelTextview;
@@ -107,7 +107,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         }
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
-        JSONWriter = new JSONWriter();
+        JSONWriter = new JsonWriter();
 
 
         recordButton = (ImageButton) findViewById(R.id.record_button);

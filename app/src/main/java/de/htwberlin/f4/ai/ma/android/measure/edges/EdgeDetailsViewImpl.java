@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.android.measure.StepData;
 import de.htwberlin.f4.ai.ma.measurement.WKT;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;

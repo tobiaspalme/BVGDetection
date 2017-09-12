@@ -13,7 +13,13 @@ import de.htwberlin.f4.ai.ma.measurement.LowPassFilter;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.AltitudeModuleA;
 
 /**
- * Created by benni on 11.08.2017.
+ * AltitudeModuleD Class which implements the AltitudeModule interface.
+ *
+ * Calculate the relative height using the airpressure from barometer sensor
+ *
+ * lowpass filter used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class AltitudeModuleD extends AltitudeModuleA {
@@ -25,6 +31,17 @@ public class AltitudeModuleD extends AltitudeModuleA {
         this.lowpassFilterValue = lowpassFilterValue;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * start sensor, register listener and apply lowpass filter
+     */
     @Override
     public void start() {
         airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER, Sensor.SENSOR_RATE_MEASUREMENT);
@@ -36,7 +53,6 @@ public class AltitudeModuleD extends AltitudeModuleA {
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
                     float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
-                    //newValue.getValues()[0] = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], 0.1f);
                     newValue.setValues(new float[]{filteredValue});
                 }
 

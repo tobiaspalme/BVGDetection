@@ -5,7 +5,13 @@ import android.content.Context;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.AltitudeModuleA;
 
 /**
- * Created by benni on 10.08.2017.
+ * AltitudeModuleC Class which implements the AltitudeModule interface.
+ *
+ * Calculate the relative height using the airpressure from barometer sensor
+ *
+ * No Lowpassfilter is used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class AltitudeModuleC extends AltitudeModuleA {

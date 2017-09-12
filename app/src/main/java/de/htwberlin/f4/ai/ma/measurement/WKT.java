@@ -1,7 +1,9 @@
 package de.htwberlin.f4.ai.ma.measurement;
 
 /**
- * Created by benni on 19.08.2017.
+ * WKT Class
+ *
+ * Used to create transform coordinates <-> WKT String
  */
 
 public class WKT {
@@ -9,7 +11,14 @@ public class WKT {
     public static final String POINT_Z = "POINT Z";
 
 
-    // expects 3 coordinate values
+
+    /**
+     * convert coordinates to wkt string.
+     * expects 3 coordinate values
+     *
+     * @param coordinates coordinates
+     * @return wkt string with coordinates
+     */
     public static String coordToStr(float[] coordinates) {
         String result = null;
 
@@ -20,8 +29,16 @@ public class WKT {
         return result;
     }
 
-    // expects a string containing 3 coordinate values
-    // for example: POINT Z(1.0 2.0 3.0)
+
+    /**
+     * Convert wkt string to float[]
+     *
+     * expects a string containing 3 coordinate values
+     * for example: POINT Z(1.0 2.0 3.0)
+     *
+     * @param coordinatesStr wkt string with coordinates
+     * @return coordinates in float[]
+     */
     public static float[] strToCoord(String coordinatesStr) {
         float[] coordinates = null;
         if (!coordinatesStr.contains(POINT_Z)) {

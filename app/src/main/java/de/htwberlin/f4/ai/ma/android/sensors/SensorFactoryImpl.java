@@ -16,7 +16,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.stepcounter.StepDetector;
 import de.htwberlin.f4.ai.ma.android.sensors.temperature.Thermometer;
 
 /**
- * Created by benni on 23.07.2017.
+ * SensorFactoryImpl class which implements the SensorFactory Interface
+ *
+ * Used to create the correct sensors
+ *
+ * Author: Benjamin Kneer
  */
 
 public class SensorFactoryImpl implements SensorFactory{
@@ -26,6 +30,14 @@ public class SensorFactoryImpl implements SensorFactory{
     public SensorFactoryImpl(Context context) {
         this.context = context;
     }
+
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
 
     @Override
     public Sensor getSensor(SensorType sensorType, int sensorRate) {

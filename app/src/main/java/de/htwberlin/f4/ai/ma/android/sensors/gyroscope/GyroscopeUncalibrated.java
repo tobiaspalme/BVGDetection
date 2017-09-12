@@ -14,7 +14,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Created by benni on 22.07.2017.
+ * Gyroscope Class which implements the Sensor and SensorEventListener Interface
+ *
+ * Used Android Sensor: Sensor.TYPE_LINEAR_GYROSCOPE_UNCALIBRATED
+ *
+ * Author: Benjamin Kneer
  */
 
 public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.f4.ai.ma.android.sensors.Sensor {
@@ -36,6 +40,17 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
         this.sensorRate = sensorRate;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Sensor Interface Methods                            *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Get sensor from SensorManager and register Listener
+     */
     @Override
     public void start() {
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
@@ -44,6 +59,10 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
         }
     }
 
+
+    /**
+     * Unregister sensor listener
+     */
     @Override
     public void stop() {
         if (sensorManager != null) {
@@ -51,11 +70,23 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
         }
     }
 
+
+    /**
+     * Get the latest sensor values
+     *
+     * @return latest sensor values
+     */
     @Override
     public SensorData getValues() {
         return sensorData;
     }
 
+
+    /**
+     * Check if the sensor is available on the device
+     *
+     * @return available true / false
+     */
     @Override
     public boolean isSensorAvailable() {
         if (sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED) == null) {
@@ -65,16 +96,50 @@ public class GyroscopeUncalibrated implements SensorEventListener, de.htwberlin.
         return true;
     }
 
+
+    /**
+     * set the custom sensor listener
+     *
+     * @param listener sensorlistener
+     */
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
 
+
+    /**
+     * get the type of sensor
+     *
+     * @return sensortype
+     */
     @Override
     public SensorType getSensorType() {
         return SENSORTYPE;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                      SensorEventListener Interface Methods                        *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Copy sensor values and create SensorData Object with sensortype, correct timestamp and
+     * sensor values
+     *
+     * values[0]: angular speed (without drift compensation) around the X axis in rad/s
+     * values[1]: angular speed (without drift compensation) around the Y axis in rad/s
+     * values[2]: angular speed (without drift compensation) around the Z axis in rad/s
+     *
+     * All values are in radians/second and measure the rate of rotation around the X, Y and Z axis
+     *
+     * Rotation is positive in the counter-clockwise direction (right-hand rule)
+     *
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE_UNCALIBRATED) {

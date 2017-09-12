@@ -6,11 +6,17 @@ import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.PositionModuleA;
 
 /**
+ * PositionModuleB Class which implements the PositionModule Interface
+ *
+ * Used for IndoorMeasurementType.VARIANT_B
+ *
  * Orientation: CompassFusion (Rotation Vector)
  * Altitude: Barometer
  * Distance: Steplength
  *
- * Lowpass filter
+ * Lowpass filter used (weighted smoothing)
+ *
+ * Author: Benjamin Kneer
  */
 
 public class PositionModuleB extends PositionModuleA {

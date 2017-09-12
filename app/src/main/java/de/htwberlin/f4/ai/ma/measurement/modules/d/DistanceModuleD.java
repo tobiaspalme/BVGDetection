@@ -5,7 +5,12 @@ import android.content.Context;
 import de.htwberlin.f4.ai.ma.measurement.modules.c.DistanceModuleC;
 
 /**
- * Created by benni on 11.08.2017.
+ * DistanceModuleD Class which implements the DistanceModule Interface
+ *
+ * Simply calculate distance by using the previously calibrated
+ * step length. Change distance if stair toggle is active
+ *
+ * Author: Benjamin Kneer
  */
 
 public class DistanceModuleD extends DistanceModuleC {

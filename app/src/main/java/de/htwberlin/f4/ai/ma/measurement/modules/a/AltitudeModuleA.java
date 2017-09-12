@@ -18,7 +18,13 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.modules.AltitudeModule;
 
 /**
- * Created by benni on 28.07.2017.
+ * AltitudeModuleA Class which implements the AltitudeModule interface.
+ *
+ * Calculate the relative height using the airpressure from barometer sensor
+ *
+ * No lowpass filter used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class AltitudeModuleA implements AltitudeModule {
@@ -44,16 +50,30 @@ public class AltitudeModuleA implements AltitudeModule {
     }
 
 
-    // since we are not interested in an precise absolute altitude, we use this method to calculate
-    // the relative altitude between two points
-
+    /**
+     * calculate altitude using the airpressure
+     *
+     * @param pressure airpressure
+     * @return altitude in meters
+     */
     private float calcAltitude(float pressure) {
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         return sensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure);
     }
 
-    // because pressure drifts over time, we calculate the relative altitude change
-    // compared to previous altitude
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * calculate the altitude change
+     *
+     * @return
+     */
     @Override
     public float getAltitude() {
         float currentAirPressure;
@@ -70,7 +90,7 @@ public class AltitudeModuleA implements AltitudeModule {
             altitudeDiff = currentAltitude - lastAltitude;
             // set new values
             lastStepTimestamp = currentStepTimestamp;
-            //lastAltitude = currentAltitude;
+            // check for threshold
             if (Math.abs(altitudeDiff) >= threshold && Math.abs(altitudeDiff) <= THRESHOLD_MAX) {
                 lastAltitude = currentAltitude;
             } else {
@@ -81,6 +101,9 @@ public class AltitudeModuleA implements AltitudeModule {
         return altitudeDiff;
     }
 
+    /**
+     * start sensor and register listener
+     */
     @Override
     public void start() {
         airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER, Sensor.SENSOR_RATE_MEASUREMENT);
@@ -94,6 +117,9 @@ public class AltitudeModuleA implements AltitudeModule {
 
     }
 
+    /**
+     * stop sensor and unregister listener
+     */
     @Override
     public void stop() {
         if (airPressureSensor != null) {

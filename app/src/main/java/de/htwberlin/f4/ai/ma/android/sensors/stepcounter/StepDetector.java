@@ -18,7 +18,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Created by benni on 23.07.2017.
+ * StepDetector Class which implements the Sensor and SensorEventListener Interface
+ *
+ * Used Android Sensor: Sensor.TYPE_STEP_DETECTOR
+ *
+ * Author: Benjamin Kneer
  */
 
 public class StepDetector implements Sensor, SensorEventListener{
@@ -51,6 +55,11 @@ public class StepDetector implements Sensor, SensorEventListener{
         this.context = context;
     }
 
+    /**
+     * load stepperiod from settings
+     *
+     * @return
+     */
     private int loadStepPeriod() {
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(context);
         CalibrationData calibrationData = calibratePersistance.load();
@@ -64,6 +73,17 @@ public class StepDetector implements Sensor, SensorEventListener{
         return period;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Sensor Interface Methods                            *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Get sensor from SensorManager and register Listener
+     */
     @Override
     public void start() {
         stepCount = 0;
@@ -74,6 +94,10 @@ public class StepDetector implements Sensor, SensorEventListener{
         }
     }
 
+
+    /**
+     * Unregister sensor listener
+     */
     @Override
     public void stop() {
         if (sensorManager != null) {
@@ -81,12 +105,23 @@ public class StepDetector implements Sensor, SensorEventListener{
         }
     }
 
+
+    /**
+     * Get the latest sensor values
+     *
+     * @return latest sensor values
+     */
     @Override
     public SensorData getValues() {
         return sensorData;
     }
 
 
+    /**
+     * Check if the sensor is available on the device
+     *
+     * @return available true / false
+     */
     @Override
     public boolean isSensorAvailable() {
         if (sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_DETECTOR) == null) {
@@ -96,29 +131,56 @@ public class StepDetector implements Sensor, SensorEventListener{
         return true;
     }
 
+
+    /**
+     * set the custom sensor listener
+     *
+     * @param listener sensorlistener
+     */
     @Override
     public void setListener(SensorListener listener) {
         this.listener = listener;
     }
 
+
+    /**
+     * get the type of sensor
+     *
+     * @return sensortype
+     */
     @Override
     public SensorType getSensorType() {
         return SENSORTYPE;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                      SensorEventListener Interface Methods                        *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * Copy sensor values and create SensorData Object with sensortype, correct timestamp and
+     * sensor values
+     *
+     * reports step count
+     *
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
 
+        // ignore first event of this sensor, because it's fired instantly when sensor is started
         if (firstRun) {
             firstRun = false;
             return;
         }
-        
 
-        // if a step was fail detected
+        // try to reduce fail detects
         if (currentStepTimestamp - lastStepTimestamp < (stepPeriod - STEPPERIODTOLERANCE)) {
-            Log.d("tmp", "failstep");
             return;
         }
 

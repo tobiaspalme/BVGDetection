@@ -90,7 +90,7 @@
             android:title="Barometer Threshold (m)"
             android:inputType="numberDecimal"
             android:numeric="decimal"
-            android:defaultValue="0.1"
+            android:defaultValue="0.14"
             />
 
         <CheckBoxPreference

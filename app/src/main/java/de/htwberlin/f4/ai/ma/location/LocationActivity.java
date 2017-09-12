@@ -22,8 +22,8 @@ import com.example.carol.bvg.R;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;

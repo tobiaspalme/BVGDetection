@@ -19,18 +19,11 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
- * Created by benni on 05.08.2017.
+ * StepDirectionModuleImpl Class which implements the StepDirectionModule Interface
  *
- * not working correctly if the step gets detected before the last high / lowpeak occured..
- * For example: we did a rightstep, the highpeak is right before the step and the lowpeak
- * would be right after step... so we just found a highpeak and no lowpeak. Since lowpeak got
- * a default timestamp of "0", the non existent lowpeak occured before highpeak -> detect left step
- * instead of right step
+ * used to detect the last step direction by analyzing the accelerometer_linear data
  *
- * A solution would be to use a scheduled thread, which gets executed 50-100ms after the stepdetection,
- * so we could get the missing low / high peak. Then we need a IndoorMeasurementListener which can
- * inform about the direction
- *
+ * Author: Benjamin Kneer
  */
 
 public class StepDirectionModuleImpl implements StepDirectionModule {
@@ -41,11 +34,8 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
     private SensorDataModel dataModel;
     private Context context;
 
-
-
     private static final float THRESHOLD_POSITIVE = 2.75f;
     private static final float THRESHOLD_NEGATIVE = -2.75f;
-
 
 
     public StepDirectionModuleImpl(Context context) {
@@ -61,22 +51,19 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
         this.lastStepTimestamp = lastStepTimestamp;
     }
 
-    private void initSensor() {
-        // saving data from accelerator_linear sensor, so we can check for step direction
-        sensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_LINEAR, Sensor.SENSOR_RATE_FASTEST);
-        sensor.setListener(new SensorListener() {
-            @Override
-            public void valueChanged(SensorData newValue) {
-                dataModel.insertData(newValue);
-            }
-        });
 
-        sensor.start();
-    }
+    /************************************************************************************
+    *                                                                                   *
+    *                               Interface Methods                                   *
+    *                                                                                   *
+    *************************************************************************************/
 
-    // checking for the last high and lowpeaks on x and y axis
-    // so we dont get incorrect results if the user shaked the device e.g. without
-    // triggering the stepdetector and doing a step afterwards.
+
+    /**
+     * return the last detected step direction
+     *
+     * @return stepdirection
+     */
     @Override
     public StepDirection getLastStepDirection() {
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
@@ -98,13 +85,6 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
             SensorData highPeakY = peaksY[0];
             SensorData lowPeakY = peaksY[1];
             float peakDiffY = highPeakY.getValues()[1] + Math.abs(lowPeakY.getValues()[1]);
-
-            Log.d("tmp", "Timestamp lowpeakX: " + lowPeakX.getTimestamp() + " lowpeakX value: " + lowPeakX.getValues()[0]);
-            Log.d("tmp", "Timestamp highpeakX: " + highPeakX.getTimestamp() + " highpeakX value: " + highPeakX.getValues()[0]);
-
-            Log.d("tmp", "Timestamp lowpeakY: " + lowPeakY.getTimestamp() + " lowpeakY value: " + lowPeakY.getValues()[1]);
-            Log.d("tmp", "Timestamp highpeakY: " + highPeakY.getTimestamp() + " highpeakY value: " + highPeakY.getValues()[1]);
-
             int screenRotation = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
 
             // handle screen orientation
@@ -345,8 +325,6 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
                     }
                 }
             }
-
-
         }
 
         lastStepTimestamp = currentStepTimestamp;
@@ -354,14 +332,51 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
         return direction;
     }
 
+
+    /**
+     * return the used sensor
+     *
+     * @return sensor
+     */
     @Override
     public Sensor getSensor() {
         return sensor;
     }
 
-    // Making a step forward / backward results in change of linear_acceleration on y axis
-    // result[0] = highpeak
-    // result[1] = lowpeak
+
+    /************************************************************************************
+    *                                                                                   *
+    *                               Class Methods                                       *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * start sensor and register listener.
+     * could be improved using lowpass filter
+     */
+    private void initSensor() {
+        // saving data from accelerator_linear sensor, so we can check for step direction
+        sensor = sensorFactory.getSensor(SensorType.ACCELEROMETER_LINEAR, Sensor.SENSOR_RATE_FASTEST);
+        sensor.setListener(new SensorListener() {
+            @Override
+            public void valueChanged(SensorData newValue) {
+                dataModel.insertData(newValue);
+            }
+        });
+
+        sensor.start();
+    }
+
+
+    /**
+     * find low and highpeaks for the specified axis
+     *
+     * @param dataList list holding all sensor data
+     * @param axis axis to analyze
+     * @return result[0] = highpeak
+     * result[1] = lowpeak
+     */
     private SensorData[] findPeaks(List<SensorData> dataList, int axis) {
         SensorData highPeak = new SensorData();
         SensorData lowPeak = new SensorData();
@@ -395,14 +410,9 @@ public class StepDirectionModuleImpl implements StepDirectionModule {
                 break;
             }
         }
-
-
         result[0] = highPeak;
         result[1] = lowPeak;
 
         return result;
     }
-
-
-
 }

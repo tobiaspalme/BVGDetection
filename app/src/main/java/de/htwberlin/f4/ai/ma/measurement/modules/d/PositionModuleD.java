@@ -6,11 +6,17 @@ import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.measurement.modules.a.PositionModuleA;
 
 /**
- * Orientation: CompassSimple
+ * PositionModuleD Class which implements the PositionModule Interface
+ *
+ * Used for IndoorMeasurementType.VARIANT_D
+ *
+ * Orientation: CompassSimple (Accelerometer + Magnetic field sensor)
  * Altitude: Barometer
  * Distance: Steplength
  *
- * Lowpass filter
+ * Lowpass filter used
+ *
+ * Author: Benjamin Kneer
  */
 
 public class PositionModuleD extends PositionModuleA{

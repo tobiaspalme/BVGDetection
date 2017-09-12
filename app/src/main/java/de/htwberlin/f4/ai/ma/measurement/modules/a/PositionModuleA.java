@@ -11,11 +11,17 @@ import de.htwberlin.f4.ai.ma.measurement.modules.OrientationModule;
 import de.htwberlin.f4.ai.ma.measurement.modules.PositionModule;
 
 /**
+ * PositionModuleA Class which implements the PositionModule Interface
+ *
+ * Used for IndoorMeasurementType.VARIANT_A
+ *
  * Orientation: CompassFusion (Rotation Vector)
  * Altitude: Barometer
  * Distance: Steplength
  *
  * No Lowpass filter
+ *
+ * Author: Benjamin Kneer
  */
 
 public class PositionModuleA implements PositionModule {
@@ -27,7 +33,7 @@ public class PositionModuleA implements PositionModule {
     protected CalibrationData calibrationData;
 
     // coordinates[0] = x = east / west
-    // coordinates[1] = y = forward / backward
+    // coordinates[1] = y = north / south
     // coordinates[2] = z = movement upward / downward
     private float[] coordinates;
 
@@ -36,33 +42,51 @@ public class PositionModuleA implements PositionModule {
         altitudeModule = new AltitudeModuleA(context, calibrationData.getAirPressure(), calibrationData.getBarometerThreshold());
         distanceModule = new DistanceModuleA(context, calibrationData.getStepLength());
         orientationModule = new OrientationModuleA(context);
-        // set start point to 0,0,0
         coordinates = calibrationData.getCoordinates();
         this.calibrationData = calibrationData;
         this.context = context;
     }
 
+
+    /************************************************************************************
+    *                                                                                   *
+    *                              Interface Methods                                    *
+    *                                                                                   *
+    *************************************************************************************/
+
+
+    /**
+     * calculate new position based on previous coordinates
+     *
+     * @return new calculated cartesian coordinates
+     */
     @Override
     public float[] calculatePosition() {
 
         // calculate new position with these 3 values
-        //float altitude = altitudeModule.getAltitude();
-        float altitude = 0f;
+        float altitude = altitudeModule.getAltitude();
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
 
-        //Toast toast = Toast.makeText(context, "Orientation: " + orientation, Toast.LENGTH_SHORT);
-        //toast.show();
+        /*
+        // calculate spherical coordinates and transform them to cartesian coordinates
+        double sinlambda = Math.sin(Math.toRadians(90 - orientation));
+        double coslambda = Math.cos(Math.toRadians(90 - orientation));
+        // calculate inclination angle
+        double phi = Math.toDegrees(Math.asin(altitude / distance));
+        double cosphi = Math.cos(Math.toRadians(phi));
 
+        float x = (float) (distance * cosphi * coslambda);
+        float y = (float) (distance * cosphi * sinlambda);*/
 
-        // orientation stuff
-        double sina = Math.sin(Math.toRadians(90 - orientation));
-        double cosa = Math.cos(Math.toRadians(90 - orientation));
-        // calculate distance -> altitude = delta z
-        float p = (float) Math.sqrt(Math.pow(distance, 2) - Math.pow(altitude, 2));
-        // calculate movement along x and y axis using the calculated rho value
-        float x = (float)cosa * p;
-        float y = (float)sina * p;
+        double sinbeta = Math.sin(Math.toRadians(orientation));
+        double cosbeta = Math.cos(Math.toRadians(orientation));
+
+        double alpha = Math.toDegrees(Math.asin(altitude / distance));
+        double cosalpha = Math.cos(Math.toRadians(alpha));
+
+        float x = (float) (distance * cosalpha * sinbeta);
+        float y = (float) (distance * cosalpha * cosbeta);
 
         coordinates[0] += x;
         coordinates[1] += y;
@@ -71,6 +95,10 @@ public class PositionModuleA implements PositionModule {
         return coordinates;
     }
 
+
+    /**
+     * start all modules
+     */
     @Override
     public void start() {
         altitudeModule.start();
@@ -78,6 +106,10 @@ public class PositionModuleA implements PositionModule {
         orientationModule.start();
     }
 
+
+    /**
+     * stop all modules
+     */
     @Override
     public void stop() {
         altitudeModule.stop();
