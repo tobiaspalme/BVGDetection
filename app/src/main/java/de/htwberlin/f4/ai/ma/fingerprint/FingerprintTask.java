@@ -43,6 +43,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private List<SignalInformation> signalInformationList;
     private List<AccessPointSample> accessPointSampleList;
     private boolean calculateAverage = false;
+    private long timestampWifimanager = 0;
     public AsyncResponse delegate = null;
 
     // Normal mode
@@ -83,9 +84,17 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 wifiManager.startScan();
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
+                if (wifiScanList.get(0).timestamp == timestampWifimanager && seconds == 1) {
+                    Log.d("FingerprintTask", "Same timestamp and 1s-scan. Please try again");
+                    return null;
+                }
+                timestampWifimanager = wifiScanList.get(0).timestamp;
+
+                Log.d("### scanresults:", String.valueOf(wifiScanList.size()));
+
                 for (final ScanResult sr : wifiScanList) {
                     if (sr.SSID.equals(wifiName)) {
-                        Log.d("Fingerprinting... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level + " dBm");
+                        Log.d("Fingerprinting... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp );
                         AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
                         multiMap.put(sr.BSSID, sr.level);

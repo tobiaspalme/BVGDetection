@@ -272,7 +272,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             }
 
             locationsCounter++;
-            Log.d("LocationActivity", "locationsCounter = " + locationsCounter);
             sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
             databaseHandler.insertLocationResult(locationResult);
         }
