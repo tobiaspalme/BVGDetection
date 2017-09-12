@@ -13,11 +13,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class JSONWriter {
+public class JsonWriter {
     private Context context;
 
     /*
-    public JSONWriter(Context context) {
+    public JsonWriter(Context context) {
         this.context = context;
     }*/
 

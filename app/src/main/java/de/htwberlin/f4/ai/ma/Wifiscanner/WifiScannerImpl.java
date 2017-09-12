@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.wifiscanner;
+package de.htwberlin.f4.ai.ma.Wifiscanner;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;

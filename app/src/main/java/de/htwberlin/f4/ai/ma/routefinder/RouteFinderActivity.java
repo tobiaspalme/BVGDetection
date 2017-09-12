@@ -25,8 +25,8 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.wifiscanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;

@@ -68,6 +68,7 @@ public class PositionModuleA implements PositionModule {
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
 
+        /*
         // calculate spherical coordinates and transform them to cartesian coordinates
         double sinlambda = Math.sin(Math.toRadians(90 - orientation));
         double coslambda = Math.cos(Math.toRadians(90 - orientation));
@@ -76,7 +77,16 @@ public class PositionModuleA implements PositionModule {
         double cosphi = Math.cos(Math.toRadians(phi));
 
         float x = (float) (distance * cosphi * coslambda);
-        float y = (float) (distance * cosphi * sinlambda);
+        float y = (float) (distance * cosphi * sinlambda);*/
+
+        double sinbeta = Math.sin(Math.toRadians(orientation));
+        double cosbeta = Math.cos(Math.toRadians(orientation));
+
+        double alpha = Math.toDegrees(Math.asin(altitude / distance));
+        double cosalpha = Math.cos(Math.toRadians(alpha));
+
+        float x = (float) (distance * cosalpha * sinbeta);
+        float y = (float) (distance * cosalpha * cosbeta);
 
         coordinates[0] += x;
         coordinates[1] += y;
