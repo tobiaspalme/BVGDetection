@@ -6,6 +6,10 @@
         android:title="Verbose-Modus (fingerprinting)"
         android:defaultValue="false" />
 
+    <CheckBoxPreference
+        android:key="use_ssid_filter"
+        android:title="WLAN-Filter benutzen"
+        android:defaultValue="false" />
 
     <PreferenceCategory
         android:title="Aufnahme"

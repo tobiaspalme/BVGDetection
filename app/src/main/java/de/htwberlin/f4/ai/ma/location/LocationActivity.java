@@ -74,6 +74,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     boolean euclideanDistance;
     boolean knnAlgorithm;
     private boolean verboseMode;
+    private boolean useSSIDfilter;
 
     int knnValue;
     int movingAverageOrder;
@@ -112,9 +113,9 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         euclideanDistance = sharedPreferences.getBoolean("pref_euclideanDistance", false);
         knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
-
-
+        useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
         locationsCounter = sharedPreferences.getInt("locationsCounter", -1);
+
         Log.d("LocationActivity", "locationsCounter onCreate= " + locationsCounter);
         if (locationsCounter == -1) {
             locationsCounter = 0;
@@ -144,7 +145,12 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         //coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
 
-        refreshWifiDropdown();
+        if (useSSIDfilter) {
+            refreshWifiDropdown();
+        } else {
+            refreshImageview.setEnabled(false);
+            wifiDropdown.setEnabled(false);
+        }
 
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -203,17 +209,27 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         //coordinatesTextview.setText("");
         //locationImageview.setEnabled(false);
 
-        if (wifiDropdown.getAdapter().getCount() > 0) {
+        FingerprintTask fingerprintTask;
+
+        // If a SSID filter is set, scan for this SSID
+        if (useSSIDfilter && wifiDropdown.getAdapter().getCount() > 0) {
             locationTextview.setText(getString(R.string.searching_node_text));
-
-            FingerprintTask fingerprintTask;
-
             if (verboseMode) {
-                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null, infobox );
+                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null, infobox);
             } else {
                 fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
             }
+            fingerprintTask.delegate = this;
+            fingerprintTask.execute();
 
+        // If no SSID filter is set, scan for all SSIDS
+        } else if (!useSSIDfilter) {
+            locationTextview.setText(getString(R.string.searching_node_text));
+            if (verboseMode) {
+                fingerprintTask = new FingerprintTask(null, seconds, wifiManager, true, progressBar, null, infobox);
+            } else {
+                fingerprintTask = new FingerprintTask(null, seconds, wifiManager, true, progressBar, null);
+            }
             fingerprintTask.delegate = this;
             fingerprintTask.execute();
         }

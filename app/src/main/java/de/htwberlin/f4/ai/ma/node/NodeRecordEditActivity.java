@@ -82,6 +82,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     private boolean showingBigPictureAtTheMoment;
     private boolean updateMode = false;
     private boolean verboseMode;
+    private boolean useSSIDfilter;
     private Node nodeToUpdate;
     private File sdCard = Environment.getExternalStorageDirectory();
     private Context context = this;
@@ -110,6 +111,8 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
         JSONWriter = new JSONWriter();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
 
 
         recordButton = (ImageButton) findViewById(R.id.record_button);
@@ -139,10 +142,19 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         takingPictureAtTheMoment = false;
         showingBigPictureAtTheMoment = false;
 
+        useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
 
         if (hasPermissions(this, permissions)) {
-            refreshWifiDropdown();
+            if (useSSIDfilter) {
+                refreshWifiDropdown();
+            } else {
+                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                wifiNamesDropdown.setEnabled(false);
+                refreshImageview.setEnabled(false);
+            }
         }
+
+
 
         recordButton.setImageResource(R.drawable.fingerprint);
         captureButton.setImageResource(R.drawable.camera);
@@ -265,13 +277,20 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
 
 
-                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
 
                         if (verboseMode) {
-                            fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
+                            if (useSSIDfilter) {
+                                fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
+                            } else {
+                                fingerprintTask = new FingerprintTask(null, 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
+                            }
                         } else {
-                            fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                            if (useSSIDfilter) {
+                                fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                            } else {
+                                fingerprintTask = new FingerprintTask(null, 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                            }
                         }
 
                         fingerprintTask.delegate = NodeRecordEditActivity.this;

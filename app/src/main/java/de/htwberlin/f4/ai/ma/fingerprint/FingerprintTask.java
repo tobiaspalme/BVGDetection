@@ -90,11 +90,21 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 }
                 timestampWifimanager = wifiScanList.get(0).timestamp;
 
-                Log.d("### scanresults:", String.valueOf(wifiScanList.size()));
+                Log.d("Fingerprinting... ", "found networks: " + String.valueOf(wifiScanList.size()));
 
                 for (final ScanResult sr : wifiScanList) {
-                    if (sr.SSID.equals(wifiName)) {
-                        Log.d("Fingerprinting... ", "MAC: " +  sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp );
+
+                    // If the wifiName was defined, filter for only this SSID
+                    if (wifiName != null) {
+                        if (sr.SSID.equals(wifiName)) {
+                            Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
+                            AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
+                            accessPointSampleList.add(accessPointSample);
+                            multiMap.put(sr.BSSID, sr.level);
+                        }
+                    // No filter while scanning
+                    } else {
+                        Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
                         AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
                         accessPointSampleList.add(accessPointSample);
                         multiMap.put(sr.BSSID, sr.level);
