@@ -75,7 +75,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     List<String> nodeNames;
     List<String> nodeDescriptions;
     List<String> nodePicturePaths;
-    private boolean verboseMode;
+    boolean verboseMode;
 
     WifiManager wifiManager;
 
@@ -153,7 +153,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         databaseHandler.insertEdge(e6);
 
         *///----------------------
-
+/*
         Node k1 = NodeFactory.createInstance("k1", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node k2 = NodeFactory.createInstance("k2", "", FingerprintFactory.createInstance("", null), "", "", "");
         Node k3 = NodeFactory.createInstance("k3", "", FingerprintFactory.createInstance("", null), "", "", "");
@@ -202,7 +202,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         databaseHandler.insertEdge(l7);
 
 
-//-----------------------------------
+//-----------------------------------*/
         //navigationResultListview.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
 
 
