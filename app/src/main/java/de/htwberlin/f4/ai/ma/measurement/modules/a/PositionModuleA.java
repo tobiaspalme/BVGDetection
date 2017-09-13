@@ -68,20 +68,10 @@ public class PositionModuleA implements PositionModule {
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float orientation = orientationModule.getOrientation();
 
-        /*
-        // calculate spherical coordinates and transform them to cartesian coordinates
-        double sinlambda = Math.sin(Math.toRadians(90 - orientation));
-        double coslambda = Math.cos(Math.toRadians(90 - orientation));
-        // calculate inclination angle
-        double phi = Math.toDegrees(Math.asin(altitude / distance));
-        double cosphi = Math.cos(Math.toRadians(phi));
-
-        float x = (float) (distance * cosphi * coslambda);
-        float y = (float) (distance * cosphi * sinlambda);*/
-
         double sinbeta = Math.sin(Math.toRadians(orientation));
         double cosbeta = Math.cos(Math.toRadians(orientation));
 
+        // calculate inclination angle
         double alpha = Math.toDegrees(Math.asin(altitude / distance));
         double cosalpha = Math.cos(Math.toRadians(alpha));
 
