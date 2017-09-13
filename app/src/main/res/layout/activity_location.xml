@@ -8,58 +8,22 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/wifi_span_layout"
-        android:layout_centerHorizontal="true">
-
-         <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginStart="15dp"
-             android:layout_marginTop="8dp"
-             android:textAppearance="?android:attr/textAppearanceLarge"
-             android:text="@string/wifi_name_text"
-             android:labelFor="@+id/wifi_names_dropdown_location"
-             android:id="@+id/wifi_name_label_textview" />
-
-         <Spinner
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:id="@+id/wifi_names_dropdown_location"
-             android:layout_toEndOf="@+id/wifi_name_label_textview"
-             android:spinnerMode="dropdown">
-         </Spinner>
-
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_toEndOf="@+id/wifi_names_dropdown_location"
-             android:contentDescription="@string/image_placeholder"
-             android:layout_marginTop="8dp"
-             android:id="@+id/refresh_imageview_locationactivity"/>
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/buttons_layout"
-        android:layout_below="@+id/wifi_span_layout"
+        android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true" >
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/measure_one_second_text"
-            android:id="@+id/start_measuring_1s_button"
-            />
+            android:id="@+id/start_measuring_1s_button" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/measure_ten_seconds_text"
             android:id="@+id/start_measurement_10s_button"
-            android:layout_toEndOf="@+id/start_measuring_1s_button"
-            />
+            android:layout_toEndOf="@+id/start_measuring_1s_button" />
 
     </RelativeLayout>
 
@@ -103,17 +67,6 @@
             android:text="@string/measured_node_textview_text"
             android:textColor="@android:color/holo_red_dark"/>
 
-<!--
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/location_textview"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/description_text"
-            android:labelFor="@+id/description_textview_location"
-            android:id="@+id/description_textview_label"/> -->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,25 +75,6 @@
             android:layout_marginStart="8dp"
             android:id="@+id/description_textview_location"
             android:layout_below="@+id/location_textview"/>
-
-
-<!--
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/description_textview_label"
-            android:text="@string/coordinates_text"
-            android:labelFor="@+id/coordinates_textview_location"
-            android:id="@+id/coordinates_textview_label"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:id="@+id/coordinates_textview_location"
-            android:layout_toEndOf="@+id/coordinates_textview_label"
-            android:layout_below="@+id/description_textview_location"/>-->
-
 
         <ImageView
             android:layout_width="250dp"
@@ -151,9 +85,8 @@
             android:layout_marginTop="15dp"
             android:layout_below="@+id/description_textview_location"/>
 
-
-
     </RelativeLayout>
+
 
     <ImageButton
         android:layout_width="wrap_content"

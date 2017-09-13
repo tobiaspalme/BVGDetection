@@ -6,14 +6,23 @@
         android:title="Verbose-Modus (fingerprinting)"
         android:defaultValue="false" />
 
-    <CheckBoxPreference
-        android:key="use_ssid_filter"
-        android:title="WLAN-Filter benutzen"
-        android:defaultValue="false" />
+
 
     <PreferenceCategory
         android:title="Aufnahme"
         android:key="pref_offline">
+
+        <CheckBoxPreference
+            android:key="use_ssid_filter"
+            android:title="WLAN-Filter benutzen"
+            android:defaultValue="false" />
+
+        <de.htwberlin.f4.ai.ma.settings.ListPreference
+            android:key="default_wifi_network"
+            android:dependency="use_ssid_filter"
+            android:title="Filter für WLAN" />
+
+
 
         <CheckBoxPreference
             android:key="pref_movingAverage"

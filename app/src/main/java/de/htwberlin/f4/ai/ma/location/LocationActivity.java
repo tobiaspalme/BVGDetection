@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -22,8 +23,8 @@ import com.example.carol.bvg.R;
 
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -49,13 +50,9 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     Button measure10sButton;
     ImageButton detailedResultsImagebutton;
     ImageView locationImageview;
-    ImageView refreshImageview;
     TextView locationTextview;
     TextView descriptionTextview;
-
     TextView infobox;
-    // TextView coordinatesLabelTextview;
-    // TextView coordinatesTextview;
     ProgressBar progressBar;
 
     Context context;
@@ -63,8 +60,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private String settingsString;
-    private Spinner wifiDropdown;
-    //private FoundNode foundNode;
     private WifiManager wifiManager;
 
     private int locationsCounter;
@@ -96,13 +91,9 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
         detailedResultsImagebutton = (ImageButton) findViewById(R.id.location_detailed_results_imagebutton);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
-        refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_locationactivity);
         locationTextview = (TextView) findViewById(R.id.location_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
         infobox = (TextView) findViewById(R.id.infobox_location);
-        //coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_textview_label);
-        //coordinatesTextview = (TextView) findViewById(R.id.coordinates_textview_location);
-        wifiDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown_location);
         progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
 
@@ -131,34 +122,15 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                 + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
 
 
-
         detailedResultsImagebutton.setImageResource(R.drawable.info);
-        refreshImageview.setImageResource(R.drawable.refresh);
-        refreshImageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshWifiDropdown();
-            }
-        });
 
-
-        //coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
-
-        if (useSSIDfilter) {
-            refreshWifiDropdown();
-        } else {
-            refreshImageview.setEnabled(false);
-            wifiDropdown.setEnabled(false);
-        }
 
         measure1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    //progressBar.setVisibility(View.INVISIBLE);
                     measure1sButton.setEnabled(false);
                     measure10sButton.setEnabled(false);
                     findLocation(1);
-
                 }
             });
 
@@ -181,21 +153,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     }
 
-
-    /**
-     * Scan for WiFi names (SSIDs) and add them to the dropdown
-     */
-    private void refreshWifiDropdown() {
-        //wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
-        WifiScanner wifiScanner = WifiScannerFactory.createInstance();
-        List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
-
-        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
-        wifiDropdown.setAdapter(dropdownAdapter);
-        Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
-    }
-
     /**
      * Create a fingerprint
      * @param seconds the time to measure in seconds
@@ -203,28 +160,25 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     private void findLocation(final int seconds) {
 
         locationImageview.setVisibility(View.INVISIBLE);
-       // coordinatesLabelTextview.setVisibility(View.INVISIBLE);
-
+        locationTextview.setText(getString(R.string.searching_node_text));
         descriptionTextview.setText("");
-        //coordinatesTextview.setText("");
-        //locationImageview.setEnabled(false);
 
         FingerprintTask fingerprintTask;
 
         // If a SSID filter is set, scan for this SSID
-        if (useSSIDfilter && wifiDropdown.getAdapter().getCount() > 0) {
-            locationTextview.setText(getString(R.string.searching_node_text));
+        if (useSSIDfilter) {
+            String defaultWifiString = sharedPreferences.getString("default_wifi_network", null);
+
             if (verboseMode) {
-                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null, infobox);
+                fingerprintTask = new FingerprintTask(defaultWifiString, seconds, wifiManager, true, progressBar, null, infobox);
             } else {
-                fingerprintTask = new FingerprintTask(wifiDropdown.getSelectedItem().toString(), seconds, wifiManager, true, progressBar, null);
+                fingerprintTask = new FingerprintTask(defaultWifiString, seconds, wifiManager, true, progressBar, null);
             }
             fingerprintTask.delegate = this;
             fingerprintTask.execute();
 
-        // If no SSID filter is set, scan for all SSIDS
+            // If no SSID filter is set, scan for all SSIDS
         } else if (!useSSIDfilter) {
-            locationTextview.setText(getString(R.string.searching_node_text));
             if (verboseMode) {
                 fingerprintTask = new FingerprintTask(null, seconds, wifiManager, true, progressBar, null, infobox);
             } else {
@@ -250,16 +204,14 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
             FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
 
-
             LocationResult locationResult;
             if (foundNode != null) {
 
                 locationTextview.setText(foundNode.getId());
                 locationImageview.setVisibility(View.VISIBLE);
-                //coordinatesLabelTextview.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
 
                 descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
-                //coordinatesTextview.setText(databaseHandler.getNode(foundNode.getId()).getCoordinates());
 
                 locationResult = LocationResultFactory.createInstance(locationsCounter, settingsString, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
 

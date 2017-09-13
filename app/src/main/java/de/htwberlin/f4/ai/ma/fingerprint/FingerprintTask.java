@@ -93,7 +93,6 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 Log.d("Fingerprinting... ", "found networks: " + String.valueOf(wifiScanList.size()));
 
                 for (final ScanResult sr : wifiScanList) {
-
                     // If the wifiName was defined, filter for only this SSID
                     if (wifiName != null) {
                         if (sr.SSID.equals(wifiName)) {
@@ -102,7 +101,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                             accessPointSampleList.add(accessPointSample);
                             multiMap.put(sr.BSSID, sr.level);
                         }
-                    // No filter while scanning
+                    // No SSID filter while scanning
                     } else {
                         Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
                         AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);

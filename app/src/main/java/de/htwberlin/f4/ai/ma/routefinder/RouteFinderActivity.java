@@ -25,15 +25,12 @@ import com.example.carol.bvg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.Wifiscanner.WifiScannerFactory;
+import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScanner;
+import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
-import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
-import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.routefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
@@ -71,11 +68,13 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     private SharedPreferences sharedPreferences;
     private String selectedStartNode;
     private String lastSelectedStartNode;
+    private String defaultWifi;
     NodeListAdapter resultListAdapter;
     List<String> nodeNames;
     List<String> nodeDescriptions;
     List<String> nodePicturePaths;
     boolean verboseMode;
+    private boolean useSSIDfilter;
 
     WifiManager wifiManager;
 
@@ -109,6 +108,8 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         allNodes = databaseHandler.getAllNodes();
 
+        useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
+        defaultWifi = sharedPreferences.getString("default_wifi_network", null);
 
 /*---------- TEST -------------------
         Node n1 = NodeFactory.createInstance("n1", "", FingerprintFactory.createInstance("", null), "", "", "");
@@ -254,26 +255,36 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             @Override
             public void onClick(View view) {
 
-                locateButton.setEnabled(false);
+                if (useSSIDfilter) {
+                    // If default WiFi is not set in preferences
+                    if (defaultWifi == null) {
+                        locateButton.setEnabled(false);
 
-                WifiScanner wifiScanner = WifiScannerFactory.createInstance();
-                final List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
+                        WifiScanner wifiScanner = WifiScannerFactory.createInstance();
+                        final List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
 
-                final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()];
-                for (int i = 0; i < wifiArray.length; i++) {
-                    wifiArray[i] = wifiNamesList.get(i);
-                }
+                        final CharSequence wifiArray[] = new CharSequence[wifiNamesList.size()];
+                        for (int i = 0; i < wifiArray.length; i++) {
+                            wifiArray[i] = wifiNamesList.get(i);
+                        }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle(getString(R.string.select_wifi));
-                builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        findLocation(wifiNamesList.get(which), 1);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        builder.setTitle(getString(R.string.select_wifi));
+                        builder.setItems(wifiArray, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                findLocation(wifiNamesList.get(which), 1);
+                            }
+                        });
+                        builder.setCancelable(false);
+                        builder.show();
+                        // If default WiFi is set in preferences
+                    } else {
+                        findLocation(defaultWifi, 1);
                     }
-                });
-                builder.setCancelable(false);
-                builder.show();
+                } else {
+                    findLocation(null, 1);
+                }
             }
         });
 
