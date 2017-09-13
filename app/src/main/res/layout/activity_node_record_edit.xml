@@ -243,6 +243,15 @@
 
     </RelativeLayout>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/show_fingerprint_button"
+        android:background="@android:color/white"
+        android:contentDescription="@string/detailed_results_button_description"
+        android:layout_above="@+id/infobox_record_edit"
+        />
 
     <TextView
         android:layout_width="match_parent"

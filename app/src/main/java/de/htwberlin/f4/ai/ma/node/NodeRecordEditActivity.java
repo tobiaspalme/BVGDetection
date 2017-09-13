@@ -42,6 +42,7 @@ import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
+import de.htwberlin.f4.ai.ma.fingerprint.show_fingerprint.ShowFingerprintActivity;
 import de.htwberlin.f4.ai.ma.nodelist.NodeListActivity;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -63,6 +64,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     TextView initialWifiLabelTextview;
     TextView coordinatesLabelTextview;
     private TextView infobox;
+    private ImageButton showFingerprintButton;
     private ImageButton recordButton;
     ImageButton captureButton;
     ImageButton saveNodeButton;
@@ -113,6 +115,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         recordButton = (ImageButton) findViewById(R.id.record_button);
         captureButton  = (ImageButton) findViewById(R.id.capture_button);
         saveNodeButton = (ImageButton) findViewById(R.id.save_node_button);
+        showFingerprintButton = (ImageButton) findViewById(R.id.show_fingerprint_button);
         cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
         refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_recordactivity);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
@@ -168,6 +171,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.END_OF, R.id.save_node_button);
 
+            showFingerprintButton.setImageResource(R.drawable.info);
             ImageButton deleteNodeButton = new ImageButton(this);
             deleteNodeButton.setLayoutParams(params);
             deleteNodeButton.setImageResource(R.drawable.trash_node);
@@ -218,6 +222,15 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
+                }
+            });
+
+            showFingerprintButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ShowFingerprintActivity.class);
+                    intent.putExtra("nodeID", nodeToUpdate.getId());
+                    startActivity(intent);
                 }
             });
         }

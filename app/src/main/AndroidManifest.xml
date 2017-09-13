@@ -22,6 +22,7 @@
         <activity android:name="de.htwberlin.f4.ai.ma.nodelist.NodeListActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.node.MaxPictureActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.node.NodeShowActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.fingerprint.show_fingerprint.ShowFingerprintActivity"/>
         <activity android:name="de.htwberlin.f4.ai.ma.ImportExportActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.edge.EdgesManagerActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.routefinder.RouteFinderActivity" />

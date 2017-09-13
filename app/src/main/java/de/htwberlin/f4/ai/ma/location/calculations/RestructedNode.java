@@ -14,7 +14,7 @@ public class RestructedNode {
         return this.id;
     }
 
-    Multimap<String, Double> getRestructedSignals() {
+    public Multimap<String, Double> getRestructedSignals() {
         return this.restructedSignals;
     }
 
