@@ -54,36 +54,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/wifi_input_layout"
-        android:layout_below="@id/description_layout">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/wifi_name_text"
-            android:labelFor="@+id/wifi_names_dropdown"
-            android:id="@+id/wifi_name_label_edittext" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/wifi_names_dropdown"
-            android:spinnerMode="dropdown">
-        </Spinner>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:contentDescription="@string/refresh"
-            android:id="@+id/refresh_imageview_recordactivity"/>
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -91,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/measuring_time_layout"
-        android:layout_below="@id/wifi_input_layout">
+        android:layout_below="@id/description_layout">
 
         <TextView
             android:layout_width="wrap_content"

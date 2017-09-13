@@ -75,7 +75,7 @@
     <string name="node_saved_toast">Ort gespeichert</string>
     <string name="node_already_exists_toast">Ort existiert bereits: bitte neuen Namen wählen.</string>
     <string name="fingerprint_finished">Messung beendet.</string>
-    <string name="initial_wifi_name">Urspr. WLAN:</string>
+    <string name="initial_wifi_name">WLAN-Filter:</string>
     <string name="coordinates_text">Koordinaten:</string>
     <string name="record_and_edit_infobox">Bitte Eingaben machen und Foto sowie Fingerprint aufnehmen. Zum Speichern auf die Diskette tippen.</string>
     <string name="permissions_warning_title_text">Bitte Zugriff erlauben</string>

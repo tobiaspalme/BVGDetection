@@ -18,26 +18,18 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
-
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.List;
-
-import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -64,17 +56,15 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     TextView initialWifiLabelTextview;
     TextView coordinatesLabelTextview;
     private TextView infobox;
-    private ImageButton showFingerprintButton;
+    ImageButton showFingerprintButton;
     private ImageButton recordButton;
     ImageButton captureButton;
     ImageButton saveNodeButton;
     private ImageView cameraImageview;
-    ImageView refreshImageview;
     private EditText nodeIdEdittext;
     private EditText recordTimeText;
     private EditText descriptionEdittext;
     private EditText coordinatesEdittext;
-    private Spinner wifiNamesDropdown;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private boolean pictureTaken;
@@ -120,12 +110,10 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         saveNodeButton = (ImageButton) findViewById(R.id.save_node_button);
         showFingerprintButton = (ImageButton) findViewById(R.id.show_fingerprint_button);
         cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
-        refreshImageview = (ImageView) findViewById(R.id.refresh_imageview_recordactivity);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
         recordTimeText = (EditText) findViewById(R.id.measure_time_edittext);
         coordinatesEdittext = (EditText) findViewById(R.id.coordinates_edittext);
-        wifiNamesDropdown = (Spinner) findViewById(R.id.wifi_names_dropdown);
         progressTextview = (TextView) findViewById(R.id.progress_textview);
         initialWifiTextview = (TextView) findViewById(R.id.initial_wifi_textview);
         initialWifiLabelTextview = (TextView) findViewById(R.id.initial_wifi_label_textview);
@@ -144,17 +132,10 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
 
+
         if (hasPermissions(this, permissions)) {
-            if (useSSIDfilter) {
-                refreshWifiDropdown();
-            } else {
-                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                wifiNamesDropdown.setEnabled(false);
-                refreshImageview.setEnabled(false);
-            }
+            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         }
-
-
 
         recordButton.setImageResource(R.drawable.fingerprint);
         captureButton.setImageResource(R.drawable.camera);
@@ -165,7 +146,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         initialWifiTextview.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesEdittext.setVisibility(View.INVISIBLE);
-
 
 
         // Check if Update-Mode is enabled
@@ -192,8 +172,10 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
             if (nodeToUpdate.getFingerprint() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
-                initialWifiLabelTextview.setVisibility(View.VISIBLE);
-                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+                if (nodeToUpdate.getFingerprint().getWifiName() != null) {
+                    initialWifiLabelTextview.setVisibility(View.VISIBLE);
+                    initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+                }
             }
 
             if (nodeToUpdate.getCoordinates().length() > 0) {
@@ -249,13 +231,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
 
         saveNodeButton.setImageResource(R.drawable.save);
-        refreshImageview.setImageResource(R.drawable.refresh);
-        refreshImageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshWifiDropdown();
-            }
-        });
 
         recordButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -264,33 +239,27 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                     } else if (databaseHandler.checkIfNodeExists(nodeIdEdittext.getText().toString()) && !updateMode) {
                         Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_SHORT).show();
                     } else {
-
                         recordButton.setEnabled(false);
                         recordTimeText.setEnabled(false);
-                        wifiNamesDropdown.setEnabled(false);
-                        refreshImageview.setEnabled(false);
-
                         progressBar.setVisibility(View.VISIBLE);
                         progressTextview.setVisibility(View.VISIBLE);
                         recordButton.setImageResource(R.drawable.fingerprint_low_contrast);
 
                         recordTime = Integer.parseInt(recordTimeText.getText().toString());
 
-
                         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
+                        String ssidFilterString = null;
 
                         if (verboseMode) {
                             if (useSSIDfilter) {
-                                fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
-                            } else {
-                                fingerprintTask = new FingerprintTask(null, 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
+                                ssidFilterString = sharedPreferences.getString("default_wifi_network", null);
                             }
+                            fingerprintTask = new FingerprintTask(ssidFilterString, 60 * recordTime, wifiManager, false, progressBar, progressTextview, infobox);
                         } else {
                             if (useSSIDfilter) {
-                                fingerprintTask = new FingerprintTask(wifiNamesDropdown.getSelectedItem().toString(), 60 * recordTime, wifiManager, false, progressBar, progressTextview);
-                            } else {
-                                fingerprintTask = new FingerprintTask(null, 60 * recordTime, wifiManager, false, progressBar, progressTextview);
+                                ssidFilterString = sharedPreferences.getString("default_wifi_network", null);
                             }
+                            fingerprintTask = new FingerprintTask(ssidFilterString, 60 * recordTime, wifiManager, false, progressBar, progressTextview);
                         }
 
                         fingerprintTask.delegate = NodeRecordEditActivity.this;
@@ -364,24 +333,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         }
         progressBar.setVisibility(View.INVISIBLE);
         progressTextview.setVisibility(View.INVISIBLE);
-        refreshImageview.setEnabled(true);
-        //fingerprintTaken = true;
-    }
-
-
-    /**
-     * Scan for WiFi names (SSIDs) and add them to the dropdown
-     */
-    private void refreshWifiDropdown() {
-
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        WifiScanner wifiScanner = WifiScannerFactory.createInstance();
-
-        List<String> wifiNamesList = wifiScanner.getAvailableNetworks(wifiManager, true);
-
-        final ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, wifiNamesList);
-        wifiNamesDropdown.setAdapter(dropdownAdapter);
-        Toast.makeText(getApplicationContext(), getString(R.string.refreshed_toast), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -571,7 +522,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         recordButton.setEnabled(true);
         recordTimeText.setEnabled(true);
         nodeIdEdittext.setEnabled(true);
-        wifiNamesDropdown.setEnabled(true);
         descriptionEdittext.setEnabled(true);
     }
 

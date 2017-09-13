@@ -8,23 +8,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.carol.bvg.R;
-
-import java.util.List;
-
-import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScanner;
-import de.htwberlin.f4.ai.ma.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
@@ -165,28 +156,22 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         FingerprintTask fingerprintTask;
 
-        // If a SSID filter is set, scan for this SSID
-        if (useSSIDfilter) {
-            String defaultWifiString = sharedPreferences.getString("default_wifi_network", null);
+        String ssidFilterString = null;
 
-            if (verboseMode) {
-                fingerprintTask = new FingerprintTask(defaultWifiString, seconds, wifiManager, true, progressBar, null, infobox);
-            } else {
-                fingerprintTask = new FingerprintTask(defaultWifiString, seconds, wifiManager, true, progressBar, null);
+        if (verboseMode) {
+            if (useSSIDfilter) {
+                ssidFilterString = sharedPreferences.getString("default_wifi_network", null);
             }
-            fingerprintTask.delegate = this;
-            fingerprintTask.execute();
-
-            // If no SSID filter is set, scan for all SSIDS
-        } else if (!useSSIDfilter) {
-            if (verboseMode) {
-                fingerprintTask = new FingerprintTask(null, seconds, wifiManager, true, progressBar, null, infobox);
-            } else {
-                fingerprintTask = new FingerprintTask(null, seconds, wifiManager, true, progressBar, null);
+            fingerprintTask = new FingerprintTask(ssidFilterString, seconds, wifiManager, true, progressBar, null, infobox);
+        } else {
+            if (useSSIDfilter) {
+                ssidFilterString = sharedPreferences.getString("default_wifi_network", null);
             }
-            fingerprintTask.delegate = this;
-            fingerprintTask.execute();
+            fingerprintTask = new FingerprintTask(ssidFilterString, seconds, wifiManager, true, progressBar, null);
         }
+
+        fingerprintTask.delegate = this;
+        fingerprintTask.execute();
     }
 
 

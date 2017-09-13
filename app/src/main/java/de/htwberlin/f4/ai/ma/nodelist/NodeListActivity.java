@@ -78,7 +78,7 @@ public class NodeListActivity extends BaseActivity {
                 if (!nodeListIsEmpty) {
                     new AlertDialog.Builder(view.getContext())
                             .setTitle(getString(R.string.nodelist_delete_entry_title_question))
-                            .setMessage("Soll der Node \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
+                            .setMessage("Soll der Ort \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
                             .setCancelable(false)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {

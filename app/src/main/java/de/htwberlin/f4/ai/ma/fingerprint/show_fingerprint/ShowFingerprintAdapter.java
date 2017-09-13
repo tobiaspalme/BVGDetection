@@ -68,7 +68,7 @@ public class ShowFingerprintAdapter extends BaseExpandableListAdapter{
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
 
         TextView textView = new TextView(context);
-        textView.setText("Second no. " + i);
+        textView.setText(i + ". Sekunde");
         textView.setPadding(100, 0, 0, 0);
         textView.setTextSize(20);
         return textView;
