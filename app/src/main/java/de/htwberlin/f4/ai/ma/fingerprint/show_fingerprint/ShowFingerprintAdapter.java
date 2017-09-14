@@ -7,13 +7,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
+import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 
 /**
  * Created by Johann Winter
  */
 
 
-public class ShowFingerprintAdapter extends BaseExpandableListAdapter{
+class ShowFingerprintAdapter extends BaseExpandableListAdapter{
 
     private Fingerprint fingerprint;
     private Context context;
@@ -21,11 +22,9 @@ public class ShowFingerprintAdapter extends BaseExpandableListAdapter{
     //private List<SignalInformation> groups;
 
 
-    public ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
+    ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
         this.context = context;
         this.fingerprint = fingerprint;
-
-        //this.groups = fingerprint.getSignalInformationList();
     }
 
 

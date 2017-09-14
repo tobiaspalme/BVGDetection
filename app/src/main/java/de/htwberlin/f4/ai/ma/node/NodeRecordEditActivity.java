@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -165,6 +166,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         if (intent.hasExtra("nodeId")) {
             updateMode = true;
             initialWifiTextview.setVisibility(View.VISIBLE);
+            initialWifiLabelTextview.setVisibility(View.VISIBLE);
             oldNodeId = (String) intent.getExtras().get("nodeId");
             nodeToUpdate = databaseHandler.getNode(oldNodeId);
             nodeIdEdittext.setText(nodeToUpdate.getId());
@@ -181,12 +183,13 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             deleteNodeButton.setImageResource(R.drawable.trash_node);
             buttonsLayout.addView(deleteNodeButton);
 
-
             if (nodeToUpdate.getFingerprint() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
-                if (nodeToUpdate.getFingerprint().getWifiName() != null) {
-                    initialWifiLabelTextview.setVisibility(View.VISIBLE);
-                    initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+
+                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+
+                if (nodeToUpdate.getFingerprint().getWifiName() == null) {
+                    initialWifiTextview.setText(getString(R.string.no_wifi_name));
                 }
             }
 
@@ -234,9 +237,14 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             showFingerprintButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, ShowFingerprintActivity.class);
-                    intent.putExtra("nodeID", nodeToUpdate.getId());
-                    startActivity(intent);
+                    if (nodeToUpdate.getFingerprint() != null) {
+                        Intent intent = new Intent(context, ShowFingerprintActivity.class);
+                        intent.putExtra("nodeID", nodeToUpdate.getId());
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_fingerprint_available), Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             });
         }
