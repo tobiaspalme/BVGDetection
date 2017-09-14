@@ -42,6 +42,18 @@ import de.htwberlin.f4.ai.ma.persistence.FileUtilities;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
 
 
+/**
+ * Created by Johann Winter
+ *
+ * This class handles the recording and editing of Nodes.
+ *
+ * Icon sources:
+ * https://www.iconfinder.com/icons/322425/camera_icon
+ * https://www.iconfinder.com/icons/115789/trash_icon
+ * https://www.iconfinder.com/icons/809537/diskette_guardar_multimedia_save_save_disk_technology_icon
+ * https://www.flaticon.com/free-icon/fingerprint-with-crosshair-focus_25927
+ */
+
 public class NodeRecordEditActivity extends BaseActivity implements AsyncResponse {
 
     private String picturePath;
@@ -344,6 +356,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == -1) {
+            nodeIdEdittext.setEnabled(false);
             pictureTaken = true;
             takingPictureAtTheMoment = false;
             long realTimestamp = timestamp.getTime();
@@ -397,9 +410,9 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+
                     // If a fingerprint has been captured...
                     } else {
-
                         final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, "", picPathToSave, "");
                         JSONWriter.writeJSON(node);
                         databaseHandler.insertNode(node);
@@ -455,7 +468,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             }
         }
 
-        // If no new fingerprint was taken
+        // If no new fingerprint was captured
         if (fingerprint == null) {
             // If an old fingerprint exists
             if (nodeToUpdate.getFingerprint() != null) {
@@ -495,7 +508,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         // If a new fingerprint was taken
         } else {
-
             final Node node = NodeFactory.createInstance(nodeID, nodeDescription, fingerprint, coordinates, picPathToSave, nodeToUpdate.getAdditionalInfo());
             JSONWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
