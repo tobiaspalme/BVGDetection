@@ -416,15 +416,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                         JSONWriter.writeJSON(node);
                                         databaseHandler.insertNode(node);
                                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                                        // Delete last Pictures
-                                        for (String picturePath : oldPicturePaths) {
-                                            if (picturePath != null) {
-                                                File imageFile = new File(picturePath);
-                                                imageFile.delete();
-                                            }
-                                        }
-
+                                        deleteOldPictures();
                                         resetUiElements();
                                     }
                                 })
@@ -444,14 +436,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         progressTextview.setText(String.valueOf(progressStatus));
                         progressBar.setProgress(progressStatus);
                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                        // Delete last Pictures
-                        for (String picturePath : oldPicturePaths) {
-                            if (picturePath != null) {
-                                File imageFile = new File(picturePath);
-                                imageFile.delete();
-                            }
-                        }
+                        deleteOldPictures();
                         askForNewNode();
                 }
             }
@@ -527,14 +512,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 JSONWriter.writeJSON(node);
                                 databaseHandler.updateNode(node, oldNodeId);
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-                                // Delete last Pictures
-                                for (String picturePath : oldPicturePaths) {
-                                    if (picturePath != null) {
-                                        File imageFile = new File(picturePath);
-                                        imageFile.delete();
-                                    }
-                                }
+                                deleteOldPictures();
                                 resetUiElements();
                             }
                         })
@@ -552,17 +530,23 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             JSONWriter.writeJSON(node);
             databaseHandler.updateNode(node, oldNodeId);
             Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
-
-            // Delete last Pictures
-            for (String picturePath : oldPicturePaths) {
-                if (picturePath != null) {
-                    File imageFile = new File(picturePath);
-                    imageFile.delete();
-                }
-            }
+            deleteOldPictures();
             finish();
             Intent intent = new Intent(context, NodeListActivity.class);
             startActivity(intent);
+        }
+    }
+
+
+    /**
+     * Deletes old picture(s) if a new was taken.
+     */
+    private void deleteOldPictures() {
+        for (String picturePath : oldPicturePaths) {
+            if (picturePath != null) {
+                File imageFile = new File(picturePath);
+                imageFile.delete();
+            }
         }
     }
 
