@@ -56,7 +56,16 @@ import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
  * https://www.iconfinder.com/icons/322425/camera_icon
  * https://www.iconfinder.com/icons/115789/trash_icon
  * https://www.iconfinder.com/icons/809537/diskette_guardar_multimedia_save_save_disk_technology_icon
+ * https://www.iconfinder.com/icons/1608681/exchange_icon
+ * https://www.iconfinder.com/icons/2135802/communication_network_tower_wifi_wifi_tower_icon
+ * https://www.iconfinder.com/icons/492103/directions_location_navigation_search_socialmedia_icon
+ * https://www.iconfinder.com/icons/2135924/location_map_navigation_pointer_icon
+ * https://www.iconfinder.com/icons/352562/navigation_icon
+ * https://www.iconfinder.com/icons/339913/help_info_information_notice_icon
  * https://www.flaticon.com/free-icon/fingerprint-with-crosshair-focus_25927
+ * http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/48/export-icon.png
+ * http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/48/import-icon.png
+ *
  */
 
 public class NodeRecordEditActivity extends BaseActivity implements AsyncResponse {
@@ -206,9 +215,9 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 recordButton.setImageResource(R.drawable.fingerprint_done);
                 showFingerprintButton.setImageResource(R.drawable.info);
 
-                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
+                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getSSID());
 
-                if (nodeToUpdate.getFingerprint().getWifiName() == null) {
+                if (nodeToUpdate.getFingerprint().getSSID() == null) {
                     initialWifiTextview.setText(getString(R.string.no_ssid_filter));
                 }
             } else {

@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -144,7 +143,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
-            values.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            values.put(NODE_WIFI_NAME, node.getFingerprint().getSSID());
             values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         }
 
@@ -185,7 +184,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
-            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getWifiName());
+            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getSSID());
             contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
         }
 //TODO

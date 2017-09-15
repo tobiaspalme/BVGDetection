@@ -9,10 +9,11 @@ import java.util.List;
  * A fingerprint contains a String for the name of the measured WiFi
  * and a list of SignalInformation which contain each a timestamp and a list
  * of measured MAC addresses (with the same SSID) in combination with a signal strength value.
+ * If the fingerprint is captured without a SSID-filter, getSSID() will return null.
  */
 
 public interface Fingerprint {
 
-    String getWifiName();
+    String getSSID();
     List<SignalInformation> getSignalInformationList();
 }

@@ -23,7 +23,7 @@ class FingerprintImpl implements Fingerprint{
      * Getter for the WiFi name
      * @return the WiFi name
      */
-    public String getWifiName() {
+    public String getSSID() {
         return this.wifiName;
     }
 
