@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="70dp"
         android:layout_height="110dp"
+        android:layout_marginStart="20dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:contentDescription="@string/image_placeholder"
@@ -18,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/preview_imageview"
-        android:layout_marginLeft="3dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="3dp"
         android:paddingTop="20dp"
         android:textStyle="bold"
         android:textSize="20sp"/>
@@ -28,7 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/node_name"
-        android:layout_marginLeft="3dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="3dp"
         android:layout_toEndOf="@+id/preview_imageview" />
 
 </RelativeLayout>

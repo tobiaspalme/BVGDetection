@@ -166,7 +166,10 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
             String textviewString = "";
 
             for (int i = 0; i < accessPointSampleList.size(); i++) {
-                textviewString += accessPointSampleList.get(i).getMacAddress() + "  " + accessPointSampleList.get(i).getRSSI() + "         ";
+                // Clip the output at 6 Accesspoints, because of the limited space of the infobox.
+                if (i <= 7) {
+                    textviewString += accessPointSampleList.get(i).getMacAddress() + "  " + accessPointSampleList.get(i).getRSSI() + "         ";
+                }
             }
             verboseOutputTextview.setText(textviewString);
             if (progressTextview != null) {

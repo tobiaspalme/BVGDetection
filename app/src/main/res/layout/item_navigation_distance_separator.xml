@@ -11,14 +11,14 @@
         android:layout_height="50dp"
         android:contentDescription="@string/image_placeholder"
         android:id="@+id/arrow_imageview"
-        android:layout_centerInParent="true"/>
+        android:layout_marginStart="40dp"/>
 
     <TextView
         android:id="@+id/distance_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/arrow_imageview"
-        android:paddingTop="15dp"
+        android:paddingTop="12dp"
         android:textSize="20sp"/>
 
 </RelativeLayout>

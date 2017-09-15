@@ -81,7 +81,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/coordinates_layout"
+        android:layout_above="@+id/infobox_location"
         android:layout_centerHorizontal="true"
         android:id="@+id/camera_imageview_show"
         android:contentDescription="@string/image_placeholder"/>
