@@ -72,9 +72,10 @@ public class PositionModuleA implements PositionModule {
         double cosbeta = Math.cos(Math.toRadians(orientation));
 
         // calculate inclination angle
-        double alpha = Math.toDegrees(Math.asin(altitude / distance));
-        double cosalpha = Math.cos(Math.toRadians(alpha));
+        double alpha = Math.asin(altitude / distance);
+        double cosalpha = Math.cos(alpha);
 
+        // calculate delta x and delta y
         float x = (float) (distance * cosalpha * sinbeta);
         float y = (float) (distance * cosalpha * cosbeta);
 
