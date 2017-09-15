@@ -444,6 +444,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                                         deleteOldPictures();
                                         resetUiElements();
+                                        askForNewNode();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -464,8 +465,8 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                         deleteOldPictures();
                         askForNewNode();
+                    }
                 }
-            }
         }
     }
 
@@ -540,6 +541,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                                 deleteOldPictures();
                                 resetUiElements();
+                                askForNewNode();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
