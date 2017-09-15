@@ -131,8 +131,8 @@
     <string name="edges_manager_infobox_text">Tippen + halten: Weg löschen</string>
     <string name="edge_already_exists">Dieser Weg existiert bereits!</string>
 
-    <!-- acitvity_navigation -->
-    <string name="start_navigation_button_text">Route berechnen</string>
+    <!-- acitvity_routefinder -->
+    <string name="find_route_label">Route</string>
     <string name="navigation_result_header">Ihre Route:</string>
     <string name="no_route_found">Keine Route gefunden.</string>
     <string name="navigation_infobox_text"><b>Hinweis:</b> Durch tippen auf die einzelnen Orte der Route können Details angezeigt werden.</string>
@@ -141,6 +141,7 @@
     <string name="locate_button_description">Standort-Button</string>
     <string name="select_wifi">Bitte WLAN wählen:</string>
     <string name="no_location_found">Standort nicht gefunden.</string>
+    <string name="find_route_button_description">Route finden</string>
 
 
 

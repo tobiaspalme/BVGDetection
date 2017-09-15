@@ -167,11 +167,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             initialWifiTextview.setText(getString(R.string.no_ssid_filter));
         }
 
-
-        if (hasPermissions(this, permissions)) {
-            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        }
-
         recordButton.setImageResource(R.drawable.fingerprint);
         captureButton.setImageResource(R.drawable.camera);
 
@@ -541,7 +536,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                                 Toast.makeText(context, getString(R.string.node_saved_toast), Toast.LENGTH_LONG).show();
                                 deleteOldPictures();
                                 resetUiElements();
-                                askForNewNode();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -636,6 +630,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 }
             }
         }
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return true;
     }
 

@@ -53,8 +53,8 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
     private Spinner startNodeSpinner;
     Spinner destinationNodeSpinner;
-    Button startRouteFinder;
     ImageButton locateButton;
+    ImageButton findRouteButton;
     ListView navigationResultListview;
     List<String> itemsStartNodeSpinner;
     private ArrayList<String> itemsDestNodeSpinner;
@@ -87,8 +87,8 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         startNodeSpinner = (Spinner) findViewById(R.id.start_node_spinner);
         destinationNodeSpinner = (Spinner) findViewById(R.id.destination_node_spinner);
-        startRouteFinder = (Button) findViewById(R.id.start_navigation_button);
         locateButton = (ImageButton) findViewById(R.id.locate_button);
+        findRouteButton = (ImageButton) findViewById(R.id.find_route_button);
         navigationResultListview = (ListView) findViewById(R.id.navigation_result_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox_navi);
         totalDistanceTextview = (TextView) findViewById(R.id.total_distance_textview);
@@ -102,6 +102,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         nodePicturePaths = new ArrayList<>();
 
         lastSelectedStartNode = "";
+        findRouteButton.setImageResource(R.drawable.find_route_button);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
@@ -217,7 +218,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
         // Disable connect-button if spinnerB has no elements (spinnerA has one or less elements)
         if (itemsStartNodeSpinner.size() < 2) {
-            startRouteFinder.setEnabled(false);
+            findRouteButton.setEnabled(false);
         }
 
 
@@ -291,7 +292,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
 
 
         // Start the find_route
-        startRouteFinder.setOnClickListener(new View.OnClickListener() {
+        findRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nodeNames.clear();
@@ -357,9 +358,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
      * @param seconds duration of the measurement in seconds
      */
     private void findLocation(String wifiName, int seconds) {
-
         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
-
         FingerprintTask fingerprintTask;
         if (verboseMode) {
             fingerprintTask = new FingerprintTask(wifiName, seconds, wifiManager, true, null, null, infobox);
@@ -373,6 +372,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     /**
      * When the fingerprinting background task finished
      * @param fingerprint the Fingerprint from the AsyncTask
+     * @param seconds the time of measurement in seconds
      */
     @Override
     public void processFinish(Fingerprint fingerprint, int seconds) {
