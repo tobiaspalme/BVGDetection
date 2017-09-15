@@ -18,12 +18,14 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -78,11 +80,11 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     ImageButton saveNodeButton;
     private ImageView cameraImageview;
     private EditText nodeIdEdittext;
-    private EditText recordTimeText;
     private EditText descriptionEdittext;
     private EditText coordinatesEdittext;
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
+    private Spinner minutesDropdown;
     private boolean pictureTaken;
     private boolean takingPictureAtTheMoment;
     private boolean showingBigPictureAtTheMoment;
@@ -129,7 +131,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         cameraImageview = (ImageView) findViewById(R.id.camera_imageview);
         descriptionEdittext = (EditText) findViewById(R.id.description_edittext);
         nodeIdEdittext = (EditText) findViewById(R.id.record_id_edittext);
-        recordTimeText = (EditText) findViewById(R.id.measure_time_edittext);
         coordinatesEdittext = (EditText) findViewById(R.id.coordinates_edittext);
         progressTextview = (TextView) findViewById(R.id.progress_textview);
         initialWifiTextview = (TextView) findViewById(R.id.initial_wifi_textview);
@@ -137,10 +138,10 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         coordinatesLabelTextview = (TextView) findViewById(R.id.coordinates_label_textview_editmode);
         infobox = (TextView) findViewById(R.id.infobox_record_edit);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        minutesDropdown = (Spinner) findViewById(R.id.minutes_dropdown);
 
         buttonsLayout = (RelativeLayout) findViewById(R.id.buttons_layout_rec_and_edit);
 
-        recordTimeText.setText("3");
         picturePath = null;
 
         pictureTaken = false;
@@ -163,6 +164,15 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         initialWifiTextview.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesEdittext.setVisibility(View.INVISIBLE);
+
+
+        // Minutes selection dropdown
+        List<Integer> minutesList = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            minutesList.add(i + 1);
+        }
+        ArrayAdapter<Integer> minutesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, minutesList);
+        minutesDropdown.setAdapter(minutesAdapter);
 
 
         // Check if Update-Mode is enabled
@@ -264,12 +274,14 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_SHORT).show();
                     } else {
                         recordButton.setEnabled(false);
-                        recordTimeText.setEnabled(false);
+                        //recordTimeText.setEnabled(false);
                         progressBar.setVisibility(View.VISIBLE);
                         progressTextview.setVisibility(View.VISIBLE);
                         recordButton.setImageResource(R.drawable.fingerprint_low_contrast);
 
-                        recordTime = Integer.parseInt(recordTimeText.getText().toString());
+                        //recordTime = Integer.parseInt(recordTimeText.getText().toString());
+                        recordTime = minutesDropdown.getSelectedItemPosition() + 1;
+
 
                         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
                         String ssidFilterString = null;
@@ -563,7 +575,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         progressTextview.setText(String.valueOf(progressStatus));
         progressBar.setProgress(progressStatus);
         recordButton.setEnabled(true);
-        recordTimeText.setEnabled(true);
+        //recordTimeText.setEnabled(true);
         nodeIdEdittext.setEnabled(true);
         descriptionEdittext.setEnabled(true);
     }

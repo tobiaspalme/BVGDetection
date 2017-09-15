@@ -72,13 +72,12 @@
             android:labelFor="@+id/measure_time_edittext"
             android:id="@+id/measure_time_label_edittext" />
 
-        <EditText
-            android:layout_width="48dp"
+        <Spinner
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:gravity="center"
-            android:id="@+id/measure_time_edittext" />
+            android:spinnerMode="dropdown"
+            android:id="@+id/minutes_dropdown"
+            android:gravity="end"/>
 
         <TextView
             android:layout_width="wrap_content"

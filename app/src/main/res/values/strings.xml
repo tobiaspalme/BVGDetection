@@ -64,7 +64,7 @@
     <string name="measure_time_text">Messzeit:</string>
     <string name="wifi_name_text">WLAN:</string>
     <string name="node_name_text">Name des Ortes:</string>
-    <string name="minutes_text">Minuten</string>
+    <string name="minutes_text">Minute(n)</string>
     <string name="save_node_button_text">Speichern</string>
     <string name="standard_wifi_name">BVG Wi-Fi</string>
     <string name="measure_wifi_button_text">Fingerprint erstellen</string>
