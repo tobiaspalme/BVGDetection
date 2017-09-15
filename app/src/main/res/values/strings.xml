@@ -75,7 +75,7 @@
     <string name="node_saved_toast">Ort gespeichert</string>
     <string name="node_already_exists_toast">Ort existiert bereits: bitte neuen Namen wählen.</string>
     <string name="no_fingerprint_available">Kein Fingerprint vorhanden!</string>
-    <string name="no_wifi_name">-Kein Filter-</string>
+    <string name="no_ssid_filter">-Kein Filter-</string>
     <string name="fingerprint_finished">Messung beendet.</string>
     <string name="initial_wifi_name">WLAN-Filter:</string>
     <string name="coordinates_text">Koordinaten:</string>

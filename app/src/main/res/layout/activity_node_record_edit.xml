@@ -18,12 +18,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:labelFor="@+id/record_id_edittext"
-            android:text="@string/node_name_text"/>
+            android:text="@string/node_name_text"
+            android:textStyle="bold"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:gravity="center"
             android:id="@+id/record_id_edittext"
             />
 
@@ -43,12 +45,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:labelFor="@+id/description_edittext"
             android:text="@string/description_text"
+            android:textStyle="bold"
             />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:gravity="center"
             android:id="@+id/description_edittext"
             />
     </LinearLayout>
@@ -69,6 +73,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/measure_time_text"
+            android:textStyle="bold"
             android:labelFor="@+id/measure_time_edittext"
             android:id="@+id/measure_time_label_edittext" />
 
@@ -90,7 +95,7 @@
 
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_info_layout"
         android:layout_below="@id/measuring_time_layout">
@@ -99,6 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/initial_wifi_name"
+            android:textStyle="bold"
             android:labelFor="@+id/initial_wifi_textview"
             android:id="@+id/initial_wifi_label_textview"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -115,6 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/coordinates_text"
+            android:textStyle="bold"
             android:labelFor="@+id/coordinates_edittext"
             android:layout_marginTop="8dp"
             android:id="@+id/coordinates_label_textview_editmode"

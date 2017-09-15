@@ -149,6 +149,12 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         showingBigPictureAtTheMoment = false;
 
         useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
+        if (useSSIDfilter) {
+            String ssidFilter = sharedPreferences.getString("default_wifi_network", null);
+            initialWifiTextview.setText(ssidFilter);
+        } else {
+            initialWifiTextview.setText(getString(R.string.no_ssid_filter));
+        }
 
 
         if (hasPermissions(this, permissions)) {
@@ -160,8 +166,8 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         progressBar.setVisibility(View.INVISIBLE);
         progressTextview.setVisibility(View.INVISIBLE);
-        initialWifiLabelTextview.setVisibility(View.INVISIBLE);
-        initialWifiTextview.setVisibility(View.INVISIBLE);
+        //initialWifiLabelTextview.setVisibility(View.INVISIBLE);
+        //initialWifiTextview.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesEdittext.setVisibility(View.INVISIBLE);
 
@@ -179,8 +185,8 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         Intent intent = getIntent();
         if (intent.hasExtra("nodeId")) {
             updateMode = true;
-            initialWifiTextview.setVisibility(View.VISIBLE);
-            initialWifiLabelTextview.setVisibility(View.VISIBLE);
+            //initialWifiTextview.setVisibility(View.VISIBLE);
+            //initialWifiLabelTextview.setVisibility(View.VISIBLE);
             oldNodeId = (String) intent.getExtras().get("nodeId");
             nodeToUpdate = databaseHandler.getNode(oldNodeId);
             nodeIdEdittext.setText(nodeToUpdate.getId());
@@ -191,7 +197,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.END_OF, R.id.save_node_button);
 
-            showFingerprintButton.setImageResource(R.drawable.info);
             ImageButton deleteNodeButton = new ImageButton(this);
             deleteNodeButton.setLayoutParams(params);
             deleteNodeButton.setImageResource(R.drawable.trash_node);
@@ -199,12 +204,15 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
             if (nodeToUpdate.getFingerprint() != null) {
                 recordButton.setImageResource(R.drawable.fingerprint_done);
+                showFingerprintButton.setImageResource(R.drawable.info);
 
                 initialWifiTextview.setText(nodeToUpdate.getFingerprint().getWifiName());
 
                 if (nodeToUpdate.getFingerprint().getWifiName() == null) {
-                    initialWifiTextview.setText(getString(R.string.no_wifi_name));
+                    initialWifiTextview.setText(getString(R.string.no_ssid_filter));
                 }
+            } else {
+                initialWifiTextview.setText("-");
             }
 
             if (nodeToUpdate.getCoordinates().length() > 0) {
@@ -251,14 +259,9 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
             showFingerprintButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (nodeToUpdate.getFingerprint() != null) {
-                        Intent intent = new Intent(context, ShowFingerprintActivity.class);
-                        intent.putExtra("nodeID", nodeToUpdate.getId());
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_fingerprint_available), Toast.LENGTH_SHORT).show();
-                    }
-
+                    Intent intent = new Intent(context, ShowFingerprintActivity.class);
+                    intent.putExtra("nodeID", nodeToUpdate.getId());
+                    startActivity(intent);
                 }
             });
         }
