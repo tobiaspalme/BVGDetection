@@ -304,6 +304,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                             if (useSSIDfilter) {
                                 ssidFilterString = sharedPreferences.getString("default_wifi_network", null);
                             }
+                            infobox.setText(getString(R.string.please_stay));
                             fingerprintTask = new FingerprintTask(ssidFilterString, 60 * recordTime, wifiManager, false, progressBar, progressTextview);
                         }
 
@@ -370,6 +371,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     @Override
     public void processFinish(Fingerprint fp, int seconds) {
         fingerprint = fp;
+        infobox.setText(R.string.navigation_infobox_text);
 
         if (fp == null) {
             recordButton.setImageResource(R.drawable.fingerprint);

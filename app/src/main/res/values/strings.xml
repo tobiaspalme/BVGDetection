@@ -82,6 +82,7 @@
     <string name="record_and_edit_infobox">Bitte Eingaben machen und Foto sowie Fingerprint aufnehmen. Zum Speichern auf die Diskette tippen.</string>
     <string name="permissions_warning_title_text">Bitte Zugriff erlauben</string>
     <string name="permissions_warning_text">Die App benötigt Zugriff auf Kamera, Standort und externen Speicher des Gerätes um zu funktionieren.</string>
+    <string name="please_stay">Messung läuft...\nBitte stehen bleiben und das Gerät möglichst ruhig halten.</string>
 
 
     <!-- activity_nodelist -->
