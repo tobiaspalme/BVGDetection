@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
 
 public class EuclideanDistance {
 
@@ -17,10 +17,10 @@ public class EuclideanDistance {
     /**
      * Calculate the euclidean distances
      * @param restructedNodes a list of restructed Nodes
-     * @param accessPointSamples a list of measured SignalStrengths (RSSI)
+     * @param accessPointInformations a list of measured SignalStrengths (RSSI)
      * @return a sorted list of distances
      */
-    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointSample> accessPointSamples) {
+    public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointInformation> accessPointInformations) {
         //List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
@@ -28,12 +28,12 @@ public class EuclideanDistance {
 
             List<Collection<Double>> matchingSignalStrengths = new ArrayList<>();
             List<Integer> measuredSignalStrength = new ArrayList<>();
-            for (int j = 0; j < accessPointSamples.size(); j++) {
-                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(accessPointSamples.get(j).getMacAddress());
+            for (int j = 0; j < accessPointInformations.size(); j++) {
+                Boolean contains = restructedNodes.get(i).restructedSignals.containsKey(accessPointInformations.get(j).getMacAddress());
                 if (contains) {
-                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(accessPointSamples.get(j).getMacAddress()));
-                    measuredSignalStrength.add(accessPointSamples.get(j).getRSSI());
-                    //measuredSignalStrength.add(accessPointSamples.get(j).getMilliwatt());
+                    matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(accessPointInformations.get(j).getMacAddress()));
+                    measuredSignalStrength.add(accessPointInformations.get(j).getRssi());
+                    //measuredSignalStrength.add(accessPointInformations.get(j).getMilliwatt());
                 }
             }
 

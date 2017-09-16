@@ -42,7 +42,7 @@ public class ShowFingerprintActivity extends BaseActivity {
             ShowFingerprintAdapter adapter = new ShowFingerprintAdapter(this, node.getFingerprint());
             fingerprintListview.setAdapter(adapter);
 
-            for (int i = 0; i < node.getFingerprint().getSignalInformationList().size(); i++) {
+            for (int i = 0; i < node.getFingerprint().getSignalSampleList().size(); i++) {
                 fingerprintListview.expandGroup(i);
             }
         }

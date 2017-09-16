@@ -143,8 +143,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
-            values.put(NODE_WIFI_NAME, node.getFingerprint().getSSID());
-            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
+            values.put(NODE_WIFI_NAME, node.getFingerprint().getSsid());
+            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalSampleList()));
         }
 
         values.put(NODE_COORDINATES, node.getCoordinates());
@@ -184,8 +184,8 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
 
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
-            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getSSID());
-            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalInformationList()));
+            contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getSsid());
+            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalSampleList()));
         }
 //TODO
         /*

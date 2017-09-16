@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformationFactory;
 
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
@@ -40,8 +40,8 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private int seconds;
     private WifiManager wifiManager;
     private Multimap<String, Integer> multiMap;
-    private List<SignalInformation> signalInformationList;
-    private List<AccessPointSample> accessPointSampleList;
+    private List<SignalSample> signalSampleList;
+    private List<AccessPointInformation> accessPointInformationList;
     private boolean calculateAverage = false;
     private long timestampWifimanager = 0;
     public AsyncResponse delegate = null;
@@ -74,7 +74,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     protected Fingerprint doInBackground(Void... voids) {
             for (int i = 0; i < seconds; i++) {
 
-                accessPointSampleList = new ArrayList<>();
+                accessPointInformationList = new ArrayList<>();
 
                 // If task gets aborted
                 if (isCancelled()) {
@@ -97,15 +97,15 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                     if (wifiName != null) {
                         if (sr.SSID.equals(wifiName)) {
                             Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
-                            AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
-                            accessPointSampleList.add(accessPointSample);
+                            AccessPointInformation accessPointInformation = AccessPointInformationFactory.createInstance(sr.BSSID, sr.level);
+                            accessPointInformationList.add(accessPointInformation);
                             multiMap.put(sr.BSSID, sr.level);
                         }
                     // No SSID filter while scanning
                     } else {
                         Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
-                        AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(sr.BSSID, sr.level);
-                        accessPointSampleList.add(accessPointSample);
+                        AccessPointInformation accessPointInformation = AccessPointInformationFactory.createInstance(sr.BSSID, sr.level);
+                        accessPointInformationList.add(accessPointInformation);
                         multiMap.put(sr.BSSID, sr.level);
                     }
                 }
@@ -117,8 +117,8 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
                 SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh.mm.ss", Locale.getDefault());
                 String format = s.format(new Date());
-                SignalInformation signalInformation = new SignalInformation(format, accessPointSampleList);
-                signalInformationList.add(signalInformation);
+                SignalSample signalSample = new SignalSample(format, accessPointInformationList);
+                signalSampleList.add(signalSample);
 
 
                 try {
@@ -130,12 +130,12 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
             if (calculateAverage) {
                 // Calculate average values
-                List<SignalInformation> signalInformations = AverageSignalCalculator.calculateAverageSignal(multiMap);
-                return FingerprintFactory.createInstance(wifiName, signalInformations);
+                List<SignalSample> signalSamples = AverageSignalCalculator.calculateAverageSignal(multiMap);
+                return FingerprintFactory.createInstance(wifiName, signalSamples);
             }
 
             else {
-                return FingerprintFactory.createInstance(wifiName, signalInformationList);
+                return FingerprintFactory.createInstance(wifiName, signalSampleList);
             }
 
     }
@@ -151,8 +151,8 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
             progressBar.setMax(seconds);
         }
         multiMap = ArrayListMultimap.create();
-        signalInformationList = new ArrayList<>();
-        accessPointSampleList = new ArrayList<>();
+        signalSampleList = new ArrayList<>();
+        accessPointInformationList = new ArrayList<>();
     }
 
     @Override
@@ -165,10 +165,10 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
         if (verboseOutputTextview != null) {
             String textviewString = "";
 
-            for (int i = 0; i < accessPointSampleList.size(); i++) {
+            for (int i = 0; i < accessPointInformationList.size(); i++) {
                 // Clip the output at 6 Accesspoints, because of the limited space of the infobox.
                 if (i <= 7) {
-                    textviewString += accessPointSampleList.get(i).getMacAddress() + "  " + accessPointSampleList.get(i).getRSSI() + "         ";
+                    textviewString += accessPointInformationList.get(i).getMacAddress() + "  " + accessPointInformationList.get(i).getRssi() + "         ";
                 }
             }
             verboseOutputTextview.setText(textviewString);

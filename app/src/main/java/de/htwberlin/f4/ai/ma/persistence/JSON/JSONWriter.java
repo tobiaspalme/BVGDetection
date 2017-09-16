@@ -87,22 +87,22 @@ public class JSONWriter {
             jsonObjectNode.put("picturePath", node.getPicturePath());
             jsonObjectNode.put("additionalInfo", node.getAdditionalInfo());
 
-            //if (node.getFingerprint().getSignalInformationList() != null) {
+            //if (node.getFingerprint().getSignalSampleList() != null) {
             if (node.getFingerprint() != null) {
                 JSONArray signalJsonArray = new JSONArray();
-                for (int i = 0; i < node.getFingerprint().getSignalInformationList().size(); i++) {
+                for (int i = 0; i < node.getFingerprint().getSignalSampleList().size(); i++) {
 
                     JSONObject signalJsonObject = new JSONObject();
                     JSONArray signalStrengthJsonArray = new JSONArray();
 
-                    for (int j = 0; j < node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().size(); j++) {
+                    for (int j = 0; j < node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().size(); j++) {
                         JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAddress", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getMacAddress());
-                        signalStrenghtObject.put("strength", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getRSSI());
-                        //signalStrenghtObject.put("strength", node.getFingerprint().getSignalInformationList().get(i).getAccessPointSampleList().get(j).getMilliwatt());
+                        signalStrenghtObject.put("macAddress", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getMacAddress());
+                        signalStrenghtObject.put("strength", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getRssi());
+                        //signalStrenghtObject.put("strength", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getMilliwatt());
                         signalStrengthJsonArray.put(signalStrenghtObject);
                     }
-                    signalJsonObject.put("timestamp", node.getFingerprint().getSignalInformationList().get(i).getTimestamp());
+                    signalJsonObject.put("timestamp", node.getFingerprint().getSignalSampleList().get(i).getTimestamp());
                     signalJsonObject.put("signalStrength", signalStrengthJsonArray);
                     signalJsonArray.put(signalJsonObject);
                 }

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class EdgesManagerActivity extends BaseActivity {
     private Spinner spinnerA;
     private Spinner spinnerB;
 
-    Button connectButton;
+    ImageButton connectNodesButton;
     ListView edgesListView;
     List<Node> allNodes;
     List<String> itemsSpinnerA;
@@ -55,11 +56,13 @@ public class EdgesManagerActivity extends BaseActivity {
 
         spinnerA = (Spinner) findViewById(R.id.nodeA_spinner);
         spinnerB = (Spinner) findViewById(R.id.nodeB_spinner);
-        connectButton = (Button) findViewById(R.id.connect_nodes_button);
+        connectNodesButton = (ImageButton) findViewById(R.id.connect_nodes_imagebutton);
         edgesListView = (ListView) findViewById(R.id.edges_listview);
         accessibilityCheckbox = (CheckBox) findViewById(R.id.accessibility_checkbox);
 
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
+
+        connectNodesButton.setImageResource(R.drawable.ways);
 
         itemsSpinnerA = new ArrayList<>();
         itemsSpinnerB = new ArrayList<>();
@@ -77,7 +80,7 @@ public class EdgesManagerActivity extends BaseActivity {
 
         // Disable connect-button if spinnerB has no elements (spinnerA has one or less elements)
         if (itemsSpinnerA.size() < 2) {
-            connectButton.setEnabled(false);
+            connectNodesButton.setEnabled(false);
         }
 
         // Set adapters to spinners and the Edges-list
@@ -123,7 +126,7 @@ public class EdgesManagerActivity extends BaseActivity {
 
 
         // Save new edge
-        connectButton.setOnClickListener(new View.OnClickListener() {
+        connectNodesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean accessible = false;

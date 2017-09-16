@@ -67,6 +67,7 @@ import de.htwberlin.f4.ai.ma.persistence.JSON.JSONWriter;
  * https://www.flaticon.com/free-icon/fingerprint-with-crosshair-focus_25927
  * http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/48/export-icon.png
  * http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/48/import-icon.png
+ * https://thenounproject.com/search/?q=connect&i=1227146
  *
  */
 
@@ -212,9 +213,9 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 recordButton.setImageResource(R.drawable.fingerprint_done);
                 showFingerprintButton.setImageResource(R.drawable.info);
 
-                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getSSID());
+                initialWifiTextview.setText(nodeToUpdate.getFingerprint().getSsid());
 
-                if (nodeToUpdate.getFingerprint().getSSID() == null) {
+                if (nodeToUpdate.getFingerprint().getSsid() == null) {
                     initialWifiTextview.setText(getString(R.string.no_ssid_filter));
                 }
             } else {
@@ -371,7 +372,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
     @Override
     public void processFinish(Fingerprint fp, int seconds) {
         fingerprint = fp;
-        infobox.setText(R.string.navigation_infobox_text);
+        infobox.setText(R.string.record_and_edit_infobox);
 
         if (fp == null) {
             recordButton.setImageResource(R.drawable.fingerprint);

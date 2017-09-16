@@ -12,18 +12,18 @@
         android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true" >
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/measure_one_second_text"
-            android:id="@+id/start_measuring_1s_button" />
+            android:id="@+id/locate_1s_button"
+            android:contentDescription="@string/locate_button_description"/>
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/measure_ten_seconds_text"
-            android:id="@+id/start_measurement_10s_button"
-            android:layout_toEndOf="@+id/start_measuring_1s_button" />
+            android:id="@+id/locate_10s_button"
+            android:contentDescription="@string/locate_button_description"
+            android:layout_toEndOf="@+id/locate_1s_button"/>
 
     </RelativeLayout>
 

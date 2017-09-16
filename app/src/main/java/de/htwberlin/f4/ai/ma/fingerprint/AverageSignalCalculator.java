@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformationFactory;
 
 /**
  * Created by Johann Winter
@@ -22,30 +22,30 @@ class AverageSignalCalculator {
     // * @param signalInformations a list of BSSIDs and signal strengths
      * @return the calculated nodeID
      */
-    static List<SignalInformation> calculateAverageSignal(Multimap<String, Integer> multiMap) {
+    static List<SignalSample> calculateAverageSignal(Multimap<String, Integer> multiMap) {
 
         Set<String> BSSIDs = multiMap.keySet();
 
-        final List<SignalInformation> signalInformationList = new ArrayList<>();
+        final List<SignalSample> signalSampleList = new ArrayList<>();
 
         /*
-        for (SignalInformation si : signalInformations) {
+        for (SignalSample si : signalInformations) {
             int value = 0;
             int counter = 0;
 
-            for (AccessPointSampleImpl ssi : si.getAccessPointSampleList()) {
+            for (AccessPointSampleImpl ssi : si.getAccessPointInformationList()) {
                 counter++;
                 value += ssi.signalStrength;
             }
             value = value / counter;
 
-            AccessPointSampleImpl signalStrengthInformation = new AccessPointSampleImpl(si.getAccessPointSampleList().)
+            AccessPointSampleImpl signalStrengthInformation = new AccessPointSampleImpl(si.getAccessPointInformationList().)
 
             List<AccessPointSampleImpl> SsiList = new ArrayList<>();
             AccessPointSampleImpl ssi = new AccessPointSampleImpl(ssi.macAddress, value);
             SsiList.add(ssi);
-            SignalInformation signalInformation = new SignalInformation("", SsiList);
-            signalInformationList.add(signalInformation);
+            SignalSample signalInformation = new SignalSample("", SsiList);
+            signalSampleList.add(signalInformation);
         }*/
 
 
@@ -60,13 +60,13 @@ class AverageSignalCalculator {
             }
             value = value / counter;
 
-            List<AccessPointSample> accessPointSamples = new ArrayList<>();
-            AccessPointSample accessPointSample = AccessPointSampleFactory.createInstance(s, value);
-            accessPointSamples.add(accessPointSample);
-            SignalInformation signalInformation = new SignalInformation("", accessPointSamples);
-            signalInformationList.add(signalInformation);
+            List<AccessPointInformation> accessPointInformations = new ArrayList<>();
+            AccessPointInformation accessPointInformation = AccessPointInformationFactory.createInstance(s, value);
+            accessPointInformations.add(accessPointInformation);
+            SignalSample signalSample = new SignalSample("", accessPointInformations);
+            signalSampleList.add(signalSample);
         }
-        return signalInformationList;
+        return signalSampleList;
     }
 }
 

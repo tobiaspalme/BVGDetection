@@ -44,7 +44,8 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformationFactory;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
 import de.htwberlin.f4.ai.ma.measurement.IndoorMeasurement;
@@ -56,8 +57,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirection;
 import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDetectListener;
 import de.htwberlin.f4.ai.ma.edge.Edge;
 import de.htwberlin.f4.ai.ma.node.Node;
-import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.SignalSample;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
@@ -661,7 +661,7 @@ public class MeasureControllerImpl implements MeasureController {
         Set<String> bssid = multiMap.keySet();
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
         final List<Node> actuallyNode = new ArrayList<>();
-        final List<SignalInformation> signalInformationList = new ArrayList<>();
+        final List<SignalSample> signalSampleList = new ArrayList<>();
 
         for (String s : bssid) {
             int value = 0;
@@ -673,16 +673,16 @@ public class MeasureControllerImpl implements MeasureController {
             }
             value = value / counter;
 
-            List<AccessPointSample> SsiList = new ArrayList<>();
-            AccessPointSample signal = AccessPointSampleFactory.createInstance(s, value);
+            List<AccessPointInformation> SsiList = new ArrayList<>();
+            AccessPointInformation signal = AccessPointInformationFactory.createInstance(s, value);
             SsiList.add(signal);
-            SignalInformation signalInformation = new SignalInformation("", SsiList);
-            signalInformationList.add(signalInformation);
+            SignalSample signalSample = new SignalSample("", SsiList);
+            signalSampleList.add(signalSample);
 
         }
 
         LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(view.getContext());
-        FoundNode foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalInformationList));
+        FoundNode foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalSampleList));
         Node result = null;
         if (foundNode != null) {
             result = databaseHandler.getNode(foundNode.getId());

@@ -61,16 +61,17 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:id="@+id/accessibility_checkbox"
                 android:text="@string/accessibility_checkbox_text"
                 />
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:id="@+id/connect_nodes_button"
-                android:text="@string/connect_nodes_button_text"
+                android:layout_marginStart="10dp"
+                android:id="@+id/connect_nodes_imagebutton"
+                android:contentDescription="@string/connect_nodes_button_text"
                 />
 
         </LinearLayout>

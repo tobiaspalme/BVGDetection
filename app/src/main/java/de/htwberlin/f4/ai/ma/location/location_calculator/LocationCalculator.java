@@ -4,12 +4,12 @@ import com.google.common.collect.Multimap;
 
 import java.util.List;
 
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
 import de.htwberlin.f4.ai.ma.location.calculations.RestructedNode;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
+import de.htwberlin.f4.ai.ma.fingerprint.SignalSample;
 
 /**
  * Created by Johann Winter
@@ -27,12 +27,12 @@ public interface LocationCalculator {
 
 
     /**
-     * Get a list of SignalStrengths by passing a list of SignalInformation (unwrap).
+     * Get a list of SignalStrengths by passing a list of SignalSample (unwrap).
      *
-     * @param signalInformationList a list of SignalInformations
+     * @param signalSampleList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
-    List<AccessPointSample> getSignalStrengths(List<SignalInformation> signalInformationList);
+    List<AccessPointInformation> getSignalStrengths(List<SignalSample> signalSampleList);
 
 
     /**

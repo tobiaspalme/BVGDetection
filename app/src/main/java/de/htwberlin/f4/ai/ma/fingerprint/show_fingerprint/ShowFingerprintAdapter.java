@@ -7,7 +7,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
 
 /**
  * Created by Johann Winter
@@ -19,7 +18,7 @@ class ShowFingerprintAdapter extends BaseExpandableListAdapter{
     private Fingerprint fingerprint;
     private Context context;
     //private List<String> groups;
-    //private List<SignalInformation> groups;
+    //private List<SignalSample> groups;
 
 
     ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
@@ -30,22 +29,22 @@ class ShowFingerprintAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getGroupCount() {
-        return fingerprint.getSignalInformationList().size();
+        return fingerprint.getSignalSampleList().size();
     }
 
     @Override
     public int getChildrenCount(int i) {
-        return fingerprint.getSignalInformationList().get(i).getAccessPointSampleList().size();
+        return fingerprint.getSignalSampleList().get(i).getAccessPointInformationList().size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return fingerprint.getSignalInformationList().get(i);
+        return fingerprint.getSignalSampleList().get(i);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        return fingerprint.getSignalInformationList().get(i).getAccessPointSampleList().get(i1);
+        return fingerprint.getSignalSampleList().get(i).getAccessPointInformationList().get(i1);
     }
 
     @Override
@@ -76,8 +75,8 @@ class ShowFingerprintAdapter extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         TextView textView = new TextView(context);
-        textView.setText(fingerprint.getSignalInformationList().get(i).getAccessPointSampleList().get(i1).getMacAddress() +
-                "   " + fingerprint.getSignalInformationList().get(i).getAccessPointSampleList().get(i1).getRSSI() + " dBm");
+        textView.setText(fingerprint.getSignalSampleList().get(i).getAccessPointInformationList().get(i1).getMacAddress() +
+                "   " + fingerprint.getSignalSampleList().get(i).getAccessPointInformationList().get(i1).getRssi() + " dBm");
         textView.setPadding(140, 0, 0, 0);
         return textView;
     }

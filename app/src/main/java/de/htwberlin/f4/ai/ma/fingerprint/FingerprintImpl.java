@@ -5,26 +5,26 @@ import java.util.List;
 /**
  * Created by Johann Winter
  *
- * A fingerprint consists of a WiFi-Name (SSID) and a list of SignalInformations.
+ * A fingerprint consists of a WiFi-Name (ssid) and a list of SignalInformations.
  */
 
 class FingerprintImpl implements Fingerprint{
 
-    private String wifiName;
-    private List<SignalInformation> signalInformationList;
+    private String ssid;
+    private List<SignalSample> signalSampleList;
 
 
-    FingerprintImpl(String wifiName, List<SignalInformation> signalInformationList) {
-        this.wifiName = wifiName;
-        this.signalInformationList = signalInformationList;
+    FingerprintImpl(String ssid, List<SignalSample> signalSampleList) {
+        this.ssid = ssid;
+        this.signalSampleList = signalSampleList;
     }
 
     /**
      * Getter for the WiFi name
      * @return the WiFi name
      */
-    public String getSSID() {
-        return this.wifiName;
+    public String getSsid() {
+        return this.ssid;
     }
 
 
@@ -32,13 +32,13 @@ class FingerprintImpl implements Fingerprint{
      * Getter for the list of SignalInformations
      * @return the list of SignalInformations
      */
-    public List<SignalInformation> getSignalInformationList() {
-        return this.signalInformationList;
+    public List<SignalSample> getSignalSampleList() {
+        return this.signalSampleList;
     }
 
 
-    //public void setWifiName(String wifiName) {
-   //     this.wifiName = wifiName;
+    //public void setWifiName(String ssid) {
+   //     this.ssid = ssid;
    // }
 
 

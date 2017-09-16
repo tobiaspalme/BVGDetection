@@ -65,8 +65,8 @@ public class NodeShowActivity extends BaseActivity {
         if (node.getFingerprint() != null) {
             wifiLabelTextview.setVisibility(View.VISIBLE);
             wifiNameTextview.setVisibility(View.VISIBLE);
-            if (node.getFingerprint().getSSID() != null) {
-                wifiNameTextview.setText(node.getFingerprint().getSSID());
+            if (node.getFingerprint().getSsid() != null) {
+                wifiNameTextview.setText(node.getFingerprint().getSsid());
             } else {
                 wifiNameTextview.setText(getString(R.string.no_ssid_filter));
             }

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSampleFactory;
+import de.htwberlin.f4.ai.ma.fingerprint.SignalSample;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformation;
+import de.htwberlin.f4.ai.ma.fingerprint.accesspoint_information.AccessPointInformationFactory;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
-import de.htwberlin.f4.ai.ma.fingerprint.SignalInformation;
-import de.htwberlin.f4.ai.ma.fingerprint.accesspointsample.AccessPointSample;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.EuclideanDistance;
@@ -48,7 +48,7 @@ class LocationCalculatorImpl implements LocationCalculator {
      */
     public FoundNode calculateNodeId(Fingerprint fingerprint) {
 
-        List<SignalInformation> signalInformationList = fingerprint.getSignalInformationList();
+        List<SignalSample> signalSampleList = fingerprint.getSignalSampleList();
 
         boolean movingAverage = sharedPreferences.getBoolean("pref_movingAverage", true);
         boolean kalmanFilter = sharedPreferences.getBoolean("pref_kalman", true);
@@ -82,12 +82,12 @@ class LocationCalculatorImpl implements LocationCalculator {
             }
 
             if (euclideanDistance) {
-                List<AccessPointSample> accessPointSamples = getSignalStrengths(signalInformationList);
+                List<AccessPointInformation> accessPointInformations = getSignalStrengths(signalSampleList);
 
-                if (accessPointSamples.size() == 0) {
+                if (accessPointInformations.size() == 0) {
                     return null;
                 }
-                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, accessPointSamples);
+                List<String> distanceNames = EuclideanDistance.calculateDistance(calculatedNodeList, accessPointInformations);
                 if (knnAlgorithm) {
                     foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
@@ -104,23 +104,23 @@ class LocationCalculatorImpl implements LocationCalculator {
 
 
     /**
-     * Get a list of AccessPointSamples by passing a list of SignalInformation (unwrap).
-     * @param signalInformationList a list of SignalInformations
+     * Get a list of AccessPointSamples by passing a list of SignalSample (unwrap).
+     * @param signalSampleList a list of SignalInformations
      * @return a list of SignalStrengthInformations
      */
-    public List<AccessPointSample> getSignalStrengths(List<SignalInformation> signalInformationList) {
-        List<AccessPointSample> accessPointSamples = new ArrayList<>();
+    public List<AccessPointInformation> getSignalStrengths(List<SignalSample> signalSampleList) {
+        List<AccessPointInformation> accessPointInformations = new ArrayList<>();
 
-        for (SignalInformation sigInfo : signalInformationList) {
-            for (AccessPointSample accessPointSample : sigInfo.getAccessPointSampleList()) {
-                String macAdress = accessPointSample.getMacAddress();
-                int signalStrength = accessPointSample.getRSSI();
-                //double signalStrength = accessPointSample.getMilliwatt();
-                AccessPointSample aps = AccessPointSampleFactory.createInstance(macAdress, signalStrength);
-                accessPointSamples.add(aps);
+        for (SignalSample sigInfo : signalSampleList) {
+            for (AccessPointInformation accessPointInformation : sigInfo.getAccessPointInformationList()) {
+                String macAdress = accessPointInformation.getMacAddress();
+                int signalStrength = accessPointInformation.getRssi();
+                //double signalStrength = accessPointInformation.getMilliwatt();
+                AccessPointInformation aps = AccessPointInformationFactory.createInstance(macAdress, signalStrength);
+                accessPointInformations.add(aps);
             }
         }
-        return accessPointSamples;
+        return accessPointInformations;
     }
 
 
@@ -139,7 +139,7 @@ class LocationCalculatorImpl implements LocationCalculator {
         Multimap<String, Double> multiMap = null;
 
         for (Node node : allNodes) {
-            count = node.getFingerprint().getSignalInformationList().size();
+            count = node.getFingerprint().getSignalSampleList().size();
             double minValue = (((double) 1 / (double) 3) * (double) count);
             macAddresses = getMacAddresses(node);
             multiMap = getMultiMap(node, macAddresses);
@@ -174,12 +174,12 @@ class LocationCalculatorImpl implements LocationCalculator {
      */
     public Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
-        for (SignalInformation signalInfo : node.getFingerprint().getSignalInformationList()) {
+        for (SignalSample signalInfo : node.getFingerprint().getSignalSampleList()) {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
-            for (AccessPointSample accessPointSample : signalInfo.getAccessPointSampleList()) {
-                multiMap.put(accessPointSample.getMacAddress(), (double) accessPointSample.getRSSI());
-                //multiMap.put(accessPointSample.getMacAddress(), (double) accessPointSample.getMilliwatt());
-                actuallyMacAdresses.add(accessPointSample.getMacAddress());
+            for (AccessPointInformation accessPointInformation : signalInfo.getAccessPointInformationList()) {
+                multiMap.put(accessPointInformation.getMacAddress(), (double) accessPointInformation.getRssi());
+                //multiMap.put(accessPointInformation.getMacAddress(), (double) accessPointInformation.getMilliwatt());
+                actuallyMacAdresses.add(accessPointInformation.getMacAddress());
             }
             for (String checkMacAdress : macAdresses) {
                 if (!actuallyMacAdresses.contains(checkMacAdress)) {
@@ -198,9 +198,9 @@ class LocationCalculatorImpl implements LocationCalculator {
      */
     public List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
-        for (SignalInformation sigInfo : node.getFingerprint().getSignalInformationList()) {
-            for (AccessPointSample accessPointSample : sigInfo.getAccessPointSampleList()) {
-                macAdresses.add(accessPointSample.getMacAddress());
+        for (SignalSample sigInfo : node.getFingerprint().getSignalSampleList()) {
+            for (AccessPointInformation accessPointInformation : sigInfo.getAccessPointInformationList()) {
+                macAdresses.add(accessPointInformation.getMacAddress());
             }
         }
         return new ArrayList<>(macAdresses);

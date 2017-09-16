@@ -37,8 +37,8 @@ import de.htwberlin.f4.ai.ma.node.MaxPictureActivity;
 
 public class LocationActivity extends BaseActivity implements AsyncResponse{
 
-    Button measure1sButton;
-    Button measure10sButton;
+    ImageButton locate1sButton;
+    ImageButton locate10sButton;
     ImageButton detailedResultsImagebutton;
     ImageView locationImageview;
     TextView locationTextview;
@@ -78,8 +78,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         databaseHandler = DatabaseHandlerFactory.getInstance(this);
 
-        measure1sButton = (Button) findViewById(R.id.start_measuring_1s_button);
-        measure10sButton = (Button) findViewById(R.id.start_measurement_10s_button);
+        locate1sButton = (ImageButton) findViewById(R.id.locate_1s_button);
+        locate10sButton = (ImageButton) findViewById(R.id.locate_10s_button);
         detailedResultsImagebutton = (ImageButton) findViewById(R.id.location_detailed_results_imagebutton);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         locationTextview = (TextView) findViewById(R.id.location_textview);
@@ -87,6 +87,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         infobox = (TextView) findViewById(R.id.infobox_location);
         progressBar = (ProgressBar) findViewById(R.id.location_progressbar);
 
+        locate1sButton.setImageResource(R.drawable.locate_1s_button);
+        locate10sButton.setImageResource(R.drawable.locate_10s_button);
 
         // Get preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -117,18 +119,18 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         progressBar.setVisibility(View.INVISIBLE);
 
-        measure1sButton.setOnClickListener(new View.OnClickListener() {
+        locate1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    measure1sButton.setEnabled(false);
-                    measure10sButton.setEnabled(false);
+                    locate1sButton.setEnabled(false);
+                    locate10sButton.setEnabled(false);
                     findLocation(1);
                 }
             });
 
-        measure10sButton.setOnClickListener(new View.OnClickListener() {
+        locate10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    measure1sButton.setEnabled(false);
-                    measure10sButton.setEnabled(false);
+                    locate1sButton.setEnabled(false);
+                    locate10sButton.setEnabled(false);
                     progressBar.setVisibility(View.VISIBLE);
                     findLocation(10);
                 }
@@ -228,8 +230,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
             databaseHandler.insertLocationResult(locationResult);
         }
-        measure1sButton.setEnabled(true);
-        measure10sButton.setEnabled(true);
+        locate1sButton.setEnabled(true);
+        locate10sButton.setEnabled(true);
     }
 
 
