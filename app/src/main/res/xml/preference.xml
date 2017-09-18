@@ -14,13 +14,13 @@
 
         <CheckBoxPreference
             android:key="use_ssid_filter"
-            android:title="ssid-Filter benutzen"
+            android:title="SSID-Filter benutzen"
             android:defaultValue="false" />
 
         <de.htwberlin.f4.ai.ma.settings.ListPreference
             android:key="default_wifi_network"
             android:dependency="use_ssid_filter"
-            android:title="Filtern nach ssid:" />
+            android:title="Filtern nach SSID:" />
 
 
 

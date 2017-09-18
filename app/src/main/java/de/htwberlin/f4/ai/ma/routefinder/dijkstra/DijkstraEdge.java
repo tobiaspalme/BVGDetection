@@ -14,7 +14,8 @@ class DijkstraEdge {
     DijkstraEdge(DijkstraNode source, DijkstraNode destination, double weight) {
         this.source = source;
         this.destination = destination;
-        this.weight = weight == 0.0?15000.0:weight;
+        this.weight = weight;
+        //this.weight = weight == 0.0 ? 15000.0:weight;
     }
 
     /**
