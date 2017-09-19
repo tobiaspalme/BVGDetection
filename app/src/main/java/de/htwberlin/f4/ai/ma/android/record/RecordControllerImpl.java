@@ -43,7 +43,6 @@ public class RecordControllerImpl implements RecordController {
 
 
     public RecordControllerImpl() {
-        sensorDataModel = new SensorDataModelImpl();
         savePeriod = 0;
     }
 
@@ -71,8 +70,9 @@ public class RecordControllerImpl implements RecordController {
      * start sensors and register listeners
      */
     @Override
-    public void onStartClicked() {
+    public void onStartClicked(List<SensorType> sensors) {
 
+        sensorDataModel = new SensorDataModelImpl();
         indoorMeasurement = IndoorMeasurementFactory.getIndoorMeasurement(view.getContext());
         // register sensor listener
         indoorMeasurement.setSensorListener(new SensorListener() {
@@ -115,17 +115,12 @@ public class RecordControllerImpl implements RecordController {
             }
         });
 
+        SensorType[] sensorArray = new SensorType[sensors.size()];
+        sensorArray = sensors.toArray(sensorArray);
+
         // start sensors
         indoorMeasurement.startSensors(Sensor.SENSOR_RATE_UI,
-                                SensorType.ACCELEROMETER_SIMPLE,
-                                SensorType.ACCELEROMETER_LINEAR,
-                                SensorType.GRAVITY,
-                                SensorType.GYROSCOPE,
-                                SensorType.GYROSCOPE_UNCALIBRATED,
-                                SensorType.MAGNETIC_FIELD,
-                                SensorType.COMPASS_FUSION,
-                                SensorType.COMPASS_SIMPLE,
-                                SensorType.BAROMETER);
+                sensorArray);
 
         // start the timer for recording data
         startTimer();

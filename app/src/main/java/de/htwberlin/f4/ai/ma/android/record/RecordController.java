@@ -1,5 +1,9 @@
 package de.htwberlin.f4.ai.ma.android.record;
 
+import java.util.List;
+
+import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
+
 /**
  * RecordController Interface
  *
@@ -14,7 +18,7 @@ public interface RecordController {
     void setView(RecordView view);
 
     // triggered by clicked on start button
-    void onStartClicked();
+    void onStartClicked(List<SensorType> sensors);
 
     // triggered by clicking on stop button
     void onStopClicked();

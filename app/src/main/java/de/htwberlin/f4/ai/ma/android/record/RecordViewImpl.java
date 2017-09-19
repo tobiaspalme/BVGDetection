@@ -4,13 +4,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.carol.bvg.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 
 /**
  * RecordViewImpl Class which implements the RecordView Interface
@@ -58,6 +64,18 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
 
     private SeekBar periodSeekbar;
 
+    private CheckBox cbAccelerometer;
+    private CheckBox cbAcceleromterLinear;
+    private CheckBox cbGravity;
+    private CheckBox cbGyroscope;
+    private CheckBox cbGyroscopeUncalibrated;
+    private CheckBox cbMagneticField;
+    private CheckBox cbCompassFusion;
+    private CheckBox cbCompassSimple;
+    private CheckBox cbPressure;
+
+    private List<SensorType> sensorList;
+
 
     public RecordViewImpl() {
         controller = new RecordControllerImpl();
@@ -83,6 +101,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
 
         setTitle("Aufnehmen");
 
+        sensorList = new ArrayList<>();
         /************        find UI Elements and set listeners          ************/
 
         accelerationX = (TextView) findViewById(R.id.fragment_record_acc_x);
@@ -104,9 +123,6 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         gyroscopeUncalibratedX = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_x);
         gyroscopeUncalibratedY = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_y);
         gyroscopeUncalibratedZ = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_z);
-        gyroscopeUncalibratedDriftX = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_x);
-        gyroscopeUncalibratedDriftY = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_y);
-        gyroscopeUncalibratedDriftZ = (TextView) findViewById(R.id.fragment_record_gyroscope_uncalibrated_drift_z);
 
         magneticFieldX = (TextView) findViewById(R.id.fragment_record_magneticfield_x);
         magneticFieldY = (TextView) findViewById(R.id.fragment_record_magneticfield_y);
@@ -145,7 +161,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (controller != null) {
-                    controller.onStartClicked();
+                    controller.onStartClicked(sensorList);
                 }
             }
         });
@@ -155,6 +171,114 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
             public void onClick(View v) {
                 if (controller != null) {
                     controller.onStopClicked();
+                }
+            }
+        });
+
+        cbAccelerometer = (CheckBox) findViewById(R.id.fragment_record_cb_accelerometer);
+        cbAccelerometer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.ACCELEROMETER_SIMPLE);
+                } else {
+                    sensorList.remove(SensorType.ACCELEROMETER_SIMPLE);
+                }
+            }
+        });
+
+        cbAcceleromterLinear = (CheckBox) findViewById(R.id.fragment_record_cb_accelerometer_linear);
+        cbAcceleromterLinear.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.ACCELEROMETER_LINEAR);
+                } else {
+                    sensorList.remove(SensorType.ACCELEROMETER_LINEAR);
+                }
+            }
+        });
+
+        cbGravity = (CheckBox) findViewById(R.id.fragment_record_cb_gravity);
+        cbGravity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.GRAVITY);
+                } else {
+                    sensorList.remove(SensorType.GRAVITY);
+                }
+            }
+        });
+
+        cbGyroscope = (CheckBox) findViewById(R.id.fragment_record_cb_gyroscope);
+        cbGyroscope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.GYROSCOPE);
+                } else {
+                    sensorList.remove(SensorType.GYROSCOPE);
+                }
+            }
+        });
+
+        cbGyroscopeUncalibrated = (CheckBox) findViewById(R.id.fragment_record_cb_gyroscope_uncalibrated);
+        cbGyroscopeUncalibrated.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.GYROSCOPE_UNCALIBRATED);
+                } else {
+                    sensorList.remove(SensorType.GYROSCOPE_UNCALIBRATED);
+                }
+            }
+        });
+
+        cbMagneticField = (CheckBox) findViewById(R.id.fragment_record_cb_magneticfield);
+        cbMagneticField.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.MAGNETIC_FIELD);
+                } else {
+                    sensorList.remove(SensorType.MAGNETIC_FIELD);
+                }
+            }
+        });
+
+        cbCompassFusion = (CheckBox) findViewById(R.id.fragment_record_cb_compassfusion);
+        cbCompassFusion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.COMPASS_FUSION);
+                } else {
+                    sensorList.remove(SensorType.COMPASS_FUSION);
+                }
+            }
+        });
+
+        cbCompassSimple = (CheckBox) findViewById(R.id.fragment_record_cb_compasssimple);
+        cbCompassSimple.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.COMPASS_SIMPLE);
+                } else {
+                    sensorList.remove(SensorType.COMPASS_SIMPLE);
+                }
+            }
+        });
+
+        cbPressure = (CheckBox) findViewById(R.id.fragment_record_cb_pressure);
+        cbPressure.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    sensorList.add(SensorType.BAROMETER);
+                } else {
+                    sensorList.remove(SensorType.BAROMETER);
                 }
             }
         });
@@ -239,9 +363,6 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
         gyroscopeUncalibratedX.setText(getString(R.string.x_caption) + " " + values[0]);
         gyroscopeUncalibratedY.setText(getString(R.string.y_caption) + " " + values[1]);
         gyroscopeUncalibratedZ.setText(getString(R.string.z_caption) + " " + values[2]);
-        gyroscopeUncalibratedDriftX.setText(getString(R.string.x_caption) + " " + values[3]);
-        gyroscopeUncalibratedDriftY.setText(getString(R.string.x_caption) + " " + values[4]);
-        gyroscopeUncalibratedDriftZ.setText(getString(R.string.x_caption) + " " + values[5]);
     }
 
 
@@ -265,7 +386,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
      */
     @Override
     public void updateCompassFusion(float value) {
-        compassFusion.setText(getString(R.string.compass_fusion) + ": " + value);
+        compassFusion.setText(String.valueOf(value));
     }
 
 
@@ -276,7 +397,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
      */
     @Override
     public void updateCompassSimple(float value) {
-        compassSimple.setText(getString(R.string.compass_simple) + ": " + value);
+        compassSimple.setText(String.valueOf(value));
     }
 
 
@@ -287,7 +408,7 @@ public class RecordViewImpl extends BaseActivity implements RecordView {
      */
     @Override
     public void updatePressure(float value) {
-        barometer.setText(getString(R.string.measure_pressure) + " " + value);
+        barometer.setText(value + " hPa");
     }
 
 
