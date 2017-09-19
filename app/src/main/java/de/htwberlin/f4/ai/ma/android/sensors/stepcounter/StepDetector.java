@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistance;
 import de.htwberlin.f4.ai.ma.android.calibrate.CalibratePersistanceImpl;
+import de.htwberlin.f4.ai.ma.android.calibrate.CalibrateViewImpl;
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
@@ -40,7 +41,6 @@ public class StepDetector implements Sensor, SensorEventListener{
     private long lastStepTimestamp;
     private int sensorRate;
     private int stepPeriod;
-    private static final int STEPPERIODTOLERANCE = 400;
 
     private Context context;
 
@@ -64,7 +64,11 @@ public class StepDetector implements Sensor, SensorEventListener{
         CalibratePersistance calibratePersistance = new CalibratePersistanceImpl(context);
         CalibrationData calibrationData = calibratePersistance.load();
         int period;
-        if (calibrationData != null) {
+
+        // make sure to NOT load period from persistance in calibration activity.
+        // thats required in case user misscalibrated and got a period of some seconds...
+        // in this case the faildetecture mechanism would prevent a new calibration
+        if (calibrationData != null && !(context instanceof CalibrateViewImpl)) {
             period = calibrationData.getStepPeriod();
         } else {
             period = 750;
@@ -180,7 +184,7 @@ public class StepDetector implements Sensor, SensorEventListener{
         }
 
         // try to reduce fail detects
-        if (currentStepTimestamp - lastStepTimestamp < (stepPeriod - STEPPERIODTOLERANCE)) {
+        if (currentStepTimestamp - lastStepTimestamp < (stepPeriod - (stepPeriod / 2))) {
             return;
         }
 

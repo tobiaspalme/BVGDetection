@@ -57,10 +57,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="de.htwberlin.f4.ai.ma.android.CoordinatesActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
     </application>
 
 

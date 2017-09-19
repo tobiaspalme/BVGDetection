@@ -73,7 +73,6 @@ public class CalibrateControllerImpl implements CalibrateController {
                     view.updateStepCount(stepCount);
                     // save timestamp of step for later step period calculation
                     stepTimes.add(sensorData.getTimestamp());
-
                 }
             }
 

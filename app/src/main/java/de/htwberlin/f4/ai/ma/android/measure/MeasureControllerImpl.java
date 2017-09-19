@@ -525,7 +525,7 @@ public class MeasureControllerImpl implements MeasureController {
             // new node
             else {
                 // create a new node
-                node = NodeFactory.createInstance(id, null, null, coordinates, null, null);
+                node = NodeFactory.createInstance(id, null, null, coordinates, null, "");
                 // save the node into database
                 databaseHandler.insertNode(node);
                 // update ui

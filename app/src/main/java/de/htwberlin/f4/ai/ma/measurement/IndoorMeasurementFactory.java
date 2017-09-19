@@ -12,12 +12,7 @@ import android.content.Context;
 
 public class IndoorMeasurementFactory {
 
-    private static IndoorMeasurement indoorMeasurement;
-
     public static IndoorMeasurement getIndoorMeasurement(Context context) {
-        if (indoorMeasurement == null) {
-            indoorMeasurement = new IndoorMeasurementImpl(context);
-        }
-        return indoorMeasurement;
+        return new IndoorMeasurementImpl(context);
     }
 }
