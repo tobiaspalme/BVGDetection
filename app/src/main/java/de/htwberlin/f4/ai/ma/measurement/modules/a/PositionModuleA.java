@@ -76,11 +76,11 @@ public class PositionModuleA implements PositionModule {
         double cosalpha = Math.cos(alpha);
 
         // calculate delta x and delta y
-        float x = (float) (distance * cosalpha * sinbeta);
-        float y = (float) (distance * cosalpha * cosbeta);
+        float deltaX = (float) (distance * cosalpha * sinbeta);
+        float deltaY = (float) (distance * cosalpha * cosbeta);
 
-        coordinates[0] += x;
-        coordinates[1] += y;
+        coordinates[0] += deltaX;
+        coordinates[1] += deltaY;
         coordinates[2] += altitude;
 
         return coordinates;

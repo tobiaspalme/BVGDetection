@@ -37,7 +37,7 @@ public class AltitudeModuleA implements AltitudeModule {
     protected long lastStepTimestamp;
     protected float lastAltitude;
     protected Context context;
-    private float threshold;
+    protected float threshold;
 
     public AltitudeModuleA(Context context, float airPressure, float threshold) {
         this.context = context;
