@@ -201,6 +201,7 @@ public class MeasureControllerImpl implements MeasureController {
             // update coordinates in view
             view.updateCoordinates(coords[0], coords[1], coords[2]);
         } else {
+            coords = new float[]{0f, 0f, 0f};
             view.updateCoordinates(0.0f, 0.0f, 0.0f);
         }
 
@@ -810,7 +811,7 @@ public class MeasureControllerImpl implements MeasureController {
      *
      * measurement and calculation is done using a thread
      *
-     * could be improved usign AsyncTask
+     * could be improved using AsyncTask
      *
      */
     private void calibrate() {
@@ -833,8 +834,9 @@ public class MeasureControllerImpl implements MeasureController {
                     String startCoordinatesStr = startNode.getCoordinates();
                     if (startCoordinatesStr != null && startCoordinatesStr.length() > 0) {
                         float[] startCoordinates = WKT.strToCoord(startCoordinatesStr);
-
                         calibrationData.setCoordinates(startCoordinates);
+                    } else {
+                        calibrationData.setCoordinates(new float[]{0f, 0f, 0f});
                     }
 
                     // set settings loaded from defaultsharedpreferences
