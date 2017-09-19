@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.d;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_d;
 
 import android.content.Context;
 
@@ -10,24 +10,27 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.LowPassFilter;
-import de.htwberlin.f4.ai.ma.measurement.modules.a.AltitudeModuleA;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_c.OrientationModuleC;
 
 /**
- * AltitudeModuleD Class which implements the AltitudeModule interface.
+ * OrientationModuleD Class which implements the OrientationModule interface
  *
- * Calculate the relative height using the airpressure from barometer sensor
+ * Calculate current heading / azimuth so the system knows the direction
+ * of the user's movement
+ *
+ * Sensor: CompassSimple
  *
  * lowpass filter used
  *
  * Author: Benjamin Kneer
  */
 
-public class AltitudeModuleD extends AltitudeModuleA {
+public class OrientationModuleD extends OrientationModuleC {
 
     private float lowpassFilterValue;
 
-    public AltitudeModuleD(Context context, float airPressure, float lowpassFilterValue, float threshold) {
-        super(context, airPressure, threshold);
+    public OrientationModuleD(Context context, float lowpassFilterValue) {
+        super(context);
         this.lowpassFilterValue = lowpassFilterValue;
     }
 
@@ -44,12 +47,12 @@ public class AltitudeModuleD extends AltitudeModuleA {
      */
     @Override
     public void start() {
-        airPressureSensor = sensorFactory.getSensor(SensorType.BAROMETER, Sensor.SENSOR_RATE_MEASUREMENT);
-        airPressureSensor.setListener(new SensorListener() {
+        compass = sensorFactory.getSensor(SensorType.COMPASS_SIMPLE, Sensor.SENSOR_RATE_MEASUREMENT);
+        compass.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {
                 Map<SensorType, List<SensorData>> sensorData = dataModel.getData();
-                List<SensorData> oldValues = sensorData.get(SensorType.BAROMETER);
+                List<SensorData> oldValues = sensorData.get(SensorType.COMPASS_SIMPLE);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
                     float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
@@ -59,6 +62,6 @@ public class AltitudeModuleD extends AltitudeModuleA {
                 dataModel.insertData(newValue);
             }
         });
-        airPressureSensor.start();
+        compass.start();
     }
 }

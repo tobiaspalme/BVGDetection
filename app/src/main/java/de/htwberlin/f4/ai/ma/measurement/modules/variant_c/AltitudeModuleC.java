@@ -1,8 +1,8 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.c;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_c;
 
 import android.content.Context;
 
-import de.htwberlin.f4.ai.ma.measurement.modules.a.AltitudeModuleA;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_a.AltitudeModuleA;
 
 /**
  * AltitudeModuleC Class which implements the AltitudeModule interface.

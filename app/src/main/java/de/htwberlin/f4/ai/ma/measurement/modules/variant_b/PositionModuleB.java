@@ -1,9 +1,9 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.b;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_b;
 
 import android.content.Context;
 
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
-import de.htwberlin.f4.ai.ma.measurement.modules.a.PositionModuleA;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_a.PositionModuleA;
 
 /**
  * PositionModuleB Class which implements the PositionModule Interface

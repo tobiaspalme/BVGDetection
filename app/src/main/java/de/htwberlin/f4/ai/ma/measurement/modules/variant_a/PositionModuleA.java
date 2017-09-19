@@ -1,8 +1,6 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.a;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_a;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import de.htwberlin.f4.ai.ma.android.measure.CalibrationData;
 import de.htwberlin.f4.ai.ma.measurement.modules.AltitudeModule;

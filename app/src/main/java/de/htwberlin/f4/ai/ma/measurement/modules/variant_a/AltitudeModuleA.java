@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.a;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_a;
 
 import android.content.Context;
 import android.hardware.SensorManager;

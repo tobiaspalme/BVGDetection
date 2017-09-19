@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.b;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_b;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ import de.htwberlin.f4.ai.ma.android.sensors.SensorData;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
 import de.htwberlin.f4.ai.ma.measurement.LowPassFilter;
-import de.htwberlin.f4.ai.ma.measurement.modules.a.OrientationModuleA;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_a.OrientationModuleA;
 
 /**
  * OrientationModuleB Class which implements the OrientationModule interface

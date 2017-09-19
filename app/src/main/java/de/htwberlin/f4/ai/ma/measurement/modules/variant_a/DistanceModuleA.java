@@ -1,11 +1,7 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.a;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_a;
 
 import android.content.Context;
 
-import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ma.measurement.modules.DistanceModule;
 
 /**

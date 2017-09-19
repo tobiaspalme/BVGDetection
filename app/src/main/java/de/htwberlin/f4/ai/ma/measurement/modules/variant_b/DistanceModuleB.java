@@ -1,8 +1,8 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.b;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_b;
 
 import android.content.Context;
 
-import de.htwberlin.f4.ai.ma.measurement.modules.a.DistanceModuleA;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_a.DistanceModuleA;
 
 /**
  * DistanceModuleB Class which implements the DistanceModule Interface

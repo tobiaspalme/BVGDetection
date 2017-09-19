@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.measurement.modules.a;
+package de.htwberlin.f4.ai.ma.measurement.modules.variant_c;
 
 import android.content.Context;
 
@@ -8,40 +8,27 @@ import java.util.Map;
 
 import de.htwberlin.f4.ai.ma.android.sensors.Sensor;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorData;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModel;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorDataModelImpl;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorFactory;
-import de.htwberlin.f4.ai.ma.android.sensors.SensorFactoryImpl;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorListener;
 import de.htwberlin.f4.ai.ma.android.sensors.SensorType;
-import de.htwberlin.f4.ai.ma.measurement.modules.OrientationModule;
+import de.htwberlin.f4.ai.ma.measurement.modules.variant_a.OrientationModuleA;
 
 /**
- * OrientationModuleA Class which implements the OrientationModule interface
+ * OrientationModuleC Class which implements the OrientationModule interface
  *
  * Calculate current heading / azimuth so the system knows the direction
  * of the user's movement
  *
- * Sensor: CompassFusion
+ * Sensor: CompassSimple
  *
- * No lowpass filter used
+ * Np lowpass filter used
  *
  * Author: Benjamin Kneer
  */
 
-public class OrientationModuleA implements OrientationModule {
+public class OrientationModuleC extends OrientationModuleA{
 
-    protected SensorDataModel dataModel;
-    protected SensorFactory sensorFactory;
-    protected Sensor compass;
-    protected long lastStepTimestamp;
-    protected Context context;
-
-    public OrientationModuleA(Context context) {
-        this.context = context;
-        dataModel = new SensorDataModelImpl();
-        sensorFactory = new SensorFactoryImpl(context);
-        lastStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
+    public OrientationModuleC(Context context) {
+        super(context);
     }
 
 
@@ -53,24 +40,22 @@ public class OrientationModuleA implements OrientationModule {
 
 
     /**
-     * get azimuth from compassfusion sensor
+     * get azimuth from compasssimple sensor
      *
      * @return azimuth
      */
     @Override
     public float getOrientation() {
-
         float currentOrientation = 0;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
         // just picking the last value
         Map<SensorType, List<SensorData>> intervalData = dataModel.getData();
-        List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_FUSION);
+        List<SensorData> dataValues = intervalData.get(SensorType.COMPASS_SIMPLE);
         if (dataValues != null && dataValues.size() > 0) {
             currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             lastStepTimestamp = currentStepTimestamp;
         }
-
         return currentOrientation;
     }
 
@@ -80,7 +65,7 @@ public class OrientationModuleA implements OrientationModule {
      */
     @Override
     public void start() {
-        compass = sensorFactory.getSensor(SensorType.COMPASS_FUSION, Sensor.SENSOR_RATE_MEASUREMENT);
+        compass = sensorFactory.getSensor(SensorType.COMPASS_SIMPLE, Sensor.SENSOR_RATE_MEASUREMENT);
         compass.setListener(new SensorListener() {
             @Override
             public void valueChanged(SensorData newValue) {
@@ -88,16 +73,5 @@ public class OrientationModuleA implements OrientationModule {
             }
         });
         compass.start();
-    }
-
-
-    /**
-     * stop sensor and unregister listener
-     */
-    @Override
-    public void stop() {
-        if (compass != null) {
-            compass.stop();
-        }
     }
 }
