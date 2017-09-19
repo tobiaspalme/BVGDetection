@@ -202,7 +202,7 @@ public class MeasureControllerImpl implements MeasureController {
             view.updateCoordinates(coords[0], coords[1], coords[2]);
         } else {
             coords = new float[]{0f, 0f, 0f};
-            view.updateCoordinates(0.0f, 0.0f, 0.0f);
+            view.updateCoordinates(coords[0], coords[1], coords[2]);
         }
 
         // set sensor listeners
