@@ -143,7 +143,7 @@ public class CalibrateViewImpl extends BaseActivity implements CalibrateView {
      */
     @Override
     public void updateAverageStepperiod(int period) {
-        stepPeriodView.setText(getString(R.string.step_setup_average_stepperiod) + " " + period);
+        stepPeriodView.setText(getString(R.string.step_setup_average_stepperiod) + " " + period + " ms");
     }
 
 

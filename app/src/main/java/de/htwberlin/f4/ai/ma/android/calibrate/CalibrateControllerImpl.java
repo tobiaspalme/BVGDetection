@@ -59,11 +59,21 @@ public class CalibrateControllerImpl implements CalibrateController {
             public void valueChanged(SensorData sensorData) {
                 if (sensorData.getSensorType() == SensorType.STEP_DETECTOR) {
                     // get step count from sensor
-                    stepCount = (int) sensorData.getValues()[0];
+                    stepCount++;
+                    // handle first step bug
+                    if (stepCount == 1) {
+                        // get step count from sensor
+                        stepCount++;
+                        // update view with new stepcount
+                        view.updateStepCount(stepCount);
+                        // save timestamp of step for later step period calculation
+                        stepTimes.add(sensorData.getTimestamp() - 700);
+                    }
                     // update view with new stepcount
                     view.updateStepCount(stepCount);
                     // save timestamp of step for later step period calculation
                     stepTimes.add(sensorData.getTimestamp());
+
                 }
             }
 
