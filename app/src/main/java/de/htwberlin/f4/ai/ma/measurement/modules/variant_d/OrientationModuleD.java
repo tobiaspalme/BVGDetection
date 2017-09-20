@@ -55,10 +55,11 @@ public class OrientationModuleD extends OrientationModuleC {
                 List<SensorData> oldValues = sensorData.get(SensorType.COMPASS_SIMPLE);
                 if (oldValues != null) {
                     float[] latestValue = oldValues.get(oldValues.size()-1).getValues();
-                    float filteredValue = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
-                    newValue.setValues(new float[]{filteredValue});
+                    float filteredAzimuth = LowPassFilter.filter(latestValue[0], newValue.getValues()[0], lowpassFilterValue);
+                    float filteredPitch = LowPassFilter.filter(latestValue[1], newValue.getValues()[1], lowpassFilterValue);
+                    float filteredRoll = LowPassFilter.filter(latestValue[2], newValue.getValues()[2], lowpassFilterValue);
+                    newValue.setValues(new float[]{filteredAzimuth, filteredPitch, filteredRoll});
                 }
-
                 dataModel.insertData(newValue);
             }
         });

@@ -212,7 +212,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ma
         // for example: phone is laying on its back towards north -> shows 0°
         // spin phone while still laying on its back -> change in azimuth
 
-        // original values are within [-180,180]
+        // original azimuth values are within [-180,180]
         orientation = SensorManager.getOrientation(remapped, orientation);
 
         azimuth = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
@@ -229,8 +229,6 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ma
             SensorManager.remapCoordinateSystem(remapped, SensorManager.AXIS_X, SensorManager.AXIS_Z, remapped);
             orientation = SensorManager.getOrientation(remapped, orientation);
             azimuth = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
-            pitch = (float) (Math.toDegrees(orientation[1]));
-            roll = (float) (Math.toDegrees(orientation[2]));
         }
 
         float[] values = new float[]{azimuth, pitch, roll};

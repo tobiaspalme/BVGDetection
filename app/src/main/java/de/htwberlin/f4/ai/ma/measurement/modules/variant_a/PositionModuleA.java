@@ -62,14 +62,17 @@ public class PositionModuleA implements PositionModule {
     public float[] calculatePosition() {
 
         // calculate new position with these 3 values
+        // altitude = delta z
         float altitude = altitudeModule.getAltitude();
         float distance = distanceModule.getDistance(calibrationData.isStairs());
-        float orientation = orientationModule.getOrientation();
+        float[] orientation = orientationModule.getOrientation();
 
-        double sinbeta = Math.sin(Math.toRadians(orientation));
-        double cosbeta = Math.cos(Math.toRadians(orientation));
+        // beta = azimuth
+        float beta = orientation[0];
+        double sinbeta = Math.sin(Math.toRadians(beta));
+        double cosbeta = Math.cos(Math.toRadians(beta));
 
-        // calculate inclination angle
+        // calculate inclination angle (alpha)
         double alpha = Math.asin(altitude / distance);
         double cosalpha = Math.cos(alpha);
 

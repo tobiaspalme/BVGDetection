@@ -10,8 +10,8 @@ package de.htwberlin.f4.ai.ma.measurement.modules;
 
 public interface OrientationModule{
 
-    // get the heading / orientation (azimuth)
-    float getOrientation();
+    // get the azimuth, pitch, roll
+    float[] getOrientation();
 
     // start module
     void start();

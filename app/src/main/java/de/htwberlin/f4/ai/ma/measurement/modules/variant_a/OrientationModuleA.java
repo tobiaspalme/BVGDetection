@@ -55,11 +55,11 @@ public class OrientationModuleA implements OrientationModule {
     /**
      * get azimuth from compassfusion sensor
      *
-     * @return azimuth
+     * @return azimuth, pitch, roll
      */
     @Override
-    public float getOrientation() {
-
+    public float[] getOrientation() {
+        float[] result = new float[3];
         float currentOrientation = 0;
         long currentStepTimestamp = new Timestamp(System.currentTimeMillis()).getTime();
         // calculation
@@ -69,9 +69,13 @@ public class OrientationModuleA implements OrientationModule {
         if (dataValues != null && dataValues.size() > 0) {
             currentOrientation = dataValues.get(dataValues.size()-1).getValues()[0];
             lastStepTimestamp = currentStepTimestamp;
+
+            result[0] = currentOrientation;
+            result[1] = dataValues.get(dataValues.size()-1).getValues()[1];
+            result[2] = dataValues.get(dataValues.size()-1).getValues()[2];
         }
 
-        return currentOrientation;
+        return result;
     }
 
 
