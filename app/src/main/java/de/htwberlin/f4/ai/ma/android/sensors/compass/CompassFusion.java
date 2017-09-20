@@ -208,7 +208,7 @@ public class CompassFusion implements SensorEventListener, de.htwberlin.f4.ai.ma
             // the normal camera on the backside of the phone points away from the user.
             // if yes, we have to remap the axis.
             // Now the azimuth is calculated relative to the camera(on the backside) / z axis of the phone.
-            // we remap the earth coordinates z axis on the phones y axis and calculate the correct azimuth
+            // we remap the z axis on the y axis and calculate the correct azimuth
             // IMPORTANT: SCREEN MUST POINT TOWARDS USER
             if (Math.abs(pitch) > 70) {
                 SensorManager.remapCoordinateSystem(remapped, SensorManager.AXIS_X, SensorManager.AXIS_Z, remapped);

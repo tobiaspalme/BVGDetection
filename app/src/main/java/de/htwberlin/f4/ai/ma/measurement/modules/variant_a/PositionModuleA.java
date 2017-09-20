@@ -60,20 +60,18 @@ public class PositionModuleA implements PositionModule {
      */
     @Override
     public float[] calculatePosition() {
-
         // calculate new position with these 3 values
-        // altitude = delta z
-        float altitude = altitudeModule.getAltitude();
+        float deltaZ = altitudeModule.getAltitude();
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float[] orientation = orientationModule.getOrientation();
 
         // beta = azimuth
-        float beta = orientation[0];
+        double beta = orientation[0];
         double sinbeta = Math.sin(Math.toRadians(beta));
         double cosbeta = Math.cos(Math.toRadians(beta));
 
         // calculate inclination angle (alpha)
-        double alpha = Math.asin(altitude / distance);
+        double alpha = Math.asin(deltaZ / distance);
         double cosalpha = Math.cos(alpha);
 
         // calculate delta x and delta y
@@ -82,7 +80,7 @@ public class PositionModuleA implements PositionModule {
 
         coordinates[0] += deltaX;
         coordinates[1] += deltaY;
-        coordinates[2] += altitude;
+        coordinates[2] += deltaZ;
 
         return coordinates;
     }

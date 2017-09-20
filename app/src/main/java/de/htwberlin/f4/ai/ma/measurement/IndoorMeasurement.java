@@ -14,7 +14,7 @@ import de.htwberlin.f4.ai.ma.measurement.modules.stepdirection.StepDirectionDete
  *
  * Used to determine the position and handle all sensor stuff
  *
- * Calculate position in cartesian coordinate system
+ * Calculate position in cartesian coordinate system using dead reckoning
  *
  * Author: Benjamin Kneer
  */

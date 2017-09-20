@@ -3,7 +3,7 @@ package de.htwberlin.f4.ai.ma.measurement;
 /**
  * WKT Class
  *
- * Used to create transform coordinates <-> WKT String
+ * Used to create / transform coordinates <-> WKT String
  */
 
 public class WKT {
