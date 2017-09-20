@@ -225,7 +225,7 @@ public class CompassSimple implements SensorEventListener, de.htwberlin.f4.ai.ma
         // Now the azimuth is calculated relative to the camera(on the backside) / z axis of the phone.
         // we remap the z axis on y axis and calculate the correct azimuth
         // IMPORTANT: SCREEN MUST POINT TOWARDS USER
-        if (Math.abs(pitch) > 70) {
+        if (pitch <= -70) {
             SensorManager.remapCoordinateSystem(remapped, SensorManager.AXIS_X, SensorManager.AXIS_Z, remapped);
             orientation = SensorManager.getOrientation(remapped, orientation);
             azimuth = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
