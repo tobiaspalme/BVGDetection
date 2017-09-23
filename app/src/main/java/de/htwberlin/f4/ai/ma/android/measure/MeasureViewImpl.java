@@ -514,6 +514,24 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         }
     }
 
+
+    /**
+     * disable nullpoint checkbox
+     */
+    @Override
+    public void disableNullPoint() {
+        nullpointStartCb.setEnabled(false);
+    }
+
+
+    /**
+     * enable nullpoint checkbox
+     */
+    @Override
+    public void enableNullPoint() {
+        nullpointStartCb.setEnabled(true);
+    }
+
     /**
      * used when we receive startnode from wifi scan or qr code
      *

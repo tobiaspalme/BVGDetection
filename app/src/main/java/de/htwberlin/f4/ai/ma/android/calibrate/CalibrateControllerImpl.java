@@ -165,6 +165,7 @@ public class CalibrateControllerImpl implements CalibrateController {
         // load second step
         else if (currentStep == 3) {
             view.loadCalibrateStep(2);
+            view.updateAverageStepperiod(stepPeriod);
         }
     }
 

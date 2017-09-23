@@ -169,6 +169,7 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onStartClicked() {
         measurementRunning = true;
+        view.disableNullPoint();
 
         // check for calibration
         // if not calibrated yet show dialog
@@ -295,6 +296,7 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         measurementRunning = false;
+        view.enableNullPoint();
     }
 
 
@@ -347,12 +349,15 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onEdgeDetailsClicked() {
         DatabaseHandler databaseHandler = DatabaseHandlerFactory.getInstance(view.getContext());
-        Edge edge = EdgeFactory.createInstance(startNode, targetNode, false, 0);
-        // check if edge between nodes exists
-        if (databaseHandler.checkIfEdgeExists(edge)) {
-            // load EdgeDetails View
-            BaseActivity activity = (BaseActivity) view;
-            activity.loadEdgeDetails(startNode.getId(), targetNode.getId());
+        // make sure both nodes are not null, can happen with fresh app install
+        if (startNode != null && targetNode != null) {
+            Edge edge = EdgeFactory.createInstance(startNode, targetNode, false, 0);
+            // check if edge between nodes exists
+            if (databaseHandler.checkIfEdgeExists(edge)) {
+                // load EdgeDetails View
+                BaseActivity activity = (BaseActivity) view;
+                activity.loadEdgeDetails(startNode.getId(), targetNode.getId());
+            }
         }
     }
 
@@ -533,6 +538,9 @@ public class MeasureControllerImpl implements MeasureController {
                 view.setStartNode(node);
             }
 
+            Toast toast = Toast.makeText(view.getContext(), "Ort gefunden: " + node.getId(), Toast.LENGTH_SHORT);
+            toast.show();
+
         } catch (JSONException e) {
             Toast toast = Toast.makeText(view.getContext(), "Ungültiger QR-Code", Toast.LENGTH_SHORT);
             toast.show();
@@ -564,6 +572,7 @@ public class MeasureControllerImpl implements MeasureController {
             }
             databaseHandler.updateNode(startNode, startNode.getId());
         }
+        handleNodeSelection(startNode, targetNode);
     }
 
 
@@ -1100,40 +1109,5 @@ public class MeasureControllerImpl implements MeasureController {
         databaseHandler.updateNode(targetNode, targetNode.getId());
         // update view with new edge data
         view.updateEdge(edge);
-    }
-
-    //todo: remove
-    private void save() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Coordinates/RecordData");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-
-        File file = new File(dir, "steps" + timestamp + ".txt");
-
-        FileOutputStream outputStream;
-
-
-        try {
-            outputStream = new FileOutputStream(file);
-            int i = 0;
-            for (StepData stepData: stepList) {
-                i++;
-                StringBuilder builder = new StringBuilder();
-                builder.append("Step " + i + ";" + stepData.getCoords()[0] + ";" + stepData.getCoords()[1] + ";" + stepData.getCoords()[2]);
-                outputStream.write(builder.toString().getBytes());
-                outputStream.write(System.lineSeparator().getBytes());
-            }
-
-
-
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
