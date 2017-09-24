@@ -65,6 +65,11 @@ public class PositionModuleA implements PositionModule {
         float distance = distanceModule.getDistance(calibrationData.isStairs());
         float[] orientation = orientationModule.getOrientation();
 
+        // prevent NaN bug in case deltaZ is bigger than distance, because of threshold
+        if (deltaZ > distance) {
+            deltaZ = distance;
+        }
+
         // beta = azimuth
         double beta = orientation[0];
         double sinbeta = Math.sin(Math.toRadians(beta));
