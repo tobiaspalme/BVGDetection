@@ -300,7 +300,7 @@ public class EdgeDetailsViewImpl extends BaseActivity implements EdgeDetailsView
     @Override
     public void updateEdgeInfo(Edge edge) {
          float edgeDistance = edge.getWeight();
-        distanceValueView.setText(String.valueOf(Math.round(edgeDistance * 100.0) / 100.0f));
+        distanceValueView.setText(String.valueOf(Math.round(edgeDistance * 100.0) / 100.0f) + " m");
 
         // check for handycap
         if (edge.getAccessibility()) {
