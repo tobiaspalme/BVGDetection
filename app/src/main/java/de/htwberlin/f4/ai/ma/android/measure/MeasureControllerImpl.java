@@ -169,7 +169,6 @@ public class MeasureControllerImpl implements MeasureController {
     @Override
     public void onStartClicked() {
         measurementRunning = true;
-        view.disableNullPoint();
 
         // check for calibration
         // if not calibrated yet show dialog
@@ -296,7 +295,6 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         measurementRunning = false;
-        view.enableNullPoint();
     }
 
 
@@ -787,6 +785,9 @@ public class MeasureControllerImpl implements MeasureController {
                 // if both nodes are nullpoints disable the start button
                 else {
                     view.disableStart();
+                    // since there will never be an edge between two nullpoint nodes, we create a placeholder edge
+                    Edge placeHolderEdge = EdgeFactory.createInstance(null, null, true, 0);
+                    view.updateEdge(placeHolderEdge);
                 }
             }
             // if start and targetnode are equal just update the edge with placeholder and disable start button

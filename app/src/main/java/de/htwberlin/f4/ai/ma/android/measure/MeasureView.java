@@ -48,12 +48,6 @@ public interface MeasureView {
     // disable add step button
     void disableAdd();
 
-    // disable nullpoint checkbox
-    void disableNullPoint();
-
-    // enable nullpoint checkbox
-    void enableNullPoint();
-
     // set the start node, used when node is retrieved from wifi fingerprint or qr
     void setStartNode(Node node);
 

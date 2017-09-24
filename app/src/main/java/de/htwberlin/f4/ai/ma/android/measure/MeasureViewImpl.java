@@ -191,6 +191,17 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         startNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_start_coords);
         targetNodeCoordinatesView = (TextView) findViewById(R.id.coordinates_measure_target_coords);
 
+        nullpointStartCb = (CheckBox) findViewById(R.id.coordinates_measure_nullpoint_start);
+
+        nullpointStartCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (controller != null) {
+                    controller.onNullpointCheckedStartNode(b);
+                }
+            }
+        });
+
         btnStart = (Button) findViewById(R.id.coordinates_measure_start);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -200,6 +211,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 btnStart.setEnabled(false);
                 btnStop.setEnabled(true);
                 btnAdd.setEnabled(true);
+                nullpointStartCb.setEnabled(false);
             }
         });
         btnStart.setEnabled(false);
@@ -213,6 +225,7 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
                 btnAdd.setEnabled(false);
+                nullpointStartCb.setEnabled(true);
             }
         });
         btnStop.setEnabled(false);
@@ -226,17 +239,6 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
             }
         });
         btnAdd.setEnabled(false);
-
-        nullpointStartCb = (CheckBox) findViewById(R.id.coordinates_measure_nullpoint_start);
-
-        nullpointStartCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (controller != null) {
-                    controller.onNullpointCheckedStartNode(b);
-                }
-            }
-        });
 
         startNodeSpinner = (Spinner) findViewById(R.id.coordinates_measure_startnode);
         // fill adapter with nodenames
@@ -514,23 +516,6 @@ public class MeasureViewImpl extends BaseActivity implements MeasureView{
         }
     }
 
-
-    /**
-     * disable nullpoint checkbox
-     */
-    @Override
-    public void disableNullPoint() {
-        nullpointStartCb.setEnabled(false);
-    }
-
-
-    /**
-     * enable nullpoint checkbox
-     */
-    @Override
-    public void enableNullPoint() {
-        nullpointStartCb.setEnabled(true);
-    }
 
     /**
      * used when we receive startnode from wifi scan or qr code
