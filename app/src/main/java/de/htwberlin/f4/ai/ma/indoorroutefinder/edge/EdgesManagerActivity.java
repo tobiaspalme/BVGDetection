@@ -128,6 +128,7 @@ public class EdgesManagerActivity extends BaseActivity {
         connectNodesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                connectNodesButton.setImageResource(R.drawable.ways_inactive);
                 boolean accessible = false;
                 if (accessibilityCheckbox.isChecked()) { accessible = true; }
 
@@ -149,7 +150,7 @@ public class EdgesManagerActivity extends BaseActivity {
                     }
                     edgesListAdapter.notifyDataSetChanged();
                 }
-
+                connectNodesButton.setImageResource(R.drawable.ways);
             }
         });
 

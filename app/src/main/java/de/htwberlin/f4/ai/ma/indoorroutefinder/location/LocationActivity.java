@@ -97,16 +97,12 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         locate1sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    locate1sButton.setEnabled(false);
-                    locate10sButton.setEnabled(false);
                     findLocation(1);
                 }
             });
 
         locate10sButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    locate1sButton.setEnabled(false);
-                    locate10sButton.setEnabled(false);
                     progressBar.setVisibility(View.VISIBLE);
                     findLocation(10);
                 }
@@ -118,6 +114,10 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
      * @param seconds the time to measure in seconds
      */
     private void findLocation(final int seconds) {
+        locate1sButton.setEnabled(false);
+        locate10sButton.setEnabled(false);
+        locate1sButton.setImageResource(R.drawable.locate_1s_button_inactive);
+        locate10sButton.setImageResource(R.drawable.locate_10s_button_inactive);
 
         locationImageview.setVisibility(View.INVISIBLE);
         locationTextview.setText(getString(R.string.searching_node_text));
@@ -190,6 +190,8 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         }
         locate1sButton.setEnabled(true);
         locate10sButton.setEnabled(true);
+        locate1sButton.setImageResource(R.drawable.locate_1s_button);
+        locate10sButton.setImageResource(R.drawable.locate_10s_button);
     }
 
 

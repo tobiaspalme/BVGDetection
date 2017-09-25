@@ -3,7 +3,7 @@
 
     <CheckBoxPreference
         android:key="verbose_mode"
-        android:title="Verbose-Modus (fingerprinting)"
+        android:title="Verbose-Modus (Fingerprinting)"
         android:defaultValue="false" />
 
 
