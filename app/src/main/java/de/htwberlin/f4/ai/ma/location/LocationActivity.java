@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,8 +21,6 @@ import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.location.location_calculator.LocationCalculatorFactory;
-import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
-import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.persistence.DatabaseHandlerFactory;
 import de.htwberlin.f4.ai.ma.location.calculations.FoundNode;
@@ -39,7 +36,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     ImageButton locate1sButton;
     ImageButton locate10sButton;
-    ImageButton detailedResultsImagebutton;
     ImageView locationImageview;
     TextView locationTextview;
     TextView descriptionTextview;
@@ -50,10 +46,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
-    private String settingsString;
     private WifiManager wifiManager;
-
-    private int locationsCounter;
 
     boolean movingAverage;
     boolean kalmanFilter;
@@ -80,7 +73,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
         locate1sButton = (ImageButton) findViewById(R.id.locate_1s_button);
         locate10sButton = (ImageButton) findViewById(R.id.locate_10s_button);
-        detailedResultsImagebutton = (ImageButton) findViewById(R.id.location_detailed_results_imagebutton);
         locationImageview = (ImageView) findViewById(R.id.location_imageview);
         locationTextview = (TextView) findViewById(R.id.location_textview);
         descriptionTextview = (TextView) findViewById(R.id.description_textview_location);
@@ -98,24 +90,10 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         knnAlgorithm = sharedPreferences.getBoolean("pref_knnAlgorithm", true);
         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
         useSSIDfilter = sharedPreferences.getBoolean("use_ssid_filter", false);
-        locationsCounter = sharedPreferences.getInt("locationsCounter", -1);
-
-        Log.d("LocationActivity", "locationsCounter onCreate= " + locationsCounter);
-        if (locationsCounter == -1) {
-            locationsCounter = 0;
-        }
 
         movingAverageOrder = Integer.parseInt(sharedPreferences.getString("pref_movivngAverageOrder", "3"));
         knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
-
-        settingsString = "Mittelwert: " + movingAverage + "\r\nOrdnung: " + sharedPreferences.getString("pref_movivngAverageOrder", "3")
-                + "\r\nKalman Filter: " + kalmanFilter +"\r\nKalman Wert: "+ sharedPreferences.getString("pref_kalmanValue","2")
-                + "\r\nEuclidische Distanz: " + euclideanDistance
-                + "\r\nKNN: " + knnAlgorithm+ "\r\nKNN Wert: "+ sharedPreferences.getString("pref_knnNeighbours", "3") ;
-
-
-        detailedResultsImagebutton.setImageResource(R.drawable.info);
 
         progressBar.setVisibility(View.INVISIBLE);
 
@@ -135,15 +113,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                     findLocation(10);
                 }
             });
-
-        detailedResultsImagebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LocationDetailedInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     /**
@@ -191,7 +160,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
             FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
 
-            LocationResult locationResult;
             if (foundNode != null) {
 
                 locationTextview.setText(foundNode.getId());
@@ -199,8 +167,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                 progressBar.setVisibility(View.INVISIBLE);
 
                 descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
-
-                locationResult = LocationResultFactory.createInstance(locationsCounter, settingsString, String.valueOf(seconds), foundNode.getId(), foundNode.getPercent());
 
                 final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
 
@@ -222,13 +188,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
             } else {
                 locationTextview.setText(getString(R.string.no_node_found_text));
-                locationResult = LocationResultFactory.createInstance(locationsCounter, settingsString, String.valueOf(seconds), getString(R.string.no_node_found_text), 0);
-
             }
-
-            locationsCounter++;
-            sharedPreferences.edit().putInt("locationsCounter", locationsCounter).apply();
-            databaseHandler.insertLocationResult(locationResult);
         }
         locate1sButton.setEnabled(true);
         locate10sButton.setEnabled(true);

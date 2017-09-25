@@ -18,11 +18,9 @@ import java.util.List;
 
 import de.htwberlin.f4.ai.ma.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.FingerprintFactory;
-import de.htwberlin.f4.ai.ma.location.locationresult.LocationResultFactory;
 import de.htwberlin.f4.ai.ma.fingerprint.Fingerprint;
 import de.htwberlin.f4.ai.ma.node.Node;
 import de.htwberlin.f4.ai.ma.edge.Edge;
-import de.htwberlin.f4.ai.ma.location.locationresult.LocationResult;
 import de.htwberlin.f4.ai.ma.node.NodeFactory;
 import de.htwberlin.f4.ai.ma.persistence.JSON.JSONConverter;
 
@@ -59,12 +57,6 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
     private static final String EDGE_WEIGHT = "weight";
     private static final String EDGE_ADDITIONAL_INFO = "additional_info";
 
-    private static final String RESULT_ID = "id";
-    private static final String RESULT_SETTINGS = "settings";
-    private static final String RESULT_MEASURED_TIME = "measuredtime";
-    private static final String RESULT_MEASURED_NODE = "measurednode";
-    private static final String RESULT_PERCENTAGE = "percentage";
-
     private JSONConverter jsonConverter = new JSONConverter();
     private Context context;
 
@@ -100,17 +92,9 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 EDGE_WEIGHT + " REAL," +
                 EDGE_ADDITIONAL_INFO + " TEXT);";
 
-        // LocationResults table
-        String createResultTableQuery = "CREATE TABLE " + RESULTS_TABLE + " (" +
-                RESULT_ID + " INTEGER PRIMARY KEY," +
-                RESULT_SETTINGS + " TEXT," +
-                RESULT_MEASURED_TIME + " TEXT," +
-                RESULT_MEASURED_NODE + " TEXT," +
-                RESULT_PERCENTAGE + " REAL)";
 
         db.execSQL(createNodeTableQuery);
         db.execSQL(createEdgeTableQuery);
-        db.execSQL(createResultTableQuery);
     }
 
     @Override
@@ -500,75 +484,6 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 + " OR " + EDGE_NODE_A + " ='" + edge.getNodeB().getId() + "' AND " + EDGE_NODE_B + " ='" + edge.getNodeA().getId() + "' ";
 
         Log.d("DB: delete_EDGE", "" + edge.getNodeA().getId() + " " + edge.getNodeB().getId());
-
-        database.execSQL(deleteQuery);
-        database.close();
-    }
-
-
-
-    //----------------- L O C A T I O N     R E S U L T S ------------------------------------------------------------------------------------------
-
-    /**
-     * Insert a LocationResult
-     * @param locationResult the LocationResult to be inserted
-     */
-    public void insertLocationResult(LocationResult locationResult) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(RESULT_ID, locationResult.getId());
-        values.put(RESULT_SETTINGS, locationResult.getSettings());
-        values.put(RESULT_MEASURED_TIME, locationResult.getMeasuredTime());
-        values.put(RESULT_MEASURED_NODE, locationResult.getMeasuredNode());
-        values.put(RESULT_PERCENTAGE, locationResult.getPercentage());
-
-        database.insert(RESULTS_TABLE, null, values);
-
-        //Log.d("DB: insert_result", "###########");
-
-        database.close();
-    }
-
-
-    /**
-     * Get a list of LocationResults
-     * @return the list of LocationResults
-     */
-    public List<LocationResult> getAllLocationResults() {
-        List<LocationResult> allResults = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + RESULTS_TABLE;
-        SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                LocationResult locationResult = LocationResultFactory.createInstance();
-
-                //Log.d("DB: get_all_locations", "###########");
-
-                locationResult.setId(Integer.valueOf(cursor.getString(0)));
-                locationResult.setSettings(cursor.getString(1));
-                locationResult.setMeasuredTime(cursor.getString(2));
-                locationResult.setMeasuredNode(cursor.getString(3));
-                locationResult.setPercentage(cursor.getFloat(4));
-
-                allResults.add(locationResult);
-            } while (cursor.moveToNext());
-        }
-
-        database.close();
-        return allResults;
-    }
-
-
-    /**
-     * Delete a single LocationResult
-     * @param locationResult the LocationResult to be deleted
-     */
-    public void deleteLocationResult(LocationResult locationResult) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + RESULTS_TABLE + " WHERE " + RESULT_ID + " ='" + locationResult.getId() + "'";
 
         database.execSQL(deleteQuery);
         database.close();
