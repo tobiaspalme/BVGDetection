@@ -17,7 +17,7 @@
             android:title="SSID-Filter benutzen"
             android:defaultValue="false" />
 
-        <de.htwberlin.f4.ai.ma.settings.ListPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.ListPreference
             android:key="default_wifi_network"
             android:dependency="use_ssid_filter"
             android:title="Filtern nach SSID:" />
@@ -30,7 +30,7 @@
             android:defaultValue="true" >
         </CheckBoxPreference>
 
-        <de.htwberlin.f4.ai.ma.settings.ListPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.ListPreference
             android:dependency="pref_movingAverage"
             android:key="pref_movivngAverageOrder"
             android:title="Ordnung"
@@ -43,7 +43,7 @@
             android:title="Kalman Filter"
             android:defaultValue="true" />
 
-        <de.htwberlin.f4.ai.ma.settings.EditTextPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.EditTextPreference
             android:defaultValue="2"
             android:key="pref_kalmanValue"
             android:title="Kalman Wert"
@@ -68,7 +68,7 @@
             android:dependency="pref_euclideanDistance"
             android:defaultValue="true" />
 
-        <de.htwberlin.f4.ai.ma.settings.EditTextPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.EditTextPreference
             android:defaultValue="3"
             android:key="pref_knnNeighbours"
             android:title="k Nachbarn"
@@ -81,7 +81,7 @@
     <PreferenceCategory
         android:title="Messung">
 
-        <de.htwberlin.f4.ai.ma.settings.ListPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.ListPreference
             android:key="pref_measurement_type"
             android:title="Messvariante"
             android:entries="@array/listDisplayWord"
@@ -90,7 +90,7 @@
             android:dialogTitle="Bitte Messvariante auswählen"
             android:defaultValue="Variante B"/>
 
-        <de.htwberlin.f4.ai.ma.settings.EditTextPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.EditTextPreference
             android:key="pref_lowpass_value"
             android:title="Lowpass Filter Wert"
             android:inputType="numberDecimal"
@@ -98,7 +98,7 @@
             android:defaultValue="0.1"
             />
 
-        <de.htwberlin.f4.ai.ma.settings.EditTextPreference
+        <de.htwberlin.f4.ai.ma.indoorroutefinder.settings.EditTextPreference
             android:key="pref_barometer_threshold"
             android:title="Barometer Threshold (m)"
             android:inputType="numberDecimal"
