@@ -378,11 +378,11 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     public void processFinish(Fingerprint fingerprint, int seconds) {
         if (fingerprint != null) {
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
-            FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
+            String foundNode = locationCalculator.calculateNodeId(fingerprint);
             if (foundNode != null) {
-                Toast toast = Toast.makeText(this, "Standort: " + foundNode.getId(), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, "Standort: " + foundNode, Toast.LENGTH_SHORT);
                 toast.show();
-                int index = itemsStartNodeSpinner.indexOf(foundNode.getId());
+                int index = itemsStartNodeSpinner.indexOf(foundNode);
                 startNodeSpinner.setSelection(index);
             } else {
                 Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);

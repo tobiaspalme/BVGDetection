@@ -690,10 +690,10 @@ public class MeasureControllerImpl implements MeasureController {
         }
 
         LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(view.getContext());
-        FoundNode foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalSampleList));
+        String foundNode = locationCalculator.calculateNodeId(FingerprintFactory.createInstance("", signalSampleList));
         Node result = null;
         if (foundNode != null) {
-            result = databaseHandler.getNode(foundNode.getId());
+            result = databaseHandler.getNode(foundNode);
         }
 
         return result;

@@ -15,9 +15,9 @@ public class KNearestNeighbor {
      * Calculate k-Nearest-Neighbor algorithm
      * @param knnValue the knn value
      * @param distanceNames names of sorted list
-     * @return nodeName
+     * @return the name of the node
      */
-    public static FoundNode calculateKnn(int knnValue, List<String> distanceNames) {
+    public static String calculateKnn(int knnValue, List<String> distanceNames) {
         Map<String, Integer> stringsCount = new HashMap<String, Integer>();
 
         if (distanceNames.size() >= knnValue && knnValue != 0) {
@@ -39,7 +39,7 @@ public class KNearestNeighbor {
             double percent = ((double)mostRepeated.getValue() / ((double)4 * (double)knnValue))*(double)100;
 
             if (mostRepeated.getKey() != null) {
-                return new FoundNode(mostRepeated.getKey(), percent);
+                return mostRepeated.getKey();
             } else {
                 return null;
             }

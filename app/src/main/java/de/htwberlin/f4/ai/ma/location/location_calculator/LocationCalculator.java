@@ -23,7 +23,7 @@ public interface LocationCalculator {
      * @param fingerprint the input Fingerprint to be compared with all existent Nodes to get the position
      * @return the ID (name) of the resulting Node
      */
-    FoundNode calculateNodeId(Fingerprint fingerprint);
+    String calculateNodeId(Fingerprint fingerprint);
 
 
     /**

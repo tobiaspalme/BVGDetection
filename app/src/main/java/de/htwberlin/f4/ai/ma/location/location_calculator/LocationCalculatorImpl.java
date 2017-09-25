@@ -46,7 +46,7 @@ class LocationCalculatorImpl implements LocationCalculator {
      * @param fingerprint the input FingerprintImpl to be compared with all existent Nodes to get the position
      * @return the ID (name) of the resulting Node
      */
-    public FoundNode calculateNodeId(Fingerprint fingerprint) {
+    public String calculateNodeId(Fingerprint fingerprint) {
 
         List<SignalSample> signalSampleList = fingerprint.getSignalSampleList();
 
@@ -59,7 +59,7 @@ class LocationCalculatorImpl implements LocationCalculator {
         int knnValue = Integer.parseInt(sharedPreferences.getString("pref_knnNeighbours", "3"));
         int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
-        FoundNode foundNode = null;
+        String foundNode = null;
 
 
         // Load all nodes which have a fingerprint
@@ -93,7 +93,7 @@ class LocationCalculatorImpl implements LocationCalculator {
 
                 } else if (!distanceNames.isEmpty()) {
                     //TODO hier 100%? ...... 100.0/distanceNames.size()
-                    foundNode = new FoundNode(distanceNames.get(0), 100.0);
+                    foundNode = distanceNames.get(0);
                 }
             }
             return foundNode;
@@ -106,7 +106,7 @@ class LocationCalculatorImpl implements LocationCalculator {
     /**
      * Get a list of AccessPointSamples by passing a list of SignalSample (unwrap).
      * @param signalSampleList a list of SignalInformations
-     * @return a list of SignalStrengthInformations
+     * @return a list of AccessPointInformations
      */
     public List<AccessPointInformation> getSignalStrengths(List<SignalSample> signalSampleList) {
         List<AccessPointInformation> accessPointInformations = new ArrayList<>();
@@ -115,7 +115,6 @@ class LocationCalculatorImpl implements LocationCalculator {
             for (AccessPointInformation accessPointInformation : sigInfo.getAccessPointInformationList()) {
                 String macAdress = accessPointInformation.getMacAddress();
                 int signalStrength = accessPointInformation.getRssi();
-                //double signalStrength = accessPointInformation.getMilliwatt();
                 AccessPointInformation aps = AccessPointInformationFactory.createInstance(macAdress, signalStrength);
                 accessPointInformations.add(aps);
             }

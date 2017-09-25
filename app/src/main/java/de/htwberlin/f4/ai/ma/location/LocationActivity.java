@@ -158,17 +158,17 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         if (fingerprint != null) {
 
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
-            FoundNode foundNode = locationCalculator.calculateNodeId(fingerprint);
+            String foundNode = locationCalculator.calculateNodeId(fingerprint);
 
             if (foundNode != null) {
 
-                locationTextview.setText(foundNode.getId());
+                locationTextview.setText(foundNode);
                 locationImageview.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
 
-                descriptionTextview.setText(databaseHandler.getNode(foundNode.getId()).getDescription());
+                descriptionTextview.setText(databaseHandler.getNode(foundNode).getDescription());
 
-                final String picturePath = databaseHandler.getNode(foundNode.getId()).getPicturePath();
+                final String picturePath = databaseHandler.getNode(foundNode).getPicturePath();
 
                 if (picturePath != null) {
                     Glide.with(context).load(picturePath).into(locationImageview);
