@@ -128,7 +128,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
             values.put(NODE_WIFI_NAME, node.getFingerprint().getSsid());
-            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalSampleList()));
+            values.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalSampleListToJSON(node.getFingerprint().getSignalSampleList()));
         }
 
         values.put(NODE_COORDINATES, node.getCoordinates());
@@ -169,7 +169,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
         // If the Node has a fingerprint
         if (node.getFingerprint() != null) {
             contentValues.put(NODE_WIFI_NAME, node.getFingerprint().getSsid());
-            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalInfoListToJSON(node.getFingerprint().getSignalSampleList()));
+            contentValues.put(NODE_SIGNALINFORMATIONLIST, jsonConverter.convertSignalSampleListToJSON(node.getFingerprint().getSignalSampleList()));
         }
 //TODO
         /*
@@ -213,7 +213,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
                 if (cursor.getString(3) == null) {
                     fingerprint = null;
                 } else {
-                    fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
+                    fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalSampleList(cursor.getString(3)));
                 }
 
                 Node node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));
@@ -244,7 +244,7 @@ class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHandler {
             if (cursor.getString(3) == null) {
                 fingerprint = null;
             } else {
-                fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalInfoList(cursor.getString(3)));
+                fingerprint = FingerprintFactory.createInstance(cursor.getString(2), jsonConverter.convertJsonToSignalSampleList(cursor.getString(3)));
             }
 
             node = NodeFactory.createInstance(cursor.getString(0), cursor.getString(1), fingerprint, cursor.getString(4), cursor.getString(5), cursor.getString(6));

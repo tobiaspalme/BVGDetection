@@ -69,7 +69,7 @@ class LocationCalculatorImpl implements LocationCalculator {
             }
         }
 
-        List<RestructedNode> restructedNodeList = calculateNewNodeDateset(nodesWithFingerprint);
+        List<RestructedNode> restructedNodeList = calculateNewNodeDataset(nodesWithFingerprint);
         List<RestructedNode> calculatedNodeList = new ArrayList<>();
 
         if (!restructedNodeList.isEmpty()) {
@@ -129,7 +129,7 @@ class LocationCalculatorImpl implements LocationCalculator {
      * @param allNodes list of all nodes
      * @return restructed Node list
      */
-    public List<RestructedNode> calculateNewNodeDateset(List<Node> allNodes) {
+    public List<RestructedNode> calculateNewNodeDataset(List<Node> allNodes) {
         List<String> macAddresses;
         int count = 0;
 

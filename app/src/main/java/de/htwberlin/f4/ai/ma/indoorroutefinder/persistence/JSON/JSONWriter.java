@@ -1,13 +1,10 @@
 package de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.JSON;
 
-import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,20 +13,12 @@ import java.io.IOException;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 
 public class JSONWriter {
-    private Context context;
-
-    /*
-    public JSONWriter(Context context) {
-        this.context = context;
-    }*/
-
 
     /**
-     * Write a JSON object to the JSON file on the device storage
+     * Write a JSON object to the JSON file on the external device storage
      * @param node the node to save
      */
     public void writeJSON(Node node) {
-//        String jsonString = loadJSONFromAsset(context);
         String jsonString = loadJSONFromAsset();
         String nodeId = node.getId();
 
@@ -53,14 +42,14 @@ public class JSONWriter {
                 if (idIsContained) {
                     JSONObject newJsonObject = jsonNode.getJSONObject(index);
 
-                    if (newJsonObject.has("signalInformation")) {
-                        JSONArray jsonArray = newJsonObject.getJSONArray("signalInformation");
-                        JSONArray jsonArrayAdd = makeJsonNode(newJsonObject, node).getJSONArray("signalInformation");
+                    if (newJsonObject.has("fingerprint")) {
+                        JSONArray jsonArray = newJsonObject.getJSONArray("fingerprint");
+                        JSONArray jsonArrayAdd = makeJsonNode(newJsonObject, node).getJSONArray("fingerprint");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
                             jsonArrayAdd.put(jsonArray.getJSONObject(i));
                         }
-                        newJsonObject.put("signalInformation", jsonArrayAdd);
+                        newJsonObject.put("fingerprint", jsonArrayAdd);
                     }
                     save(jsonObj);
                 } else {
@@ -89,26 +78,24 @@ public class JSONWriter {
             jsonObjectNode.put("picturePath", node.getPicturePath());
             jsonObjectNode.put("additionalInfo", node.getAdditionalInfo());
 
-            //if (node.getFingerprint().getSignalSampleList() != null) {
             if (node.getFingerprint() != null) {
                 JSONArray signalJsonArray = new JSONArray();
                 for (int i = 0; i < node.getFingerprint().getSignalSampleList().size(); i++) {
 
                     JSONObject signalJsonObject = new JSONObject();
-                    JSONArray signalStrengthJsonArray = new JSONArray();
+                    JSONArray apInfoJsonArray = new JSONArray();
 
                     for (int j = 0; j < node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().size(); j++) {
-                        JSONObject signalStrenghtObject = new JSONObject();
-                        signalStrenghtObject.put("macAddress", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getMacAddress());
-                        signalStrenghtObject.put("strength", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getRssi());
-                        //signalStrenghtObject.put("strength", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getMilliwatt());
-                        signalStrengthJsonArray.put(signalStrenghtObject);
+                        JSONObject signalStrengthObject = new JSONObject();
+                        signalStrengthObject.put("macAddress", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getMacAddress());
+                        signalStrengthObject.put("strength", node.getFingerprint().getSignalSampleList().get(i).getAccessPointInformationList().get(j).getRssi());
+                        apInfoJsonArray.put(signalStrengthObject);
                     }
                     signalJsonObject.put("timestamp", node.getFingerprint().getSignalSampleList().get(i).getTimestamp());
-                    signalJsonObject.put("signalStrength", signalStrengthJsonArray);
+                    signalJsonObject.put("signalSample", apInfoJsonArray);
                     signalJsonArray.put(signalJsonObject);
                 }
-                jsonObjectNode.put("signalInformation", signalJsonArray);
+                jsonObjectNode.put("fingerprint", signalJsonArray);
             }
         } catch (final JSONException e) {
             Log.e("JSON", "parsing Error");
@@ -118,7 +105,7 @@ public class JSONWriter {
     }
 
     /**
-     * Save the new jsonSting to file
+     * Save the new JSONString to file
      * @param jsonObject the new json String
      */
     public void save(JSONObject jsonObject){
@@ -140,11 +127,9 @@ public class JSONWriter {
 
     /**
      * If file exists, load .txt file from Files folder and return its content as a JSON String.
-     * If no file exist create empty JSON String
-     //* @param context
+     * If no file exists, create an empty JSON String
      * @return json String
      */
-    //private String loadJSONFromAsset(Context context) {
     private String loadJSONFromAsset() {
         String json = null;
         try {

@@ -1,7 +1,6 @@
 package de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner;
 
 import android.net.wifi.WifiManager;
-
 import java.util.List;
 
 /**
@@ -15,5 +14,12 @@ import java.util.List;
 
 public interface WifiScanner {
 
+    /**
+     *
+     * @param wifiManager the WifiManager object which is used to scan the WiFi
+     * @param onlyNetworksWithTwoOrMoreAPs true, if only networks with more than two access points
+     *                                     should be returned
+     * @return a list of SSIDs (network names)
+     */
     List<String> getAvailableNetworks(WifiManager wifiManager, boolean onlyNetworksWithTwoOrMoreAPs);
 }

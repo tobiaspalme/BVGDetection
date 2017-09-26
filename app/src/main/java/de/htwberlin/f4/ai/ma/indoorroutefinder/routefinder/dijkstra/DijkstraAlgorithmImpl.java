@@ -210,17 +210,17 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      * @return the nearest DijkstraNode
      */
     public DijkstraNode getMinimumDistance(Set<DijkstraNode> dijkstraNodes) {
-        DijkstraNode minimum = null;
+        DijkstraNode nearestDijkstraNode = null;
         for (DijkstraNode dijkstraNode : dijkstraNodes) {
-            if (minimum == null) {
-                minimum = dijkstraNode;
+            if (nearestDijkstraNode == null) {
+                nearestDijkstraNode = dijkstraNode;
             } else {
-                if (getShortestDistance(dijkstraNode) < getShortestDistance(minimum)) {
-                    minimum = dijkstraNode;
+                if (getShortestDistance(dijkstraNode) < getShortestDistance(nearestDijkstraNode)) {
+                    nearestDijkstraNode = dijkstraNode;
                 }
             }
         }
-        return minimum;
+        return nearestDijkstraNode;
     }
 
 

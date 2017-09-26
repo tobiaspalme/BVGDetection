@@ -12,41 +12,37 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
  *
  * Thanks to tognitos for contribution.
  *
- * The Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
- * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
- * It is important that methods from the Node and Edge classes (of the Model) are avoided.
- * This allows us to change just how the mapping to the DijkstraNodes and DijkstraEdges work.
+ * The Dijkstra algorithm maps the common node and edge objects to its own DijkstraNode and
+ * DijkstraEdge objects in order to avoid loading the model objects to the algorithm's logic.
  */
 
 public interface DijkstraAlgorithm {
 
     /**
-     * Map the normal Node objects from the Model to the custom DijkstraNode of the Dijkstra Algorithm.
-     * This is done to avoid filling the model objects with logic elements.
-     * @param nodes a list of Nodes
+     * Map the normal node objects from the model to the custom DijkstraNode of the Dijkstra Algorithm.
+     * @param nodes a list of nodes
      * @return a list of DijkstraNodes
      */
     List<DijkstraNode> mapNodes(List<Node> nodes);
 
     /**
-     * Map the normal Edge objects from the Model to the custom DijkstraEdge of the Dijkstra
-     * algorithm. This is done in order to avoid filling the model objects with logic elements.
-     * Since the graph is bidirectional, it maps 2 DijkstraEdges: one for poiA->poiB, one for poiB->poiA.
-     * @param edges a list of Edges
+     * Map the normal edge objects from the model to the custom DijkstraEdge of the Dijkstra Algorithm.
+     * Since the graph is bidirectional, it maps 2 DijkstraEdges: one for nodeA->nodeB, one for nodeB->nodeA.
+     * @param edges a list of edges
      * @return a list of DijkstraEdges
      */
     List<DijkstraEdge> mapEdges(List<Edge> edges);
 
     /**
-     * Executes all the calculations and the shortest paths from the specified source node.
-     * @param sourceNodeId the startnode for the calculations
-     * @throws IllegalArgumentException if the sourcenodeid does not exist
+     * Executes all the calculations and calculates the shortest paths from the specified start node.
+     * @param sourceNodeId the start node for the calculations
+     * @throws IllegalArgumentException if the source node does not exist
      */
     void execute(String sourceNodeId) throws IllegalArgumentException;
 
     /**
-     * Find the minimal distance from a node
-     * @param node the startnode
+     * Find the minimal distances from a DijkstraNode to all other DijkstraNodes
+     * @param node the start node
      */
     void findMinimalDistances(DijkstraNode node);
 
@@ -54,42 +50,43 @@ public interface DijkstraAlgorithm {
      * Get the distance between the two DijkstraNodes
      * @param node the start-node
      * @param target the target-node
-     * @return the weight (distance) between start-node and target-node
+     * @return the weight (distance in meters) between start-node and target-node
      */
     double getDistance(DijkstraNode node, DijkstraNode target);
 
     /**
      * Get all the neighbours (directly connected DijkstraNodes) for the specified node.
      * @param node the specified node
-     * @return list of neighbor nodes
+     * @return list of neighbor DijkstraNodes
      */
     List<DijkstraNode> getNeighbors(DijkstraNode node);
 
     /**
-     * Get the minimum shortest distance of all the DijkstraNodes.
+     * Get the nearest of all the DijkstraNodes for a specified DijkstraNode.
      * @param dijkstraNodes a set of DijkstraNodes
      * @return the nearest DijkstraNode
      */
     DijkstraNode getMinimumDistance(Set<DijkstraNode> dijkstraNodes);
 
     /**
-     * @param dijkstraNode the input DijkstraNode
+     * Check if the algorithm already ran through a specified DijkstraNode (is settled)
+     * @param dijkstraNode the specified DijkstraNode
      * @return true if the DijkstraNode was already settled
      */
     boolean isSettled(DijkstraNode dijkstraNode);
 
     /**
      * Gets the shortest distance to the destination, from the calculated start-node (called through
-     * the method execute).
-     * @param destinationNode the destination-node
-     * @return the shortest distance
+     * the method "execute").
+     * @param destinationNode the destination-DijkstraNode
+     * @return the shortest distance (in meters)
      */
     double getShortestDistance(DijkstraNode destinationNode);
 
     /**
-     * This method returns the path from the source to the selected target and
-     * NULL if no path exists
-     *
+     * This method returns the path as a list of node IDs from the source node
+     * (which was parameter of the method "execute") to the selected target.
+     * Returns NULL if no path exists.
      * @param targetNodeID the ID of the target Node
      */
     LinkedList<String> getPath(String targetNodeID);

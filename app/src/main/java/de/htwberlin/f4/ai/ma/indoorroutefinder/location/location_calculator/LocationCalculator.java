@@ -12,51 +12,49 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.SignalSample;
 
 /**
  * Created by Johann Winter
+ *
+ * This interface if for calculating a node from a given fingerprint.
+ * It is used to locate the user.
  */
 
 public interface LocationCalculator {
 
     /**
-     * Calculate a Node from a given Fingerprint
-     *
-     * @param fingerprint the input Fingerprint to be compared with all existent Nodes to get the position
-     * @return the ID (name) of the resulting Node
+     * Calculate a node from a given fingerprint
+     * @param fingerprint the input fingerprint to be compared with all existent nodes to get the position
+     * @return the ID (name) of the resulting node
      */
     String calculateNodeId(Fingerprint fingerprint);
 
 
     /**
-     * Get a list of SignalStrengths by passing a list of SignalSample (unwrap).
-     *
-     * @param signalSampleList a list of SignalInformations
-     * @return a list of SignalStrengthInformations
+     * Get a list of AccessPointInformation by passing a list of SignalSample (unwrap).
+     * @param signalSampleList a list of SignalSamples
+     * @return a list of AccesspointInformations
      */
     List<AccessPointInformation> getSignalStrengths(List<SignalSample> signalSampleList);
 
 
     /**
-     * Rewrite the nodelist to restrucetd Nodes and delete weak MAC addresses
-     *
+     * Rewrite the nodelist to restrucetd nodes and delete weak MAC addresses
      * @param allNodes list of all nodes
-     * @return restructed Node list
+     * @return a list of restructed nodes
      */
-    List<RestructedNode> calculateNewNodeDateset(List<Node> allNodes);
+    List<RestructedNode> calculateNewNodeDataset(List<Node> allNodes);
 
 
     /**
-     * Create a multimap with MAC address and signal strength values
-     *
-     * @param node input Node
-     * @param macAdresses list of MAC addresses
-     * @return multimap with mac address and signal strengths
+     * Create a multimap with MAC address and signal strength values.
+     * @param node input node
+     * @param macAdresses a list of MAC addresses
+     * @return a multimap with mac address and signal strengths
      */
     Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses);
 
 
     /**
-     * Get all mac addresses of a specific Node
-     *
-     * @param node the Node
+     * Get (extract) all MAC-addresses from a specific node
+     * @param node the node
      * @return list of unique MAC addresses
      */
     List<String> getMacAddresses(Node node);
