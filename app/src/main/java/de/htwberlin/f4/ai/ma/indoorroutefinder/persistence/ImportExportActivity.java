@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder;
+package de.htwberlin.f4.ai.ma.indoorroutefinder.persistence;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,18 +9,15 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
-
 import java.io.File;
 import java.io.IOException;
-
+import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
+ *
+ * Activity for import / export of the database
  */
 
 public class ImportExportActivity extends BaseActivity {
@@ -29,9 +26,7 @@ public class ImportExportActivity extends BaseActivity {
     ImageButton exportButton;
     private DatabaseHandler databaseHandler;
     private Context context;
-
     private static final int PICKFILE_REQUEST_CODE = 0;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,12 +51,10 @@ public class ImportExportActivity extends BaseActivity {
                 importDatabase();
             }
         });
-
-
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                exortDatabase();
+                exportDatabase();
             }
         });
     }
@@ -99,7 +92,7 @@ public class ImportExportActivity extends BaseActivity {
      * If the user agrees, or the file is non-existent, it will be overwritten by the database dump which
      * will be created from the application's database.
      */
-    private void exortDatabase() {
+    private void exportDatabase() {
         File exportFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorPositioning/Exported/indoor_data.db");
 
         if (exportFile.exists()) {
@@ -127,10 +120,6 @@ public class ImportExportActivity extends BaseActivity {
                 Toast.makeText(context, getString(R.string.database_exported_toast), Toast.LENGTH_LONG).show();
             }
         }
-
-
     }
-
-
 
 }

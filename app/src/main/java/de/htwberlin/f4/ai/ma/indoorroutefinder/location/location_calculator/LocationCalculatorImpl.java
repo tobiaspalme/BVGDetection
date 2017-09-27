@@ -3,14 +3,11 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.location.location_calculator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.SignalSample;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformation;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformationFactory;
@@ -26,6 +23,7 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.location.calculations.RestructedN
 
 /**
  * Created by Johann Winter
+ *
  */
 
 class LocationCalculatorImpl implements LocationCalculator {
@@ -41,8 +39,8 @@ class LocationCalculatorImpl implements LocationCalculator {
     }
 
     /**
-     * Calculate a Node for a Fingerprint
-     * @param fingerprint the input FingerprintImpl to be compared with all existent Nodes to get the position
+     * Calculate a node from a fingerprint
+     * @param fingerprint the input fingerprint to be compared with all existent nodes' fingerprints to get the position
      * @return the ID (name) of the resulting Node
      */
     public String calculateNodeId(Fingerprint fingerprint) {
@@ -59,7 +57,6 @@ class LocationCalculatorImpl implements LocationCalculator {
         int kalmanValue = Integer.parseInt(sharedPreferences.getString("pref_kalmanValue","2"));
 
         String foundNode = null;
-
 
         // Load all nodes which have a fingerprint
         List<Node> nodesWithFingerprint = new ArrayList<>();
@@ -91,7 +88,6 @@ class LocationCalculatorImpl implements LocationCalculator {
                     foundNode = KNearestNeighbor.calculateKnn(knnValue, distanceNames);
 
                 } else if (!distanceNames.isEmpty()) {
-                    //TODO hier 100%? ...... 100.0/distanceNames.size()
                     foundNode = distanceNames.get(0);
                 }
             }
@@ -103,15 +99,15 @@ class LocationCalculatorImpl implements LocationCalculator {
 
 
     /**
-     * Get a list of AccessPointSamples by passing a list of SignalSample (unwrap).
-     * @param signalSampleList a list of SignalInformations
+     * Get a list of AccessPointInformations by passing a list of SignalSample (unwrap).
+     * @param signalSampleList a list of SignalSamples
      * @return a list of AccessPointInformations
      */
     public List<AccessPointInformation> getSignalStrengths(List<SignalSample> signalSampleList) {
         List<AccessPointInformation> accessPointInformations = new ArrayList<>();
 
-        for (SignalSample sigInfo : signalSampleList) {
-            for (AccessPointInformation accessPointInformation : sigInfo.getAccessPointInformationList()) {
+        for (SignalSample signalSample : signalSampleList) {
+            for (AccessPointInformation accessPointInformation : signalSample.getAccessPointInformationList()) {
                 String macAdress = accessPointInformation.getMacAddress();
                 int signalStrength = accessPointInformation.getRssi();
                 AccessPointInformation aps = AccessPointInformationFactory.createInstance(macAdress, signalStrength);
@@ -127,7 +123,7 @@ class LocationCalculatorImpl implements LocationCalculator {
     /**
      * Rewrite the nodelist to restrucetd Nodes and delete weak MAC addresses
      * @param allNodes list of all nodes
-     * @return restructed Node list
+     * @return restructed node list
      */
     public List<RestructedNode> calculateNewNodeDataset(List<Node> allNodes) {
         List<String> macAddresses;
@@ -153,7 +149,6 @@ class LocationCalculatorImpl implements LocationCalculator {
                 }
                 if (countValue <= minValue) {
                     multiMap.removeAll(macAddress);
-                    //Log.d("LocationCalculatorImpl", "calculateNewNodeDataset,   remove MAC: " + macAddress);
                 }
             }
             //fill restructed Nodes
@@ -166,9 +161,9 @@ class LocationCalculatorImpl implements LocationCalculator {
 
     /**
      * Create a multimap with MAC address and signal strength values
-     * @param node input Node
+     * @param node input node
      * @param macAdresses list of MAC addresses
-     * @return multimap with mac address and signal strengths
+     * @return multimap with mac addresses and signal strengths
      */
     public Multimap<String, Double> getMultiMap(Node node, List<String> macAdresses) {
         Multimap<String, Double> multiMap = ArrayListMultimap.create();
@@ -176,7 +171,6 @@ class LocationCalculatorImpl implements LocationCalculator {
             HashSet<String> actuallyMacAdresses = new HashSet<>();
             for (AccessPointInformation accessPointInformation : signalInfo.getAccessPointInformationList()) {
                 multiMap.put(accessPointInformation.getMacAddress(), (double) accessPointInformation.getRssi());
-                //multiMap.put(accessPointInformation.getMacAddress(), (double) accessPointInformation.getMilliwatt());
                 actuallyMacAdresses.add(accessPointInformation.getMacAddress());
             }
             for (String checkMacAdress : macAdresses) {
@@ -190,14 +184,14 @@ class LocationCalculatorImpl implements LocationCalculator {
 
 
     /**
-     * Get all mac addresses of a specific Node
-     * @param node the Node
+     * Get all mac addresses of a specific node
+     * @param node the node
      * @return list of unique MAC addresses
      */
     public List<String> getMacAddresses(Node node) {
         HashSet<String> macAdresses = new HashSet<String>();
-        for (SignalSample sigInfo : node.getFingerprint().getSignalSampleList()) {
-            for (AccessPointInformation accessPointInformation : sigInfo.getAccessPointInformationList()) {
+        for (SignalSample signalSample : node.getFingerprint().getSignalSampleList()) {
+            for (AccessPointInformation accessPointInformation : signalSample.getAccessPointInformationList()) {
                 macAdresses.add(accessPointInformation.getMacAddress());
             }
         }

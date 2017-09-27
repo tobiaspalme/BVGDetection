@@ -3,24 +3,18 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.GlideException;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created Johann Winter
  *
- * This is a custom adapter for the NodeListActivity's nodelist.
+ * Custom adapter for the NodeListActivity's node list.
  */
 
 public class NodeListAdapter extends ArrayAdapter {
@@ -31,7 +25,7 @@ public class NodeListAdapter extends ArrayAdapter {
     private List<String> nodePicturePaths;
 
     private final int REGULAR_ITEM = 0;   // For "normal" Nodes
-    private final int DISTANCE_ITEM = 1;  // For distances between Nodes in Listview of RouteFinderActivity
+    private final int DISTANCE_ITEM = 1;  // For distances between Nodes in ListView of RouteFinderActivity
 
 
     public NodeListAdapter(Activity context, List<String> nodeNames, List<String> nodeDescriptions, List<String> nodePicturePaths) {
@@ -42,7 +36,6 @@ public class NodeListAdapter extends ArrayAdapter {
         this.nodeDescriptions = nodeDescriptions;
         this.nodePicturePaths = nodePicturePaths;
     }
-
 
     @NonNull
     @Override
@@ -117,5 +110,6 @@ public class NodeListAdapter extends ArrayAdapter {
     public int getCount() {
         return nodeNames.size();
     }
+
 }
 

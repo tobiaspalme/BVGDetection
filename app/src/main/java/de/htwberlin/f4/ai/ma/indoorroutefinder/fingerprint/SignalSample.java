@@ -16,7 +16,6 @@ public class SignalSample {
     private String timestamp;
     private List<AccessPointInformation> accessPointInformationList;
 
-
     public SignalSample(String timestamp, List<AccessPointInformation> accessPointInformations) {
         this.timestamp = timestamp;
         this.accessPointInformationList = accessPointInformations;
@@ -37,6 +36,5 @@ public class SignalSample {
     public List<AccessPointInformation> getAccessPointInformationList() {
         return accessPointInformationList;
     }
-
 
 }

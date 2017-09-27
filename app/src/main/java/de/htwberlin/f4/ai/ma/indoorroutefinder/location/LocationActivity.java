@@ -39,20 +39,16 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     TextView descriptionTextview;
     TextView infobox;
     ProgressBar progressBar;
-
     Context context;
-
     private DatabaseHandler databaseHandler;
     private SharedPreferences sharedPreferences;
     private WifiManager wifiManager;
-
     boolean movingAverage;
     boolean kalmanFilter;
     boolean euclideanDistance;
     boolean knnAlgorithm;
     private boolean verboseMode;
     private boolean useSSIDfilter;
-
     int knnValue;
     int movingAverageOrder;
     int kalmanValue;
@@ -147,7 +143,6 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
 
     /**
      * If the background FingerprintTask is finished, display results
-     * and save the LocationResult.
      * @param seconds the measured time
      * @param fingerprint the fingerprint measured before
      */

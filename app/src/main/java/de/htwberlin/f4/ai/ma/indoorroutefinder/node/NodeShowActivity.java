@@ -6,16 +6,17 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter
+ *
+ * Activity to show a detailed view of a node which was tapped on in the ListView
+ * of the RouteFinderActivity.
  */
 
 public class NodeShowActivity extends BaseActivity {
@@ -27,7 +28,6 @@ public class NodeShowActivity extends BaseActivity {
     TextView coordinatesTextview;
     TextView coordinatesLabelTextview;
     ImageView cameraImageView;
-
     private Node node;
     DatabaseHandler databaseHandler;
 
@@ -70,15 +70,13 @@ public class NodeShowActivity extends BaseActivity {
             } else {
                 wifiNameTextview.setText(getString(R.string.no_ssid_filter));
             }
-
         }
 
-        if (node.getCoordinates() != null) {
-            coordinatesLabelTextview.setVisibility(View.INVISIBLE);
-            coordinatesTextview.setVisibility(View.INVISIBLE);
+        if (!node.getCoordinates().equals("")) {
+            coordinatesLabelTextview.setVisibility(View.VISIBLE);
+            coordinatesTextview.setVisibility(View.VISIBLE);
             coordinatesTextview.setText(node.getCoordinates());
         }
-
 
         if (node.getPicturePath() != null) {
             Glide.with(this).load(node.getPicturePath()).into(cameraImageView);
@@ -94,6 +92,5 @@ public class NodeShowActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
     }
 }

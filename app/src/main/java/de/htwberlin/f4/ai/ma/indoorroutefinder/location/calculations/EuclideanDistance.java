@@ -1,27 +1,27 @@
 package de.htwberlin.f4.ai.ma.indoorroutefinder.location.calculations;
 
-/**
- * Created by Johann Winter
- */
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformation;
 
+
+/**
+ * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
+ */
 public class EuclideanDistance {
 
 
     /**
      * Calculate the euclidean distances
      * @param restructedNodes a list of restructed Nodes
-     * @param accessPointInformations a list of measured SignalStrengths (RSSI)
+     * @param accessPointInformations a list of measured AccesspointInformations
      * @return a sorted list of distances
      */
     public static List<String> calculateDistance(List<RestructedNode> restructedNodes, List<AccessPointInformation> accessPointInformations) {
-        //List<String> distanceName = new ArrayList<>();
         List<DistanceClass> distanceClassList = new ArrayList<>();
 
         for (int i = 0; i < restructedNodes.size(); i++) {
@@ -33,7 +33,6 @@ public class EuclideanDistance {
                 if (contains) {
                     matchingSignalStrengths.add(restructedNodes.get(i).restructedSignals.get(accessPointInformations.get(j).getMacAddress()));
                     measuredSignalStrength.add(accessPointInformations.get(j).getRssi());
-                    //measuredSignalStrength.add(accessPointInformations.get(j).getMilliwatt());
                 }
             }
 

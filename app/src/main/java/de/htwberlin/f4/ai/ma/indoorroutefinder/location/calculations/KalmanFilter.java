@@ -1,21 +1,20 @@
 package de.htwberlin.f4.ai.ma.indoorroutefinder.location.calculations;
 
-/**
- * Created by user on Johann Winter
- */
-
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 
 /**
- * The kalman filter
+ * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
+ *
+ * The Kalman filter
  */
+
 public class KalmanFilter {
 
     public static List<RestructedNode> calculateCalman(int kalmanValue, List<RestructedNode> restructedNodeList) {

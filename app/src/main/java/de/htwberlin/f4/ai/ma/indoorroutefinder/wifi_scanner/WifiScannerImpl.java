@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +22,6 @@ class WifiScannerImpl implements WifiScanner {
         List<String> wifiNamesList = new ArrayList<>();
         List<String> SSIDsWithMoreThanOneBSSID = new ArrayList<>();
 
-
         for (ScanResult sr : wifiScanList) {
             SSIDs.add(sr.SSID);
             if (!wifiNamesList.contains(sr.SSID) && !sr.SSID.equals("")) {
@@ -31,7 +29,7 @@ class WifiScannerImpl implements WifiScanner {
             }
         }
 
-        // Filter for SSIDs with more than one BSSID (Accesspoint)
+        // Filter for SSIDs with more than one BSSID (access point)
         for (String s : SSIDs) {
             int occurrences = Collections.frequency(SSIDs, s);
             if (occurrences > 1 && !SSIDsWithMoreThanOneBSSID.contains(s) && !s.equals("")) {

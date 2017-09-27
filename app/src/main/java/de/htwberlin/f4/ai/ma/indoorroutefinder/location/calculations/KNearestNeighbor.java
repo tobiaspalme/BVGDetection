@@ -6,6 +6,8 @@ import java.util.Map;
 
 /**
  * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
  */
 
 

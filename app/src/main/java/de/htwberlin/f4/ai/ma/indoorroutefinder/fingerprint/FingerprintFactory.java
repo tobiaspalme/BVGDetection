@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Created by Johann Winter
+ *
+ * Factory for creating fingerprints
  */
 
 public class FingerprintFactory {

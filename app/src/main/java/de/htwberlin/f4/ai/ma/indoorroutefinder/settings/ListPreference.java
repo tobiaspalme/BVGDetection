@@ -5,7 +5,8 @@ import android.util.AttributeSet;
 
 
 /**
- * Override the standard ListPreference element. It is now possible to see the value of the child element as summary.
+ * Override the standard ListPreference element.
+ * It is now possible to see the value of the child element as summary.
  */
 public class ListPreference extends android.preference.ListPreference {
 

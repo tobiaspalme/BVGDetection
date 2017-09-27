@@ -10,7 +10,6 @@ class DijkstraNode {
 
     private final String id;
 
-
     DijkstraNode(Node node) {
         this.id = node.getId();
     }
@@ -24,11 +23,8 @@ class DijkstraNode {
     }
 
 
-    // TODO return
     /**
      * Override hashCode method of the class "Object"
-     *
-     * @return
      */
     @Override
     public int hashCode() {
@@ -40,18 +36,18 @@ class DijkstraNode {
 
 
     /**
-     * @param obj the input object
+     * @param object the input object
      * @return boolean if the object equals an other object
      */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(Object object) {
+        if (this == object)
             return true;
-        if (obj == null)
+        if (object == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (getClass() != object.getClass())
             return false;
-        DijkstraNode other = (DijkstraNode) obj;
+        DijkstraNode other = (DijkstraNode) object;
         if (id == null) {
             if (other.id != null)
                 return false;

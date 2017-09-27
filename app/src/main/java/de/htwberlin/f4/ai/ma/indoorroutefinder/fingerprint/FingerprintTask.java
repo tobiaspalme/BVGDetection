@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.text.SimpleDateFormat;
@@ -10,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformation;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformationFactory;
-
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -27,7 +24,11 @@ import android.widget.TextView;
  * This class generates a WiFi fingerprint by measuring signal strengths for a given WiFi name (SSID).
  * It takes as parameter: SSID ("wifiName"), measuring time in seconds ("seconds"), a WifiManager,
  * a boolean if the result should be averaged, and a TextView and ProgressBar for displaying Progress.
- * The TextView and ProgressBar can be null.
+ * The TextView and ProgressBar can be NULL. If the wifiName parameter is NULL, all SSIDs will be recorded.
+ *
+ * The verbose mode constructor takes an extra TextView as parameter, which will display the live
+ * measuring data (usually the infobox TextView on the bottom of the NodeRecordEditActivity, the
+ * LocationActivity or the RouteFinderActivity.
  */
 
 
@@ -46,7 +47,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private long timestampWifimanager = 0;
     public AsyncResponse delegate = null;
 
-    // Normal mode
+    // Normal mode constructor
     public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage,
                            final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview) {
         this.wifiManager = wifiManager;
@@ -57,7 +58,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
         this.progressTextview = progressTextview;
     }
 
-    // Verbose mode
+    // Verbose mode constructor
     public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage,
                            final @Nullable ProgressBar progressBar, final @Nullable TextView progressTextview, final TextView verboseOutputTextview) {
         this.wifiManager = wifiManager;

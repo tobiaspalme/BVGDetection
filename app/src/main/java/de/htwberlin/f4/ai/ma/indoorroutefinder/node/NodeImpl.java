@@ -40,11 +40,6 @@ class NodeImpl implements Node {
         return this.description;
     }
 
-    //@Override
-    // public void setDescription(String description) {
-    //    this.description = description;
-    //}
-
     public Fingerprint getFingerprint() {
         return this.fingerprint;
     }
@@ -64,11 +59,6 @@ class NodeImpl implements Node {
         return this.picturePath;
     }
 
-    //@Override
-    //public void setPicturePath(String picturePath) {
-    //    this.picturePath = picturePath;
-    //}
-
     @Override
     public String getAdditionalInfo() {
         return this.additionalInfo;
@@ -78,7 +68,5 @@ class NodeImpl implements Node {
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
-
-
 
 }

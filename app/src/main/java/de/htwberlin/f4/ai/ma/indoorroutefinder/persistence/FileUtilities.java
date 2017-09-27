@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.persistence;
 
 import android.os.Environment;
 import android.util.Log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,7 +12,7 @@ import java.sql.Timestamp;
 /**
  * Created by Johann Winter
  *
- * Provides funcitons for file management (creating and copying).
+ * Provides functions for file management (creating and copying).
  */
 
 public class FileUtilities {
@@ -21,8 +20,8 @@ public class FileUtilities {
     /**
      * Copies a File from one to another path.
      *
-     * @param fromFile   FileInputStream for the file to copy from.
-     * @param toFile     FileInputStream for the file to copy to.
+     * @param fromFile FileInputStream for the file to copy from.
+     * @param toFile FileInputStream for the file to copy to.
      */
     static void copyFile(FileInputStream fromFile, FileOutputStream toFile) throws IOException {
         FileChannel fromChannel = null;
@@ -50,7 +49,7 @@ public class FileUtilities {
      * then creates a new imagefile.
      *
      * @param name the filename
-     * @return File Object of the Imagefile
+     * @return File object of the image file
      */
     public static File getFile(String name, Timestamp timestamp) {
         File externalStorageDirectory = Environment.getExternalStorageDirectory();

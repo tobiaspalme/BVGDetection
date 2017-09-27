@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra;
 
 import android.content.Context;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,30 +10,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.Edge;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
 
+
 /**
  * Created by Johann Winter
  *
- * Thanks to tognitos for contribution.
+ * Thanks to tognitos.
  *
- * The Dijkstra algorithm uses maps the common Node and Edge objects to its own DijkstraNode and
- * DijkstraEdge objects in order to avoid loading the model objects with the algorithm's logic.
- * It is important that methods from the Node and Edge classes (of the Model) are avoided.
- * This allows us to change just how the mapping to the DijkstraNodes and DijkstraEdges work.
- * Prinzip der "losen Kopplung".
+ * The Dijkstra algorithm maps the common node and edge objects to its own DijkstraNode and
+ * DijkstraEdge objects in order to avoid loading the model objects to the algorithm's logic.
  */
-
-
-// TODO: RETURNS
 
 class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
-    // DijkstraNodes and dijkstraEdges
+    // DijkstraNodes and DijkstraEdges
     final List<DijkstraNode> dijkstraNodes;
     private final List<DijkstraEdge> dijkstraEdges;
 
@@ -61,8 +54,7 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
 
     /**
-     * Map the normal Node objects from the Model to the custom DijkstraNode of the Dijkstra Algorithm.
-     * This is done to avoid filling the model objects with logic elements.
+     * Map the normal node objects from the Model to the custom DijkstraNode of the Dijkstra Algorithm.
      * @param nodes a list of Nodes
      * @return a list of DijkstraNodes
      */
@@ -77,9 +69,8 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
     /**
      * Map the normal Edge objects from the Model to the custom DijkstraEdge of the Dijkstra
-     * algorithm. This is done in order to avoid filling the model objects with logic elements.
-     * Since the graph is bidirectional, it maps 2 DijkstraEdges: one for poiA->poiB, one for poiB->poiA.
-     * @param edges a list of Edges
+     * algorithm. Since the graph is bidirectional, it maps 2 DijkstraEdges: one for nodeA->nodeB, one for nodeB->nodeA.
+     * @param edges a list of edges
      * @return a list of DijkstraEdges
      */
     public List<DijkstraEdge> mapEdges(List<Edge> edges) {
@@ -114,7 +105,7 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
     /**
      * Executes all the calculations and the shortest paths from the specified source node.
      * @param sourceNodeId the startnode for the calculations
-     * @throws IllegalArgumentException if the sourcenodeid does not exist
+     * @throws IllegalArgumentException if the source node does not exist
      */
     public void execute(String sourceNodeId) throws IllegalArgumentException {
         final Node source = databaseHandler.getNode(sourceNodeId);
@@ -141,7 +132,7 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
 
 
     /**
-     * Find the minimal distance from a node
+     * Find the minimal distances from a DijkstraNode to all other DijkstraNodes
      * @param node the startnode
      */
     public void findMinimalDistances(DijkstraNode node) {
@@ -163,23 +154,9 @@ class DijkstraAlgorithmImpl implements DijkstraAlgorithm {
      * @return the weight (distance) between start-node and target-node
      */
     public double getDistance(DijkstraNode node, DijkstraNode target) {
-        Log.d("getDistance", "------- GET DISTANCE ---------");
-        Log.d("getDistance", "node=" + node.getId());
-        Log.d("getDistance", "target=" + target.getId());
 
         for (DijkstraEdge dijkstraEdge : dijkstraEdges) {
-            Log.d("-------", "---------------------------------------------------------");
-            Log.d("getDistance", "--- dijkstraEdge.getSource().getNode().getId() = " + dijkstraEdge.getSource().getId());
-            Log.d("getDistance", "--- node.getNode().getId()= " + node.getId());
-
-            Log.d("getDistance", "+++ dijkstraEdge.getDestination().getNode().getId() = " + dijkstraEdge.getDestination().getId());
-            Log.d("getDistance", "+++ target.getNode().getId()= " + target.getId());
-            Log.d("-------", "---------------------------------------------------------");
-            Log.d("getDistance", "SOURCE = node.getNode    " + dijkstraEdge.getSource().equals(node));
-            Log.d("getDistance", "DEST = target.getNode    " + dijkstraEdge.getDestination().equals(target));
-
             if (dijkstraEdge.getSource().getId().equals(node.getId()) && dijkstraEdge.getDestination().getId().equals(target.getId())) {
-                Log.d("getDistance", "Edge weight: " + dijkstraEdge.getWeight());
                 return dijkstraEdge.getWeight();
             }
         }

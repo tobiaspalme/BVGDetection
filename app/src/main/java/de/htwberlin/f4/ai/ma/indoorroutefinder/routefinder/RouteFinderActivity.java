@@ -18,12 +18,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner.WifiScanner;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
@@ -44,7 +41,7 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra.DijkstraAlgo
 /**
  * Created by Johann Winter
  *
- * This activity provides the find route functionality ("Route finden").
+ * This activity provides the route finder functionality ("Route finden").
  */
 
 public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
@@ -59,7 +56,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     CheckBox accessibilityCheckbox;
     private TextView totalDistanceTextview;
     private TextView infobox;
-
     List<String> navigationResultsList;
     List<Node> allNodes;
     DatabaseHandler databaseHandler;
@@ -73,7 +69,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     List<String> nodePicturePaths;
     boolean verboseMode;
     private boolean useSSIDfilter;
-
     WifiManager wifiManager;
 
 
@@ -124,7 +119,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             findRouteButton.setEnabled(false);
         }
 
-
         // Set adapters and attach the lists
         final ArrayAdapter<String> adapterA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsStartNodeSpinner);
         startNodeSpinner.setAdapter(adapterA);
@@ -132,7 +126,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
         destinationNodeSpinner.setAdapter(adapterB);
         resultListAdapter = new NodeListAdapter(this, nodeNames, nodeDescriptions, nodePicturePaths);
         navigationResultListview.setAdapter(resultListAdapter);
-
 
         // Exclude on spinnerA selected item on spinnerB
         startNodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -151,7 +144,6 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
 
         // Get WiFis around and ask the user which to use
         locateButton.setOnClickListener(new View.OnClickListener() {
@@ -192,9 +184,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             }
         });
 
-
-
-        // Start the find_route
+        // Start the route finding process
         findRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

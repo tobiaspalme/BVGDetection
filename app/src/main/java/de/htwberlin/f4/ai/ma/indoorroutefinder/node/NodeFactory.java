@@ -4,6 +4,8 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.Fingerprint;
 
 /**
  * Created by Johann Winter
+ *
+ * Factory for creating node objects
  */
 
 public class NodeFactory {

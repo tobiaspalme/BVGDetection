@@ -50,7 +50,7 @@ public interface Node {
     /**
      * Getter for the path of the picture belonging to the node.
      * The path will point to external storage of the device
-     * @return
+     * @return the path to the picture file
      */
     String getPicturePath();
 

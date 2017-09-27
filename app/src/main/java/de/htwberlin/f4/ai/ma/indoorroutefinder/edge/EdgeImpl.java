@@ -2,7 +2,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.edge;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 
 /**
@@ -44,20 +43,10 @@ class EdgeImpl implements Edge{
         return this.nodeA;
     }
 
-    //@Override
-    //public void setNodeA(Node nodeA) {
-    //    this.nodeA = nodeA;
-    //}
-
     @Override
     public Node getNodeB() {
         return this.nodeB;
     }
-
-    //@Override
-    //public void setNodeB(Node nodeB) {
-    //    this.nodeB = nodeB;
-    //}
 
     @Override
     public boolean getAccessibility() {
@@ -79,16 +68,10 @@ class EdgeImpl implements Edge{
         this.weight = weight;
     }
 
-    //@Override
-    //public void insertStepCoords(String coords) {
-    //    this.stepCoordList.add(coords);
-    //}
-
     @Override
     public List<String> getStepCoordsList() {
         return this.stepCoordList;
     }
-
 
     @Override
     public String getAdditionalInfo() {

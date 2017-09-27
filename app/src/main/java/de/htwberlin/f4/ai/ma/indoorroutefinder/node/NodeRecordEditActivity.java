@@ -238,7 +238,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 @Override
                 public void onClick(View view) {
                     new AlertDialog.Builder(view.getContext())
-                            .setTitle(getString(R.string.nodelist_delete_entry_title_question))
+                            .setTitle(getString(R.string.delete_entry_title_question))
                             .setMessage("Soll der Node \"" + oldNodeId + "\" wirklich gelöscht werden?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {

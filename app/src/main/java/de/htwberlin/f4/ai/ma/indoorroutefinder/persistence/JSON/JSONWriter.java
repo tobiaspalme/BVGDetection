@@ -9,9 +9,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 
+
+/**
+ * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
+ *
+ * Saves new nodes to a JSON file on external storage.
+ * Path: "/IndoorPositioning/JSON/jsonFile.txt"
+ */
 public class JSONWriter {
 
     /**

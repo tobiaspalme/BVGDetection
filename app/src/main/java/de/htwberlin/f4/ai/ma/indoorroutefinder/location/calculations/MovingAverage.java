@@ -2,12 +2,13 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.location.calculations;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
  */
 
 public class MovingAverage {

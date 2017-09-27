@@ -33,16 +33,14 @@ public class EdgesManagerActivity extends BaseActivity {
 
     private Spinner spinnerA;
     private Spinner spinnerB;
-
-    ImageButton connectNodesButton;
-    ListView edgesListView;
-    List<Node> allNodes;
-    List<String> itemsSpinnerA;
-
+    private ImageButton connectNodesButton;
+    private ListView edgesListView;
+    private List<Node> allNodes;
+    private List<String> itemsSpinnerA;
     private List<String> itemsSpinnerB;
     private List<String> itemsEdgesList;
     private List<Edge> allEdges;
-    DatabaseHandler databaseHandler;
+    private DatabaseHandler databaseHandler;
     private CheckBox accessibilityCheckbox;
     private String lastSelectedItemA;
 
@@ -117,7 +115,7 @@ public class EdgesManagerActivity extends BaseActivity {
         for (Edge e : databaseHandler.getAllEdges()) {
             allEdges.add(e);
             if (e.getAccessibility()) {
-                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId() + ",        " + getString(R.string.accessibility_checkbox_text));
+                itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId() + ",     " + getString(R.string.accessibility_checkbox_text));
             } else {
                 itemsEdgesList.add(e.getNodeA().getId() + " <---> " + e.getNodeB().getId());
             }
@@ -144,7 +142,7 @@ public class EdgesManagerActivity extends BaseActivity {
                     allEdges.add(edge);
 
                     if (accessible) {
-                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId() + ",        " + getString(R.string.accessibility_checkbox_text));
+                        itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId() + ",     " + getString(R.string.accessibility_checkbox_text));
                     } else {
                         itemsEdgesList.add(edge.getNodeA().getId() + " <---> " + edge.getNodeB().getId());
                     }
@@ -160,16 +158,14 @@ public class EdgesManagerActivity extends BaseActivity {
             @Override
             public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
                 new AlertDialog.Builder(view.getContext())
-                        .setTitle("Eintrag löschen")
-                        .setMessage("Möchten sie den Eintrag löschen?")
+                        .setTitle(getString(R.string.delete_entry_title_question))
+                        .setMessage(getString(R.string.delete_entry_question))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-
                                 databaseHandler.deleteEdge(allEdges.get(position));
                                 allEdges.remove(position);
                                 itemsEdgesList.remove(position);
                                 edgesListAdapter.notifyDataSetChanged();
-
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -181,7 +177,5 @@ public class EdgesManagerActivity extends BaseActivity {
                 return false;
             }
         });
-
-
     }
 }

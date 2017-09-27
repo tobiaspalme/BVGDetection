@@ -3,9 +3,10 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.persistence;
 import android.content.Context;
 
 /**
+ * Created by Johann Winter
+ *
  * Factory for creating and retrieving a DatabaseHandler singleton object.
  *
- * Created by Johann Winter
  */
 
 public class DatabaseHandlerFactory {
@@ -16,7 +17,6 @@ public class DatabaseHandlerFactory {
         if (databaseHandler == null) {
             databaseHandler = new DatabaseHandlerImpl(context);
         }
-
         return databaseHandler;
     }
 }

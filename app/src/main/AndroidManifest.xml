@@ -23,7 +23,7 @@
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.node.MaxPictureActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeShowActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.show_fingerprint.ShowFingerprintActivity"/>
-        <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.ImportExportActivity" />
+        <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.ImportExportActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.edge.EdgesManagerActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.RouteFinderActivity" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.location.LocationActivity" />
@@ -35,23 +35,12 @@
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.android.calibrate.CalibrateViewImpl" />
         <activity android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.android.measure.edges.EdgeDetailsViewImpl"
             android:windowSoftInputMode="stateHidden"/>
-       <!--
-        <activity
-            android:name="de.htwberlin.f4.ai.ba.menu.ChooseAppActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
         <activity
             android:name="de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeRecordEditActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

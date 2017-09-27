@@ -3,7 +3,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 
 /**

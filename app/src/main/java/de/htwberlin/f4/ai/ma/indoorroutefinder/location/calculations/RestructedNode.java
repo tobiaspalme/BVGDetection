@@ -4,6 +4,8 @@ import com.google.common.collect.Multimap;
 
 /**
  * Created by Johann Winter
+ *
+ * Thanks to Carola Walter
  */
 
 public class RestructedNode {

@@ -3,14 +3,13 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.Edge;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 
 /**
  * Created by Johann Winter
  *
- * Thanks to tognitos for contribution.
+ * Thanks to tognitos.
  *
  * The Dijkstra algorithm maps the common node and edge objects to its own DijkstraNode and
  * DijkstraEdge objects in order to avoid loading the model objects to the algorithm's logic.

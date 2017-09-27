@@ -10,6 +10,8 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.Fingerprint;
 
 /**
  * Created by Johann Winter
+ *
+ * Adapter to fill the ListView in ShowFingerprintActivity with fingerprint data
  */
 
 
@@ -17,9 +19,6 @@ class ShowFingerprintAdapter extends BaseExpandableListAdapter{
 
     private Fingerprint fingerprint;
     private Context context;
-    //private List<String> groups;
-    //private List<SignalSample> groups;
-
 
     ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
         this.context = context;

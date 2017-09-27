@@ -11,6 +11,9 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_informati
 
 /**
  * Created by Johann Winter
+ *
+ * Converts a list of SignalSamples to JSON strings for being stored in the database and
+ * JSON strings to a list of SignalSample.
  */
 
 public class JSONConverter {

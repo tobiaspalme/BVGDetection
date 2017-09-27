@@ -11,8 +11,6 @@ import android.widget.ListView;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
@@ -23,7 +21,7 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactor
 /**
  * Created by Johann Winter
  *
- * This activity shows a list of all Nodes from the database.
+ * This activity shows a list of all nodes from the database.
  */
 
 public class NodeListActivity extends BaseActivity {
@@ -77,7 +75,7 @@ public class NodeListActivity extends BaseActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (!nodeListIsEmpty) {
                     new AlertDialog.Builder(view.getContext())
-                            .setTitle(getString(R.string.nodelist_delete_entry_title_question))
+                            .setTitle(getString(R.string.delete_entry_title_question))
                             .setMessage("Soll der Ort \"" + allNodes.get(position).getId() + "\" wirklich gelöscht werden?")
                             .setCancelable(false)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -115,7 +113,7 @@ public class NodeListActivity extends BaseActivity {
 
 
     /**
-     * Clear and reload the Nodelist
+     * Clear and reload the nodelist
      */
     private void loadDbData() {
 
@@ -139,7 +137,6 @@ public class NodeListActivity extends BaseActivity {
                 nodeDescriptions.add(n.getDescription());
                 nodePicturePaths.add(n.getPicturePath());
             }
-            //Collections.sort(nodeNames);
         }
         nodeListAdapter.notifyDataSetChanged();
     }

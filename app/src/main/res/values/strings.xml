@@ -78,21 +78,19 @@
     <string name="no_ssid_filter">-Kein Filter-</string>
     <string name="fingerprint_finished">Messung beendet.</string>
     <string name="initial_wifi_name">WLAN-Filter:</string>
-    <string name="coordinates_text">Koordinaten:</string>
+    <string name="coordinates_text"><b>Koordinaten:</b></string>
     <string name="record_and_edit_infobox">Bitte Eingaben machen und Foto sowie Fingerprint aufnehmen. Zum Speichern auf die Diskette tippen.</string>
     <string name="permissions_warning_title_text">Bitte Zugriff erlauben</string>
     <string name="permissions_warning_text">Die App benötigt Zugriff auf Kamera, Standort und externen Speicher des Gerätes um zu funktionieren.</string>
     <string name="please_stay"><b>Messung läuft...</b>\nBitte stehen bleiben und das Gerät möglichst ruhig halten.</string>
 
-
     <!-- activity_nodelist -->
-    <string name="nodelist_delete_entry_title_question">Eintrag löschen?</string>
     <string name="nodelist_infobox_text">Antippen zum editieren, tippen + halten zum löschen</string>
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild</string>
     <string name="node_show_infobox_text"><b>Hinweis:</b> Bild antippen zum Vergrößern</string>
-
+    <string name="initial_wifi_name_show"><b>WLAN-Filter:</b></string>
 
     <!-- activity_location -->
     <string name="measured_node_text">Gemessener Ort:</string>
@@ -118,12 +116,6 @@
     <string name="database_exported_toast">Datenbank nach \"/IndoorPositioning/Exported\" exportiert.</string>
     <string name="import_export_infobox_text">Die Daten werden in die Datei\n \"<b>/IndoorPositioning/Exported/indoor_data.db</b>\"\nim externen Speicher des Gerätes exportiert und auch aus dieser wieder importiert.</string>
 
-    <!--<string name="wrong_file_extension">Falsche Dateiendung</string>
-    <string name="import_database_wrong_file_extension_error">Die gewählte Datei ist leider nicht mit dieser Anwendung kompatibel. Bitte eine .db-Datei auswählen.</string>
-    <string name="try_again">Erneut versuchen</string>
-    <string name="filechooser_title">Bitte .db Datei wählen</string>
-    <string name="folderchooser_title">Bitte einen Ordner wählen</string>-->
-
     <!-- activity_edges_manager -->
     <string name="connect_nodes_button_text">Verbinden</string>
     <string name="accessibility_checkbox_text">Barrierefrei</string>
@@ -131,6 +123,7 @@
     <string name="destination_edgesmanager">nach:</string>
     <string name="edges_manager_infobox_text">Tippen + halten: Weg löschen</string>
     <string name="edge_already_exists">Dieser Weg existiert bereits!</string>
+    <string name="delete_entry_question">Möchten sie den Eintrag löschen?</string>
 
     <!-- acitvity_routefinder -->
     <string name="find_route_label">Route</string>
@@ -145,10 +138,8 @@
     <string name="find_route_button_description">Route finden</string>
 
 
-
+    <string name="delete_entry_title_question">Eintrag löschen?</string>
     <string name="refreshed_toast">WLANs Aktualisiert</string>
-    <string name="refresh">refresh_button</string>
-
     <string name="save_button_text">Speichern</string>
     <string name="delete_button_text">Löschen</string>
     <string name="delete_title_question">Löschen?</string>

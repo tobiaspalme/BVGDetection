@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/wifi_label_show"
-            android:text="@string/wifi_name_text"/>
+            android:text="@string/initial_wifi_name_show"/>
 
         <TextView
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -81,7 +81,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:layout_above="@+id/infobox_location"
+        android:layout_below="@+id/coordinates_layout"
         android:layout_centerHorizontal="true"
         android:id="@+id/camera_imageview_show"
         android:contentDescription="@string/image_placeholder"/>

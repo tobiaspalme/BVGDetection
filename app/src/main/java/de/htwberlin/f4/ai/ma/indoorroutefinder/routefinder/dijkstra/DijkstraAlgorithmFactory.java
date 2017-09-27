@@ -4,6 +4,8 @@ import android.content.Context;
 
 /**
  * Created by Johann Winter
+ *
+ * Factory for creating DijkstraAlgorithm objects
  */
 
 public class DijkstraAlgorithmFactory {

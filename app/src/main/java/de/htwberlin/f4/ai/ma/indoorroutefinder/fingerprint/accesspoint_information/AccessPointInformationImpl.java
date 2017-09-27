@@ -3,7 +3,6 @@ package de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_informat
 /**
  * Created by Johann Winter
  *
- * A AccessPointInformationImpl consists of a MAC-Address and a signal strength (rssi) in dBm.
  */
 
 class AccessPointInformationImpl implements AccessPointInformation {
@@ -17,7 +16,6 @@ class AccessPointInformationImpl implements AccessPointInformation {
     }
 
 
-
     public int getRssi() {
         return this.rssi;
     }
@@ -25,7 +23,6 @@ class AccessPointInformationImpl implements AccessPointInformation {
     public String getMacAddress() {
         return this.macAddress;
     }
-
 
     // Convert the rssi (dBm) to milliwatt
     public double getMilliwatt() {
