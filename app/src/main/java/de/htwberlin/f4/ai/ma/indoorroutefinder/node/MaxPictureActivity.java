@@ -30,6 +30,7 @@ public class MaxPictureActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String picturePath = (String) intent.getExtras().get("picturePath");
+        setTitle((String) intent.getExtras().get("nodeID"));
 
         if (picturePath != null) {
             Glide.with(this).load(picturePath).into(maxImageView);

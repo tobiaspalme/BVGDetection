@@ -57,6 +57,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.title_activity_location));
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_location, contentFrameLayout);
 
@@ -151,13 +152,12 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
         if (fingerprint != null) {
 
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
-            String foundNode = locationCalculator.calculateNodeId(fingerprint);
+            final String foundNode = locationCalculator.calculateNodeId(fingerprint);
 
             if (foundNode != null) {
 
                 locationTextview.setText(foundNode);
                 locationImageview.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.INVISIBLE);
 
                 descriptionTextview.setText(databaseHandler.getNode(foundNode).getDescription());
 
@@ -174,6 +174,7 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
                     public void onClick(View view) {
                         Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                         intent.putExtra("picturePath", picturePath);
+                        intent.putExtra("nodeID", foundNode);
                         startActivity(intent);
                     }
                 });
@@ -182,7 +183,11 @@ public class LocationActivity extends BaseActivity implements AsyncResponse{
             } else {
                 locationTextview.setText(getString(R.string.no_node_found_text));
             }
+        } else {
+            locationTextview.setText(getString(R.string.please_try_again));
         }
+        progressBar.setVisibility(View.INVISIBLE);
+
         locate1sButton.setEnabled(true);
         locate10sButton.setEnabled(true);
         locate1sButton.setImageResource(R.drawable.locate_1s_button);

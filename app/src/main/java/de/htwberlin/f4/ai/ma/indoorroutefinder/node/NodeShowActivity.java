@@ -35,6 +35,7 @@ public class NodeShowActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("");
 
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_show, contentFrameLayout);
@@ -89,6 +90,7 @@ public class NodeShowActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                 intent.putExtra("picturePath", node.getPicturePath());
+                intent.putExtra("nodeID", node.getId());
                 startActivity(intent);
             }
         });

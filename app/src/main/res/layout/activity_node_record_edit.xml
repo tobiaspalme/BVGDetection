@@ -194,7 +194,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
                 android:textSize="20sp"
-                android:textColor="@android:color/holo_red_dark"
+                android:textColor="@color/colorAccent"
                 android:layout_centerInParent="true"
                 android:id="@+id/progress_textview" />
 

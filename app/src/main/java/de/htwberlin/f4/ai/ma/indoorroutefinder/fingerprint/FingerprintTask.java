@@ -7,8 +7,11 @@ import com.google.common.collect.Multimap;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformation;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformationFactory;
 import android.os.AsyncTask;
@@ -44,8 +47,12 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private List<SignalSample> signalSampleList;
     private List<AccessPointInformation> accessPointInformationList;
     private boolean calculateAverage = false;
-    private long timestampWifimanager = 0;
+    //private long timestampWifimanager = 0;
     public AsyncResponse delegate = null;
+
+    private float deprecationTreshold = 0.5f;
+    private static HashMap<String, Long> timestampMap = new HashMap<>();
+
 
     // Normal mode constructor
     public FingerprintTask(final String wifiName, final int seconds, final WifiManager wifiManager, final Boolean calculateAverage,
@@ -85,11 +92,48 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 wifiManager.startScan();
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-                if (wifiScanList.get(0).timestamp == timestampWifimanager && seconds == 1) {
+                /*
+                if (seconds == 1 && wifiScanList.get(0).timestamp == timestampWifimanager) {
                     Log.d("FingerprintTask", "Same timestamp and 1s-scan. Please try again");
                     return null;
                 }
                 timestampWifimanager = wifiScanList.get(0).timestamp;
+                */
+
+
+
+
+                if (seconds == 1) {
+                    System.out.println("######################################################################");
+
+                    float deprecatedAccessPoints = 0;
+                    float numberOfAccessPoints = wifiScanList.size();
+
+                    for (ScanResult scanResult : wifiScanList) {
+
+                        if (timestampMap.get(scanResult.BSSID) != null && timestampMap.get(scanResult.BSSID).equals(scanResult.timestamp)) {
+                            deprecatedAccessPoints++;
+                            System.out.println("+++++ NOT_UPDATED:  " + scanResult.timestamp + " <-> " + timestampMap.get(scanResult.BSSID));
+                        } else {
+                            timestampMap.put(scanResult.BSSID, scanResult.timestamp);
+                        }
+                    }
+                    System.out.println("### TimestampMap.size= " + timestampMap.size());
+
+                    System.out.println("Old AP data: " + deprecatedAccessPoints + " of " +numberOfAccessPoints);
+
+                    if (deprecatedAccessPoints > (numberOfAccessPoints * deprecationTreshold)) {
+                        System.out.println("++++++++++++++++ Mehr als die Hälfte der Informationen veraltet!");
+                        System.out.println("######################################################################");
+
+                        return null;
+                    }
+                    System.out.println("######################################################################");
+                }
+
+
+
+
 
                 Log.d("Fingerprinting... ", "found networks: " + String.valueOf(wifiScanList.size()));
 

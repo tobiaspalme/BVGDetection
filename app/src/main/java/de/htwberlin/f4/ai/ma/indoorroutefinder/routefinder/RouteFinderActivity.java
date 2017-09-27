@@ -75,6 +75,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.title_activity_findroute));
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_routefinder, contentFrameLayout);
 
@@ -273,7 +274,7 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
             LocationCalculator locationCalculator = LocationCalculatorFactory.createInstance(this);
             String foundNode = locationCalculator.calculateNodeId(fingerprint);
             if (foundNode != null) {
-                Toast toast = Toast.makeText(this, "Standort: " + foundNode, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, getString(R.string.location) + foundNode, Toast.LENGTH_SHORT);
                 toast.show();
                 int index = itemsStartNodeSpinner.indexOf(foundNode);
                 startNodeSpinner.setSelection(index);
@@ -281,6 +282,9 @@ public class RouteFinderActivity extends BaseActivity implements AsyncResponse {
                 Toast toast = Toast.makeText(this, getString(R.string.no_location_found), Toast.LENGTH_SHORT);
                 toast.show();
             }
+        } else {
+            Toast toast = Toast.makeText(this, getString(R.string.please_try_again), Toast.LENGTH_SHORT);
+            toast.show();
         }
         locateButton.setEnabled(true);
         locateButton.setImageResource(R.drawable.locate);

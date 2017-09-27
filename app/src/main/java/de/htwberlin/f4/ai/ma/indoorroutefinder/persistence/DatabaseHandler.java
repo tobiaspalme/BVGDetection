@@ -120,8 +120,6 @@ public interface DatabaseHandler {
 //---------------------- Import / Export of the database -------------------------
 
 
-    SQLiteDatabase getReadableDatabase();
-
     /**
      * Get a database object to work with
      * @return the SQLite database object

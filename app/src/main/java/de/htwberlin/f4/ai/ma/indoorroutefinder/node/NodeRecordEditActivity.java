@@ -50,7 +50,7 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.JSON.JSONWriter;
 /**
  * Created by Johann Winter
  *
- * This class handles the recording and editing of Nodes.
+ * This class handles the recording and editing of nodes.
  *
  * Icon sources:
  * https://www.iconfinder.com/icons/322425/camera_icon
@@ -121,6 +121,8 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_node_record_edit, contentFrameLayout);
+        setTitle(getString(R.string.title_activity_recordedit_rec));
+
 
         permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA};
 
@@ -173,8 +175,6 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
 
         progressBar.setVisibility(View.INVISIBLE);
         progressTextview.setVisibility(View.INVISIBLE);
-        //initialWifiLabelTextview.setVisibility(View.INVISIBLE);
-        //initialWifiTextview.setVisibility(View.INVISIBLE);
         coordinatesLabelTextview.setVisibility(View.INVISIBLE);
         coordinatesEdittext.setVisibility(View.INVISIBLE);
 
@@ -192,8 +192,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
         Intent intent = getIntent();
         if (intent.hasExtra("nodeId")) {
             updateMode = true;
-            //initialWifiTextview.setVisibility(View.VISIBLE);
-            //initialWifiLabelTextview.setVisibility(View.VISIBLE);
+            setTitle(getString(R.string.title_activity_recordedit_edit));
             oldNodeId = (String) intent.getExtras().get("nodeId");
             nodeToUpdate = databaseHandler.getNode(oldNodeId);
             nodeIdEdittext.setText(nodeToUpdate.getId());
@@ -239,7 +238,7 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 public void onClick(View view) {
                     new AlertDialog.Builder(view.getContext())
                             .setTitle(getString(R.string.delete_entry_title_question))
-                            .setMessage("Soll der Node \"" + oldNodeId + "\" wirklich gelöscht werden?")
+                            .setMessage("Soll der Ort \"" + oldNodeId + "\" wirklich gelöscht werden?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -284,14 +283,10 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                         Toast.makeText(getApplicationContext(), getString(R.string.node_already_exists_toast), Toast.LENGTH_SHORT).show();
                     } else {
                         recordButton.setEnabled(false);
-                        //recordTimeText.setEnabled(false);
                         progressBar.setVisibility(View.VISIBLE);
                         progressTextview.setVisibility(View.VISIBLE);
                         recordButton.setImageResource(R.drawable.fingerprint_low_contrast);
-
-                        //recordTime = Integer.parseInt(recordTimeText.getText().toString());
                         recordTime = minutesDropdown.getSelectedItemPosition() + 1;
-
 
                         verboseMode = sharedPreferences.getBoolean("verbose_mode", false);
                         String ssidFilterString = null;
@@ -342,11 +337,13 @@ public class NodeRecordEditActivity extends BaseActivity implements AsyncRespons
                 if (pictureTaken) {
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", picturePath);
+                    intent.putExtra("nodeID", nodeIdEdittext.getText().toString());
                     startActivity(intent);
                 } else if (nodeToUpdate != null && nodeToUpdate.getPicturePath() != null) {
 
                     Intent intent = new Intent(getApplicationContext(), MaxPictureActivity.class);
                     intent.putExtra("picturePath", nodeToUpdate.getPicturePath());
+                    intent.putExtra("nodeID", nodeToUpdate.getId());
                     startActivity(intent);
                 }
             }

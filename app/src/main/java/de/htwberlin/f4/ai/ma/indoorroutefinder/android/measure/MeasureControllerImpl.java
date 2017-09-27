@@ -370,6 +370,7 @@ public class MeasureControllerImpl implements MeasureController {
             // using activity from johann
             Intent intent = new Intent(view.getContext(), MaxPictureActivity.class);
             intent.putExtra("picturePath", startNode.getPicturePath());
+            intent.putExtra("nodeID", startNode.getId());
             BaseActivity activity = (BaseActivity) view;
             activity.startActivity(intent);
         }
@@ -387,6 +388,7 @@ public class MeasureControllerImpl implements MeasureController {
             // using activity from johann
             Intent intent = new Intent(view.getContext(), MaxPictureActivity.class);
             intent.putExtra("picturePath", targetNode.getPicturePath());
+            intent.putExtra("nodeID", startNode.getId());
             BaseActivity activity = (BaseActivity) view;
             activity.startActivity(intent);
         }
