@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder;
+package de.htwberlin.f4.ai.ma.indoorroutefinder;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,14 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner.WifiScanner;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.wifi_scanner.WifiScannerFactory;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.Edge;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.location.location_calculator.LocationCalculator;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.location.location_calculator.LocationCalculatorFactory;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra.DijkstraAlgorithm;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.dijkstra.DijkstraAlgorithm;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.AsyncResponse;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.Fingerprint;
@@ -35,8 +34,7 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.FingerprintTask;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeShowActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra.DijkstraAlgorithmFactory;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.dijkstra.DijkstraAlgorithmFactory;
 
 /**
  * Created by Johann Winter

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.persistence;
+package de.htwberlin.f4.ai.ma.indoorroutefinder;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,8 +11,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
 
 /**
  * Created by Johann Winter

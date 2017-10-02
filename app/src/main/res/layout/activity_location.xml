@@ -65,7 +65,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/location_textview"
             android:text="@string/measured_node_textview_text"
-            android:textColor="@android:color/holo_red_dark"/>
+            android:textColor="@color/colorAccent"/>
 
         <TextView
             android:layout_width="wrap_content"

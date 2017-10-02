@@ -15,14 +15,14 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.android.calibrate.CalibrateViewIm
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.measure.MeasureViewImpl;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.measure.edges.EdgeDetailsViewImpl;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.record.RecordViewImpl;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.EdgesManagerActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.location.LocationActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.RouteFinderActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist.NodeListActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.ImportExportActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.EdgesManagerActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.LocationActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.RouteFinderActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.NodeListActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.ImportExportActivity;
 //import de.htwberlin.f4.ai.ma.indoorroutefinder.NodeRecordActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeRecordEditActivity;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.settings.SettingsActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.NodeRecordEditActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.SettingsActivity;
 
 /**
  * BasicActivity Class

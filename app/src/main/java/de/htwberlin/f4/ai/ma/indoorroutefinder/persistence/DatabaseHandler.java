@@ -14,7 +14,6 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.Edge;
  * This interface offers all necessary database functions to
  * create, edit and delete Nodes and Edges and
  * import / export functionality of the SQLite DB.
- *
  */
 
 public interface DatabaseHandler {

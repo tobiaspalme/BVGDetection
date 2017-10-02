@@ -1,9 +1,8 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.settings;
+package de.htwberlin.f4.ai.ma.indoorroutefinder;
 
 import android.os.Bundle;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
-
+import de.htwberlin.f4.ai.ma.indoorroutefinder.settings.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {
     @Override

@@ -92,7 +92,7 @@
     <string name="please_stay"><b>Messung läuft...</b>\nBitte stehen bleiben und das Gerät möglichst ruhig halten.</string>
 
     <!-- activity_nodelist -->
-    <string name="nodelist_infobox_text">Antippen zum editieren, tippen + halten zum löschen</string>
+    <string name="nodelist_infobox_text">Antippen zum editieren, Tippen + halten zum Löschen</string>
 
     <!-- activity_node_show -->
     <string name="image_placeholder">Bild</string>
@@ -107,7 +107,6 @@
     <string name="no_node_found_text">Kein Ort gefunden</string>
     <string name="searching_node_text">Lokalisiere...</string>
     <string name="percent_label_textview"> %</string>
-    <string name="go_to_detailed_location_results">Details</string>
     <string name="detailed_results_button_description">Details</string>
     <string name="location_infobox_text">Falls die 1-Sekunden-Messung keinen Erfolg hat, probieren Sie bitte die 10-Sekunden-Messung. \n\n<b>Tip:</b> Falls vorhanden, Bild antippen zum vergrößern</string>
 
@@ -135,7 +134,7 @@
     <string name="find_route_label">Route</string>
     <string name="navigation_result_header">Ihre Route:</string>
     <string name="no_route_found">Keine Route gefunden.</string>
-    <string name="navigation_infobox_text"><b>Hinweis:</b> Durch tippen auf die einzelnen Orte der Route können Details angezeigt werden.</string>
+    <string name="navigation_infobox_text"><b>Hinweis:</b> Durch Tippen auf die einzelnen Orte der Route können Details angezeigt werden.</string>
     <string name="from_label_text">Start:</string>
     <string name="to_label_text">Ziel:</string>
     <string name="locate_button_description">Standort-Button</string>

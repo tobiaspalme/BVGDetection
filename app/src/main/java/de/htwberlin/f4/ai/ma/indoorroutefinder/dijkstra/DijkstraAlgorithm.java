@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.routefinder.dijkstra;
+package de.htwberlin.f4.ai.ma.indoorroutefinder.dijkstra;
 
 import java.util.LinkedList;
 import java.util.List;

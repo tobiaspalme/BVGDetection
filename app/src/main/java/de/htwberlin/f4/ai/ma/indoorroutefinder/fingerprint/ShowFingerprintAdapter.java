@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.show_fingerprint;
+package de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint;
 
 import android.content.Context;
 import android.view.View;
@@ -15,12 +15,12 @@ import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.Fingerprint;
  */
 
 
-class ShowFingerprintAdapter extends BaseExpandableListAdapter{
+public class ShowFingerprintAdapter extends BaseExpandableListAdapter{
 
     private Fingerprint fingerprint;
     private Context context;
 
-    ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
+    public ShowFingerprintAdapter(Context context, Fingerprint fingerprint) {
         this.context = context;
         this.fingerprint = fingerprint;
     }

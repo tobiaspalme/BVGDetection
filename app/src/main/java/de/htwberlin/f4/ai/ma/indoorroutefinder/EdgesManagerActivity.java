@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.edge;
+package de.htwberlin.f4.ai.ma.indoorroutefinder;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,13 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.Edge;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.edge.EdgeFactory;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;

@@ -1,4 +1,4 @@
-package de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist;
+package de.htwberlin.f4.ai.ma.indoorroutefinder;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,12 +8,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.R;
 import java.io.File;
 import java.util.ArrayList;
-import de.htwberlin.f4.ai.ma.indoorroutefinder.node.NodeRecordEditActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.android.BaseActivity;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.node.Node;
+import de.htwberlin.f4.ai.ma.indoorroutefinder.nodelist.NodeListAdapter;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandler;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.persistence.DatabaseHandlerFactory;
 
