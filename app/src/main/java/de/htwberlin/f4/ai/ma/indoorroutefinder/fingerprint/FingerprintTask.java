@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformation;
 import de.htwberlin.f4.ai.ma.indoorroutefinder.fingerprint.accesspoint_information.AccessPointInformationFactory;
 import android.os.AsyncTask;
@@ -47,11 +45,13 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
     private List<SignalSample> signalSampleList;
     private List<AccessPointInformation> accessPointInformationList;
     private boolean calculateAverage = false;
-    //private long timestampWifimanager = 0;
     public AsyncResponse delegate = null;
 
-    private float deprecationTreshold = 0.5f;
+    private float deprecationTreshold = 0.5f;   // 50%
     private static HashMap<String, Long> timestampMap = new HashMap<>();
+
+    // Used for console output, sorted by accesspoint
+    //private HashMap<String, List<Integer>> testData = new HashMap<>();
 
 
     // Normal mode constructor
@@ -92,17 +92,9 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                 wifiManager.startScan();
                 List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
-                /*
-                if (seconds == 1 && wifiScanList.get(0).timestamp == timestampWifimanager) {
-                    Log.d("FingerprintTask", "Same timestamp and 1s-scan. Please try again");
-                    return null;
-                }
-                timestampWifimanager = wifiScanList.get(0).timestamp;
-                */
 
-
-
-
+                // When measuring for just one second, compare the timestamps of the scan results
+                // with the last saved scan data, and cancel measurement if more than 50% are deprecated.
                 if (seconds == 1) {
                     System.out.println("######################################################################");
 
@@ -110,7 +102,6 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                     float numberOfAccessPoints = wifiScanList.size();
 
                     for (ScanResult scanResult : wifiScanList) {
-
                         if (timestampMap.get(scanResult.BSSID) != null && timestampMap.get(scanResult.BSSID).equals(scanResult.timestamp)) {
                             deprecatedAccessPoints++;
                             System.out.println("+++++ NOT_UPDATED:  " + scanResult.timestamp + " <-> " + timestampMap.get(scanResult.BSSID));
@@ -119,13 +110,11 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                         }
                     }
                     System.out.println("### TimestampMap.size= " + timestampMap.size());
-
-                    System.out.println("Old AP data: " + deprecatedAccessPoints + " of " +numberOfAccessPoints);
+                    System.out.println("Old AP data: " + deprecatedAccessPoints + " of " + numberOfAccessPoints);
 
                     if (deprecatedAccessPoints > (numberOfAccessPoints * deprecationTreshold)) {
-                        System.out.println("++++++++++++++++ Mehr als die Hälfte der Informationen veraltet!");
+                        System.out.println("++++++++++++++++ Mehr als die Hälfte der Messwerte veraltet!");
                         System.out.println("######################################################################");
-
                         return null;
                     }
                     System.out.println("######################################################################");
@@ -133,14 +122,22 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
 
 
-
-
-                Log.d("Fingerprinting... ", "found networks: " + String.valueOf(wifiScanList.size()));
+                Log.d("Fingerprinting... ", "found networks (total): " + String.valueOf(wifiScanList.size()));
 
                 for (final ScanResult sr : wifiScanList) {
                     // If the wifiName was defined, filter for only this SSID
                     if (wifiName != null) {
                         if (sr.SSID.equals(wifiName)) {
+
+                            // Used for console output, sorted by accesspoint
+                            /*
+                            if (testData.get(sr.BSSID) == null) {
+                                testData.put(sr.BSSID, new ArrayList<Integer>());
+                            } else {
+                                testData.get(sr.BSSID).add(sr.level);
+                            }
+                            */
+
                             Log.d("Fingerprinting... ", "MAC: " + sr.BSSID + "   Strength: " + sr.level + " dBm         timestamp: " + sr.timestamp);
                             AccessPointInformation accessPointInformation = AccessPointInformationFactory.createInstance(sr.BSSID, sr.level);
                             accessPointInformationList.add(accessPointInformation);
@@ -154,7 +151,7 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
                         multiMap.put(sr.BSSID, sr.level);
                     }
                 }
-                Log.d("--------", "-------------------------------------------------");
+                //Log.d("--------", "-------------------------------------------------");
 
                 publishProgress(i);
 
@@ -231,9 +228,18 @@ public class FingerprintTask extends AsyncTask<Void, Integer, Fingerprint> {
 
     @Override
     protected void onPostExecute(Fingerprint fingerprint) {
+        // Used for console output, sorted by accesspoint
+        /*
+        for (String mac : testData.keySet()) {
+            String output = "";
+            for (Integer rssi : testData.get(mac)) {
+                output += rssi + " ";
+            }
+            System.out.println(mac + ": " + output);
+        }*/
+
         delegate.processFinish(fingerprint, seconds);
     }
-
 
 }
 
