@@ -6,8 +6,9 @@
     <string name="title_activity_recordedit_rec">Ort aufnehmen</string>
     <string name="title_activity_recordedit_edit">Ort editieren</string>
     <string name="title_activity_nodelist">Orte verwalten</string>
+    <string name="title_activity_show_fingerprint"></string>
     <string name="title_activity_edgesmanager">Wege verwalten</string>
-    <string name="title_activity_location">Standort bestimmen</string>
+    <string name="title_activity_location">Standort ermitteln</string>
     <string name="title_activity_findroute">Route finden</string>
     <string name="title_activity_importexport">Import / Export</string>
     <string name="title_activity_settings">Einstellungen</string>

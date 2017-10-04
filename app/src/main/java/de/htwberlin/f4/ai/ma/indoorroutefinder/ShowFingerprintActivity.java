@@ -32,6 +32,7 @@ public class ShowFingerprintActivity extends BaseActivity {
 
         if (nodeID != null) {
             Node node = databaseHandler.getNode(nodeID);
+            setTitle(node.getId());
             ShowFingerprintAdapter adapter = new ShowFingerprintAdapter(this, node.getFingerprint());
             fingerprintListview.setAdapter(adapter);
 
